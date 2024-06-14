@@ -1,0 +1,2 @@
+// TO USE THIS VARIABLE IN AXIOS
+export const BASE_URL = "";
