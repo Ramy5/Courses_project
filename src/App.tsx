@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Dashboard, Login } from "./pages";
 import { Home, StructurePage } from "./pages";
 import { useRTL } from "./hooks/useRTL";
 import { useLayoutEffect } from "react";
@@ -17,9 +18,9 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/" element={<Login />} />
         <Route path="/" element={<StructurePage />}>
-          {/* <Route index element={<Home />} /> */}
-          <Route index path="/" element={<InformationPanel />} />
+          <Route path="/informationPanel" element={<InformationPanel />} />
           <Route path="/programs" element={<Programs />} />
           <Route path="lecturers" element={<Lecturers />} />
         </Route>

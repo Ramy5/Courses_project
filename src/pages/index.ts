@@ -1,4 +1,5 @@
-import Home from "./Home";
 import StructurePage from "./StructurePage";
+import Dashboard from "./Dashboard";
+import Login from "./Login";
 
-export { Home, StructurePage };
+export { StructurePage, Dashboard, Login };

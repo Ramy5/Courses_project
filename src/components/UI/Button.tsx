@@ -4,7 +4,7 @@ import { Spinner } from "../";
 import { FormikValues } from "formik";
 
 const buttonVars = tv({
-  base: "relative active:top-[1px] py-2 px-8 font-semibold rounded-lg text-white transition-all hover:scale-110",
+  base: "relative active:top-[1px] py-2 px-8 font-semibold rounded-lg text-white transition-all duration-500 hover:scale-[1.04]",
   variants: {
     color: {
       primary: "bg-mainColor",
@@ -56,7 +56,7 @@ interface ButtonProps_TP {
   bordered?: boolean;
 }
 
-export const Button = ({
+const Button = ({
   variant,
   children,
   className,
@@ -88,3 +88,5 @@ export const Button = ({
     </button>
   );
 };
+
+export default Button;

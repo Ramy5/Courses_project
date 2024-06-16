@@ -14,7 +14,7 @@ import { t } from "i18next";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const SideBar = () => {
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -23,7 +23,7 @@ const SideBar = () => {
       title: "Information Panel",
       icon: <CiGrid41 size={24} />,
       alert: "alt",
-      link: "/",
+      link: "/informationPanel",
     },
     {
       title: "Programs",
@@ -81,21 +81,21 @@ const SideBar = () => {
 
   return (
     <aside className="col-start-1 col-end-2 row-start-1 row-end-3">
-      <nav className="h-full flex flex-col bg-mainColor border-r shadow-sm">
-        <div className="p-4 pb-2 flex justify-between items-center">
+      <nav className="flex flex-col h-full border-r shadow-sm bg-mainColor">
+        <div className="flex items-center justify-between p-4 pb-2">
           <button
             onClick={() => setExpanded((curr) => !curr)}
             className="p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100"
           >
             {expanded ? (
-              <RxCross2 size={28} />
+              <RxCross2 size={24} />
             ) : (
-              <HiBars3CenterLeft size={28} />
+              <HiBars3CenterLeft size={24} />
             )}
           </button>
         </div>
 
-        <ul className="flex-1 ps-2 mt-6">
+        <ul className="flex-1 mt-6 ps-2">
           {sideBarItems.map((item, index) => (
             <li
               key={index}

@@ -1,4 +1,4 @@
-import { tv } from "tailwind-variants"
+import { tv } from "tailwind-variants";
 
 const spinner = tv({
   base: "animate-spin rounded-full",
@@ -17,18 +17,17 @@ const spinner = tv({
     color: "primary",
     size: "medium",
   },
-})
+});
 
-export const Spinner = ({
+const Spinner = ({
   variant = "primary",
   size = "medium",
   className,
 }: {
-  variant?: "primary" | "danger"
-  size?: "small" | "medium" | "large"
-  className?: string
+  variant?: "primary" | "danger";
+  size?: "small" | "medium" | "large";
+  className?: string;
 }) => {
-
   return (
     <div className={`flex items-center justify-center ${className}`}>
       <div
@@ -38,5 +37,7 @@ export const Spinner = ({
         })}
       ></div>
     </div>
-  )
-}
+  );
+};
+
+export default Spinner;

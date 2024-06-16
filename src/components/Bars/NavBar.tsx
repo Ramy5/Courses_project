@@ -1,8 +1,5 @@
-import { t } from "i18next";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
-import { Button } from "../Buttons/Button";
 import NotUser from "../../assets/navBar/no-user.svg";
 import DateImg from "../../assets/navBar/date.svg";
 import SearchImg from "../../assets/navBar/search.svg";
@@ -10,13 +7,14 @@ import Notification from "../../assets/navBar/notification.svg";
 import { useRTL } from "../../hooks/useRTL";
 import BaseInput from "../UI/BaseInput";
 import { Form, Formik } from "formik";
+import Button from "../UI/Button";
 
 type InitialValues_TP = {
   search: string;
 };
 
 const NavBar = () => {
-  const [currentDate, setCurrentDate] = useState<String>("");
+  const [currentDate, setCurrentDate] = useState<string>("");
 
   const isRTL = useRTL();
 
@@ -40,12 +38,12 @@ const NavBar = () => {
   };
 
   return (
-    <div className="w-100 flex h-16 items-center justify-between px-4">
-      <div className="w-100 flex items-center gap-1 py-6 px-4">
+    <div className="flex items-center justify-between h-16 px-4 w-100">
+      <div className="flex items-center gap-1 px-4 py-6 w-100">
         <img src={DateImg} alt="date" />
         <p>{currentDate}</p>
       </div>
-      <div className="me-2 flex items-center gap-4">
+      <div className="flex items-center gap-4 me-2">
         <div className="flex items-center justify-center gap-3">
           <div className="me-6">
             <Formik
@@ -59,7 +57,7 @@ const NavBar = () => {
                 <img
                   src={SearchImg}
                   alt="Search"
-                  className="absolute top-1/2 right-2 -translate-y-1/2 z-50 w-5 h-5"
+                  className="absolute z-50 w-5 h-5 -translate-y-1/2 top-1/2 right-2"
                 />
                 <BaseInput
                   type="text"
@@ -78,7 +76,7 @@ const NavBar = () => {
             <img
               src={NotUser}
               alt="User Image"
-              className="w-7 h-7 rounded-full"
+              className="rounded-full w-7 h-7"
             />
             <span className="m-0">مستخدم 1</span>
           </div>
@@ -88,7 +86,7 @@ const NavBar = () => {
             className="animate_from_top  animation_delay-3 bg-mainColor text-base w-8 h-8 py-[1px] px-[4px] rounded-md font-normal"
             action={() => toggleLang()}
           >
-            {isRTL ? "Ar" : "En"}
+            {isRTL ? "En" : "Ar"}
           </Button>
         </div>
       </div>

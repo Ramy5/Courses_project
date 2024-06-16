@@ -7,6 +7,7 @@ export type BaseInput_TP = {
   id: string;
   noMb?: boolean;
   required?: boolean;
+  className?: string;
   labelProps?: {
     [key: string]: any;
   };
@@ -63,9 +64,9 @@ const BaseInput = ({
 
   return (
     <div className={noMb ? "col-span-1 relative" : "col-span-1 relative"}>
-      <div className="flex flex-col gap-1 relative">
+      <div className="relative flex flex-col gap-1">
         {label && (
-          <label className="text-black font-normal text-base" htmlFor={id}>
+          <label className="text-base font-normal text-black" htmlFor={id}>
             {label}
           </label>
         )}
@@ -92,7 +93,7 @@ const BaseInput = ({
           })}
         />
       </div>
-      {/* <FormikError name={props.name} className="whitespace-nowrap absolute" /> */}
+      {/* <FormikError name={props.name} className="absolute whitespace-nowrap" /> */}
     </div>
   );
 };
