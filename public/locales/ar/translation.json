@@ -2,5 +2,15 @@
   "date to": "تاريخ إلي",
   "to": "الي",
   "loading statement of accounts": "تحميل كشف الحسابات",
-  "create the accounting entry": "انشاء القيد المحاسبي"
+  "create the accounting entry": "انشاء القيد المحاسبي",
+  "search": "بحث",
+  "Information Panel": "لوحة المعلومات",
+  "Programs": "البرامج",
+  "Lecturers": "المحاضرون",
+  "Students": "الطلاب",
+  "Lecture Management": "إدارة المحاضرات",
+  "Virtual Classroom": "الفصول  الافتراضية",
+  "Test Management": "إدارة الإختبارات",
+  "Reports": "التقارير",
+  "Settings": "الإعدادات"
 }
