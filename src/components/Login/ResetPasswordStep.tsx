@@ -1,8 +1,8 @@
 import { useFormikContext } from "formik";
 import { t } from "i18next";
-import MainBtn from "../UI/MainBtn";
 import resetPasswordImg from "../../assets/login/resetPasswordImg.gif";
 import { useRTL } from "../../hooks/useRTL";
+import { Button } from "..";
 
 interface ResetPasswordStepProps_TP {
   setStep: (step: number) => void;
@@ -52,16 +52,15 @@ const ResetPasswordStep = (props: ResetPasswordStepProps_TP) => {
           />
         </div>
         {/* BUTTON */}
-        <MainBtn
-          btnText={t("confirm")}
-          className="text-xl"
-          onclick={() => setStep(1)}
-        />
-        <MainBtn
-          btnText={t("back to login")}
-          className="text-xl bg-cyan-500 hover:bg-cyan-600"
-          onclick={() => setStep(1)}
-        />
+        <Button action={() => setStep(1)} className="py-3 text-xl rounded-full">
+          {t("confirm")}
+        </Button>
+        <Button
+          action={() => setStep(1)}
+          className="py-3 text-xl rounded-full bg-cyan-500 hover:bg-cyan-600"
+        >
+          {t("back to login")}
+        </Button>
       </div>
 
       {/* IMAGE */}

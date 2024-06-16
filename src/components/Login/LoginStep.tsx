@@ -4,11 +4,11 @@ import { AiOutlineMail } from "react-icons/ai";
 import { useState } from "react";
 import { IoMdEyeOff } from "react-icons/io";
 import { IoEye } from "react-icons/io5";
-import MainBtn from "../UI/MainBtn";
 import { useRTL } from "../../hooks/useRTL";
 import { RiLockPasswordLine } from "react-icons/ri";
 import MainRadio from "../UI/MainRadio";
 import { useFormikContext } from "formik";
+import { Button } from "..";
 
 interface LoginStepProps_TP {
   setStep: (step: number) => void;
@@ -130,7 +130,9 @@ const LoginStep = (props: LoginStepProps_TP) => {
         </div>
 
         {/* BUTTON */}
-        <MainBtn btnText={t("login")} type="submit" className="text-xl" />
+        <Button type="submit" className="py-3 text-xl rounded-full">
+          {t("login")}
+        </Button>
       </div>
 
       {/* IMAGE */}

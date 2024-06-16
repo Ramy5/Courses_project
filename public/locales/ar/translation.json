@@ -12,5 +12,15 @@
   "check your email": "تحقق من بريدك الإلكتروني",
   "new password": "كلمة المرور الجديدة",
   "confirm new password": "تأكيد كلمة المرور الجديدة",
-  "confirm": "تأكيد"
+  "confirm": "تأكيد",
+  "search": "بحث",
+  "Information Panel": "لوحة المعلومات",
+  "Programs": "البرامج",
+  "Lecturers": "المحاضرون",
+  "Students": "الطلاب",
+  "Lecture Management": "إدارة المحاضرات",
+  "Virtual Classroom": "الفصول  الافتراضية",
+  "Test Management": "إدارة الإختبارات",
+  "Reports": "التقارير",
+  "Settings": "الإعدادات"
 }

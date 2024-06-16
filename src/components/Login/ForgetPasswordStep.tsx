@@ -1,9 +1,9 @@
 import { t } from "i18next";
-import MainBtn from "../UI/MainBtn";
 import { useFormikContext } from "formik";
 import forgetPasswordImg from "../../assets/login/forgetPasswordImg.gif";
 import { useState } from "react";
 import { useRTL } from "../../hooks/useRTL";
+import { Button } from "..";
 
 interface ForgetPasswordStep_TP {
   setStep: (step: number) => void;
@@ -40,27 +40,30 @@ const ForgetPasswordStep = (props: ForgetPasswordStep_TP) => {
             />
 
             {/* BUTTON */}
-            <MainBtn
-              btnText={t("reset password")}
-              className="text-xl"
-              onclick={() => setCheckEmailStep(true)}
-            />
+            <Button
+              action={() => setCheckEmailStep(true)}
+              className="py-3 text-xl rounded-full"
+            >
+              {t("reset password")}
+            </Button>
           </>
         )}
 
         {checkEmailStep && (
-          <MainBtn
-            btnText={t("check your email")}
-            className="text-xl"
-            onclick={() => setStep(3)}
-          />
+          <Button
+            action={() => setStep(3)}
+            className="py-3 text-xl rounded-full"
+          >
+            {t("check your email")}
+          </Button>
         )}
 
-        <MainBtn
-          btnText={t("back to login")}
-          className="text-xl bg-cyan-500 hover:bg-cyan-600"
-          onclick={() => setStep(1)}
-        />
+        <Button
+          action={() => setStep(1)}
+          className="py-3 text-xl rounded-full bg-cyan-500 hover:bg-cyan-600"
+        >
+          {t("back to login")}
+        </Button>
       </div>
 
       {/* IMAGE */}

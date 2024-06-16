@@ -33,10 +33,10 @@ const Login = () => {
     <Formik
       initialValues={initialValues}
       onSubmit={(values) => {
-        navigate("/dashboard");
+        navigate("/informationPanel");
       }}
     >
-      <div className="flex items-center justify-center w-full h-screen bg-mainColorBlue">
+      <div className="flex items-center justify-center w-full h-screen bg-mainColor">
         <Form className="w-full lg:w-[70vw] rounded-xl px-2 lg:px-16 bg-white drop-shadow-xl transition-all duration-300 h-[80vh] lg:h-[70vh] hover:drop-shadow-2xl">
           {step === 1 ? (
             <LoginStep setStep={setStep} />
