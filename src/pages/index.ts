@@ -1,3 +1,4 @@
 import Home from "./Home";
+import StructurePage from "./StructurePage";
 
-export { Home };
+export { Home, StructurePage };

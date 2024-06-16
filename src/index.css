@@ -1,3 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ANIMATE FROM TOP */
+.animate_from_top {
+  animation: move-top 0.7s ease-out backwards;
+}
+
+@keyframes move-top {
+  0% {
+    opacity: 0;
+    transform: translateY(-3rem);
+  }
+  100% {
+    transform: translate(0);
+  }
+}
+
+
+  
