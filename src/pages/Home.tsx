@@ -1,9 +1,6 @@
-import { Button } from "../components/Buttons/Button";
 
 const Home = () => {
-  return <div className="m-5">
-    <Button bordered>Add</Button>
-  </div>;
+  return <div>Home</div>;
 };
 
 export default Home;
