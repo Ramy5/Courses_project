@@ -1,9 +1,5 @@
-import React from 'react'
-
 const InformationPanel = () => {
-  return (
-    <div>InformationPanel</div>
-  )
-}
+  return <div>InformationPanel</div>;
+};
 
-export default InformationPanel
+export default InformationPanel;
