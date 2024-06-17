@@ -12,6 +12,7 @@ import { HiBars3CenterLeft } from "react-icons/hi2";
 import { RxCross2 } from "react-icons/rx";
 import { t } from "i18next";
 import { useLocation, useNavigate } from "react-router-dom";
+import SearchInput from "../UI/SearchInput";
 
 const SideBar = () => {
   const [expanded, setExpanded] = useState(true);
@@ -96,6 +97,11 @@ const SideBar = () => {
         </div>
 
         <ul className="flex-1 mt-6 ps-2">
+          {expanded && (
+            <li className="ms-1 mt-2 mb-6 me-3 block lg:hidden">
+              <SearchInput />
+            </li>
+          )}
           {sideBarItems.map((item, index) => (
             <li
               key={index}

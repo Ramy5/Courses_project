@@ -6,6 +6,7 @@ import Button from "./UI/Button";
 import MainCheckBox from "./UI/MainCheckBox";
 import MainRadio from "./UI/MainRadio";
 import Spinner from "./UI/Spinner";
+import SearchInput from "./UI/SearchInput";
 
 export {
   BaseInput,
@@ -16,4 +17,5 @@ export {
   MainRadio,
   Spinner,
   Button,
+  SearchInput
 };
