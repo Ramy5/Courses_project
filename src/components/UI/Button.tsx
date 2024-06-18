@@ -4,7 +4,7 @@ import { Spinner } from "../";
 import { FormikValues } from "formik";
 
 const buttonVars = tv({
-  base: "relative active:top-[1px] py-2 px-8 font-semibold rounded-lg text-white transition-all duration-500 hover:scale-[1.04]",
+  base: "relative active:top-[1px] py-2 px-8 font-semibold rounded-lg text-white transition-all duration-400 hover:scale-[1.04]",
   variants: {
     color: {
       primary: "bg-mainColor",
