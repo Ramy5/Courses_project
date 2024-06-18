@@ -1,5 +1,7 @@
 import StructurePage from "./StructurePage";
-import Dashboard from "./Dashboard";
 import Login from "./Login";
+import InformationPanel from "./AdminPages/InformationPanel";
+import Lecturers from "./AdminPages/Lecturers";
+import Programs from "./AdminPages/Programs";
 
-export { StructurePage, Dashboard, Login };
+export { StructurePage, Login, InformationPanel, Lecturers, Programs };

@@ -7,6 +7,11 @@ import MainCheckBox from "./UI/MainCheckBox";
 import MainRadio from "./UI/MainRadio";
 import Spinner from "./UI/Spinner";
 import SearchInput from "./UI/SearchInput";
+import Table from "./UI/Table";
+import ProgramBox from "./AdminComponent/InformationPanel/ProgramBox";
+import DataCount from "./AdminComponent/InformationPanel/DataCount";
+import PersonView from "./AdminComponent/InformationPanel/PersonView";
+import PerformanceChart from "./AdminComponent/InformationPanel/PerformanceChart";
 
 export {
   BaseInput,
@@ -17,5 +22,10 @@ export {
   MainRadio,
   Spinner,
   Button,
-  SearchInput
+  SearchInput,
+  Table,
+  ProgramBox,
+  DataCount,
+  PersonView,
+  PerformanceChart,
 };

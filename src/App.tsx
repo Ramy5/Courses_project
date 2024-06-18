@@ -3,9 +3,9 @@ import { Dashboard, Login } from "./pages";
 import { Home, StructurePage } from "./pages";
 import { useRTL } from "./hooks/useRTL";
 import { useLayoutEffect } from "react";
-import InformationPanel from "./pages/InformationPanel";
-import Lecturers from "./pages/Lecturers";
-import Programs from "./pages/Programs";
+import InformationPanel from "./pages/AdminPages/InformationPanel";
+import Lecturers from "./pages/AdminPages/Lecturers";
+import Programs from "./pages/AdminPages/Programs";
 
 function App() {
   const isRTL = useRTL();

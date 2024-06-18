@@ -98,7 +98,7 @@ const SideBar = () => {
 
         <ul className="flex-1 mt-6 ps-2">
           {expanded && (
-            <li className="ms-1 mt-2 mb-6 me-3 block lg:hidden">
+            <li className="block mt-2 mb-6 ms-1 me-3 lg:hidden">
               <SearchInput />
             </li>
           )}
@@ -120,7 +120,7 @@ const SideBar = () => {
               {item.icon}
               <span
                 className={`overflow-hidden transition-all ${
-                  expanded ? "w-52 ml-3" : "w-0"
+                  expanded ? "w-40 ml-3" : "w-0"
                 }`}
               >
                 {t(item.title)}
