@@ -4,9 +4,9 @@ import { PiLessThan } from "react-icons/pi";
 import { Link } from "react-router-dom";
 
 type TitlePage_TP = {
-  mainTitle: String;
-  supTitle: String;
-  mainLink: String;
+  mainTitle?: String;
+  supTitle?: String;
+  mainLink?: String;
 };
 
 const TitlePage = ({ mainTitle, supTitle, mainLink }: TitlePage_TP) => {

@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import { ReactNode } from "react";
 import { Button } from "..";
 import { MdNavigateNext } from "react-icons/md";
 import { t } from "i18next";

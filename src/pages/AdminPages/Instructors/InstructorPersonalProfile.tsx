@@ -98,7 +98,7 @@ const InstructorPersonalProfile = () => {
       {
         header: () => <span>{t("")}</span>,
         accessorKey: "action",
-        cell: (info) => (
+        cell: () => (
           <HiOutlineDotsHorizontal
             size={35}
             className="fill-mainGray opacity-55 cursor-pointer"

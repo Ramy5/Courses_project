@@ -256,7 +256,7 @@ body {
   }
 }
 
-
+/*Start Instructors Profile */
 .profileCover {
   background-image: url(./assets/instructors/profile-cover.svg);
   background-position: center;
@@ -265,3 +265,4 @@ body {
   height: 200px;
   border-radius: 16px;
 }
+/*End Instructors Profile */

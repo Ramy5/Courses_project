@@ -1,5 +1,3 @@
-import { Form, Formik } from "formik";
-import BaseInput from "../../UI/BaseInput";
 import { t } from "i18next";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
 
