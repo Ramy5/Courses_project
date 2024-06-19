@@ -33,13 +33,13 @@ const SideBar = () => {
       link: "/programs",
     },
     {
-      title: "Lecturers",
+      title: "instructors",
       icon: <FaUserAlt size={24} />,
       alert: "alt",
-      link: "/lecturers",
+      link: "/instructors",
     },
     {
-      title: "Students",
+      title: "students",
       icon: <PiStudentBold size={24} />,
       alert: "alt",
       link: "/students",

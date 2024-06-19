@@ -4,8 +4,9 @@ import { Home, StructurePage } from "./pages";
 import { useRTL } from "./hooks/useRTL";
 import { useLayoutEffect } from "react";
 import InformationPanel from "./pages/AdminPages/InformationPanel";
-import Lecturers from "./pages/AdminPages/Lecturers";
 import Programs from "./pages/AdminPages/Programs";
+import Instructors from "./pages/AdminPages/Instructors/Instructors";
+import InstructorPersonalProfile from "./pages/AdminPages/Instructors/InstructorPersonalProfile";
 
 function App() {
   const isRTL = useRTL();
@@ -22,7 +23,8 @@ function App() {
         <Route path="/" element={<StructurePage />}>
           <Route path="/informationPanel" element={<InformationPanel />} />
           <Route path="/programs" element={<Programs />} />
-          <Route path="lecturers" element={<Lecturers />} />
+          <Route path="/instructors" element={<Instructors />} />
+          <Route path="/instructorProfile/:id" element={<InstructorPersonalProfile />} />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -53,5 +53,21 @@
   "ascending": "تصاعدي",
   "descending": "تنازلي",
   "students fee": "رسوم الطلاب",
-  "sort by : none": "الترتيب حسب: بلا"
+  "sort by : none": "الترتيب حسب: بلا",
+  "add lecturer +":"إضافة محاضر +",
+  "profile personly":"الملف الشخصي",
+  "blocking instructor": "حجب المحاضر",
+  "phone":"الهاتف",
+  "E-mail":"البريد الالكتروني",
+  "address":"العنوان",
+  "scientific certificates":"الشهادات العلمية",
+  "type of certificate": "نوع الشهادة",
+  "certificate name": "مسمي الشهادة",
+  "donor": "الجهة المانحة",
+  "date of acquisition": "تاريخ الحصول",
+  "specialization": "التخصص",
+  "appreciation": "التقدير",
+  "general specialization": "التخصص العام",
+  "Specialization": "التخصص الدقيق",
+  "degree": "الدرجة العلمية"
 }
