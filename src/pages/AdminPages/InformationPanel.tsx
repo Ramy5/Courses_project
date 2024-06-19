@@ -275,7 +275,7 @@ const InformationPanel = () => {
               spaceBetween: 15,
             },
           }}
-          dir={isRTL ? "rtl" : "ltr"}
+          dir={isRTL ? "rtl" : "rtl"}
           modules={[Navigation, Autoplay]}
           className="mySwiper"
         >
@@ -321,7 +321,7 @@ const InformationPanel = () => {
             navigation={true}
             loop
             centeredSlides={true}
-            dir={isRTL ? "rtl" : "ltr"}
+            dir={isRTL ? "rtl" : "rtl"}
             slidesPerView={1}
             modules={[Navigation]}
             className="mySwiper"

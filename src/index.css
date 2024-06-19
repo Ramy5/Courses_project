@@ -255,3 +255,14 @@ body {
     transform: translate(0);
   }
 }
+
+/*Start Instructors Profile */
+.profileCover {
+  background-image: url(./assets/instructors/profile-cover.svg);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 200px;
+  border-radius: 16px;
+}
+/*End Instructors Profile */

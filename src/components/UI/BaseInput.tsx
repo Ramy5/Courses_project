@@ -13,7 +13,7 @@ export type BaseInput_TP = {
   };
   name: string;
   placeholder: string;
-  type: "text" | "number" | "password" | "email";
+  type: "text" | "number" | "password" | "email" | "checkbox";
 };
 
 const BaseInput = ({
