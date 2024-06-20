@@ -14,6 +14,11 @@ body {
   font-family: "Tajawal", sans-serif;
 }
 
+/* BOX SHADOW */
+.main_shadow {
+  box-shadow: 0px 4px 4px 0px #00000040;
+}
+
 /* SWIPER CUSTOM STYLE */
 /* SwiperComponent.css */
 .swiper-button-prev,

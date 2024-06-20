@@ -1,3 +1,5 @@
+import { t } from "i18next";
+
 interface MainCheckBox_TP {
   name: string;
   id?: string;
@@ -5,7 +7,7 @@ interface MainCheckBox_TP {
   className?: string;
   checked?: boolean;
   labelClassName?: string;
-  label: string;
+  label?: string;
 }
 
 const MainCheckBox = (props: MainCheckBox_TP) => {
@@ -26,7 +28,7 @@ const MainCheckBox = (props: MainCheckBox_TP) => {
         htmlFor={(id || name) as string}
         className={`${labelClassName} text-lg`}
       >
-        {label}
+        {t(`${label}`)}
       </label>
     </div>
   );

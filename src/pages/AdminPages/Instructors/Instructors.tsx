@@ -77,8 +77,7 @@ const Instructors = () => {
         {instructorsData.map((instructor, index) => (
           <div
             key={index}
-            className="bg-white rounded-2xl p-4 text-center"
-            style={{ boxShadow: "0px 4px 4px 0px #00000040"}}
+            className="bg-white rounded-2xl p-4 text-center main_shadow"
           >
             <div className="w-full flex items-center justify-end">
               <HiOutlineDotsHorizontal

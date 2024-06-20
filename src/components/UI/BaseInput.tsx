@@ -8,12 +8,11 @@ export type BaseInput_TP = {
   noMb?: boolean;
   required?: boolean;
   className?: string;
-  labelProps?: {
-    [key: string]: any;
-  };
+  labelProps?: String;
   name: string;
   placeholder: string;
-  type: "text" | "number" | "password" | "email" | "checkbox";
+  ref?: any;
+  type: "text" | "number" | "password" | "email" | "checkbox" | "text";
 };
 
 const BaseInput = ({
@@ -24,6 +23,7 @@ const BaseInput = ({
   noMb = false,
   type = "text",
   placeholder,
+  ref,
   ...props
 }: BaseInput_TP) => {
   const { setFieldValue, setFieldTouched, errors, touched, values } =
@@ -42,7 +42,7 @@ const BaseInput = ({
       },
       type: {
         checkbox:
-          "w-4 h-4 text-mainGreen border-gray-300 rounded focus:ring-mainGreen form-checkbox shadow-none",
+          "w-4 h-4 text-mainGreen border-gray-300 rounded focus:ring-mainColor form-checkbox shadow-none",
         radio:
           "w-5 h-5 form-radio rounded-full focus:ring-mainGreen border-gray-300",
         text: GeneralInputClass,
@@ -66,7 +66,7 @@ const BaseInput = ({
     <div className={noMb ? "col-span-1 relative" : "col-span-1 relative"}>
       <div className="relative flex flex-col gap-1">
         {label && (
-          <label className="text-base font-normal text-black" htmlFor={id}>
+          <label className={`${labelProps} text-base font-normal text-black`} htmlFor={id}>
             {label}
           </label>
         )}
@@ -91,6 +91,7 @@ const BaseInput = ({
             className: props.className,
             type: props.type || "text",
           })}
+          ref={ref}
         />
       </div>
       {/* <FormikError name={props.name} className="absolute whitespace-nowrap" /> */}

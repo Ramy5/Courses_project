@@ -7,6 +7,7 @@ import InformationPanel from "./pages/AdminPages/InformationPanel";
 import Programs from "./pages/AdminPages/Programs";
 import Instructors from "./pages/AdminPages/Instructors/Instructors";
 import InstructorPersonalProfile from "./pages/AdminPages/Instructors/InstructorPersonalProfile";
+import InstructorEditProfile from "./pages/AdminPages/Instructors/InstructorEditProfile";
 
 function App() {
   const isRTL = useRTL();
@@ -25,6 +26,7 @@ function App() {
           <Route path="/programs" element={<Programs />} />
           <Route path="/instructors" element={<Instructors />} />
           <Route path="/instructorProfile/:id" element={<InstructorPersonalProfile />} />
+          <Route path="/instructorEdit/:id" element={<InstructorEditProfile />} />
         </Route>
       </Routes>
     </BrowserRouter>
