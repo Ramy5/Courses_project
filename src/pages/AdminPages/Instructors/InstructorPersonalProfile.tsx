@@ -13,7 +13,7 @@ import { HiOutlineDotsHorizontal } from "react-icons/hi";
 
 import { t } from "i18next";
 import { Table } from "../../../components";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 
 export type InstructorPersonalData_TP = {
@@ -23,7 +23,11 @@ export type InstructorPersonalData_TP = {
 };
 
 const InstructorPersonalProfile = () => {
+  const [selectAll, setSelectAll] = useState<Boolean>(false);
+  const [selectedRows, setSelectedRows] = useState<any>([]);
+
   const instructorPersonalData = {
+    id: 1,
     profileCover: ProfileCover,
     personalImage: PersonalImage,
     instructorName: "Dimitres Viga",
@@ -58,12 +62,58 @@ const InstructorPersonalProfile = () => {
     },
   ];
 
+  const handleHeaderCheckboxClick = () => {
+    const allCheckBoxes = document.querySelectorAll(
+      'input[name="selectedItem"]'
+    );
+    allCheckBoxes.forEach((checkbox) => {
+      checkbox.checked = !selectAll;
+    });
+    setSelectAll(!selectAll);
+  };
+
+  const handleCheckboxChange = (event: any, selectedRow: any) => {
+    const checkboxId = event.target.id;
+    if (event.target.checked) {
+      setSelectedRows((prevSelectedItems: any) => [
+        ...prevSelectedItems,
+        selectedRow.row.original,
+      ]);
+    } else {
+      setSelectedRows((prevSelectedItems: any) =>
+        prevSelectedItems.filter((item: any) => item.id !== +checkboxId)
+      );
+    }
+  };
+
   const studentsColumnsFee = useMemo<ColumnDef<any>[]>(
     () => [
       {
-        header: () => <span>{t("#")}</span>,
-        accessorKey: "index",
-        cell: (info) => info.getValue(),
+        header: () => {
+          return (
+            <input
+              type="checkbox"
+              className="w-5 h-5 cursor-pointer"
+              id={crypto.randomUUID()}
+              name="selectedItem"
+              onClick={handleHeaderCheckboxClick}
+            />
+          );
+        },
+        accessorKey: "checkbox",
+        cell: (info: any) => {
+          return (
+            <div className="flex items-center justify-center gap-4">
+              <input
+                type="checkbox"
+                className="w-5 h-5 cursor-pointer"
+                id={info.row.original.id}
+                name="selectedItem"
+                onClick={(event) => handleCheckboxChange(event, info)}
+              />
+            </div>
+          );
+        },
       },
       {
         header: () => <span>{t("type of certificate")}</span>,
@@ -112,7 +162,11 @@ const InstructorPersonalProfile = () => {
   return (
     <div>
       <div>
-        <TitlePage mainTitle="instructors" supTitle="Dimitres Viga" mainLink="/instructors" />
+        <TitlePage
+          mainTitle="instructors"
+          supTitle="Dimitres Viga"
+          mainLink="/instructors"
+        />
       </div>
 
       <div className="bg-white rounded-2xl pb-2">
@@ -190,7 +244,9 @@ const InstructorPersonalProfile = () => {
         </div>
 
         <div className="bg-[#E6EAEE] rounded-2xl my-7 mx-5 py-6 px-8">
-          <h2 className="text-2xl font-semibold text-center sm:text-start">{t("specialization")}</h2>
+          <h2 className="text-2xl font-semibold text-center sm:text-start">
+            {t("specialization")}
+          </h2>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 text-center sm:text-start gap-6 my-12">
             <div className="flex gap-2 flex-col">
