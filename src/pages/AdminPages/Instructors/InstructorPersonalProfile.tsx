@@ -17,9 +17,9 @@ import { useMemo, useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 
 export type InstructorPersonalData_TP = {
-  profileCover?: any;
-  personalImage?: any;
-  instructorName?: String;
+  profileCover?: string;
+  personalImage?: string;
+  instructorName?: string;
 };
 
 const InstructorPersonalProfile = () => {

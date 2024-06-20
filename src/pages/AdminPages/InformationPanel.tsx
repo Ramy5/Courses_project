@@ -25,7 +25,6 @@ import {
 import { useMemo, useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { t } from "i18next";
-import { Formik } from "formik";
 
 const InformationPanel = () => {
   const isRTL = useRTL();
@@ -275,7 +274,7 @@ const InformationPanel = () => {
               spaceBetween: 15,
             },
           }}
-          dir={isRTL ? "rtl" : "rtl"}
+          dir="rtl"
           modules={[Navigation, Autoplay]}
           className="mySwiper"
         >
@@ -321,7 +320,7 @@ const InformationPanel = () => {
             navigation={true}
             loop
             centeredSlides={true}
-            dir={isRTL ? "rtl" : "rtl"}
+            dir="rtl"
             slidesPerView={1}
             modules={[Navigation]}
             className="mySwiper"

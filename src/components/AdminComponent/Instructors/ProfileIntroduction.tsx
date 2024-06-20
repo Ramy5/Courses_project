@@ -5,7 +5,7 @@ const ProfileIntroduction = ({ instructorPersonalData }: any) => {
   return (
     <div className="relative">
       <div className="profileCover"></div>
-      <div className="flex justify-between items-end absolute px-12 top-32 w-full">
+      <div className="absolute flex items-end justify-between w-full px-12 top-32">
         <div className="flex items-end gap-3">
           <img
             src={instructorPersonalData.personalImage}
@@ -30,7 +30,10 @@ const ProfileIntroduction = ({ instructorPersonalData }: any) => {
           />
         </div>
 
-        <DotsDropDown instructorId={instructorPersonalData.id} instructorRoute="/instructorEdit" />
+        <DotsDropDown
+          instructorId={instructorPersonalData.id}
+          instructorRoute="/instructorEdit"
+        />
       </div>
     </div>
   );
