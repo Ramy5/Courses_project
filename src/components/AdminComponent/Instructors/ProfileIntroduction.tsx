@@ -1,11 +1,12 @@
 import { t } from "i18next";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
+import MainCheckBox from "../../UI/MainCheckBox";
 
 const ProfileIntroduction = ({ instructorPersonalData }: any) => {
   return (
     <div className="relative">
       <div className="profileCover"></div>
-      <div className="flex justify-between items-end absolute px-12 top-32 w-full">
+      <div className="absolute flex items-end justify-between w-full px-12 top-32">
         <div className="flex items-end gap-3">
           <img
             src={instructorPersonalData.personalImage}
@@ -30,7 +31,7 @@ const ProfileIntroduction = ({ instructorPersonalData }: any) => {
           />
           <label
             htmlFor="instructor_blocking"
-            className="text-black text-base font-medium ms-2"
+            className="text-base font-medium text-black ms-2"
           >
             {t("blocking instructor")}
           </label>
@@ -38,7 +39,7 @@ const ProfileIntroduction = ({ instructorPersonalData }: any) => {
 
         <HiOutlineDotsHorizontal
           size={30}
-          className="fill-mainGray opacity-55 mb-6"
+          className="mb-6 fill-mainGray opacity-55"
         />
       </div>
     </div>

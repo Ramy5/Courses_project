@@ -17,9 +17,9 @@ import { useMemo } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 
 export type InstructorPersonalData_TP = {
-  profileCover?: any;
-  personalImage?: any;
-  instructorName?: String;
+  profileCover?: string;
+  personalImage?: string;
+  instructorName?: string;
 };
 
 const InstructorPersonalProfile = () => {
@@ -112,7 +112,11 @@ const InstructorPersonalProfile = () => {
   return (
     <div>
       <div>
-        <TitlePage mainTitle="instructors" supTitle="Dimitres Viga" mainLink="/instructors" />
+        <TitlePage
+          mainTitle="instructors"
+          supTitle="Dimitres Viga"
+          mainLink="/instructors"
+        />
       </div>
 
       <div className="bg-white rounded-2xl pb-2">
@@ -190,7 +194,9 @@ const InstructorPersonalProfile = () => {
         </div>
 
         <div className="bg-[#E6EAEE] rounded-2xl my-7 mx-5 py-6 px-8">
-          <h2 className="text-2xl font-semibold text-center sm:text-start">{t("specialization")}</h2>
+          <h2 className="text-2xl font-semibold text-center sm:text-start">
+            {t("specialization")}
+          </h2>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 text-center sm:text-start gap-6 my-12">
             <div className="flex gap-2 flex-col">
