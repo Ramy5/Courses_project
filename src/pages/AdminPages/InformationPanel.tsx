@@ -183,7 +183,7 @@ const InformationPanel = () => {
     },
   ];
 
-  const studentsColumnsFee = useMemo<ColumnDef<any>[]>(
+  const studentsColumnsFee = useMemo<ColumnDef<[]>[]>(
     () => [
       {
         header: () => <span>{t("#")}</span>,

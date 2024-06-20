@@ -6,7 +6,7 @@ import InstructorContactInformation from "../../../components/AdminComponent/Ins
 import InstructorQualificationData from "../../../components/AdminComponent/Instructors/InstructorQualificationData";
 
 const InstructorEditProfile = () => {
-  const [activeTab, setActiveTab] = useState<String>("login data");
+  const [activeTab, setActiveTab] = useState<string>("login data");
 
   const tabs = [
     { id: 0, title: "login data" },
@@ -16,7 +16,7 @@ const InstructorEditProfile = () => {
   ];
   return (
     <div>
-      <div className="bg-mainColor px-16 py-3 rounded-tr-2xl rounded-tl-2xl">
+      <div className="px-16 py-3 bg-mainColor rounded-tr-2xl rounded-tl-2xl">
         <ul className="flex items-center justify-between">
           {tabs.map((tab) => (
             <li
@@ -32,7 +32,7 @@ const InstructorEditProfile = () => {
           ))}
         </ul>
       </div>
-      <div className="bg-white py-8 rounded-br-2xl rounded-bl-2xl">
+      <div className="py-8 bg-white rounded-br-2xl rounded-bl-2xl">
         {activeTab === "login data" && <InstructorLoginData />}
         {activeTab === "personal data" && <InstructorPersonalData />}
         {activeTab === "contact information" && (

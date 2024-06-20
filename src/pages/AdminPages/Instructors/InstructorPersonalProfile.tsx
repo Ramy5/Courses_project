@@ -1,4 +1,3 @@
-import ProfileIntroduction from "../../../components/AdminComponent/Instructors/ProfileIntroduction";
 import TitlePage from "../../../components/UI/TitlePage";
 import ProfileCover from "../../../assets/instructors/profile-cover.svg";
 import PersonalImage from "../../../assets/instructors/instructor_2.svg";
@@ -12,7 +11,7 @@ import { FaTwitter } from "react-icons/fa";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
 
 import { t } from "i18next";
-import { Table } from "../../../components";
+import { ProfileIntroduction, Table } from "../../../components";
 import { useMemo, useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 
@@ -151,7 +150,7 @@ const InstructorPersonalProfile = () => {
         cell: () => (
           <HiOutlineDotsHorizontal
             size={35}
-            className="fill-mainGray opacity-55 cursor-pointer"
+            className="cursor-pointer fill-mainGray opacity-55"
           />
         ),
       },
@@ -169,12 +168,12 @@ const InstructorPersonalProfile = () => {
         />
       </div>
 
-      <div className="bg-white rounded-2xl pb-2">
+      <div className="pb-2 bg-white rounded-2xl">
         <ProfileIntroduction instructorPersonalData={instructorPersonalData} />
 
-        <div className="bg-mainBg rounded-2xl mt-28 mx-5 py-6 px-8">
-          <div className="flex items-center justify-between flex-col md:flex-row gap-y-5">
-            <div className="flex gap-2 flex-col lg:flex-row text-center lg:text-start items-center lg:items-start">
+        <div className="px-8 py-6 mx-5 bg-mainBg rounded-2xl mt-28">
+          <div className="flex flex-col items-center justify-between md:flex-row gap-y-5">
+            <div className="flex flex-col items-center gap-2 text-center lg:flex-row lg:text-start lg:items-start">
               <div
                 className="w-[50px] h-[50px] rounded-full bg-mainColor flex items-center justify-center "
                 style={{ boxShadow: "0px 4px 4px 0px #00000080" }}
@@ -186,7 +185,7 @@ const InstructorPersonalProfile = () => {
                 <span>{instructorPersonalData.phoneNumber}</span>
               </div>
             </div>
-            <div className="flex gap-2 flex-col lg:flex-row text-center lg:text-start items-center lg:items-start">
+            <div className="flex flex-col items-center gap-2 text-center lg:flex-row lg:text-start lg:items-start">
               <div
                 className="w-[50px] h-[50px] rounded-full bg-mainColor text-white flex items-center justify-center"
                 style={{ boxShadow: "0px 4px 4px 0px #00000080" }}
@@ -198,7 +197,7 @@ const InstructorPersonalProfile = () => {
                 <span>{instructorPersonalData.emial}</span>
               </div>
             </div>
-            <div className="flex gap-2 flex-col lg:flex-row text-center lg:text-start items-center lg:items-start">
+            <div className="flex flex-col items-center gap-2 text-center lg:flex-row lg:text-start lg:items-start">
               <div
                 className="w-[50px] h-[50px] rounded-full bg-mainColor text-white flex items-center justify-center"
                 style={{ boxShadow: "0px 4px 4px 0px #00000080" }}
@@ -212,20 +211,20 @@ const InstructorPersonalProfile = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 my-12">
-            <div className="flex gap-3 items-center flex-col sm:flex-row">
+          <div className="grid grid-cols-1 gap-6 my-12 sm:grid-cols-2">
+            <div className="flex flex-col items-center gap-3 sm:flex-row">
               <FaLinkedin size={32} className="rounded-xl fill-[#0A66C2]" />
               <p className="font-medium">{instructorPersonalData.linkedIn}</p>
             </div>
-            <div className="flex gap-3 items-center flex-col sm:flex-row">
+            <div className="flex flex-col items-center gap-3 sm:flex-row">
               <FaFacebook size={32} fill="#1877F2" />
               <p className="font-medium">{instructorPersonalData.facebook}</p>
             </div>
-            <div className="flex gap-3 items-center flex-col sm:flex-row">
+            <div className="flex flex-col items-center gap-3 sm:flex-row">
               <RiWhatsappFill size={32} fill="#60D669" />
               <p className="font-medium">{instructorPersonalData.whatsapp}</p>
             </div>
-            <div className="flex gap-3 items-center flex-col sm:flex-row">
+            <div className="flex flex-col items-center gap-3 sm:flex-row">
               <FaTwitter size={32} fill="#55ACEE" />
               <p className="font-medium">{instructorPersonalData.twitter}</p>
             </div>
@@ -233,7 +232,7 @@ const InstructorPersonalProfile = () => {
         </div>
 
         <div className="bg-[#E6EAEE] rounded-2xl my-7 mx-5 py-6">
-          <h2 className="text-2xl font-semibold ms-5 mb-5 text-center sm:text-start">
+          <h2 className="mb-5 text-2xl font-semibold text-center ms-5 sm:text-start">
             {t("scientific certificates")}
           </h2>
           <Table
@@ -248,27 +247,27 @@ const InstructorPersonalProfile = () => {
             {t("specialization")}
           </h2>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 text-center sm:text-start gap-6 my-12">
-            <div className="flex gap-2 flex-col">
-              <p className="text-mainColor font-semibold text-base">
+          <div className="grid grid-cols-1 gap-6 my-12 text-center sm:grid-cols-2 sm:text-start">
+            <div className="flex flex-col gap-2">
+              <p className="text-base font-semibold text-mainColor">
                 {t("general specialization")}
               </p>
               <span className="font-semibold">Lorem ipsum </span>
             </div>
-            <div className="flex gap-2 flex-col">
-              <p className="text-mainColor font-semibold text-base">
+            <div className="flex flex-col gap-2">
+              <p className="text-base font-semibold text-mainColor">
                 {t("Specialization")}
               </p>
               <span className="font-semibold">Lorem ipsum </span>
             </div>
-            <div className="flex gap-2 flex-col">
-              <p className="text-mainColor font-semibold text-base">
+            <div className="flex flex-col gap-2">
+              <p className="text-base font-semibold text-mainColor">
                 {t("degree")}
               </p>
               <span className="font-semibold">Lorem ipsum </span>
             </div>
-            <div className="flex gap-2 flex-col">
-              <p className="text-mainColor font-semibold text-base">
+            <div className="flex flex-col gap-2">
+              <p className="text-base font-semibold text-mainColor">
                 {t("date")}
               </p>
               <span className="font-semibold">3/2/2010</span>

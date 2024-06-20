@@ -10,9 +10,9 @@ export type BaseInput_TP = {
   className?: string;
   labelProps?: String;
   name: string;
-  placeholder: string;
+  placeholder?: string;
   ref?: any;
-  type: "text" | "number" | "password" | "email" | "checkbox" | "text";
+  type?: "text" | "number" | "password" | "email" | "checkbox" | "text";
 };
 
 const BaseInput = ({
@@ -66,7 +66,10 @@ const BaseInput = ({
     <div className={noMb ? "col-span-1 relative" : "col-span-1 relative"}>
       <div className="relative flex flex-col gap-1">
         {label && (
-          <label className={`${labelProps} text-base font-normal text-black`} htmlFor={id}>
+          <label
+            className={`${labelProps} text-base font-normal text-black`}
+            htmlFor={id}
+          >
             {label}
           </label>
         )}
