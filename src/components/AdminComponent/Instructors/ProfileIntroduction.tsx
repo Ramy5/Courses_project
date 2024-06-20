@@ -1,6 +1,5 @@
-import { t } from "i18next";
-import { HiOutlineDotsHorizontal } from "react-icons/hi";
 import MainCheckBox from "../../UI/MainCheckBox";
+import DotsDropDown from "../../UI/DotsDropDown";
 
 const ProfileIntroduction = ({ instructorPersonalData }: any) => {
   return (
@@ -24,22 +23,16 @@ const ProfileIntroduction = ({ instructorPersonalData }: any) => {
         </div>
 
         <div className="mb-6">
-          <input
-            type="checkbox"
-            id="instructor_blocking"
-            name="instructor_blocking"
+          <MainCheckBox
+            id="instructor_block"
+            name="instructor_block"
+            label="blocking instructor"
           />
-          <label
-            htmlFor="instructor_blocking"
-            className="text-base font-medium text-black ms-2"
-          >
-            {t("blocking instructor")}
-          </label>
         </div>
 
-        <HiOutlineDotsHorizontal
-          size={30}
-          className="mb-6 fill-mainGray opacity-55"
+        <DotsDropDown
+          instructorId={instructorPersonalData.id}
+          instructorRoute="/instructorEdit"
         />
       </div>
     </div>

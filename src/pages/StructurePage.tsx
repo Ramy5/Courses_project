@@ -11,7 +11,7 @@ const StructurePage = () => {
 
       <SideBar />
 
-      <main className="col-start-2 col-end-3 row-start-2 row-end-3 px-2 py-6 mb-10 overflow-y-auto lg:px-8">
+      <main className="col-start-2 col-end-3 row-start-2 row-end-3 px-4 py-6 mb-5 overflow-y-auto lg:px-8">
         <Outlet />
       </main>
     </div>
