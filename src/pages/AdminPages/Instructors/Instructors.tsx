@@ -1,14 +1,14 @@
 import { t } from "i18next";
 import Select from "react-select";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
-import TitlePage from "../../../components/UI/TitlePage";
-import { Button, SearchInput } from "../../../components";
-import { useNavigate } from 'react-router-dom';
+import { Button, SearchInput, TitlePage } from "../../../components";
+import { useNavigate } from "react-router-dom";
 import Pagination from "../../../components/UI/Pagination";
 import Instructor from "../../../assets/instructors/instructor.svg";
 import Instructor_2 from "../../../assets/instructors/instructor_2.svg";
 import Instructor_3 from "../../../assets/instructors/instructor_3.svg";
 import Instructor_4 from "../../../assets/instructors/instructor_4.svg";
+import { FaUserAlt } from "react-icons/fa";
 
 const Instructors = () => {
   const navigate = useNavigate();
@@ -21,37 +21,36 @@ const Instructors = () => {
 
   const instructorsData = [
     {
-      id:1,
+      id: 1,
       image: Instructor,
       name: "Dimitres Viga",
       jobTitle: "مصمم مواقع",
     },
     {
-      id:2,
+      id: 2,
       image: Instructor_2,
       name: "Viga Dimitres",
       jobTitle: "مصمم مواقع",
     },
     {
-      id:3,
+      id: 3,
       image: Instructor_3,
       name: "Dimitres Viga",
       jobTitle: "مصمم مواقع",
     },
     {
-      id:4,
+      id: 4,
       image: Instructor_4,
       name: "Viga Dimitres",
       jobTitle: "مصمم مواقع",
     },
     {
-      id:5,
+      id: 5,
       image: Instructor,
       name: "Dimitres Viga",
       jobTitle: "مصمم مواقع",
     },
   ];
-
 
   const handleProfileClick = (instructorId: number) => {
     navigate(`/instructorProfile/${instructorId}`);
@@ -60,26 +59,30 @@ const Instructors = () => {
   return (
     <div>
       <div>
-        <TitlePage mainTitle="instructors" supTitle="" />
+        <TitlePage
+          mainTitle="instructors"
+          supTitle=""
+          icon={<FaUserAlt size={22} className="fill-mainColor" />}
+        />
       </div>
 
-      <div className="bg-white p-4 flex items-center justify-between rounded-2xl">
+      <div className="flex items-center justify-between p-4 bg-white rounded-2xl">
         <Select options={options} placeholder="short by" />
 
         <SearchInput />
 
-        <Button type="button" className="font-medium text-xl">
+        <Button type="button" className="text-xl font-medium">
           {t("add lecturer +")}
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 my-8">
+      <div className="grid grid-cols-1 gap-4 my-8 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4">
         {instructorsData.map((instructor, index) => (
           <div
             key={index}
-            className="bg-white rounded-2xl p-4 text-center main_shadow"
+            className="p-4 text-center bg-white rounded-2xl main_shadow"
           >
-            <div className="w-full flex items-center justify-end">
+            <div className="flex items-center justify-end w-full">
               <HiOutlineDotsHorizontal
                 size={30}
                 className="fill-mainGray opacity-55"

@@ -18,7 +18,7 @@ export const DateInputField = ({
   placeholder,
   className,
 }: {
-  label: string;
+  label?: string;
   icon?: ReactNode;
   name: string;
   maxDate?: Date;
@@ -35,10 +35,10 @@ export const DateInputField = ({
     useFormikContext<{
       [key: string]: any;
     }>();
-//   const [dateActive, setDateActive] = useState(false);
+  //   const [dateActive, setDateActive] = useState(false);
 
   return (
-    <div className="col-span-1 relative">
+    <div className="relative col-span-1">
       <div className="flex flex-col gap-1">
         <label
           htmlFor={name}
@@ -71,7 +71,7 @@ export const DateInputField = ({
           }
         />
       </div>
-      {/* <FormikError name={name} className="whitespace-nowrap absolute" /> */}
+      {/* <FormikError name={name} className="absolute whitespace-nowrap" /> */}
     </div>
   );
 };

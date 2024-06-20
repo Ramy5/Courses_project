@@ -1,28 +1,30 @@
 import { t } from "i18next";
+import { ReactNode } from "react";
 import { FaUserAlt } from "react-icons/fa";
 import { PiLessThan } from "react-icons/pi";
 import { Link } from "react-router-dom";
 
 type TitlePage_TP = {
-  mainTitle?: String;
-  supTitle?: String;
-  mainLink?: String;
+  mainTitle?: string;
+  supTitle?: string;
+  mainLink?: string;
+  icon?: ReactNode;
 };
 
-const TitlePage = ({ mainTitle, supTitle, mainLink }: TitlePage_TP) => {
+const TitlePage = ({ mainTitle, supTitle, mainLink, icon }: TitlePage_TP) => {
   return (
     <div>
-      <h2 className="text-mainGray font-semibold text-3xl opacity-90">
+      <h2 className="text-3xl font-semibold text-mainGray opacity-90">
         {t(`${mainTitle}`)}
       </h2>
-      <div className="flex items-center gap-2 text-black my-5">
-        <FaUserAlt size={22} className="fill-mainColor" />
+      <div className="flex items-center gap-2 my-5 text-black">
+        <span>{icon}</span>
         <Link to={`${mainLink}`} className="cursor-pointer">
           {t(`${mainTitle}`)}
         </Link>
         {supTitle && (
           <>
-            <PiLessThan size={22} className="fill-mainColor" />
+            <PiLessThan size={16} className="fill-mainColor" />
             <p>{t(`${supTitle}`)}</p>
           </>
         )}
