@@ -8,7 +8,7 @@ import { useRTL } from "../../hooks/useRTL";
 import { useNavigate } from "react-router-dom";
 
 type DotsDropDown_TP = {
-  instructorId: number;
+  instructorId: string | number;
   instructorRoute: string;
 };
 

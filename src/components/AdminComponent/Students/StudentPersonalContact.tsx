@@ -11,7 +11,7 @@ const StudentPersonalContact = (props: StudentPersonalContact_TP) => {
 
   return (
     <div className="flex items-center gap-1">
-      <p className="flex items-center justify-center p-3 text-white rounded-full shadow-xl w-max bg-mainColor">
+      <p className="flex items-center justify-center p-2 text-white rounded-full shadow-xl lg:p-3 w-max bg-mainColor">
         {icon}
       </p>
       <div>

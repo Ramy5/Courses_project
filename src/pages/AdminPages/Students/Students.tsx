@@ -86,7 +86,7 @@ const Students = () => {
         cell: (info) => {
           return (
             <IoMdEye
-              className="w-full mx-auto cursor-pointer text-mainColor"
+              className="mx-auto cursor-pointer lg:w-full text-mainColor"
               size={24}
               onClick={() =>
                 navigate(`/studentProfile/${info.row.original.id}`)
@@ -156,9 +156,13 @@ const Students = () => {
             </span>
             <span className="text-xl text-gray-700">{t("filter")}</span>
           </p>
-          <div className="flex items-center gap-12">
+          <div className="flex flex-wrap items-center gap-6 mt-4 lg:gap-12 lg:mt-0">
             <SearchInput />
-            <Button type="button" className="text-xl font-medium">
+            <Button
+              type="button"
+              className="text-xl font-medium"
+              action={() => navigate("/students/addStudent")}
+            >
               {t("add student +")}
             </Button>
             <p>

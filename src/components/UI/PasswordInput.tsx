@@ -4,24 +4,36 @@ import { IoEye } from "react-icons/io5";
 
 interface PasswordInput_TP {
   name: string;
-  value: string;
+  value?: string;
   type?: string;
   placeholder?: string;
   className?: string;
   id?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
+  parentClass?: string;
 }
 
 const PasswordInput = (props: PasswordInput_TP) => {
-  const { value, name, placeholder, className, id, onChange, onBlur } = props;
+  const {
+    value,
+    name,
+    placeholder,
+    className,
+    id,
+    onChange,
+    onBlur,
+    parentClass,
+  } = props;
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const handleShowPassword = () => setShowPassword((prev) => !prev);
 
   return (
-    <div className="flex items-center w-full gap-2 rounded-full bg-[#D8DEEA] px-6  shadow-lg">
+    <div
+      className={`${parentClass} flex items-center w-full gap-2 rounded-full bg-[#D8DEEA] px-6  shadow-lg`}
+    >
       <input
         name={name}
         id={id || name}
