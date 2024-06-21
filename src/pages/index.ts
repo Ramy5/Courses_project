@@ -5,6 +5,7 @@ import Instructors from "./AdminPages/Instructors/Instructors";
 import Programs from "./AdminPages/Programs/Programs";
 import Students from "./AdminPages/Students/Students";
 import StudentProfile from "./AdminPages/Students/StudentProfile";
+import AddStudent from "./AdminPages/Students/AddStudent";
 
 export {
   StructurePage,
@@ -14,4 +15,5 @@ export {
   Programs,
   Students,
   StudentProfile,
+  AddStudent,
 };

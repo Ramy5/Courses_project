@@ -38,9 +38,7 @@ const InstructorEditProfile = () => {
         {activeTab === "contact information" && (
           <InstructorContactInformation />
         )}
-        {activeTab === "qualification data" && (
-          <InstructorQualificationData />
-        )}
+        {activeTab === "qualification data" && <InstructorQualificationData />}
       </div>
     </div>
   );

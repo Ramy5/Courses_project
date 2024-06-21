@@ -22,7 +22,7 @@ const MainPopup: React.FC<MainPopup_TP> = ({
         onClick={onClose}
       ></div>
       <div
-        className={`fixed w-[80vw] xl:w-[50vw] p-6 text-white transform -translate-x-1/2 -translate-y-1/2 bg-mainColor top-1/2 left-1/2 min-h-1/3 rounded-xl z-50 ${className}`}
+        className={`fixed w-[95vw] lg:w-[80vw] xl:w-[50vw] p-6 text-white transform -translate-x-1/2 -translate-y-1/2 bg-mainColor top-1/2 left-1/2 min-h-1/3 rounded-xl z-50 ${className}`}
       >
         <IoMdClose
           onClick={onClose}
