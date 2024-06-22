@@ -18,6 +18,8 @@ import ProgramInformation from "./pages/AdminPages/Programs/ProgramInformation";
 import ViewCourseDescription from "./pages/AdminPages/Programs/ViewCourseDescription";
 import CreateProgram from "./pages/AdminPages/Programs/CreateProgram";
 import CreateCourses from "./pages/AdminPages/Programs/CreateCourses";
+import StudySchedule from "./pages/AdminPages/Programs/StudySchedule";
+import AddLectureTiming from "./pages/AdminPages/Programs/AddLectureTiming";
 
 function App() {
   const isRTL = useRTL();
@@ -72,6 +74,8 @@ function App() {
           />
           <Route path="/programs/create" element={<CreateProgram />} />
           <Route path="/programs/courses/create" element={<CreateCourses />} />
+          <Route path="/programs/StudySchedule/:id" element={<StudySchedule />} />
+          <Route path="/programs/LectureTime" element={<AddLectureTiming />} />
 
           {/* INSTRUCTORS */}
           <Route path="/instructors" element={<Instructors />} />
