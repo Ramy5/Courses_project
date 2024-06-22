@@ -49,7 +49,7 @@ const StudentAddFatherData = () => {
       />
 
       <div className="flex flex-col">
-        <label htmlFor="address" className="font-semibold">
+        <label htmlFor="address_father" className="font-semibold">
           {t("address")}
         </label>
         <textarea
