@@ -20,6 +20,8 @@ import { MdOutlineEmail, MdPeople } from "react-icons/md";
 import { useMemo, useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { Form, Formik } from "formik";
+import { FaRegEdit } from "react-icons/fa";
+import { RiDeleteBin5Line } from "react-icons/ri";
 
 const StudentProfile = () => {
   const [showReceiptModal, setShowReceiptModal] = useState(false);
@@ -153,6 +155,17 @@ const StudentProfile = () => {
                         <DotsDropDown
                           instructorId={"addStudent"}
                           instructorRoute="/students"
+                          firstName="edit"
+                          firstIcon={
+                            <FaRegEdit size={22} className="fill-mainColor" />
+                          }
+                          secondName="delete"
+                          secondIcon={
+                            <RiDeleteBin5Line
+                              size={22}
+                              className="fill-mainRed"
+                            />
+                          }
                         />
                       </div>
                     </div>
