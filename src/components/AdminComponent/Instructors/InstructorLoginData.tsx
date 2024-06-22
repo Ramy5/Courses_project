@@ -32,7 +32,7 @@ const InstructorLoginData = () => {
           console.log("🚀 ~ InstructorLoginData ~ values:", values);
         }}
       >
-        <Form className="flex flex-col gap-5 w-full md:w-3/4 px-16">
+        <Form className="flex flex-col gap-5 w-full md:w-3/4 px-8 md:px-16">
           <div>
             <BaseInput
               name="full_name"
@@ -104,7 +104,7 @@ const InstructorLoginData = () => {
             )}
           </div>
 
-          <div className="mt-4">
+          <div className="mt-5 flex justify-end">
             <Button type="submit" className="me-5">{t("confirm")}</Button>
             <Button type="button" className="bg-[#E6EAEE] text-mainColor">{t("cancel")}</Button>
           </div>

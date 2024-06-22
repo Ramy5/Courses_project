@@ -6,13 +6,25 @@ import { RiDeleteBin5Line } from "react-icons/ri";
 import { t } from "i18next";
 import { useRTL } from "../../hooks/useRTL";
 import { useNavigate } from "react-router-dom";
+import { GrView } from "react-icons/gr";
 
 type DotsDropDown_TP = {
-  instructorId: string | number;
-  instructorRoute: string;
+  instructorId?: number;
+  instructorRoute?: string;
+  firstName: string;
+  firstIcon: any;
+  secondName?: string;
+  secondIcon?: any;
 };
 
-const DotsDropDown = ({ instructorId, instructorRoute }: DotsDropDown_TP) => {
+const DotsDropDown = ({
+  instructorId,
+  instructorRoute,
+  firstName,
+  firstIcon,
+  secondName,
+  secondIcon,
+}: DotsDropDown_TP) => {
   const [dropDown, setDropDown] = useState<boolean>(false);
   const isRTL = useRTL();
   const navigate = useNavigate();
@@ -26,9 +38,11 @@ const DotsDropDown = ({ instructorId, instructorRoute }: DotsDropDown_TP) => {
   return (
     <div className="relative">
       <Button
-        className="p-0 mb-4 bg-transparent text-mainGray"
+        className="p-0 bg-transparent text-mainGray"
         type="button"
-        action={() => setDropDown(!dropDown)}
+        action={() => {
+          setDropDown(!dropDown);
+        }}
       >
         <HiOutlineDotsHorizontal
           size={35}
@@ -37,7 +51,7 @@ const DotsDropDown = ({ instructorId, instructorRoute }: DotsDropDown_TP) => {
       </Button>
 
       <ul
-        className={`${dropDown ? "opacity-100" : "opacity-0"} ${
+        className={`${dropDown ? "block" : "hidden"} ${
           isRTL ? "left-0" : "right-0"
         } transition-all duration-150 absolute top-7 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
       >
@@ -47,8 +61,8 @@ const DotsDropDown = ({ instructorId, instructorRoute }: DotsDropDown_TP) => {
           onClick={handleClickEdit}
         >
           <div className="flex items-center gap-2 px-4 py-2 text-mainColor">
-            <FaRegEdit size={22} className="fill-mainColor" />
-            <p className="text-base font-medium">{t("edit")}</p>
+            {firstIcon}
+            <p className="text-base font-medium">{t(`${firstName}`)}</p>
           </div>
         </li>
 
@@ -57,9 +71,15 @@ const DotsDropDown = ({ instructorId, instructorRoute }: DotsDropDown_TP) => {
           role="none"
           onClick={handleClickDelete}
         >
-          <div className="flex items-center gap-2 px-4 py-2 text-mainRed">
-            <RiDeleteBin5Line size={22} className="fill-mainRed" />
-            <p className="text-base font-medium">{t("delete")}</p>
+          <div
+            className={`${
+              secondIcon.props.className === "fill-mainRed"
+                ? "text-mainRed"
+                : "text-mainColor"
+            } flex items-center gap-2 px-4 py-2`}
+          >
+            {secondIcon}
+            <p className="text-base font-medium">{t(`${secondName}`)}</p>
           </div>
         </li>
       </ul>

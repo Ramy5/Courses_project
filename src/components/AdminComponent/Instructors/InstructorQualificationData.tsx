@@ -19,6 +19,7 @@ import {
 
 const InstructorQualificationData = () => {
   const [file, setFile] = useState(null);
+  const [addNewCertificates, setAddNewCertificates] = useState(false);
 
   const studentsDataFee = [
     {
@@ -42,8 +43,6 @@ const InstructorQualificationData = () => {
   ];
 
   const [dataSource, setDataSource] = useState(studentsDataFee);
-  console.log("🚀 ~ InstructorQualificationData ~ dataSource:", dataSource);
-  console.log("🚀 ~ InstructorQualificationData ~ file:", file);
 
   const initialValues = {
     general_specialization: "",
@@ -119,7 +118,7 @@ const InstructorQualificationData = () => {
     getPaginationRowModel: getPaginationRowModel(),
   });
 
-  const addNewCertificate = (newCertificate) => {
+  const addNewCertificate = (newCertificate: any) => {
     setDataSource((prev) => [newCertificate, ...prev]);
   };
 
@@ -133,7 +132,7 @@ const InstructorQualificationData = () => {
       {({ setFieldValue, values }) => {
         return (
           <Form>
-            <div className="flex flex-col gap-5 w-full md:w-3/4 px-16">
+            <div className="flex flex-col gap-5 w-full md:w-3/4 px-8 md:px-16">
               <div>
                 <BaseInput
                   name="specialization"
@@ -232,9 +231,14 @@ const InstructorQualificationData = () => {
             </div>
 
             <div className="mt-8">
-              <h2 className="text-2xl font-semibold ms-5 mb-5 text-center sm:text-start">
-                {t("scientific certificates")}
-              </h2>
+              <div className="flex justify-between items-center mx-8 mb-5">
+                <h2 className="text-2xl font-semibold">
+                  {t("scientific certificates")}
+                </h2>
+                <Button action={() => setAddNewCertificates(true)}>
+                  {t("add")}
+                </Button>
+              </div>
               <div className="overflow-auto">
                 <table className="min-w-full text-center">
                   <thead className="bg-mainColor text-white">
@@ -257,75 +261,77 @@ const InstructorQualificationData = () => {
                     ))}
                   </thead>
                   <tbody>
-                    <tr className="border-b border-mainColor text-center">
-                      <td className="p-4">
-                        <BaseInput
-                          name="newCertificate.type_certificate"
-                          id="type_certificate"
-                          type="text"
-                          className="w-full text-lg py-1 !border-2 !border-black rounded-lg text-center"
-                          placeholder={t("")}
-                        />
-                      </td>
-                      <td className="p-4">
-                        <BaseInput
-                          name="newCertificate.certificate_name"
-                          id="certificate_name"
-                          type="text"
-                          className="w-full text-lg py-1 !border-2 !border-black rounded-lg text-center"
-                          placeholder={t("")}
-                        />
-                      </td>
-                      <td className="p-4">
-                        <BaseInput
-                          name="newCertificate.donor"
-                          id="donor"
-                          type="text"
-                          className="w-full text-lg py-1 !border-2 !border-black rounded-lg text-center"
-                          placeholder={t("")}
-                        />
-                      </td>
-                      <td className="p-4">
-                        <BaseInput
-                          name="newCertificate.date_acquisition"
-                          id="date_acquisition"
-                          type="text"
-                          className="w-full text-lg py-1 !border-2 !border-black rounded-lg text-center"
-                          placeholder={t("")}
-                        />
-                      </td>
-                      <td className="p-4">
-                        <BaseInput
-                          name="newCertificate.specialization"
-                          id="specialization"
-                          type="text"
-                          className="w-full text-lg py-1 !border-2 !border-black rounded-lg text-center"
-                          placeholder={t("")}
-                        />
-                      </td>
-                      <td className="p-4">
-                        <BaseInput
-                          name="newCertificate.appreciation"
-                          id="appreciation"
-                          type="text"
-                          className="w-full text-lg py-1 !border-2 !border-black rounded-lg text-center"
-                          placeholder={t("")}
-                        />
-                      </td>
-                      <td>
-                        <Button
-                          className="bg-transparent"
-                          action={() => {
-                            addNewCertificate(values.newCertificate);
-                          }}
-                        >
-                          <IoIosCheckmarkCircleOutline
-                            size={30}
-                            className="fill-[#4ECB71]"
+                    {addNewCertificates && (
+                      <tr className="border-b-2 border-mainColor text-center">
+                        <td className="p-4">
+                          <BaseInput
+                            name="newCertificate.type_certificate"
+                            id="type_certificate"
+                            type="text"
+                            className="w-full text-lg py-1 !border-2 !border-black rounded-lg text-center"
+                            placeholder={t("")}
                           />
-                        </Button>
-                      </td>
-                    </tr>
+                        </td>
+                        <td className="p-4">
+                          <BaseInput
+                            name="newCertificate.certificate_name"
+                            id="certificate_name"
+                            type="text"
+                            className="w-full text-lg py-1 !border-2 !border-black rounded-lg text-center"
+                            placeholder={t("")}
+                          />
+                        </td>
+                        <td className="p-4">
+                          <BaseInput
+                            name="newCertificate.donor"
+                            id="donor"
+                            type="text"
+                            className="w-full text-lg py-1 !border-2 !border-black rounded-lg text-center"
+                            placeholder={t("")}
+                          />
+                        </td>
+                        <td className="p-4">
+                          <BaseInput
+                            name="newCertificate.date_acquisition"
+                            id="date_acquisition"
+                            type="text"
+                            className="w-full text-lg py-1 !border-2 !border-black rounded-lg text-center"
+                            placeholder={t("")}
+                          />
+                        </td>
+                        <td className="p-4">
+                          <BaseInput
+                            name="newCertificate.specialization"
+                            id="specialization"
+                            type="text"
+                            className="w-full text-lg py-1 !border-2 !border-black rounded-lg text-center"
+                            placeholder={t("")}
+                          />
+                        </td>
+                        <td className="p-4">
+                          <BaseInput
+                            name="newCertificate.appreciation"
+                            id="appreciation"
+                            type="text"
+                            className="w-full text-lg py-1 !border-2 !border-black rounded-lg text-center"
+                            placeholder={t("")}
+                          />
+                        </td>
+                        <td>
+                          <Button
+                            className="bg-transparent"
+                            action={() => {
+                              addNewCertificate(values.newCertificate);
+                            }}
+                          >
+                            <IoIosCheckmarkCircleOutline
+                              size={30}
+                              className="fill-[#4ECB71]"
+                            />
+                          </Button>
+                        </td>
+                      </tr>
+                    )}
                     {table.getRowModel().rows.map((row) => {
                       return (
                         <tr
@@ -354,7 +360,7 @@ const InstructorQualificationData = () => {
               </div>
             </div>
 
-            <div className="mt-4">
+            <div className="mt-12 px-8 flex justify-end">
               <Button type="submit" className="me-5">
                 {t("confirm")}
               </Button>

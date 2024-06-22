@@ -80,6 +80,13 @@ const SideBar = () => {
     navigate(link);
   };
 
+  const getCurrentPathName = (path: string) => {
+    const segments = path.split("/").filter(Boolean);
+    return segments.length > 0 ? `/${segments[0]}` : "";
+  };
+
+  const currentPathtName = getCurrentPathName(location.pathname);
+
   return (
     <aside className="col-start-1 col-end-2 row-start-1 row-end-3">
       <nav className="flex flex-col h-full border-r shadow-sm bg-mainColor">
@@ -110,7 +117,7 @@ const SideBar = () => {
                         font-medium rounded-s-full cursor-pointer
                         transition-colors group text-[#E7E7E7]
                         ${
-                          location.pathname == item.link
+                          currentPathtName == item.link
                             ? "bg-[#F9F9F9] !text-mainColor"
                             : "hover:bg-[#F9F9F9] hover:text-mainColor"
                         }
