@@ -19,6 +19,10 @@ import StudentPersonalContact from "./AdminComponent/Students/StudentPersonalCon
 import StudentPersonalContactWithOptionalIcon from "./AdminComponent/Students/StudentPersonalContactWithOptionalIcon";
 import MainPopup from "./UI/MainPopup";
 import { DateInputField } from "./UI/DateInputField";
+import StudentAddLoginData from "./AdminComponent/Students/StudentAddLoginData";
+import StudentAddPersonalData from "./AdminComponent/Students/StudentAddPersonalData";
+import StudentAddFatherData from "./AdminComponent/Students/StudentAddFatherData";
+import StudentAddAcademicData from "./AdminComponent/Students/StudentAddAcademicData";
 
 export {
   BaseInput,
@@ -42,4 +46,8 @@ export {
   StudentPersonalContactWithOptionalIcon,
   MainPopup,
   DateInputField,
+  StudentAddLoginData,
+  StudentAddPersonalData,
+  StudentAddFatherData,
+  StudentAddAcademicData,
 };

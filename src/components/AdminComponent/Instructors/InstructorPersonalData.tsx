@@ -133,8 +133,12 @@ const InstructorPersonalData = () => {
                 </div>
 
                 <div className="w-full md:w-1/2">
-                  <img src={selectedImage} alt="user" className="m-auto w-[180px] h-[180px] rounded-full" />
-                  <div className="mt-6 flex justify-center gap-5">
+                  <img
+                    src={selectedImage}
+                    alt="user"
+                    className="m-auto w-[180px] h-[180px] rounded-full"
+                  />
+                  <div className="flex justify-center gap-5 mt-6">
                     <input
                       type="file"
                       accept="image/*"
@@ -142,21 +146,21 @@ const InstructorPersonalData = () => {
                       className="hidden"
                       name="personal_image"
                       onChange={(e) => {
-                        handleImageChange(e)
-                        setFieldValue("personal_image", e.target.value)
+                        handleImageChange(e);
+                        setFieldValue("personal_image", e.target.value);
                       }}
                     />
-                    <Button type="button" className="relative h-10 w-full">
+                    <Button type="button" className="relative w-full h-10">
                       <label
                         htmlFor="image-upload"
-                        className="absolute top-0 left-0 bottom-0 right-0 z-50 flex justify-center items-center cursor-pointer"
+                        className="absolute top-0 bottom-0 left-0 right-0 z-50 flex items-center justify-center cursor-pointer"
                       >
                         {t("add image")}
                       </label>
                     </Button>
                     <Button
                       type="button"
-                      className="bg-mainRed text-white w-full"
+                      className="w-full text-white bg-mainRed"
                       action={handleDeleteImage}
                     >
                       {t("delete")}

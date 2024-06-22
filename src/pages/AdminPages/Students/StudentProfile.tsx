@@ -131,13 +131,13 @@ const StudentProfile = () => {
                   className="w-full"
                 />
 
-                <div className="px-8">
-                  <div className="flex items-center justify-between -translate-y-12">
+                <div className="px-4 lg:px-8">
+                  <div className="flex flex-wrap items-center justify-between -translate-y-8 lg:-translate-y-12">
                     <div className="flex items-center gap-3">
                       <img
                         src={studentProfileData.personalImage}
                         alt="student profile image"
-                        className="-translate-y-8"
+                        className="w-24 h-24 lg:h-auto lg:w-auto -translate-y-0 lg:-translate-y-8"
                       />
                       <p className="text-3xl font-bold">
                         {studentProfileData.studentName}
@@ -151,8 +151,8 @@ const StudentProfile = () => {
                       />
                       <div className="translate-y-2">
                         <DotsDropDown
-                          instructorId={studentProfileData.id}
-                          instructorRoute="/instructorEdit"
+                          instructorId={"addStudent"}
+                          instructorRoute="/students"
                         />
                       </div>
                     </div>
@@ -160,10 +160,10 @@ const StudentProfile = () => {
                 </div>
               </div>
 
-              <div className="flex flex-col gap-10 p-8 pt-0">
+              <div className="flex flex-col gap-10 p-4 pt-0 lg:p-8">
                 {/* PERSONAL DETAILS */}
-                <div className="p-10 bg-mainColor/15 rounded-xl">
-                  <div className="grid items-center grid-cols-3 gap-14">
+                <div className="p-6 lg:p-10 bg-mainColor/15 rounded-xl">
+                  <div className="grid items-center gap-8 md:grid-cols-2 lg:grid-cols-3 lg:gap-14">
                     <StudentPersonalContact
                       contactTitle={t("address")}
                       contactValue={studentProfileData.address}
@@ -200,12 +200,12 @@ const StudentProfile = () => {
                 </div>
 
                 {/* ACADEMIC DETAILS */}
-                <div className="p-10 bg-mainColor/15 rounded-xl">
+                <div className="p-6 lg:p-10 bg-mainColor/15 rounded-xl">
                   <h2 className="mb-10 text-2xl font-bold">
                     {t("academic data")}
                   </h2>
 
-                  <div className="grid items-center grid-cols-3 gap-14">
+                  <div className="grid items-center gap-8 md:grid-cols-2 lg:grid-cols-3 lg:gap-14">
                     {studentAcademicData.map((item, index) => (
                       <StudentPersonalContactWithOptionalIcon
                         key={index}
@@ -217,12 +217,12 @@ const StudentProfile = () => {
                 </div>
 
                 {/* FATHER  DETAILS */}
-                <div className="p-10 bg-mainColor/15 rounded-xl">
+                <div className="p-6 lg:p-10 bg-mainColor/15 rounded-xl">
                   <h2 className="mb-10 text-2xl font-bold">
                     {t("father data")}
                   </h2>
 
-                  <div className="grid items-center grid-cols-3 gap-14">
+                  <div className="grid items-center gap-8 md:grid-cols-2 lg:grid-cols-3 lg:gap-14">
                     <StudentPersonalContact
                       contactTitle={t("name")}
                       contactValue={studentProfileData.fatherName}
@@ -261,32 +261,32 @@ const StudentProfile = () => {
 
             {showReceiptModal && (
               <MainPopup onClose={() => setShowReceiptModal(false)}>
-                <h2 className="mb-8 text-2xl font-bold">
+                <h2 className="mb-4 text-2xl font-bold lg:mb-8">
                   {t("payment receipt")}
                 </h2>
-                <div className="grid items-center gap-4 my-8 grid-cols-view">
+                <div className="grid items-center gap-4 my-8 lg:grid-cols-view">
                   <p className="text-xl w-36">{t("receipt number")}</p>
                   <BaseInput
                     name="receipt_number"
                     id="receipt_number"
-                    className="w-1/2 text-gray-700"
+                    className="text-gray-700 lg:w-1/2"
                   />
                 </div>
-                <div className="grid items-center gap-4 my-8 grid-cols-view">
+                <div className="grid items-center gap-4 my-8 lg:grid-cols-view">
                   <p className="text-xl w-36">{t("amount paid")}</p>
                   <BaseInput
                     name="amount_paid"
                     id="amount_paid"
-                    className="w-1/2 text-gray-700"
+                    className="text-gray-700 lg:w-1/2"
                   />
                 </div>
-                <div className="grid items-center gap-4 my-8 grid-cols-view">
+                <div className="grid items-center gap-4 my-8 lg:grid-cols-view">
                   <p className="text-xl w-36">{t("amount date")}</p>
                   <input
                     type="date"
                     name="amount_date"
                     id="amount_date"
-                    className="w-1/2 text-gray-700"
+                    className="text-gray-700 lg:w-1/2"
                     onChange={(e) =>
                       setFieldValue("amount_date", e.target.value)
                     }
@@ -303,17 +303,11 @@ const StudentProfile = () => {
                         receiptNumber: values.receipt_number,
                       };
 
-                      setreceiptData((prev) => [...prev, newReceipt]);
+                      setreceiptData((prev: any) => [...prev, newReceipt]);
                       setShowReceiptModal(false);
                     }}
                   >
                     {t("confirm")}
-                  </Button>
-                  <Button
-                    className="bg-white text-mainColor"
-                    action={() => setShowReceiptModal(false)}
-                  >
-                    {t("cancel")}
                   </Button>
                 </div>
               </MainPopup>
