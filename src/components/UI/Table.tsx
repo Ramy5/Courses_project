@@ -8,9 +8,6 @@ import {
 } from "@tanstack/react-table";
 import type { ColumnDef } from "@tanstack/react-table";
 import { ReactNode } from "react";
-import { Button } from "..";
-import { MdNavigateNext } from "react-icons/md";
-import { t } from "i18next";
 import Pagination from "./Pagination";
 
 interface ReactTableProps<T extends object> {
@@ -44,7 +41,7 @@ const Table = <T extends object>({
 
   return (
     <div>
-      <div className="overflow-auto">
+      <div className="!overflow-auto">
         <table className="min-w-full text-center">
           <thead className={`${className} border-b bg-[#DED9FF]`}>
             {table.getHeaderGroups().map((headerGroup) => (

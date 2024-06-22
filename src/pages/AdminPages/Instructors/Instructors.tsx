@@ -53,7 +53,7 @@ const Instructors = () => {
   ];
 
   const handleProfileClick = (instructorId: number) => {
-    navigate(`/instructorProfile/${instructorId}`);
+    navigate(`/instructors/instructorProfile/${instructorId}`);
   };
 
   return (

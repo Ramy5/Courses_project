@@ -14,14 +14,15 @@ const InstructorEditProfile = () => {
     { id: 2, title: "contact information" },
     { id: 3, title: "qualification data" },
   ];
+
   return (
     <div>
-      <div className="px-16 py-3 bg-mainColor rounded-tr-2xl rounded-tl-2xl">
-        <ul className="flex items-center justify-between">
+      <div className="px-8 md:px-16 py-3 bg-mainColor rounded-tr-2xl rounded-tl-2xl">
+        <ul className="flex items-center justify-between py-2">
           {tabs.map((tab) => (
             <li
               key={tab.id}
-              className={`cursor-pointer p-2 text-white font-medium text-lg ${
+              className={`cursor-pointer p-1 text-white font-medium text-base ${
                 activeTab === tab.title &&
                 "border-b-4 border-b-[#369252] rounded-lg"
               }`}
@@ -38,9 +39,7 @@ const InstructorEditProfile = () => {
         {activeTab === "contact information" && (
           <InstructorContactInformation />
         )}
-        {activeTab === "qualification data" && (
-          <InstructorQualificationData />
-        )}
+        {activeTab === "qualification data" && <InstructorQualificationData />}
       </div>
     </div>
   );

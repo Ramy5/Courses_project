@@ -1,5 +1,7 @@
 import MainCheckBox from "../../UI/MainCheckBox";
 import DotsDropDown from "../../UI/DotsDropDown";
+import { RiDeleteBin5Line } from "react-icons/ri";
+import { FaRegEdit } from "react-icons/fa";
 
 const ProfileIntroduction = ({ instructorPersonalData }: any) => {
   return (
@@ -29,11 +31,16 @@ const ProfileIntroduction = ({ instructorPersonalData }: any) => {
             label="blocking instructor"
           />
         </div>
-
-        <DotsDropDown
-          instructorId={instructorPersonalData.id}
-          instructorRoute="/instructorEdit"
-        />
+        <div className="mb-3">
+          <DotsDropDown
+            instructorId={instructorPersonalData.id}
+            instructorRoute="/instructors/instructorEdit"
+            firstName="edit"
+            firstIcon={<FaRegEdit size={22} className="fill-mainColor" />}
+            secondName="delete"
+            secondIcon={<RiDeleteBin5Line size={22} className="fill-mainRed" />}
+          />
+        </div>
       </div>
     </div>
   );

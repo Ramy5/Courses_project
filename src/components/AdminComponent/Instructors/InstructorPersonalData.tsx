@@ -44,7 +44,7 @@ const InstructorPersonalData = () => {
       >
         {({ setFieldValue, values }) => {
           return (
-            <Form className="flex flex-col gap-5 px-16 ">
+            <Form className="flex flex-col gap-5 px-8 md:px-16 ">
               <div className="flex justify-between gap-8 flex-col-reverse md:flex-row">
                 <div className="flex flex-col gap-4 w-full md:w-1/2 ">
                   <div>
@@ -165,7 +165,7 @@ const InstructorPersonalData = () => {
                 </div>
               </div>
 
-              <div className="mt-4">
+              <div className="mt-5 flex justify-end">
                 <Button type="submit" className="me-5">
                   {t("confirm")}
                 </Button>

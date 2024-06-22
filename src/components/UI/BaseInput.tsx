@@ -12,7 +12,7 @@ export type BaseInput_TP = {
   name: string;
   placeholder?: string;
   ref?: any;
-  type?: "text" | "number" | "password" | "email" | "checkbox" | "text";
+  type?: "text" | "number" | "password" | "email" | "checkbox" | "text" | "date";
 };
 
 const BaseInput = ({
