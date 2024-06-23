@@ -166,7 +166,6 @@
   "research": "ابحاث",
   "case studies": "دراسات حالة",
   "project": "مشروع",
-<<<<<<< HEAD
   "study schedule": "الجدول الدراسى",
   "study schedule for artificial intelligence program": "الجدول الدراسى لبرنامج ذكاء اصطناعي",
   "schedule settings": "اعدادات الجدول",
@@ -189,8 +188,6 @@
   "add lecture timing":"اضافه توقيت محاضرة ",
   "lecture timing":"توقيت المحاضرة",
   "add": "اضافة"
-=======
-  "add": "اضافة",
   "subject": "المقرر",
   "academic program": "البرنامج الدراسي",
   "branch": "الشعبة",
@@ -247,5 +244,4 @@
   "country": "الدولة",
   "full name": "الاسم بالكامل",
   "joining date": "تاريخ الالتحاق"
->>>>>>> 0cc20b282da00a29b43d62424a858a602c38eccf
 }
