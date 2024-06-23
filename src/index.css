@@ -272,15 +272,12 @@ body {
 }
 /*End Instructors Profile */
 
-.e-schedule-toolbar,
-.e-schedule-sidebar {
-  display: none;
+.App {
+  text-align: center;
 }
 
-.e-schedule {
-  border: none;
-}
-
-.e-schedule-table {
+#scheduler-container {
+  height: 900px; /* Adjust as needed */
   width: 100%;
+  margin: 0 auto;
 }
