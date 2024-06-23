@@ -8,11 +8,20 @@ interface MainCheckBox_TP {
   checked?: boolean;
   labelClassName?: string;
   label?: string;
+  onChange?: () => void;
 }
 
 const MainCheckBox = (props: MainCheckBox_TP) => {
-  const { name, id, disabled, className, checked, labelClassName, label } =
-    props;
+  const {
+    name,
+    id,
+    disabled,
+    className,
+    checked,
+    labelClassName,
+    label,
+    onChange,
+  } = props;
 
   return (
     <div className="flex items-center gap-2">
@@ -23,6 +32,7 @@ const MainCheckBox = (props: MainCheckBox_TP) => {
         className={`${className} w-5 h-5 cursor-pointer`}
         checked={checked}
         name={name}
+        onChange={onChange}
       />
       <label
         htmlFor={(id || name) as string}

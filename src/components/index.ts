@@ -23,6 +23,9 @@ import StudentAddLoginData from "./AdminComponent/Students/StudentAddLoginData";
 import StudentAddPersonalData from "./AdminComponent/Students/StudentAddPersonalData";
 import StudentAddFatherData from "./AdminComponent/Students/StudentAddFatherData";
 import StudentAddAcademicData from "./AdminComponent/Students/StudentAddAcademicData";
+import OrganizationSettingData from "./AdminComponent/Settings/OrganizationSettingData";
+import OrganizationLogo from "./AdminComponent/Settings/OrganizationLogo";
+import SideBarMenuColor from "./AdminComponent/Settings/SideBarMenuColor";
 
 export {
   BaseInput,
@@ -50,4 +53,7 @@ export {
   StudentAddPersonalData,
   StudentAddFatherData,
   StudentAddAcademicData,
+  OrganizationSettingData,
+  OrganizationLogo,
+  SideBarMenuColor,
 };

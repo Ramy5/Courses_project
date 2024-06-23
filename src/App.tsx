@@ -1,12 +1,17 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import {
   AddStudent,
-  Dashboard,
+  LectureManagement,
   Login,
+  Reports,
+  Settings,
   StudentProfile,
   Students,
+  TestApproved,
+  TestManagement,
+  VirtualClasses,
 } from "./pages";
-import { Home, StructurePage } from "./pages";
+import { StructurePage } from "./pages";
 import { useRTL } from "./hooks/useRTL";
 import { useLayoutEffect } from "react";
 import InformationPanel from "./pages/AdminPages/InformationPanel";
@@ -92,6 +97,25 @@ function App() {
           <Route path="/students" element={<Students />} />
           <Route path="/studentProfile/:id" element={<StudentProfile />} />
           <Route path="/students/addStudent" element={<AddStudent />} />
+
+          {/* LECTURE MANAGEMENT */}
+          <Route path="/lectureManagement" element={<LectureManagement />} />
+
+          {/* VIRTUAL CLASSES */}
+          <Route path="/virtualClasses" element={<VirtualClasses />} />
+
+          {/* TEST MANAGEMENT */}
+          <Route path="/testManagement" element={<TestManagement />} />
+          <Route
+            path="/testManagement/testApproved/:id"
+            element={<TestApproved />}
+          />
+
+          {/* REPORTS */}
+          <Route path="/reports" element={<Reports />} />
+
+          {/* SETTINGS */}
+          <Route path="/settings" element={<Settings />} />
         </Route>
       </Routes>
     </BrowserRouter>
