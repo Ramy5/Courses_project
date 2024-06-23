@@ -48,19 +48,19 @@ const SideBar = () => {
       title: "Lecture Management",
       icon: <FaChalkboardTeacher size={24} />,
       alert: "alt",
-      link: "/lecture-management",
+      link: "/lectureManagement",
     },
     {
       title: "Virtual Classroom",
       icon: <CgPlayButtonR size={24} />,
       alert: "alt",
-      link: "/virtual-classroom",
+      link: "/virtualClasses",
     },
     {
       title: "Test Management",
       icon: <FiFileText size={24} />,
       alert: "alt",
-      link: "/test-management",
+      link: "/testManagement",
     },
     {
       title: "Reports",
@@ -69,7 +69,7 @@ const SideBar = () => {
       link: "/reports",
     },
     {
-      title: "Settings",
+      title: "settings",
       icon: <IoMdSettings size={24} />,
       alert: "alt",
       link: "/settings",

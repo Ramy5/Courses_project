@@ -12,15 +12,15 @@ import Pagination from "./Pagination";
 
 interface ReactTableProps<T extends object> {
   data: T[];
-  columns: ColumnDef<T>[];
+  columns: ColumnDef<[]>[];
   showNavigation?: boolean;
   showGlobalFilter?: boolean;
   filterFn?: FilterFn<T>;
   footered?: boolean;
   children?: ReactNode;
-  totalPages?: Number;
-  currentPage?: String;
-  className?: any
+  totalPages?: number;
+  currentPage?: string;
+  className?: any;
 }
 
 const Table = <T extends object>({
@@ -29,7 +29,7 @@ const Table = <T extends object>({
   showNavigation,
   totalPages,
   currentPage,
-  className
+  className,
 }: ReactTableProps<T>) => {
   const table = useReactTable({
     data,
@@ -49,7 +49,9 @@ const Table = <T extends object>({
                 {headerGroup.headers.map((header) => (
                   <th
                     key={header.id}
-                    className={`${className ? "text-white" : "text-mainColor"} px-6 py-4 text-md font-medium`}
+                    className={`${
+                      className ? "text-white" : "text-mainColor"
+                    } px-6 py-4 text-md font-medium`}
                   >
                     {header.isPlaceholder
                       ? null
@@ -64,10 +66,15 @@ const Table = <T extends object>({
           </thead>
           <tbody>
             {table.getRowModel().rows.map((row, i) => (
-              <tr key={row.id} className={`${className ? "border-b-2 border-mainColor" : "border-b"}`}>
+              <tr
+                key={row.id}
+                className={`${
+                  className ? "border-b-2 border-mainColor" : "border-b"
+                }`}
+              >
                 {row.getVisibleCells().map((cell) => (
                   <td
-                    className={`whitespace-nowrap px-6 py-4 text-md font-medium !text-[#292D32]`}
+                    className={`whitespace-nowrap px-4 py-6 text-md font-medium !text-[#292D32]`}
                     key={cell.id}
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
