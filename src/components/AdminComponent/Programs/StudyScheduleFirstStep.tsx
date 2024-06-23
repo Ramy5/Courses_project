@@ -7,7 +7,7 @@ import { FaRegEdit } from "react-icons/fa";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 
-const StudyScheduleFirstStep = ({ setSteps }: any) => {
+const StudyScheduleFirstStep = ({ setSteps }) => {
   const [activeButton, setActiveButton] = useState<string>("saturday");
   const navigate = useNavigate();
 
@@ -84,11 +84,11 @@ const StudyScheduleFirstStep = ({ setSteps }: any) => {
         accessorKey: "action",
         cell: (info) => {
           return (
-            <div className="flex gap-5 items-center">
-              <FaRegEdit size={24} className="fill-mainColor cursor-pointer" />
+            <div className="flex items-center gap-5">
+              <FaRegEdit size={24} className="cursor-pointer fill-mainColor" />
               <RiDeleteBin5Line
                 size={24}
-                className="fill-mainRed cursor-pointer"
+                className="cursor-pointer fill-mainRed"
               />
             </div>
           );
@@ -100,7 +100,7 @@ const StudyScheduleFirstStep = ({ setSteps }: any) => {
 
   return (
     <div className="mt-12">
-      <h2 className="font-semibold text-xl">
+      <h2 className="text-xl font-semibold">
         {t("study schedule for artificial intelligence program")}
       </h2>
 
@@ -112,8 +112,8 @@ const StudyScheduleFirstStep = ({ setSteps }: any) => {
           }}
         >
           <Form>
-            <div className="flex justify-between flex-col md:flex-row my-3 gap-y-4">
-              <p className="font-semibold text-base">
+            <div className="flex flex-col justify-between my-3 md:flex-row gap-y-4">
+              <p className="text-base font-semibold">
                 {t("current academic period")}
               </p>
               <BaseInput
@@ -140,7 +140,7 @@ const StudyScheduleFirstStep = ({ setSteps }: any) => {
       </div>
 
       <div className="bg-[#F9F9F9] p-4 my-5 rounded-2xl flex justify-between flex-col sm:flex-row gap-y-5 items-center">
-        <div className="grid  grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7">
           {days.map((day) => (
             <Button
               key={day}
@@ -156,12 +156,17 @@ const StudyScheduleFirstStep = ({ setSteps }: any) => {
           ))}
         </div>
 
-        <Button className="px-4 py-3" action={() => (navigate("/programs/LectureTime"))}>{t("add lecture timing +")}</Button>
+        <Button
+          className="px-4 py-3"
+          action={() => navigate("/programs/LectureTime")}
+        >
+          {t("add lecture timing +")}
+        </Button>
       </div>
 
       <Table data={studyScheduleData} columns={studyScheduleColumns} />
 
-      <div className="mt-12 flex items-center justify-end gap-5">
+      <div className="flex items-center justify-end gap-5 mt-12">
         <Button action={() => setSteps(2)}>{t("Next")}</Button>
         <Button className="bg-mainRed">{t("cancel")}</Button>
       </div>

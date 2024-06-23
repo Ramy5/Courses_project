@@ -1,31 +1,31 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Button } from "../..";
 import { t } from "i18next";
-import { Calendar, momentLocalizer } from "react-big-calendar";
-import moment from "moment";
-import "react-big-calendar/lib/css/react-big-calendar.css";
-import {
-  ScheduleComponent,
-  Day,
-  Week,
-  WorkWeek,
-  Month,
-  Agenda,
-  Inject,
-  ViewsDirective,
-  ViewDirective,
-} from "@syncfusion/ej2-react-schedule";
+// import { Calendar, momentLocalizer } from "react-big-calendar";
+// import moment from "moment";
+// import "react-big-calendar/lib/css/react-big-calendar.css";
+// import {
+//   ScheduleComponent,
+//   Day,
+//   Week,
+//   WorkWeek,
+//   Month,
+//   Agenda,
+//   Inject,
+//   ViewsDirective,
+//   ViewDirective,
+// } from "@syncfusion/ej2-react-schedule";
 
-import { DayPilot, DayPilotScheduler } from "daypilot-pro-react";
+// import { DayPilot, DayPilotScheduler } from "daypilot-pro-react";
 
-import "../../../../node_modules/@syncfusion/ej2-base/styles/material.css";
-import "../../../../node_modules/@syncfusion/ej2-buttons/styles/material.css";
-import "../../../../node_modules/@syncfusion/ej2-calendars/styles/material.css";
-import "../../../../node_modules/@syncfusion/ej2-dropdowns/styles/material.css";
-import "../../../../node_modules/@syncfusion/ej2-inputs/styles/material.css";
-import "../../../../node_modules/@syncfusion/ej2-navigations/styles/material.css";
-import "../../../../node_modules/@syncfusion/ej2-popups/styles/material.css";
-import "../../../../node_modules/@syncfusion/ej2-react-schedule/styles/material.css";
+// import "../../../../node_modules/@syncfusion/ej2-base/styles/material.css";
+// import "../../../../node_modules/@syncfusion/ej2-buttons/styles/material.css";
+// import "../../../../node_modules/@syncfusion/ej2-calendars/styles/material.css";
+// import "../../../../node_modules/@syncfusion/ej2-dropdowns/styles/material.css";
+// import "../../../../node_modules/@syncfusion/ej2-inputs/styles/material.css";
+// import "../../../../node_modules/@syncfusion/ej2-navigations/styles/material.css";
+// import "../../../../node_modules/@syncfusion/ej2-popups/styles/material.css";
+// import "../../../../node_modules/@syncfusion/ej2-react-schedule/styles/material.css";
 
 const StudyScheduleSecondStep = ({ setSteps }: any) => {
   //   const localizer = momentLocalizer(moment);
@@ -222,9 +222,7 @@ const StudyScheduleSecondStep = ({ setSteps }: any) => {
     <div className="mt-12">
       <h2>StudyScheduleSecondStep</h2>
 
-      <div>
-        <DayPilotScheduler {...config} ref={schedulerRef} />
-      </div>
+      <div>{/* <DayPilotScheduler {...config} ref={schedulerRef} /> */}</div>
 
       {/* <div>
         <div className="flex items-center justify-between mb-5 ms-24">
@@ -234,7 +232,7 @@ const StudyScheduleSecondStep = ({ setSteps }: any) => {
         </div>
         <div className="flex flex-col gap-12">
           {days.map((day) => (
-            <div key={day} className="flex gap-8 items-center">
+            <div key={day} className="flex items-center gap-8">
               <p className="w-20">{day}</p>
               <div className="h-[1px] bg-mainColor w-full"></div>
             </div>
@@ -267,7 +265,7 @@ const StudyScheduleSecondStep = ({ setSteps }: any) => {
         />
       </div> */}
 
-      <div className="mt-4 flex items-center justify-end gap-5">
+      <div className="flex items-center justify-end gap-5 mt-4">
         <Button bordered action={() => setSteps(1)}>
           {t("Previous")}
         </Button>
