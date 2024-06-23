@@ -34,7 +34,7 @@ const StudyScheduleSecondStep = ({ setSteps }: any) => {
         </div>
         <div className="flex flex-col gap-12">
           {days.map((day) => (
-            <div key={day} className="flex gap-8 items-center">
+            <div key={day} className="flex items-center gap-8">
               <p className="w-20">{day}</p>
               <div className="h-[1px] bg-mainColor w-full"></div>
             </div>
