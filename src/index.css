@@ -271,3 +271,16 @@ body {
   border-radius: 16px;
 }
 /*End Instructors Profile */
+
+.e-schedule-toolbar,
+.e-schedule-sidebar {
+  display: none;
+}
+
+.e-schedule {
+  border: none;
+}
+
+.e-schedule-table {
+  width: 100%;
+}

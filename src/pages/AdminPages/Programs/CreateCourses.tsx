@@ -540,7 +540,7 @@ const CreateCourses = () => {
 
                 <div className="mt-8 px-8 flex justify-end">
                   <Button type="submit" className="me-5">
-                    {t("create program")}
+                    {t("submit")}
                   </Button>
                   <Button type="button" className="bg-[#E6EAEE] text-mainColor">
                     {t("cancel")}

@@ -49,8 +49,8 @@ const Programs = () => {
     },
   ];
 
-  const handleProfileClick = (instructorId: number) => {
-    navigate(`/instructors/instructorProfile/${instructorId}`);
+  const handleStudySchedule = (instructorId: number) => {
+    navigate(`/programs/StudySchedule/${instructorId}`);
   };
 
   return (
@@ -103,7 +103,7 @@ const Programs = () => {
               <Button
                 className="border border-[#404B52] text-black font-medium mt-3"
                 bordered
-                action={() => handleProfileClick(program.id)}
+                action={() => handleStudySchedule(program.id)}
               >
                 {t("school schedule")}
               </Button>
