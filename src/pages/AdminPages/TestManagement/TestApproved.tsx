@@ -1,7 +1,7 @@
 import { FiFileText } from "react-icons/fi";
 import { Button, MainCheckBox, Table, TitlePage } from "../../../components";
 import { t } from "i18next";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 
 const TestApproved = () => {
@@ -49,25 +49,34 @@ const TestApproved = () => {
       approvalStatus: false,
     },
   ];
-  console.log(
-    "🚀 ~ TestApproved ~ studentsApprovalData:",
-    studentsApprovalData
-  );
+  const [test, setTest] = useState(studentsApprovalData);
+  console.log("🚀 ~ TestApproved ~ test:", test);
 
   const studentsApprovalColumns = useMemo<ColumnDef<[]>[]>(
     () => [
       {
         header: () => (
           <div>
-            <MainCheckBox label={t("select all")} name="select_all" />
+            <MainCheckBox
+              label={t("select all")}
+              name="select_all"
+              onChange={() => {
+                const approve = test.map((el) => {
+                  return { ...el, approvalStatus: !el.approvalStatus };
+                });
+
+                setTest(approve);
+              }}
+            />
           </div>
         ),
         accessorKey: "approvalStatus",
         cell: (info) => (
           <MainCheckBox
-            className="ms-2"
+            className="ms-4"
             checked={info.getValue()}
             label=""
+            checked={info.row.original.approvalStatus}
             onChange={(e) => {
               handleApprovalChange(info.row.index, e.target.checked);
             }}
@@ -85,7 +94,7 @@ const TestApproved = () => {
         cell: (info) => info.getValue(),
       },
     ],
-    [handleApprovalChange]
+    [handleApprovalChange, test]
   );
 
   function handleApprovalChange(index: number, isChecked: boolean) {
@@ -107,7 +116,7 @@ const TestApproved = () => {
             {t("determine which students are allowed to choose")}
           </h2>
         </div>
-        <Table data={studentsApprovalData} columns={studentsApprovalColumns} />
+        <Table data={test} columns={studentsApprovalColumns} />
       </div>
 
       <Button className="self-end mt-12">{t("test approval")}</Button>
