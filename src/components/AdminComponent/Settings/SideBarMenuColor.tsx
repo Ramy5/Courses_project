@@ -1,9 +1,12 @@
 import { Button, MainRadio } from "../..";
 import { t } from "i18next";
 import { useFormikContext } from "formik";
+import { useAppDispatch } from "../../../hooks/reduxHooks";
+import { changeSidebarColor } from "../../../features/global/globalSlice";
 
 const SideBarMenuColor = () => {
   const { values, setFieldValue } = useFormikContext();
+  const dispatch = useAppDispatch();
 
   return (
     <div className="flex flex-col w-full gap-5 px-4 lg:px-16">
@@ -17,6 +20,7 @@ const SideBarMenuColor = () => {
             checked={values.color === "#393D94"}
             onChange={() => {
               setFieldValue("color", "#393D94");
+              dispatch(changeSidebarColor("#393D94"));
             }}
           />
           <label
@@ -33,6 +37,7 @@ const SideBarMenuColor = () => {
             checked={values.color === "#144DAA"}
             onChange={() => {
               setFieldValue("color", "#144DAA");
+              dispatch(changeSidebarColor("#144DAA"));
             }}
           />
           <label
@@ -49,6 +54,7 @@ const SideBarMenuColor = () => {
             checked={values.color === "#1E0342"}
             onChange={() => {
               setFieldValue("color", "#1E0342");
+              dispatch(changeSidebarColor("#1E0342"));
             }}
           />
           <label
@@ -65,6 +71,7 @@ const SideBarMenuColor = () => {
             checked={values.color === "#025464"}
             onChange={() => {
               setFieldValue("color", "#025464");
+              dispatch(changeSidebarColor("#025464"));
             }}
           />
           <label
@@ -72,11 +79,6 @@ const SideBarMenuColor = () => {
             className="inline-block cursor-pointer h-10 bg-[#025464] w-28"
           ></label>
         </div>
-      </div>
-
-      <div className="self-end mt-12">
-        <Button className="me-5">{t("save")}</Button>
-        <Button className="bg-[#E6EAEE] text-mainColor">{t("cancel")}</Button>
       </div>
     </div>
   );

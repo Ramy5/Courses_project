@@ -74,7 +74,7 @@ const Table = <T extends object>({
               >
                 {row.getVisibleCells().map((cell) => (
                   <td
-                    className={`whitespace-nowrap px-4 py-6 text-md font-medium !text-[#292D32]`}
+                    className={`whitespace-nowrap px-1 py-6 text-md font-medium !text-[#292D32]`}
                     key={cell.id}
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
