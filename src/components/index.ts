@@ -26,6 +26,7 @@ import StudentAddAcademicData from "./AdminComponent/Students/StudentAddAcademic
 import OrganizationSettingData from "./AdminComponent/Settings/OrganizationSettingData";
 import OrganizationLogo from "./AdminComponent/Settings/OrganizationLogo";
 import SideBarMenuColor from "./AdminComponent/Settings/SideBarMenuColor";
+import UploadFile from "./UI/UploadFile";
 
 export {
   BaseInput,
@@ -56,4 +57,5 @@ export {
   OrganizationSettingData,
   OrganizationLogo,
   SideBarMenuColor,
+  UploadFile,
 };

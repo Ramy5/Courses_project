@@ -13,11 +13,13 @@ import { RxCross2 } from "react-icons/rx";
 import { t } from "i18next";
 import { useLocation, useNavigate } from "react-router-dom";
 import SearchInput from "../UI/SearchInput";
+import { useAppSelector } from "../../hooks/reduxHooks";
 
 const SideBar = () => {
   const [expanded, setExpanded] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
+  const { sidebarColor } = useAppSelector((state) => state.global);
 
   const sideBarItems = [
     {
@@ -89,7 +91,10 @@ const SideBar = () => {
 
   return (
     <aside className="col-start-1 col-end-2 row-start-1 row-end-3">
-      <nav className="flex flex-col h-full border-r shadow-sm bg-mainColor">
+      <nav
+        className="flex flex-col h-full border-r shadow-sm"
+        style={{ backgroundColor: sidebarColor }}
+      >
         <div className="flex items-center justify-between p-4 pb-2">
           <button
             onClick={() => setExpanded((curr) => !curr)}
@@ -119,7 +124,7 @@ const SideBar = () => {
                         ${
                           currentPathtName == item.link
                             ? "bg-[#F9F9F9] !text-mainColor"
-                            : "hover:bg-[#F9F9F9] hover:text-mainColor"
+                            : `hover:bg-[#F9F9F9] hover:text-mainColor`
                         }
                     `}
               onClick={() => handleNavigate(item.link)}

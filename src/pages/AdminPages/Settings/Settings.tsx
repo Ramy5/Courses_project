@@ -15,7 +15,7 @@ const Settings = () => {
     organization_email: "",
     organization_vision: "",
     organization_mission: "",
-    color: "#144DAA",
+    color: "#393D94",
   };
 
   const tabs = [
