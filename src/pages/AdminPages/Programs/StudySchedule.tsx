@@ -3,9 +3,11 @@ import { Fragment, useState } from "react";
 import { GiCheckMark } from "react-icons/gi";
 import StudyScheduleFirstStep from "../../../components/AdminComponent/Programs/StudyScheduleFirstStep";
 import StudyScheduleSecondStep from "../../../components/AdminComponent/Programs/StudyScheduleSecondStep";
+import { Button } from "../../../components";
 
 const StudySchedule = () => {
-  const [steps, setSteps] = useState<number>(2);
+  const [steps, setSteps] = useState<number>(1);
+  console.log("🚀 ~ StudySchedule ~ steps:", steps);
 
   const stepsOption = [
     { id: 1, label: "schedule settings", border: true },
@@ -68,12 +70,22 @@ const StudySchedule = () => {
         </div> */}
       </div>
 
-      {steps === 1 && <StudyScheduleFirstStep setSteps={setSteps}/>}
+      {steps === 1 && <StudyScheduleFirstStep setSteps={setSteps} />}
 
-      {steps === 2 && <StudyScheduleSecondStep setSteps={setSteps}/>}
+      {steps === 2 && <StudyScheduleSecondStep setSteps={setSteps} />}
 
-      {steps === 3 && "StudyScheduleThirsStep"}
-
+      {steps === 3 && (
+        <div className="w-full h-[480px] flex">
+          <div className="w-3/5 m-auto text-center">
+            <h1 className="text-[#073051] opacity-100 font-semibold text-2xl">
+              {t(
+                "program schedule settings for the selected study period have been completed. Click “Save Schedule” to complete the setup process."
+              )}
+            </h1>
+            <Button className="font-semibold text-xl py-3 rounded-2xl mt-20" action={() => {}}>{t("save table")}</Button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
