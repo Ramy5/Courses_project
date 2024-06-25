@@ -5,6 +5,10 @@ import { useMemo, useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 
 const TestApproved = () => {
+  const [approvalStudent, setApprovalStudent] = useState([]);
+  console.log("🚀 ~ TestApproved ~ approvalStudent:", approvalStudent);
+  const [allIsChecked, setAllIsChecked] = useState(null);
+
   const studentsApprovalData = [
     {
       index: 1,
@@ -52,6 +56,15 @@ const TestApproved = () => {
   const [test, setTest] = useState(studentsApprovalData);
   console.log("🚀 ~ TestApproved ~ test:", test);
 
+  const handleSelectAll = (isChecked) => {
+    setAllIsChecked(isChecked);
+    if (isChecked) {
+      setApprovalStudent([...test]);
+    } else {
+      setApprovalStudent([]);
+    }
+  };
+
   const studentsApprovalColumns = useMemo<ColumnDef<[]>[]>(
     () => [
       {
@@ -60,13 +73,8 @@ const TestApproved = () => {
             <MainCheckBox
               label={t("select all")}
               name="select_all"
-              onChange={() => {
-                const approve = test.map((el) => {
-                  return { ...el, approvalStatus: !el.approvalStatus };
-                });
-
-                setTest(approve);
-              }}
+              checked={allIsChecked}
+              onChange={(e) => handleSelectAll(e.target.checked)}
             />
           </div>
         ),
@@ -74,11 +82,24 @@ const TestApproved = () => {
         cell: (info) => (
           <MainCheckBox
             className="ms-4"
-            checked={info.getValue()}
+            name="approve"
             label=""
-            checked={info.row.original.approvalStatus}
+            checked={approvalStudent.some(
+              (student) => student.index === info.row.original.index
+            )}
             onChange={(e) => {
-              handleApprovalChange(info.row.index, e.target.checked);
+              if (e.target.checked) {
+                setApprovalStudent((prev) => {
+                  return [
+                    ...prev,
+                    { ...info.row.original, id: info.row.index },
+                  ];
+                });
+              } else {
+                setApprovalStudent((prev) => {
+                  return prev.filter((el) => el.id !== info.row.index);
+                });
+              }
             }}
           />
         ),
@@ -94,12 +115,8 @@ const TestApproved = () => {
         cell: (info) => info.getValue(),
       },
     ],
-    [handleApprovalChange, test]
+    [allIsChecked, approvalStudent, handleSelectAll]
   );
-
-  function handleApprovalChange(index: number, isChecked: boolean) {
-    studentsApprovalData[index].approvalStatus = isChecked;
-  }
 
   return (
     <div className="flex flex-col">

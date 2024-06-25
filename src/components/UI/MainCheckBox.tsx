@@ -1,4 +1,5 @@
 import { t } from "i18next";
+import { ChangeEvent } from "react";
 
 interface MainCheckBox_TP {
   name: string;
@@ -8,7 +9,8 @@ interface MainCheckBox_TP {
   checked?: boolean;
   labelClassName?: string;
   label?: string;
-  onChange?: () => void;
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+  onClick?: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
 const MainCheckBox = (props: MainCheckBox_TP) => {
@@ -21,6 +23,7 @@ const MainCheckBox = (props: MainCheckBox_TP) => {
     labelClassName,
     label,
     onChange,
+    onClick,
   } = props;
 
   return (
@@ -33,6 +36,7 @@ const MainCheckBox = (props: MainCheckBox_TP) => {
         checked={checked}
         name={name}
         onChange={onChange}
+        onClick={onClick}
       />
       <label
         htmlFor={(id || name) as string}
