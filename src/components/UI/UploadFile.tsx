@@ -5,23 +5,24 @@ import uploadImg from "../../assets/Sittengs/Group 24.svg";
 interface uploadFile_TP {
   files: [];
   setFiles: (files: File[]) => void;
+  id: string;
 }
 
-const UploadFile = ({ files, setFiles }: uploadFile_TP) => {
+const UploadFile = ({ files, setFiles, id }: uploadFile_TP) => {
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     setFiles(file);
   };
 
   const handleButtonClick = () => {
-    document.getElementById("file-input").click();
+    document.getElementById(id).click();
   };
 
   return (
     <div className="flex flex-col items-center p-4">
       <input
         type="file"
-        id="file-input"
+        id={id}
         className="hidden"
         onChange={handleFileChange}
       />

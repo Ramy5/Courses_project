@@ -22,12 +22,14 @@ const OrganizationLogo = () => {
             <UploadFile
               files={organizationFile}
               setFiles={setOrganizationFile}
+              id="logo"
             />
           </div>
 
           <div className="col-span-2 text-center">
-            <h2>{t("organization logo")}</h2>
+            <h2>{t("image cover")}</h2>
             <UploadFile
+              id="cover"
               files={organizationCoverFile}
               setFiles={setOrganizationCoverFile}
             />
