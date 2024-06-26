@@ -71,11 +71,11 @@ const Schedule = () => {
       id: "1",
       customContent: (
         <div className="text-center">
-          <p>فيزياء</p>
-          <p className="py-2">محمد يس</p>
+          <p className="text-base font-medium">فيزياء</p>
+          <p className="py-2 text-base font-medium">محمد يس</p>
           <div className="flex items-center justify-center gap-1">
             <IoTimeOutline />
-            <p>09:30 - 11:20</p>
+            <p>09:00 - 10:00</p>
           </div>
         </div>
       ),
@@ -88,8 +88,8 @@ const Schedule = () => {
       id: "2",
       customContent: (
         <div className="text-center">
-          <p>كمياء</p>
-          <p className="py-2">محمد يس</p>
+          <p className="text-base font-medium">كمياء</p>
+          <p className="py-2 text-base font-medium">محمد يس</p>
           <div className="flex items-center justify-center gap-1">
             <IoTimeOutline />
             <p>12:00 - 13:00</p>
@@ -105,8 +105,8 @@ const Schedule = () => {
       id: "3",
       customContent: (
         <div className="text-center">
-          <p>حاسب الي</p>
-          <p className="py-2">محمد يس</p>
+          <p className="text-base font-medium">حاسب الي</p>
+          <p className="py-2 text-base font-medium">محمد يس</p>
           <div className="flex items-center justify-center gap-1">
             <IoTimeOutline />
             <p>09:30 - 11:20</p>
@@ -122,8 +122,8 @@ const Schedule = () => {
       id: "9",
       customContent: (
         <div className="text-center">
-          <p>فيزياء</p>
-          <p className="py-2">محمد يس</p>
+          <p className="text-base font-medium">فيزياء</p>
+          <p className="py-2 text-base font-medium">محمد يس</p>
           <div className="flex items-center justify-center gap-1">
             <IoTimeOutline />
             <p>09:30 - 11:20</p>
@@ -139,8 +139,8 @@ const Schedule = () => {
       id: "4",
       customContent: (
         <div className="text-center">
-          <p>كمياء</p>
-          <p className="py-2">محمد يس</p>
+          <p className="text-base font-medium">كمياء</p>
+          <p className="py-2 text-base font-medium">محمد يس</p>
           <div className="flex items-center justify-center gap-1">
             <IoTimeOutline />
             <p>09:30 - 11:20</p>
@@ -156,8 +156,8 @@ const Schedule = () => {
       id: "10",
       customContent: (
         <div className="text-center">
-          <p>فيزياء</p>
-          <p className="py-2">محمد يس</p>
+          <p className="text-base font-medium">فيزياء</p>
+          <p className="py-2 text-base font-medium">محمد يس</p>
           <div className="flex items-center justify-center gap-1">
             <IoTimeOutline />
             <p>09:30 - 11:20</p>
@@ -173,8 +173,8 @@ const Schedule = () => {
       id: "5",
       customContent: (
         <div className="text-center">
-          <p>فيزياء</p>
-          <p className="py-2">محمد يس</p>
+          <p className="text-base font-medium">فيزياء</p>
+          <p className="py-2 text-base font-medium">محمد يس</p>
           <div className="flex items-center justify-center gap-1">
             <IoTimeOutline />
             <p>09:30 - 11:20</p>
@@ -190,8 +190,8 @@ const Schedule = () => {
       id: "6",
       customContent: (
         <div className="text-center">
-          <p>فيزياء</p>
-          <p className="py-2">محمد يس</p>
+          <p className="text-base font-medium">فيزياء</p>
+          <p className="py-2 text-base font-medium">محمد يس</p>
           <div className="flex items-center justify-center gap-1">
             <IoTimeOutline />
             <p>09:30 - 11:20</p>
@@ -207,8 +207,8 @@ const Schedule = () => {
       id: "7",
       customContent: (
         <div className="text-center">
-          <p>فيزياء</p>
-          <p className="py-2">محمد يس</p>
+          <p className="text-base font-medium">فيزياء</p>
+          <p className="py-2 text-base font-medium">محمد يس</p>
           <div className="flex items-center justify-center gap-1">
             <IoTimeOutline />
             <p>09:30 - 11:20</p>
@@ -225,7 +225,7 @@ const Schedule = () => {
     //   customContent: (
     //     <div className="text-center">
     //       <p>فيزياء</p>
-    //       <p className="py-2">محمد يس</p>
+    //       <p className="py-2 text-base font-medium">محمد يس</p>
     //       <div className="flex items-center justify-center gap-1">
     //         <IoTimeOutline />
     //         <p>09:30 - 11:20</p>

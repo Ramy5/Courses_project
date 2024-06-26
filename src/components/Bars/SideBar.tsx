@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import { CiGrid41 } from "react-icons/ci";
 import { FaFolder } from "react-icons/fa6";
 import { FaUserAlt } from "react-icons/fa";
@@ -14,9 +14,15 @@ import { t } from "i18next";
 import { useLocation, useNavigate } from "react-router-dom";
 import SearchInput from "../UI/SearchInput";
 import { useAppSelector } from "../../hooks/reduxHooks";
+import { Button } from "..";
 
-const SideBar = () => {
-  const [expanded, setExpanded] = useState(true);
+export type SideBarProps = {
+  setToggleSideBar: (value: boolean) => void;
+  toggleSideBar: boolean;
+}
+
+
+const SideBar: React.FC<SideBarProps> = ({ setToggleSideBar, toggleSideBar }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { sidebarColor } = useAppSelector((state) => state.global);
@@ -90,27 +96,27 @@ const SideBar = () => {
   const currentPathtName = getCurrentPathName(location.pathname);
 
   return (
-    <aside className="col-start-1 col-end-2 row-start-1 row-end-3">
+    <aside className={`${toggleSideBar ? "right-0" : " -right-full"} sm:static fixed w-full transition-all duration-300 col-start-1 col-end-2 row-start-1 row-end-3 top-0 h-full z-50`}>
       <nav
-        className="flex flex-col h-full border-r shadow-sm"
+        className="flex flex-col h-full border-r shadow-sm "
         style={{ backgroundColor: sidebarColor }}
       >
         <div className="flex items-center justify-between p-4 pb-2">
           <button
-            onClick={() => setExpanded((curr) => !curr)}
+            onClick={() => setToggleSideBar((curr) => !curr)}
             className="p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100"
           >
-            {expanded ? (
-              <RxCross2 size={24} />
+            {toggleSideBar ? (
+              <RxCross2 size={24} className="fill-mainColor" />
             ) : (
-              <HiBars3CenterLeft size={24} />
+              <HiBars3CenterLeft size={24} className="fill-mainColor" />
             )}
           </button>
         </div>
 
         <ul className="flex-1 mt-6 ps-2">
-          {expanded && (
-            <li className="block mt-2 mb-6 ms-1 me-3 lg:hidden">
+          {toggleSideBar && (
+            <li className="block mt-2 mb-6 ms-1 me-3 lg:hidden trans">
               <SearchInput />
             </li>
           )}
@@ -131,8 +137,8 @@ const SideBar = () => {
             >
               {item.icon}
               <span
-                className={`overflow-hidden transition-all ${
-                  expanded ? "w-40 ml-3" : "w-0"
+                className={`overflow-hidden transition-all truncate ${
+                  toggleSideBar ? "w-40 ml-3" : "w-0"
                 }`}
               >
                 {t(item.title)}
@@ -141,12 +147,12 @@ const SideBar = () => {
               {/* {item.alert && (
                 <div
                   className={`absolute right-2 w-2 h-2 rounded bg-indigo-400 ${
-                    expanded ? "" : "top-2"
+                    toggleSideBar ? "" : "top-2"
                   }`}
                 />
               )} */}
 
-              {/* {!expanded && (
+              {/* {!toggleSideBar && (
                 <div
                   className={`
                           absolute left-full rounded-md px-2 py-1 ml-6

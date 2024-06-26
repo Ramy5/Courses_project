@@ -272,6 +272,7 @@ body {
 }
 /*End Instructors Profile */
 
+/* Start Schedule */
 .fc-header-toolbar,
 .fc-license-message {
   display: none !important;
@@ -301,9 +302,17 @@ h1 {
 .fc-view-harness-active {
   height: 710px !important;
 }
+
+.fc-timeline-header-row th,
+.fc-datagrid-body tr {
+  font-size: 17px !important;
+  font-weight: 500 !important;
+  color: #393d94 !important;
+}
+
 .fc-datagrid-cell-frame {
   display: flex;
-  justify-content: center;
+  justify-content: start;
   align-items: center;
 }
 
@@ -331,19 +340,34 @@ tbody .fc-datagrid-cell-frame {
 }
 
 .fc-timeline-events .fc-scrollgrid-sync-inner {
-  border-bottom: 2px solid #4ECB71 !important;
+  border-bottom: 2px solid #4ecb71 !important;
   height: 35px !important;
   width: 100% !important;
 }
 .fc-scrollgrid-liquid,
 .fc-scrollgrid-section td,
-.fc-scrollgrid-section  th {
+.fc-scrollgrid-section th {
   border: none !important;
 }
 .fc .fc-resource-timeline-divider {
   width: 0 !important;
 }
 
-.fc-scrollgrid-section  th {
+.fc-scrollgrid-section th {
   padding-bottom: 10px;
 }
+
+.fc-event {
+  border-radius: 8px !important;
+  margin-right: -27px !important;
+  margin-left: 5px !important;
+}
+
+.fc .fc-timeline-bg {
+  height: 1px !important;
+  width: 100% !important;
+  top: 40px !important;
+  border-bottom: 2px solid #4ecb71 !important;
+}
+
+/* End Schedule */
