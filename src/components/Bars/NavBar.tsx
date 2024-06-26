@@ -6,8 +6,14 @@ import Notification from "../../assets/navBar/notification.svg";
 import { useRTL } from "../../hooks/useRTL";
 import Button from "../UI/Button";
 import SearchInput from "../UI/SearchInput";
+import { RxCross2 } from "react-icons/rx";
+import { HiBars3CenterLeft } from "react-icons/hi2";
+import { SideBarProps } from "./SideBar";
 
-const NavBar = () => {
+const NavBar: React.FC<SideBarProps> = ({
+  setToggleSideBar,
+  toggleSideBar,
+}) => {
   const [currentDate, setCurrentDate] = useState<string>("");
 
   const isRTL = useRTL();
@@ -29,9 +35,17 @@ const NavBar = () => {
 
   return (
     <div className="flex items-center justify-between h-16 px-4 w-100">
-      <div className="flex items-center gap-1 px-4 py-6 w-100">
-        <img src={DateImg} alt="date" />
-        <p>{currentDate}</p>
+      <div className="flex items-center">
+        <Button
+          action={() => setToggleSideBar((curr) => !curr)}
+          className="p-1.5 rounded-lg bg-mainColor sm:hidden block"
+        >
+          <HiBars3CenterLeft size={24} className="fill-white" />
+        </Button>
+        <div className="hidden items-center gap-2 px-4 py-6 w-100 sm:flex">
+          <img src={DateImg} alt="date" />
+          <p>{currentDate}</p>
+        </div>
       </div>
       <div className="flex items-center gap-4 me-2">
         <div className="flex items-center justify-center gap-3">
