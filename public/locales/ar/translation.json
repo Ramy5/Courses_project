@@ -187,6 +187,7 @@
   "add lecture timing": "اضافه توقيت محاضرة ",
   "lecture timing": "توقيت المحاضرة",
   "add": "اضافة",
+  "subject": "المقرر",
   "academic program": "البرنامج الدراسي",
   "branch": "الشعبة",
   "lecture date": "تاريخ المحاضرة",
@@ -215,7 +216,6 @@
   "test approval": "اعتماد الاختبار",
   "determine which students are allowed to choose": "حدد الطلاب المسموح لهم بالإختبار",
   "student number": "رقم الطالب",
-  "section": "الشعبة",
   "grade": "الدرجة",
   "percentage": "المعدل",
   "accepted": "مقبول",
@@ -240,6 +240,9 @@
   "phone number": "رقم الهاتف",
   "country": "الدولة",
   "full name": "الاسم بالكامل",
-  "joining date": "تاريخ الالتحاق",
-  "image cover": "صورة الغلاف"
+  "educational level": "المرحلة الدراسية",
+  "artificial intelligence programme": "برنامج الذكاء الاصطناعي",
+  "program schedule settings for the selected study period have been completed. Click “Save Schedule” to complete the setup process.": "تم الانتهاء من إعدادات جدول البرنامج للفترة الدراسية المحددة. اضغط “حفظ الجدول” لإتمام عملية الإعداد.",
+  "save table":"حفظ الجدول",
+  "joining date": "تاريخ الالتحاق"
 }
