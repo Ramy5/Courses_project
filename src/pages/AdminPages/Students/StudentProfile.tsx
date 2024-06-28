@@ -22,6 +22,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Form, Formik } from "formik";
 import { FaRegEdit } from "react-icons/fa";
 import { RiDeleteBin5Line } from "react-icons/ri";
+import Back from "../../../components/UI/Back";
 
 const StudentProfile = () => {
   const [showReceiptModal, setShowReceiptModal] = useState(false);
@@ -271,7 +272,6 @@ const StudentProfile = () => {
                 </div>
               </div>
             </div>
-
             {showReceiptModal && (
               <MainPopup onClose={() => setShowReceiptModal(false)}>
                 <h2 className="mb-4 text-2xl font-bold lg:mb-8">

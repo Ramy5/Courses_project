@@ -12,6 +12,7 @@ import TestManagement from "./AdminPages/TestManagement/TestManagement";
 import TestApproved from "./AdminPages/TestManagement/TestApproved";
 import Reports from "./AdminPages/Reports/Reports";
 import Settings from "./AdminPages/Settings/Settings";
+import Error from "./Error";
 
 export {
   StructurePage,
@@ -28,4 +29,5 @@ export {
   TestApproved,
   Reports,
   Settings,
+  Error,
 };
