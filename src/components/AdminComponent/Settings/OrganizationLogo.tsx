@@ -4,14 +4,9 @@ import { t } from "i18next";
 import { useFormikContext } from "formik";
 
 const OrganizationLogo = () => {
-  const { values, setFieldValue } = useFormikContext();
   const [organizationFile, setOrganizationFile] = useState(null);
-  console.log("🚀 ~ OrganizationLogo ~ organizationFile:", organizationFile);
   const [organizationCoverFile, setOrganizationCoverFile] = useState(null);
-  console.log(
-    "🚀 ~ OrganizationLogo ~ organizationCoverFile:",
-    organizationCoverFile
-  );
+
 
   return (
     <div className="flex flex-col w-full gap-5 px-4 lg:px-16 md:w-3/4">

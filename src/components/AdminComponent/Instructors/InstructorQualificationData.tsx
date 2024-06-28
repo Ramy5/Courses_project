@@ -61,7 +61,6 @@ const InstructorQualificationData = () => {
   };
 
   const handleFileChange = (event) => {
-    console.log("🚀 ~ handleFileChange ~ event:", event);
     setFile(event.target.files[0]);
   };
 

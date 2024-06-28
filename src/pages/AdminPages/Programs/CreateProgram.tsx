@@ -14,7 +14,8 @@ import { RiDeleteBin5Line } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 
 const CreateProgram = () => {
-    
+  const [openRow, setOpenRow] = useState<number | null>(null);
+
   const navigate = useNavigate();
 
   const initialValues = {
@@ -68,6 +69,8 @@ const CreateProgram = () => {
         header: () => <span>{t("")}</span>,
         accessorKey: "action",
         cell: (info) => {
+          const rowIndex = info.row.index;
+          const totalRows = info.table.getCoreRowModel().rows.length;
           return (
             <DotsDropDown
               instructorRoute=""
@@ -78,13 +81,21 @@ const CreateProgram = () => {
               secondIcon={
                 <RiDeleteBin5Line size={22} className="fill-mainColor" />
               }
+              isOpen={openRow == info.row.original.id}
+              onToggle={() => handleToggleDropDown(info.row.original.id)}
+              isLastRow={rowIndex === totalRows - 1}
             />
           );
         },
       },
     ],
-    []
+    [openRow]
   );
+
+  const handleToggleDropDown = (id: number) => {
+    setOpenRow((prevOpenRow) => (prevOpenRow == id ? null : id));
+  };
+
   return (
     <div>
       <Formik
@@ -256,7 +267,9 @@ const CreateProgram = () => {
                     <h2 className="text-2xl font-semibold text-centersm:text-start">
                       {t("Courses")}
                     </h2>
-                    <Button action={() => navigate("/programs/courses/create")}>{t("add")}</Button>
+                    <Button action={() => navigate("/programs/courses/create")}>
+                      {t("add")}
+                    </Button>
                   </div>
                   <Table
                     data={CoursesData}

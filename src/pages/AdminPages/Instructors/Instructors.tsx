@@ -1,7 +1,11 @@
 import { t } from "i18next";
 import Select from "react-select";
-import { HiOutlineDotsHorizontal } from "react-icons/hi";
-import { Button, SearchInput, TitlePage } from "../../../components";
+import {
+  Button,
+  DotsDropDown,
+  SearchInput,
+  TitlePage,
+} from "../../../components";
 import { useNavigate } from "react-router-dom";
 import Pagination from "../../../components/UI/Pagination";
 import Instructor from "../../../assets/instructors/instructor.svg";
@@ -9,8 +13,13 @@ import Instructor_2 from "../../../assets/instructors/instructor_2.svg";
 import Instructor_3 from "../../../assets/instructors/instructor_3.svg";
 import Instructor_4 from "../../../assets/instructors/instructor_4.svg";
 import { FaUserAlt } from "react-icons/fa";
+import { GrView } from "react-icons/gr";
+import { RiDeleteBin5Line } from "react-icons/ri";
+import { useState } from "react";
 
 const Instructors = () => {
+  const [openRow, setOpenRow] = useState<number | null>(null);
+
   const navigate = useNavigate();
 
   const options = [
@@ -56,6 +65,10 @@ const Instructors = () => {
     navigate(`/instructors/instructorProfile/${instructorId}`);
   };
 
+  const handleToggleDropDown = (id: number) => {
+    setOpenRow((prevOpenRow) => (prevOpenRow == id ? null : id));
+  };
+
   return (
     <div>
       <div>
@@ -83,9 +96,17 @@ const Instructors = () => {
             className="p-4 text-center bg-white rounded-2xl main_shadow"
           >
             <div className="flex items-center justify-end w-full">
-              <HiOutlineDotsHorizontal
-                size={30}
-                className="fill-mainGray opacity-55"
+              <DotsDropDown
+                instructorId={instructor.id}
+                instructorRoute=""
+                firstName="edit"
+                firstIcon={<GrView size={22} className="fill-mainColor" />}
+                secondName="delete"
+                secondIcon={
+                  <RiDeleteBin5Line size={22} className="fill-mainRed" />
+                }
+                isOpen={openRow == instructor.id}
+                onToggle={() => handleToggleDropDown(instructor.id)}
               />
             </div>
             <div className="w-full my-2">

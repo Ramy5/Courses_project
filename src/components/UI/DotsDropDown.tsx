@@ -1,12 +1,8 @@
-import { useState } from "react";
 import { Button } from "..";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
-import { FaRegEdit } from "react-icons/fa";
-import { RiDeleteBin5Line } from "react-icons/ri";
 import { t } from "i18next";
 import { useRTL } from "../../hooks/useRTL";
 import { useNavigate } from "react-router-dom";
-import { GrView } from "react-icons/gr";
 
 type DotsDropDown_TP = {
   instructorId?: number;
@@ -15,6 +11,9 @@ type DotsDropDown_TP = {
   firstIcon: any;
   secondName?: string;
   secondIcon?: any;
+  isOpen: boolean;
+  isLastRow?: boolean;
+  onToggle: () => void;
 };
 
 const DotsDropDown = ({
@@ -24,8 +23,11 @@ const DotsDropDown = ({
   firstIcon,
   secondName,
   secondIcon,
+  isOpen,
+  isLastRow,
+  onToggle,
 }: DotsDropDown_TP) => {
-  const [dropDown, setDropDown] = useState<boolean>(false);
+
   const isRTL = useRTL();
   const navigate = useNavigate();
 
@@ -40,9 +42,7 @@ const DotsDropDown = ({
       <Button
         className="p-0 bg-transparent text-mainGray"
         type="button"
-        action={() => {
-          setDropDown(!dropDown);
-        }}
+        action={onToggle}
       >
         <HiOutlineDotsHorizontal
           size={35}
@@ -51,9 +51,7 @@ const DotsDropDown = ({
       </Button>
 
       <ul
-        className={`${dropDown ? "block" : "hidden"} ${
-          isRTL ? "left-0" : "right-0"
-        } transition-all duration-150 absolute top-7 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
+        className={`${isOpen ? "block" : "hidden"} ${isLastRow ? "bottom-11" : "top-7"} ${isLastRow != undefined ? `${isRTL ? "left-4" : "right-4"}`: `${isRTL ? "left-0" : "right-0"}`} transition-all duration-150 absolute z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
       >
         <li
           className="py-1 cursor-pointer"

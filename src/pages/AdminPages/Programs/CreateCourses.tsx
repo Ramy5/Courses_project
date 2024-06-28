@@ -1,8 +1,8 @@
 import { Form, Formik } from "formik";
-import { BaseInput, Button, DateInputField, MainRadio } from "../../../components";
+import { BaseInput, Button, MainRadio } from "../../../components";
 import { t } from "i18next";
 import Select from "react-select";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import {
   ColumnDef,
@@ -12,13 +12,11 @@ import {
   getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { IoIosCheckmarkCircleOutline } from "react-icons/io";
 import selectStyle from "../../../utils/selectStyle";
 
 const CreateCourses = () => {
   const [selectedInstructor, setSelectedInstructor] = useState<any>([]);
   let [dataSource, setDataSource] = useState<any>([]);
-  console.log("🚀 ~ CreateCourses ~ dataSource:", dataSource);
 
   const initialValues = {
     course_name: "",
@@ -125,8 +123,7 @@ const CreateCourses = () => {
           console.log("🚀 ~ CreateProgram ~ values:", values);
         }}
       >
-        {({ setFieldValue, values, resetForm }) => {
-          console.log("🚀 ~ CreateCourses ~ values:", values);
+        {({ setFieldValue, values }) => {
           return (
             <Form>
               <div className="bg-white rounded-3xl pb-8">

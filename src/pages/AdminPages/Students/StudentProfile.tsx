@@ -2,7 +2,6 @@ import { t } from "i18next";
 import {
   BaseInput,
   Button,
-  DateInputField,
   DotsDropDown,
   MainCheckBox,
   MainPopup,
@@ -25,6 +24,9 @@ import { RiDeleteBin5Line } from "react-icons/ri";
 
 const StudentProfile = () => {
   const [showReceiptModal, setShowReceiptModal] = useState(false);
+
+  const [openRow, setOpenRow] = useState<number | null>(null);
+
   const [receiptData, setreceiptData] = useState([
     {
       amountPaid: 500,
@@ -108,6 +110,10 @@ const StudentProfile = () => {
     []
   );
 
+  const handleToggleDropDown = (id: number) => {
+    setOpenRow((prevOpenRow) => (prevOpenRow == id ? null : id));
+  };
+
   return (
     <Formik initialValues={initialValues} onSubmit={(values) => {}}>
       {({ values, setFieldValue }) => {
@@ -153,7 +159,7 @@ const StudentProfile = () => {
                       />
                       <div className="translate-y-2">
                         <DotsDropDown
-                          instructorId={"addStudent"}
+                          instructorId={studentProfileData.id}
                           instructorRoute="/students"
                           firstName="edit"
                           firstIcon={
@@ -166,6 +172,8 @@ const StudentProfile = () => {
                               className="fill-mainRed"
                             />
                           }
+                          isOpen={openRow == studentProfileData.id}
+                          onToggle={() => handleToggleDropDown(studentProfileData.id)}
                         />
                       </div>
                     </div>
