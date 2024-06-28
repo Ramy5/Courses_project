@@ -7,7 +7,6 @@ import { Button } from "../../../components";
 
 const StudySchedule = () => {
   const [steps, setSteps] = useState<number>(1);
-  console.log("🚀 ~ StudySchedule ~ steps:", steps);
 
   const stepsOption = [
     { id: 1, label: "schedule settings", border: true },

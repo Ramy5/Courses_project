@@ -7,8 +7,12 @@ import { PiStudentBold } from "react-icons/pi";
 import Pagination from "../../../components/UI/Pagination";
 import { GrView } from "react-icons/gr";
 import { RiDeleteBin5Line } from "react-icons/ri";
+import { useState } from "react";
 
 const Programs = () => {
+  const [openRow, setOpenRow] = useState<number | null>(null);
+  console.log("🚀 ~ Programs ~ openRow:", openRow)
+
   const navigate = useNavigate();
 
   const programsData = [
@@ -53,12 +57,18 @@ const Programs = () => {
     navigate(`/programs/StudySchedule/${instructorId}`);
   };
 
+  const handleToggleDropDown = (id: number) => {
+    setOpenRow((prevOpenRow) => (prevOpenRow == id ? null : id));
+  };
+
+
   return (
     <div>
       <div>
         <TitlePage
           mainTitle="Programs"
           supTitle=""
+          ThirdLink={`/programs/programInfo/${openRow}`}
           icon={<FaFolder size={28} className="fill-mainColor" />}
         />
 
@@ -83,6 +93,8 @@ const Programs = () => {
                   firstIcon={<GrView size={22} className="fill-mainColor" />}
                   secondName="delete program"
                   secondIcon={<RiDeleteBin5Line size={22} className="fill-mainRed" />}
+                  isOpen={openRow == program.id}
+                  onToggle={() => handleToggleDropDown(program.id)}
                 />
               </div>
               <div className="my-4">

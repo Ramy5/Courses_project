@@ -39,6 +39,7 @@
   "number of lectures": "عدد المحاضرات",
   "lecture hours": "ساعات المحاضرات",
   "number of exams": "عدد الاختبارات",
+  "exams":"الاختبارات",
   "projects": "المشروعات",
   "assignments": "الواجبات",
   "performance": "الأداء",
@@ -244,5 +245,10 @@
   "artificial intelligence programme": "برنامج الذكاء الاصطناعي",
   "program schedule settings for the selected study period have been completed. Click “Save Schedule” to complete the setup process.": "تم الانتهاء من إعدادات جدول البرنامج للفترة الدراسية المحددة. اضغط “حفظ الجدول” لإتمام عملية الإعداد.",
   "save table":"حفظ الجدول",
+  "homeworks":"الواجبات",
+  "Projects":"المشاريع",
+  "student grades":"درجات الطالب",
+  "academic data":"البيانات الأكاديمية",
+  "father data":"بيانات الأب",
   "joining date": "تاريخ الالتحاق"
 }

@@ -89,7 +89,7 @@ const Students = () => {
               className="mx-auto cursor-pointer lg:w-full text-mainColor"
               size={24}
               onClick={() =>
-                navigate(`/studentProfile/${info.row.original.id}`)
+                navigate(`/students/studentProfile/${info.row.original.id}`)
               }
             />
           );

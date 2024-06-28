@@ -25,6 +25,10 @@ import CreateProgram from "./pages/AdminPages/Programs/CreateProgram";
 import CreateCourses from "./pages/AdminPages/Programs/CreateCourses";
 import StudySchedule from "./pages/AdminPages/Programs/StudySchedule";
 import AddLectureTiming from "./pages/AdminPages/Programs/AddLectureTiming";
+import StudentInformationPanel from "./pages/StudentPages/StudentInformationPanel";
+import PersonlyProfile from "./pages/StudentPages/PersonlyProfile";
+import StudentSchedule from "./pages/StudentPages/StudentSchedule";
+import StudentCourses from "./pages/StudentPages/StudentCourses/StudentCourses";
 
 function App() {
   const isRTL = useRTL();
@@ -79,7 +83,10 @@ function App() {
           />
           <Route path="/programs/create" element={<CreateProgram />} />
           <Route path="/programs/courses/create" element={<CreateCourses />} />
-          <Route path="/programs/StudySchedule/:id" element={<StudySchedule />} />
+          <Route
+            path="/programs/StudySchedule/:id"
+            element={<StudySchedule />}
+          />
           <Route path="/programs/LectureTime" element={<AddLectureTiming />} />
 
           {/* INSTRUCTORS */}
@@ -95,7 +102,10 @@ function App() {
 
           {/* STUDENTS */}
           <Route path="/students" element={<Students />} />
-          <Route path="/studentProfile/:id" element={<StudentProfile />} />
+          <Route
+            path="/students/studentProfile/:id"
+            element={<StudentProfile />}
+          />
           <Route path="/students/addStudent" element={<AddStudent />} />
 
           {/* LECTURE MANAGEMENT */}
@@ -116,6 +126,24 @@ function App() {
 
           {/* SETTINGS */}
           <Route path="/settings" element={<Settings />} />
+
+          {/* STUDENT INFORMATION PANEL */}
+          <Route
+            path="/student/informationPanel"
+            element={<StudentInformationPanel />}
+          />
+
+          {/* STUDENT PERSONLY PROFILE */}
+          <Route
+            path="/student/PersonlyProfile"
+            element={<PersonlyProfile />}
+          />
+
+          {/* STUDENT SCHEDULE */}
+          <Route path="/students/schedule" element={<StudentSchedule />} />
+
+          {/* STUDENT SCHEDULE */}
+          <Route path="/student/Courses" element={<StudentCourses />} />
         </Route>
       </Routes>
     </BrowserRouter>

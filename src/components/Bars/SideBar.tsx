@@ -14,20 +14,29 @@ import { t } from "i18next";
 import { useLocation, useNavigate } from "react-router-dom";
 import SearchInput from "../UI/SearchInput";
 import { useAppSelector } from "../../hooks/reduxHooks";
-import { Button } from "..";
+import { FiCalendar } from "react-icons/fi";
+import { IoBulbOutline } from "react-icons/io5";
+import { TbFileText } from "react-icons/tb";
+import { MdInsertChartOutlined } from "react-icons/md";
+import { LiaBookReaderSolid } from "react-icons/lia";
+import { SlBookOpen } from "react-icons/sl";
 
 export type SideBarProps = {
   setToggleSideBar: (value: boolean) => void;
   toggleSideBar: boolean;
-}
+};
 
-
-const SideBar: React.FC<SideBarProps> = ({ setToggleSideBar, toggleSideBar }) => {
+const SideBar: React.FC<SideBarProps> = ({
+  setToggleSideBar,
+  toggleSideBar,
+}) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { sidebarColor } = useAppSelector((state) => state.global);
 
-  const sideBarItems = [
+  const userData = "student";
+
+  const sideBarItemsOfAdmin = [
     {
       title: "Information Panel",
       icon: <CiGrid41 size={24} />,
@@ -84,19 +93,107 @@ const SideBar: React.FC<SideBarProps> = ({ setToggleSideBar, toggleSideBar }) =>
     },
   ];
 
+  const sideBarItemsOfStudents = [
+    {
+      title: "Information Panel",
+      icon: <CiGrid41 size={24} />,
+      alert: "alt",
+      link: "/student/informationPanel",
+    },
+    {
+      title: "profile personly",
+      icon: <PiStudentBold size={24} />,
+      alert: "alt",
+      link: "/student/PersonlyProfile",
+    },
+    {
+      title: "school schedule",
+      icon: <FiCalendar size={24} />,
+      alert: "alt",
+      link: "/student/schedule",
+    },
+    {
+      title: "Courses",
+      icon: <LiaBookReaderSolid size={24} />,
+      alert: "alt",
+      link: "/student/Courses",
+    },
+    {
+      title: "Virtual Classroom",
+      icon: <CgPlayButtonR size={24} />,
+      alert: "alt",
+      link: "/students/virtualClasses",
+    },
+    {
+      title: "homeworks",
+      icon: <SlBookOpen size={24} />,
+      alert: "alt",
+      link: "/students/homeworks",
+    },
+    {
+      title: "Projects",
+      icon: <IoBulbOutline size={24} />,
+      alert: "alt",
+      link: "/students/Projects",
+    },
+    {
+      title: "exams",
+      icon: <TbFileText size={24} />,
+      alert: "alt",
+      link: "/students/exams",
+    },
+    {
+      title: "student grades",
+      icon: <MdInsertChartOutlined size={24} />,
+      alert: "alt",
+      link: "/students/studentGrades",
+    },
+    {
+      title: "settings",
+      icon: <IoMdSettings size={24} />,
+      alert: "alt",
+      link: "/settings",
+    },
+  ];
+
+  const sideBarAdmin =
+    userData === "admin"
+      ? sideBarItemsOfAdmin
+      : userData === "student"
+      ? sideBarItemsOfStudents
+      : "";
+
   const handleNavigate = (link: String) => {
     navigate(link);
   };
 
   const getCurrentPathName = (path: string) => {
     const segments = path.split("/").filter(Boolean);
-    return segments.length > 0 ? `/${segments[0]}` : "";
+
+    const segmentsType =
+      userData === "admin"
+        ? segments.length > 0
+          ? `/${segments[0]}`
+          : ""
+        : userData === "student"
+        ? segments.length > 0
+          ? `/${segments[0]}/${segments[1]}`
+          : ""
+        : "";
+
+    console.log("🚀 ~ getCurrentPathName ~ segmentsType:", segmentsType);
+
+    return segmentsType;
   };
 
   const currentPathtName = getCurrentPathName(location.pathname);
 
   return (
-    <aside className={`${toggleSideBar ? "right-0" : " -right-full"} sm:static fixed w-full transition-all duration-300 col-start-1 col-end-2 row-start-1 row-end-3 top-0 h-full z-50`}>
+    <aside
+      className={`${
+        toggleSideBar ? "right-0" : " -right-full"
+      } sm:static fixed w-full transition-all duration-300 col-start-1 col-end-2 row-start-1 row-end-3 top-0 h-full z-50`}
+    >
       <nav
         className="flex flex-col h-full border-r shadow-sm "
         style={{ backgroundColor: sidebarColor }}
@@ -120,7 +217,7 @@ const SideBar: React.FC<SideBarProps> = ({ setToggleSideBar, toggleSideBar }) =>
               <SearchInput />
             </li>
           )}
-          {sideBarItems.map((item, index) => (
+          {sideBarAdmin.map((item, index) => (
             <li
               key={index}
               className={`
