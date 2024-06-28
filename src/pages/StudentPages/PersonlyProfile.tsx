@@ -1,45 +1,67 @@
-import TitlePage from "../../../components/UI/TitlePage";
-import ProfileCover from "../../../assets/instructors/profile-cover.svg";
-import PersonalImage from "../../../assets/instructors/instructor_2.svg";
-import { MdPhoneIphone } from "react-icons/md";
-import { HiOutlineMail } from "react-icons/hi";
-import { IoLocationOutline } from "react-icons/io5";
-import { FaFacebook, FaRegEdit } from "react-icons/fa";
-import { FaLinkedin } from "react-icons/fa6";
-import { RiWhatsappFill } from "react-icons/ri";
-import { FaTwitter } from "react-icons/fa";
-
-import { t } from "i18next";
-import { DotsDropDown, ProfileIntroduction, Table } from "../../../components";
 import { useMemo, useState } from "react";
+import {
+  DotsDropDown,
+  ProfileIntroduction,
+  StudentPersonalContact,
+  StudentPersonalContactWithOptionalIcon,
+} from "../../components";
+import { MdOutlineEmail, MdPeople } from "react-icons/md";
+import studentProfileCover from "../../assets/students/studentProfileCover.svg";
+import studentProfileImg from "../../assets/students/studentProfileImg.svg";
 import { ColumnDef } from "@tanstack/react-table";
+import { t } from "i18next";
 import { GrView } from "react-icons/gr";
+import { FaRegEdit } from "react-icons/fa";
+import { HiOutlineIdentification } from "react-icons/hi";
+import { IoMdPhonePortrait } from "react-icons/io";
+import { PiCertificate, PiMapPinLight } from "react-icons/pi";
 
-export type InstructorPersonalData_TP = {
-  profileCover?: string;
-  personalImage?: string;
-  instructorName?: string;
-};
-
-const InstructorPersonalProfile = () => {
-  const [selectAll, setSelectAll] = useState<Boolean>(false);
+const PersonlyProfile = () => {
+  const [selectAll, setSelectAll] = useState<boolean>(false);
   const [selectedRows, setSelectedRows] = useState<any>([]);
   const [openRow, setOpenRow] = useState<number | null>(null);
 
-  const instructorPersonalData = {
+  const studentProfileData = {
     id: 1,
-    profileCover: ProfileCover,
-    personalImage: PersonalImage,
-    instructorName: "Dimitres Viga",
-    jobTitle: "محاضر شبكات",
+    profileCover: studentProfileCover,
+    personalImage: studentProfileImg,
+    studentName: "moaz",
     phoneNumber: "+009735625632",
-    emial: "Albert Adam@gmail.com",
+    email: "Albert Adam@gmail.com",
     address: "123,المنصورة الجديدة",
-    linkedIn: "user@example.com",
-    facebook: "user@example.com",
-    whatsapp: "+009759568548",
-    twitter: "user@example.com",
+    idNumber: "2394894757",
+    educationalQualification: "الثانوية العامه",
+    fatherName: "adam",
+    fatherPhone: "+3435465543",
+    fatherEmail: "albertadam@gmail.com",
   };
+
+  const studentAcademicData = [
+    {
+      title: t("academic number"),
+      value: "123456789012",
+    },
+    {
+      title: t("program"),
+      value: "Software Engineering",
+    },
+    {
+      title: t("level"),
+      value: "4",
+    },
+    {
+      title: t("date of enrollment"),
+      value: "01/09/2022",
+    },
+    {
+      title: t("section number"),
+      value: "2",
+    },
+    {
+      title: t("educational qualification"),
+      value: "درجة البكالوريوس في علوم الكمبيوتر",
+    },
+  ];
 
   const studentsDataFee = [
     {
@@ -100,7 +122,7 @@ const InstructorPersonalProfile = () => {
             <input
               type="checkbox"
               className="w-5 h-5 cursor-pointer"
-              id={crypto.randomUUID()} 
+              id={crypto.randomUUID()}
               name="selectedItem"
               onClick={handleHeaderCheckboxClick}
             />
@@ -178,17 +200,12 @@ const InstructorPersonalProfile = () => {
 
   return (
     <div>
-      <div>
-        <TitlePage
-          mainTitle="instructors"
-          supTitle="Dimitres Viga"
-          mainLink="/instructors"
-        />
-      </div>
-
       <div className="pb-2 bg-white rounded-2xl">
-        <ProfileIntroduction instructorPersonalData={instructorPersonalData} />
-
+        <ProfileIntroduction
+          instructorPersonalData={studentProfileData}
+          blocking={false}
+        />
+        {/* 
         <div className="px-8 py-6 mx-5 bg-mainBg rounded-2xl mt-28">
           <div className="flex flex-col items-center justify-between md:flex-row gap-y-5">
             <div className="flex flex-col items-center gap-2 text-center lg:flex-row lg:text-start lg:items-start">
@@ -200,7 +217,7 @@ const InstructorPersonalProfile = () => {
               </div>
               <div className="mt-[6px] lg:mt-3 font-medium">
                 <p className="text-mainGray">{t("phone")}</p>
-                <span>{instructorPersonalData.phoneNumber}</span>
+                <span>{studentProfileData.phoneNumber}</span>
               </div>
             </div>
             <div className="flex flex-col items-center gap-2 text-center lg:flex-row lg:text-start lg:items-start">
@@ -212,7 +229,7 @@ const InstructorPersonalProfile = () => {
               </div>
               <div className="mt-[6px] lg:mt-3 font-medium">
                 <p className="text-mainGray">{t("E-mail")}</p>
-                <span>{instructorPersonalData.emial}</span>
+                <span>{studentProfileData.emial}</span>
               </div>
             </div>
             <div className="flex flex-col items-center gap-2 text-center lg:flex-row lg:text-start lg:items-start">
@@ -224,77 +241,109 @@ const InstructorPersonalProfile = () => {
               </div>
               <div className="mt-[6px] lg:mt-3 font-medium">
                 <p className="text-mainGray">{t("address")}</p>
-                <span>{instructorPersonalData.address}</span>
+                <span>{studentProfileData.address}</span>
               </div>
             </div>
           </div>
+            <div>
 
-          <div className="grid grid-cols-1 gap-6 my-12 sm:grid-cols-2">
-            <div className="flex flex-col items-center gap-3 sm:flex-row">
-              <FaLinkedin size={32} className="rounded-xl fill-[#0A66C2]" />
-              <p className="font-medium">{instructorPersonalData.linkedIn}</p>
             </div>
-            <div className="flex flex-col items-center gap-3 sm:flex-row">
-              <FaFacebook size={32} fill="#1877F2" />
-              <p className="font-medium">{instructorPersonalData.facebook}</p>
-            </div>
-            <div className="flex flex-col items-center gap-3 sm:flex-row">
-              <RiWhatsappFill size={32} fill="#60D669" />
-              <p className="font-medium">{instructorPersonalData.whatsapp}</p>
-            </div>
-            <div className="flex flex-col items-center gap-3 sm:flex-row">
-              <FaTwitter size={32} fill="#55ACEE" />
-              <p className="font-medium">{instructorPersonalData.twitter}</p>
+        </div> */}
+
+        <div className="flex flex-col gap-10 p-4 pt-0 lg:p-8 mt-24">
+          {/* PERSONAL DETAILS */}
+          <div className="p-6 lg:p-10 bg-mainColor/15 rounded-xl">
+            <div className="grid items-center gap-8 md:grid-cols-2 lg:grid-cols-3 lg:gap-14">
+              <StudentPersonalContact
+                contactTitle={t("address")}
+                contactValue={studentProfileData.address}
+                icon={<PiMapPinLight size={30} />}
+              />
+              <StudentPersonalContact
+                contactTitle={t("phone")}
+                contactValue={studentProfileData.phoneNumber}
+                icon={<IoMdPhonePortrait size={30} />}
+              />
+              <StudentPersonalContact
+                contactTitle={t("email")}
+                contactValue={studentProfileData.email}
+                icon={<MdOutlineEmail size={30} />}
+              />
+              <StudentPersonalContactWithOptionalIcon
+                contactTitle={t("id number")}
+                contactValue={studentProfileData.idNumber}
+                icon={
+                  <HiOutlineIdentification
+                    className="text-mainColor"
+                    size={30}
+                  />
+                }
+              />
+              <StudentPersonalContactWithOptionalIcon
+                contactTitle={t("educational qualification")}
+                contactValue={studentProfileData.educationalQualification}
+                icon={<PiCertificate className="text-mainColor" size={30} />}
+              />
             </div>
           </div>
-        </div>
 
-        <div className="bg-[#E6EAEE] rounded-2xl my-7 mx-5 py-6">
-          <h2 className="mb-5 text-2xl font-semibold text-center ms-5 sm:text-start">
-            {t("scientific certificates")}
-          </h2>
-          <Table
-            data={studentsDataFee}
-            columns={studentsColumnsFee}
-            className="bg-mainColor"
-          />
-        </div>
+          {/* ACADEMIC DETAILS */}
+          <div className="p-6 lg:p-10 bg-mainColor/15 rounded-xl">
+            <h2 className="mb-10 text-2xl font-bold">{t("academic data")}</h2>
 
-        <div className="bg-[#E6EAEE] rounded-2xl my-7 mx-5 py-6 px-8">
-          <h2 className="text-2xl font-semibold text-center sm:text-start">
-            {t("specialization")}
-          </h2>
-
-          <div className="grid grid-cols-1 gap-6 my-12 text-center sm:grid-cols-2 sm:text-start">
-            <div className="flex flex-col gap-2">
-              <p className="text-base font-semibold text-mainColor">
-                {t("general specialization")}
-              </p>
-              <span className="font-semibold">Lorem ipsum </span>
-            </div>
-            <div className="flex flex-col gap-2">
-              <p className="text-base font-semibold text-mainColor">
-                {t("Specialization")}
-              </p>
-              <span className="font-semibold">Lorem ipsum </span>
-            </div>
-            <div className="flex flex-col gap-2">
-              <p className="text-base font-semibold text-mainColor">
-                {t("degree")}
-              </p>
-              <span className="font-semibold">Lorem ipsum </span>
-            </div>
-            <div className="flex flex-col gap-2">
-              <p className="text-base font-semibold text-mainColor">
-                {t("date")}
-              </p>
-              <span className="font-semibold">3/2/2010</span>
+            <div className="grid items-center gap-8 md:grid-cols-2 lg:grid-cols-3 lg:gap-14">
+              {studentAcademicData.map((item, index) => (
+                <StudentPersonalContactWithOptionalIcon
+                  key={index}
+                  contactTitle={item.title}
+                  contactValue={item.value}
+                />
+              ))}
             </div>
           </div>
+
+          {/* FATHER  DETAILS */}
+          <div className="p-6 lg:p-10 bg-mainColor/15 rounded-xl">
+            <h2 className="mb-10 text-2xl font-bold">{t("father data")}</h2>
+
+            <div className="grid items-center gap-8 md:grid-cols-2 lg:grid-cols-3 lg:gap-14">
+              <StudentPersonalContact
+                contactTitle={t("name")}
+                contactValue={studentProfileData.fatherName}
+                icon={<MdPeople size={30} />}
+              />
+              <StudentPersonalContact
+                contactTitle={t("phone")}
+                contactValue={studentProfileData.fatherPhone}
+                icon={<IoMdPhonePortrait size={30} />}
+              />
+              <StudentPersonalContact
+                contactTitle={t("email")}
+                contactValue={studentProfileData.fatherEmail}
+                icon={<MdOutlineEmail size={30} />}
+              />
+            </div>
+          </div>
+
+          {/* ADD A RECEIPT */}
+          {/* <div className="flex flex-col p-10 bg-mainColor/15 rounded-xl">
+                  <Button
+                    action={() => setShowReceiptModal(true)}
+                    className="self-end mb-6"
+                  >
+                    {t("+ add a receipt")}
+                  </Button>
+
+                  <Table
+                    className={"bg-mainColor/90"}
+                    data={receiptData || []}
+                    columns={receiptColumn}
+                  />
+                </div> */}
         </div>
       </div>
     </div>
   );
 };
 
-export default InstructorPersonalProfile;
+export default PersonlyProfile;

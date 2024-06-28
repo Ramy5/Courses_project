@@ -13,6 +13,8 @@ import TestApproved from "./AdminPages/TestManagement/TestApproved";
 import Reports from "./AdminPages/Reports/Reports";
 import Settings from "./AdminPages/Settings/Settings";
 import Error from "./Error";
+import StudentInformationPanel from "./StudentPages/StudentInformationPanel";
+import StudentVirtualClasses from "./StudentPages/StudentVirtualClasses";
 
 export {
   StructurePage,
@@ -30,4 +32,6 @@ export {
   Reports,
   Settings,
   Error,
+  StudentInformationPanel,
+  StudentVirtualClasses,
 };

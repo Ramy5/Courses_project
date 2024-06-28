@@ -10,7 +10,7 @@ const Error = () => {
           Sorry, the page you tried cannot be found
         </p>
         <Button className="mt-8">
-          <Link to={"/informationPanel"}>Back to information panel</Link>
+          <Link to={"/"}>Back to login</Link>
         </Button>
       </div>
     </div>

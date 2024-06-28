@@ -4,12 +4,18 @@ import { FaFolder, FaUserAlt } from "react-icons/fa";
 import { CgNotes } from "react-icons/cg";
 import { PiStudentBold } from "react-icons/pi";
 import { GoDotFill } from "react-icons/go";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { GrView } from "react-icons/gr";
 import { FaRegEdit } from "react-icons/fa";
 
 const ProgramInformation = () => {
+  const [openRow, setOpenRow] = useState<number | null>(null);
+
+  const handleToggleDropDown = (id: number) => {
+    setOpenRow((prevOpenRow) => (prevOpenRow == id ? null : id));
+  };
+
   const ProgramInf = {
     program_name: "علوم حاسب",
     program_code: "#1545456",
@@ -33,12 +39,14 @@ const ProgramInformation = () => {
   const studentsDataFee = [
     {
       index: 1,
+      id: 1,
       course_code: "#65654SD",
       course_name: "تحليل نظم",
       level: "الثالث",
     },
     {
       index: 2,
+      id: 2,
       course_code: "#65654SD",
       course_name: "تحليل نظم",
       level: "الثالث",
@@ -62,28 +70,36 @@ const ProgramInformation = () => {
         accessorKey: "level",
         cell: (info) => info.getValue(),
       },
-      {
+      { 
         header: () => <span>{t("")}</span>,
         accessorKey: "action",
-        cell: (info) => (
-          <DotsDropDown
-            instructorRoute="/programs/courseDescription"
-            instructorId={info.row.original.id}
-            firstName="view course description"
-            firstIcon={<GrView size={22} className="fill-mainColor" />}
-            secondName="edit course description"
-            secondIcon={<FaRegEdit size={22} className="fill-mainColor" />}
-          />
-        ),
+        cell: (info) => {
+          const rowIndex = info.row.index;
+          const totalRows = info.table.getCoreRowModel().rows.length;
+          return (
+            <DotsDropDown
+              instructorRoute="/programs/courseDescription"
+              instructorId={info.row.original.id} 
+              firstName="view course description"
+              firstIcon={<GrView size={22} className="fill-mainColor" />}
+              secondName="edit course description"
+              secondIcon={<FaRegEdit size={22} className="fill-mainColor" />}
+              isOpen={openRow == info.row.original.id}
+              onToggle={() => handleToggleDropDown(info.row.original.id)}
+              isLastRow={rowIndex === totalRows - 1}
+            />
+          );
+        },
       },
     ],
-    []
+    [openRow]
   );
 
   return (
     <div>
       <TitlePage
         mainTitle="Programs"
+        mainLink="/programs"
         supTitle="computer science program"
         icon={<FaFolder size={28} className="fill-mainColor" />}
       />
@@ -177,11 +193,11 @@ const ProgramInformation = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 mt-4">
-          <div>
-            <h2 className="font-semibold text-2xl text-mainColor text-start">
+          <div className="text-center md:text-start">
+            <h2 className="font-semibold text-2xl text-mainColor text-center md:text-start">
               {t("number academic levels")}
             </h2>
-            <p className="font-semibold text-xl mt-3 ms-16">
+            <p className="font-semibold text-xl mt-3 ms-0 md:ms-16">
               {ProgramInf.academic_levels}
             </p>
           </div>

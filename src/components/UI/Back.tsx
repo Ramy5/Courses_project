@@ -4,13 +4,17 @@ import { t } from "i18next";
 
 interface Back_TP {
   path?: string;
+  className?: string;
 }
 
-const Back = ({ path }: Back_TP) => {
+const Back = ({ path, className }: Back_TP) => {
   const navigate = useNavigate();
 
   return (
-    <Button action={() => (path ? navigate(path) : navigate(-1))}>
+    <Button
+      className={className}
+      action={() => (path ? navigate(path) : navigate(-1))}
+    >
       {t("back")}
     </Button>
   );

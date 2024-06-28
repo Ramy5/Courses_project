@@ -7,6 +7,7 @@ import {
   Reports,
   Settings,
   StudentProfile,
+  StudentVirtualClasses,
   Students,
   TestApproved,
   TestManagement,
@@ -26,34 +27,13 @@ import CreateProgram from "./pages/AdminPages/Programs/CreateProgram";
 import CreateCourses from "./pages/AdminPages/Programs/CreateCourses";
 import StudySchedule from "./pages/AdminPages/Programs/StudySchedule";
 import AddLectureTiming from "./pages/AdminPages/Programs/AddLectureTiming";
+import StudentInformationPanel from "./pages/StudentPages/StudentInformationPanel";
+import PersonlyProfile from "./pages/StudentPages/PersonlyProfile";
+import StudentSchedule from "./pages/StudentPages/StudentSchedule";
+import StudentCourses from "./pages/StudentPages/StudentCourses/StudentCourses";
 
 function App() {
   const isRTL = useRTL();
-
-  // const fakeStudentData = {
-  //   email_login: "student@example.com",
-  //   password_login: "password123",
-  //   confirm_password_login: "password123",
-  //   fullName_personal: "John Doe",
-  //   nationality_personal: "American",
-  //   id_number_personal: "123456789",
-  //   country_residence_personal: "United States",
-  //   educational_qualification_personal: "High School Diploma",
-  //   address_personal: "1234 Elm Street, Springfield, IL 62704",
-  //   date_birth_personal: new Date("2005-06-15"),
-  //   type_personal: "male",
-  //   image_upload_personal: [],
-  //   fullName_father: "Richard Roe",
-  //   email_father: "richard.roe@example.com",
-  //   phone_father: "9876543210",
-  //   country_father: "United States",
-  //   address_father: "5678 Maple Avenue, Springfield, IL 62704",
-  //   number_academic: "2023-001",
-  //   program_academic: "Computer Science",
-  //   level_academic: "Undergraduate",
-  //   division_number_academic: "101",
-  //   join_date_academic: new Date("2023-09-01"),
-  // };
 
   useLayoutEffect(() => {
     document.documentElement.dir = isRTL ? "rtl" : "ltr";
@@ -99,7 +79,10 @@ function App() {
 
           {/* STUDENTS */}
           <Route path="/students" element={<Students />} />
-          <Route path="/studentProfile/:id" element={<StudentProfile />} />
+          <Route
+            path="/students/studentProfile/:id"
+            element={<StudentProfile />}
+          />
           <Route path="/students/addStudent" element={<AddStudent />} />
 
           {/* LECTURE MANAGEMENT */}
@@ -120,6 +103,30 @@ function App() {
 
           {/* SETTINGS */}
           <Route path="/settings" element={<Settings />} />
+
+          {/* STUDENT INFORMATION PANEL */}
+          <Route
+            path="/student/informationPanel"
+            element={<StudentInformationPanel />}
+          />
+
+          {/* STUDENT PERSONLY PROFILE */}
+          <Route
+            path="/student/PersonlyProfile"
+            element={<PersonlyProfile />}
+          />
+
+          {/* STUDENT SCHEDULE */}
+          <Route path="/student/schedule" element={<StudentSchedule />} />
+
+          {/* STUDENT COURSES */}
+          <Route path="/student/Courses" element={<StudentCourses />} />
+
+          {/* STUDENT VIRTUAL CLASSES */}
+          <Route
+            path="/students/virtualClasses"
+            element={<StudentVirtualClasses />}
+          />
 
           {/* ERROR PAGE */}
           <Route path="*" element={<Error />} />
