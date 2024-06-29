@@ -27,6 +27,11 @@ import OrganizationSettingData from "./AdminComponent/Settings/OrganizationSetti
 import OrganizationLogo from "./AdminComponent/Settings/OrganizationLogo";
 import SideBarMenuColor from "./AdminComponent/Settings/SideBarMenuColor";
 import UploadFile from "./UI/UploadFile";
+import StudentBanar from "./StudentComponent/StudentInformationPanel/StudentBanar";
+import StudentLecturesBoxes from "./StudentComponent/StudentInformationPanel/StudentLecturesBoxes";
+import LectureBox from "./StudentComponent/StudentInformationPanel/LectureBox";
+import LatestNews from "./StudentComponent/StudentInformationPanel/LatestNews";
+import Statistics from "./StudentComponent/StudentInformationPanel/Statistics";
 
 export {
   BaseInput,
@@ -58,4 +63,9 @@ export {
   OrganizationLogo,
   SideBarMenuColor,
   UploadFile,
+  StudentBanar,
+  StudentLecturesBoxes,
+  LectureBox,
+  LatestNews,
+  Statistics,
 };
