@@ -31,6 +31,12 @@ import StudentInformationPanel from "./pages/StudentPages/StudentInformationPane
 import PersonlyProfile from "./pages/StudentPages/PersonlyProfile";
 import StudentSchedule from "./pages/StudentPages/StudentSchedule";
 import StudentCourses from "./pages/StudentPages/StudentCourses/StudentCourses";
+import StudentLectures from "./pages/StudentPages/StudentCourses/StudentLectures";
+import StudentLecturesDetails from "./pages/StudentPages/StudentCourses/StudentLecturesDetails";
+import StudentExams from "./pages/StudentPages/StudentExams/StudentExams";
+import StudentExamDetails from "./pages/StudentPages/StudentExams/StudentExamDetails";
+import StudentExam from "./pages/StudentPages/StudentExams/StudentExam";
+import StudentExamResults from "./pages/StudentPages/StudentExams/StudentExamResults";
 
 function App() {
   const isRTL = useRTL();
@@ -122,6 +128,29 @@ function App() {
           {/* STUDENT COURSES */}
           <Route path="/student/Courses" element={<StudentCourses />} />
 
+          {/* STUDENT LECTURES */}
+          <Route
+            path="/student/Courses/lectures/:id"
+            element={<StudentLectures />}
+          />
+
+          {/* STUDENT LECTURES */}
+          <Route
+            path="/student/Courses/lecture/details/:id"
+            element={<StudentLecturesDetails />}
+          />
+
+          {/* STUDENT EXAMS */}
+          <Route path="/student/exams" element={<StudentExams />} />
+          <Route
+            path="/student/exams/details/:id"
+            element={<StudentExamDetails />}
+          />
+          <Route
+            path="/student/exams/result"
+            element={<StudentExamResults />}
+          />
+        
           {/* STUDENT VIRTUAL CLASSES */}
           <Route
             path="/students/virtualClasses"
@@ -131,6 +160,9 @@ function App() {
           {/* ERROR PAGE */}
           <Route path="*" element={<Error />} />
         </Route>
+
+        {/* STUDENT EXAMS */}
+        <Route path="/student/exam/:id" element={<StudentExam />} />
       </Routes>
     </BrowserRouter>
   );

@@ -33,7 +33,15 @@ const Login = () => {
     <Formik
       initialValues={initialValues}
       onSubmit={(values) => {
-        navigate("/informationPanel");
+        console.log("🚀 ~ Login ~ values:", values);
+        const loginType =
+          values.loginType === "manager"
+            ? "/informationPanel"
+            : values.loginType === "student"
+            ? "/student/informationPanel"
+            : "";
+
+        navigate(loginType);
       }}
     >
       <div className="flex items-center justify-center w-full h-screen bg-mainColor">

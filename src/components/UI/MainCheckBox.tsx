@@ -9,6 +9,7 @@ interface MainCheckBox_TP {
   checked?: boolean;
   labelClassName?: string;
   label?: string;
+  readOnly?: boolean;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
   onClick?: (e: ChangeEvent<HTMLInputElement>) => void;
 }
@@ -22,6 +23,7 @@ const MainCheckBox = (props: MainCheckBox_TP) => {
     checked,
     labelClassName,
     label,
+    readOnly,
     onChange,
     onClick,
   } = props;
@@ -37,6 +39,7 @@ const MainCheckBox = (props: MainCheckBox_TP) => {
         name={name}
         onChange={onChange}
         onClick={onClick}
+        readOnly={readOnly}
       />
       <label
         htmlFor={(id || name) as string}
