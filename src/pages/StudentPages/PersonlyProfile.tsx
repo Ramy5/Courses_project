@@ -17,7 +17,7 @@ import { IoMdPhonePortrait } from "react-icons/io";
 import { PiCertificate, PiMapPinLight } from "react-icons/pi";
 
 const PersonlyProfile = () => {
-  const [selectAll, setSelectAll] = useState<Boolean>(false);
+  const [selectAll, setSelectAll] = useState<boolean>(false);
   const [selectedRows, setSelectedRows] = useState<any>([]);
   const [openRow, setOpenRow] = useState<number | null>(null);
 
