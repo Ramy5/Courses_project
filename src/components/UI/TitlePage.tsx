@@ -4,6 +4,7 @@ import { PiLessThan } from "react-icons/pi";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 type TitlePage_TP = {
+  title?: string;
   mainTitle?: string;
   supTitle?: string;
   mainLink?: string;
@@ -14,6 +15,7 @@ type TitlePage_TP = {
 };
 
 const TitlePage = ({
+  title,
   mainTitle,
   supTitle,
   mainLink,
@@ -28,15 +30,15 @@ const TitlePage = ({
   console.log("🚀 ~ currentPath:", currentPath);
   return (
     <div>
-      <h2 className="text-3xl font-semibold text-mainGray opacity-90">
-        {t(`${mainTitle}`)}
+      <h2 className="text-2xl font-semibold text-mainGray opacity-90">
+        {title ? t(`${title}`) : t(`${mainTitle}`)}
       </h2>
-      <div className="flex items-center gap-2 my-5 text-black">
+      <div className="flex items-center gap-1 my-5 text-black">
         <span>{icon}</span>
         {currentPath === mainLink ? (
-          <span className="cursor-default">{t(`${mainTitle}`)}</span>
+          <p className="cursor-default text-[15px]">{t(`${mainTitle}`)}</p>
         ) : (
-          <Link to={mainLink} className="cursor-pointer">
+          <Link to={mainLink} className="cursor-pointer text-[15px]">
             {t(`${mainTitle}`)}
           </Link>
         )}
@@ -46,10 +48,10 @@ const TitlePage = ({
             <PiLessThan size={16} className="fill-mainColor" />
 
             {currentPath === mainLink ? (
-              <p>{t(`${supTitle}`)}</p>
+              <p className="text-[15px]">{t(`${supTitle}`)}</p>
             ) : (
               <Link to={supLink} className="cursor-pointer">
-                <p>{t(`${supTitle}`)}</p>
+                <p className="text-[15px]">{t(`${supTitle}`)}</p>
               </Link>
             )}
           </>
@@ -58,10 +60,10 @@ const TitlePage = ({
           <>
             <PiLessThan size={16} className="fill-mainColor" />
             {currentPath === mainLink ? (
-              <p>{t(`${ThirdTitle}`)}</p>
+              <p className="text-[15px]">{t(`${ThirdTitle}`)}</p>
             ) : (
               <Link to={ThirdLink} className="cursor-pointer">
-                <p>{t(`${ThirdTitle}`)}</p>
+                <p className="text-[15px]">{t(`${ThirdTitle}`)}</p>
               </Link>
             )}
           </>

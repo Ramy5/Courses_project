@@ -140,7 +140,7 @@ const SideBar: React.FC<SideBarProps> = ({
       title: "exams",
       icon: <TbFileText size={24} />,
       alert: "alt",
-      link: "/students/exams",
+      link: "/student/exams",
     },
     {
       title: "student grades",
@@ -180,8 +180,6 @@ const SideBar: React.FC<SideBarProps> = ({
           ? `/${segments[0]}/${segments[1]}`
           : ""
         : "";
-
-    console.log("🚀 ~ getCurrentPathName ~ segmentsType:", segmentsType);
 
     return segmentsType;
   };
