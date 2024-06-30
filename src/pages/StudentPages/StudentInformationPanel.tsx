@@ -44,9 +44,9 @@ const StudentInformationPanel = () => {
 
   const progressData = [
     { title: "tests", percentage: 77 },
-    { title: "projects", percentage: 77 },
-    { title: "homeworks", percentage: 77 },
-    { title: "lectures", percentage: 77 },
+    { title: "projects", percentage: 33 },
+    { title: "homeworks", percentage: 50 },
+    { title: "lectures", percentage: 5 },
   ];
 
   return (

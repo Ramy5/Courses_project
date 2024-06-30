@@ -314,5 +314,11 @@
   "homework": "الواجب",
   "assignment title": "عنوان الواجب",
   "submission date": "تاريخ التسليم",
-  "view assignment": "عرض الواجب"
+  "view assignment": "عرض الواجب",
+  "studentName": "اسم الطالب",
+  "studentCode": "كود الطالب",
+  "assignmentTitle": "عنوان الواجب",
+  "studentAnswer": "اجابة الطالب",
+  "attachedFile": "ملف مرفق",
+  "noFileAttached": "لا يوجد ملف مرفق"
 }

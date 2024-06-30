@@ -36,6 +36,7 @@ import HomeworksTabs from "./StudentComponent/Homeworks/HomeworksTabs";
 import Banar from "./StudentComponent/Homeworks/Banar";
 import StudentHomeworkDescription from "./StudentComponent/Homeworks/StudentHomeworkDescription";
 import AddHomeworkDelivery from "./StudentComponent/Homeworks/AddHomeworkDelivery";
+import ViewHomeworkTable from "./StudentComponent/Homeworks/ViewHomeworkTable";
 
 export {
   BaseInput,
@@ -76,4 +77,5 @@ export {
   Banar,
   StudentHomeworkDescription,
   AddHomeworkDelivery,
+  ViewHomeworkTable,
 };
