@@ -15,6 +15,10 @@ import Settings from "./AdminPages/Settings/Settings";
 import Error from "./Error";
 import StudentInformationPanel from "./StudentPages/StudentInformationPanel";
 import StudentVirtualClasses from "./StudentPages/StudentVirtualClasses";
+import StudentHomework from "./StudentPages/StudentHomework/StudentHomework";
+import StudentHomeworkPage from "./StudentPages/StudentHomework/StudentHomeworkPage";
+import StudentAddHomework from "./StudentPages/StudentHomework/StudentAddHomework";
+import StudentViewHomework from "./StudentPages/StudentHomework/StudentViewHomework";
 
 export {
   StructurePage,
@@ -34,4 +38,8 @@ export {
   Error,
   StudentInformationPanel,
   StudentVirtualClasses,
+  StudentHomework,
+  StudentHomeworkPage,
+  StudentAddHomework,
+  StudentViewHomework
 };

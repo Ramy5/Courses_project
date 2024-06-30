@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 import { Button, UploadFile } from "../..";
 import { t } from "i18next";
-import { useFormikContext } from "formik";
 
 const OrganizationLogo = () => {
   const [organizationFile, setOrganizationFile] = useState(null);
   const [organizationCoverFile, setOrganizationCoverFile] = useState(null);
-
 
   return (
     <div className="flex flex-col w-full gap-5 px-4 lg:px-16 md:w-3/4">

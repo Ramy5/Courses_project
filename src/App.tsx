@@ -6,7 +6,11 @@ import {
   Login,
   Reports,
   Settings,
+  StudentAddHomework,
+  StudentHomework,
+  StudentHomeworkPage,
   StudentProfile,
+  StudentViewHomework,
   StudentVirtualClasses,
   Students,
   TestApproved,
@@ -150,11 +154,26 @@ function App() {
             path="/student/exams/result"
             element={<StudentExamResults />}
           />
-        
+
           {/* STUDENT VIRTUAL CLASSES */}
           <Route
             path="/students/virtualClasses"
             element={<StudentVirtualClasses />}
+          />
+
+          {/* STUDENT HOMEWORK */}
+          <Route path="/students/homeworks" element={<StudentHomework />} />
+          <Route
+            path="/students/homeworks/:id"
+            element={<StudentHomeworkPage />}
+          />
+          <Route
+            path="/students/addHomeworks/:id"
+            element={<StudentAddHomework />}
+          />
+          <Route
+            path="/students/viewHomework/:id"
+            element={<StudentViewHomework />}
           />
 
           {/* ERROR PAGE */}

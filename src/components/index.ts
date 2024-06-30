@@ -32,6 +32,10 @@ import StudentLecturesBoxes from "./StudentComponent/StudentInformationPanel/Stu
 import LectureBox from "./StudentComponent/StudentInformationPanel/LectureBox";
 import LatestNews from "./StudentComponent/StudentInformationPanel/LatestNews";
 import Statistics from "./StudentComponent/StudentInformationPanel/Statistics";
+import HomeworksTabs from "./StudentComponent/Homeworks/HomeworksTabs";
+import Banar from "./StudentComponent/Homeworks/Banar";
+import StudentHomeworkDescription from "./StudentComponent/Homeworks/StudentHomeworkDescription";
+import AddHomeworkDelivery from "./StudentComponent/Homeworks/AddHomeworkDelivery";
 
 export {
   BaseInput,
@@ -68,4 +72,8 @@ export {
   LectureBox,
   LatestNews,
   Statistics,
+  HomeworksTabs,
+  Banar,
+  StudentHomeworkDescription,
+  AddHomeworkDelivery,
 };
