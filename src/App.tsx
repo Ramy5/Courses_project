@@ -47,6 +47,9 @@ import StudentExam from "./pages/StudentPages/StudentExams/StudentExam";
 import StudentExamResults from "./pages/StudentPages/StudentExams/StudentExamResults";
 import StudentGrades from "./pages/StudentPages/StudentGrades/StudentGrades";
 import StudentSetting from "./pages/StudentPages/StudentSetting";
+import InstructorInformationPanel from "./pages/InstructorPage/InstructorInformationPanel";
+import InstructorProfile from "./pages/InstructorPage/InstructorProfile";
+import InstructorSchedule from "./pages/InstructorPage/InstructorSchedule";
 
 function App() {
   const isRTL = useRTL();
@@ -89,7 +92,7 @@ function App() {
             element={<InstructorPersonalProfile />}
           />
           <Route
-            path="/instructors/instructorEdit/:id"
+            path="/instructors/instructorEdit/:id?"
             element={<InstructorEditProfile />}
           />
 
@@ -203,6 +206,18 @@ function App() {
 
           {/* ERROR PAGE */}
           <Route path="*" element={<Error />} />
+
+          {/* INSTRUCTOR INFORMATION PANEL */}
+          <Route
+            path="/instructor/informationPanel"
+            element={<InstructorInformationPanel />}
+          />
+
+          {/* INSTRUCTOR PROFILE */}
+          <Route path="/instructor/profile" element={<InstructorProfile />} />
+
+          {/* INSTRUCTOR SCHEDULE */}
+          <Route path="/instructor/schedule" element={<InstructorSchedule />} />
         </Route>
 
         {/* STUDENT EXAMS */}

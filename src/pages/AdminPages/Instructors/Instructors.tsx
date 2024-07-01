@@ -84,7 +84,7 @@ const Instructors = () => {
 
         <SearchInput />
 
-        <Button type="button" className="text-xl font-medium">
+        <Button type="button" className="text-xl font-medium" action={() => navigate("/instructors/instructorEdit")}>
           {t("add lecturer +")}
         </Button>
       </div>
@@ -98,7 +98,7 @@ const Instructors = () => {
             <div className="flex items-center justify-end w-full">
               <DotsDropDown
                 instructorId={instructor.id}
-                instructorRoute=""
+                instructorRoute="/instructors/instructorEdit"
                 firstName="edit"
                 firstIcon={<GrView size={22} className="fill-mainColor" />}
                 secondName="delete"
