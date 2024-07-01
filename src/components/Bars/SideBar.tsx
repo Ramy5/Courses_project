@@ -134,7 +134,7 @@ const SideBar: React.FC<SideBarProps> = ({
       title: "Projects",
       icon: <IoBulbOutline size={24} />,
       alert: "alt",
-      link: "/students/Projects",
+      link: "/students/projects",
     },
     {
       title: "exams",
