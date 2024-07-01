@@ -34,7 +34,7 @@ const SideBar: React.FC<SideBarProps> = ({
   const location = useLocation();
   const { sidebarColor } = useAppSelector((state) => state.global);
 
-  const userData = "student";
+  const userData = "admin";
 
   const sideBarItemsOfAdmin = [
     {
@@ -146,13 +146,13 @@ const SideBar: React.FC<SideBarProps> = ({
       title: "student grades",
       icon: <MdInsertChartOutlined size={24} />,
       alert: "alt",
-      link: "/students/studentGrades",
+      link: "/students/grades",
     },
     {
       title: "settings",
       icon: <IoMdSettings size={24} />,
       alert: "alt",
-      link: "/settings",
+      link: "/students/setting",
     },
   ];
 

@@ -1,5 +1,5 @@
 import { t } from "i18next";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Button, MainCheckBox, MainPopup } from "../../../components";
 import { Form, Formik } from "formik";
 import { useRTL } from "../../../hooks/useRTL";
@@ -8,7 +8,6 @@ import { useNavigate } from "react-router-dom";
 const StudentExam = () => {
   const [questionNumber, setQuestionNumber] = useState(0);
   const [answers, setAnswers] = useState({});
-  const [timeRemaining, setTimeRemaining] = useState(0);
   const [showReceiptModal, setShowReceiptModal] = useState(false);
   const navigate = useNavigate();
   const isRTL = useRTL();
@@ -130,28 +129,29 @@ const StudentExam = () => {
     return minutes * 60 + seconds;
   };
 
-  useEffect(() => {
-    const initialTime = convertDurationToSeconds(examDetails.exam_duration);
-    setTimeRemaining(initialTime);
+  const initialTime = useMemo(
+    () => convertDurationToSeconds(examDetails.exam_duration),
+    [examDetails.exam_duration]
+  );
 
+  const [timeRemaining, setTimeRemaining] = useState(initialTime);
+
+  useEffect(() => {
     const startTimer = () => {
       const timerInterval = setInterval(() => {
-        setTimeRemaining((prevTime) => {
-          if (prevTime <= 1) {
-            clearInterval(timerInterval);
-            return 0;
-          }
-          return prevTime - 1;
-        });
+        if (initialTime <= 1) {
+          clearInterval(timerInterval);
+          setTimeRemaining(0);
+        } else {
+          setTimeRemaining((prev) => prev - 1);
+        }
       }, 1000);
     };
 
     const timerTimeout = setTimeout(startTimer, 1000);
 
-    return () => {
-      clearTimeout(timerTimeout);
-    };
-  }, [examDetails.exam_duration]);
+    return () => clearTimeout(timerTimeout);
+  }, [initialTime]);
 
   const formatTime = (seconds) => {
     const minutes = Math.floor(seconds / 60);
