@@ -6,7 +6,7 @@ const ViewHomeworkTable = ({ data }) => {
     <div className="bg-white border border-gray-800 rounded-xl">
       <ul>
         <li className="grid items-center grid-cols-4 border-b border-gray-800">
-          <span className="col-span-1 px-6 text-xl font-bold text-center text-mainColor">
+          <span className="col-span-1 px-2 text-sm font-bold text-center lg:px-6 lg:text-xl text-mainColor">
             {t(`student name`)}
           </span>
           <span className="col-span-3 px-6 py-8 text-lg border-gray-800 border-s">
@@ -15,7 +15,7 @@ const ViewHomeworkTable = ({ data }) => {
         </li>
 
         <li className="grid items-center grid-cols-4 border-b border-gray-800">
-          <span className="col-span-1 px-6 text-xl font-bold text-center text-mainColor">
+          <span className="col-span-1 text-sm font-bold text-center lg:px-6 lg:text-xl text-mainColor">
             {t(`student code`)}
           </span>
           <span className="col-span-3 px-6 py-8 text-lg border-gray-800 border-s">
@@ -24,7 +24,7 @@ const ViewHomeworkTable = ({ data }) => {
         </li>
 
         <li className="grid items-center grid-cols-4 border-b border-gray-800">
-          <span className="col-span-1 px-6 text-xl font-bold text-center text-mainColor">
+          <span className="col-span-1 text-sm font-bold text-center lg:px-6 lg:text-xl text-mainColor">
             {t(`assignment title`)}
           </span>
           <span className="col-span-3 px-6 py-8 text-lg border-gray-800 border-s">
@@ -33,7 +33,7 @@ const ViewHomeworkTable = ({ data }) => {
         </li>
 
         <li className="grid items-center grid-cols-4 border-b border-gray-800">
-          <span className="col-span-1 px-6 text-xl font-bold text-center text-mainColor ">
+          <span className="col-span-1 text-sm font-bold text-center lg:px-6 lg:text-xl text-mainColor ">
             {t(`instructions`)}
           </span>
           <span className="col-span-3 px-6 py-8 text-lg border-gray-800 border-s">
@@ -42,7 +42,7 @@ const ViewHomeworkTable = ({ data }) => {
         </li>
 
         <li className="grid items-center grid-cols-4 border-b border-gray-800">
-          <span className="col-span-1 px-6 text-xl font-bold text-center text-mainColor">
+          <span className="col-span-1 text-sm font-bold text-center lg:px-6 lg:text-xl text-mainColor">
             {t(`student answer`)}
           </span>
           <span className="col-span-3 px-6 py-8 text-lg border-gray-800 border-s">
@@ -51,7 +51,7 @@ const ViewHomeworkTable = ({ data }) => {
         </li>
 
         <li className="grid items-center grid-cols-4">
-          <span className="col-span-1 px-6 text-xl font-bold text-center text-mainColor">
+          <span className="col-span-1 text-sm font-bold text-center lg:px-6 lg:text-xl text-mainColor">
             {t(`attached file`)}
           </span>
           <span className="col-span-3 px-6 py-8 text-lg border-gray-800 border-s">

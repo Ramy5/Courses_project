@@ -6,11 +6,20 @@ import { IoMdPerson } from "react-icons/io";
 import { Link } from "react-router-dom";
 
 const HomeworkRequiredBox = (props) => {
-  const { color, subject, professor, taskName, startDate, endDate, id } = props;
+  const {
+    color,
+    subject,
+    professor,
+    taskName,
+    startDate,
+    endDate,
+    id,
+    isProject,
+  } = props;
 
   return (
     <Link
-      to={`/students/homeworks/${id}`}
+      to={isProject ? `/students/projects/${id}` : `/students/homeworks/${id}`}
       className={`rounded-lg border-s-[12px] p-4 border border-gray-400 shadow-xl bg-gray-100 space-y-4`}
       style={{ borderInlineStartColor: color }}
     >
@@ -33,7 +42,7 @@ const HomeworkRequiredBox = (props) => {
           <FiFileText className="text-3xl text-mainColor" />
         </span>
         <span>
-          {`${t("homework")}`} {id}: {taskName}
+          {isProject ? t("project") : t("homework")} {id}: {taskName}
         </span>
       </p>
       <div className="flex items-center gap-6">
