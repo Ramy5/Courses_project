@@ -37,6 +37,8 @@ import StudentExams from "./pages/StudentPages/StudentExams/StudentExams";
 import StudentExamDetails from "./pages/StudentPages/StudentExams/StudentExamDetails";
 import StudentExam from "./pages/StudentPages/StudentExams/StudentExam";
 import StudentExamResults from "./pages/StudentPages/StudentExams/StudentExamResults";
+import StudentGrades from "./pages/StudentPages/StudentGrades/StudentGrades";
+import StudentSetting from "./pages/StudentPages/StudentSetting";
 
 function App() {
   const isRTL = useRTL();
@@ -155,6 +157,12 @@ function App() {
             path="/students/virtualClasses"
             element={<StudentVirtualClasses />}
           />
+
+          {/* STUDENT GRADES */}
+          <Route path="/students/grades" element={<StudentGrades />} />
+
+          {/* STUDENT GRADES */}
+          <Route path="/students/setting" element={<StudentSetting />} />
 
           {/* ERROR PAGE */}
           <Route path="*" element={<Error />} />
