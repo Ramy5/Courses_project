@@ -1,7 +1,7 @@
 import { ReactNode, useState } from "react";
 import { CiGrid41 } from "react-icons/ci";
 import { FaFolder } from "react-icons/fa6";
-import { FaUserAlt } from "react-icons/fa";
+import { FaRegEdit, FaUserAlt } from "react-icons/fa";
 import { PiStudentBold } from "react-icons/pi";
 import { FaChalkboardTeacher } from "react-icons/fa";
 import { FiFileText } from "react-icons/fi";
@@ -34,7 +34,7 @@ const SideBar: React.FC<SideBarProps> = ({
   const location = useLocation();
   const { sidebarColor } = useAppSelector((state) => state.global);
 
-  const userData = "admin";
+  const userData = "instructor";
 
   const sideBarItemsOfAdmin = [
     {
@@ -156,12 +156,75 @@ const SideBar: React.FC<SideBarProps> = ({
     },
   ];
 
+  const sideBarItemsOfInstructor = [
+    {
+      title: "Information Panel",
+      icon: <CiGrid41 size={24} />,
+      alert: "alt",
+      link: "/instructor/informationPanel",
+    },
+    {
+      title: "profile personly",
+      icon: <PiStudentBold size={24} />,
+      alert: "alt",
+      link: "/instructor/Profile",
+    },
+    {
+      title: "school schedule",
+      icon: <FiCalendar size={24} />,
+      alert: "alt",
+      link: "/instructor/schedule",
+    },
+    {
+      title: "record attendance",
+      icon: <FaRegEdit size={24} />,
+      alert: "alt",
+      link: "/instructor/attendance",
+    },
+    {
+      title: "Courses",
+      icon: <LiaBookReaderSolid size={24} />,
+      alert: "alt",
+      link: "/instructor/Courses",
+    },
+    {
+      title: "Virtual Classroom",
+      icon: <CgPlayButtonR size={24} />,
+      alert: "alt",
+      link: "/instructors/virtualClasses",
+    },
+    {
+      title: "homeworks",
+      icon: <SlBookOpen size={24} />,
+      alert: "alt",
+      link: "/instructors/homeworks",
+    },
+    {
+      title: "Projects",
+      icon: <IoBulbOutline size={24} />,
+      alert: "alt",
+      link: "/instructors/projects",
+    },
+    {
+      title: "exams",
+      icon: <TbFileText size={24} />,
+      alert: "alt",
+      link: "/instructor/exams",
+    },
+    {
+      title: "settings",
+      icon: <IoMdSettings size={24} />,
+      alert: "alt",
+      link: "/instructor/setting",
+    },
+  ];
+
   const sideBarAdmin =
     userData === "admin"
       ? sideBarItemsOfAdmin
-      : userData === "student"
-      ? sideBarItemsOfStudents
-      : "";
+      : userData === "instructor"
+      ? sideBarItemsOfInstructor
+      : sideBarItemsOfStudents;
 
   const handleNavigate = (link: String) => {
     navigate(link);
