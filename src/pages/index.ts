@@ -19,6 +19,10 @@ import StudentHomework from "./StudentPages/StudentHomework/StudentHomework";
 import StudentHomeworkPage from "./StudentPages/StudentHomework/StudentHomeworkPage";
 import StudentAddHomework from "./StudentPages/StudentHomework/StudentAddHomework";
 import StudentViewHomework from "./StudentPages/StudentHomework/StudentViewHomework";
+import StudentProjects from "./StudentPages/StudentProjects/StudentProjects";
+import StudentProjectPage from "./StudentPages/StudentProjects/StudentProjectPage";
+import StudentAddProject from "./StudentPages/StudentProjects/StudentAddProject";
+import StudentViewProjects from "./StudentPages/StudentProjects/StudentViewProjects";
 
 export {
   StructurePage,
@@ -41,5 +45,9 @@ export {
   StudentHomework,
   StudentHomeworkPage,
   StudentAddHomework,
-  StudentViewHomework
+  StudentViewHomework,
+  StudentProjects,
+  StudentProjectPage,
+  StudentAddProject,
+  StudentViewProjects,
 };

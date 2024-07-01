@@ -37,7 +37,7 @@ const StudentHomeworkDescription = (props: StudentHomeworkDescription_TP) => {
   const { id } = useParams();
 
   return (
-    <div className="space-y-16">
+    <div className="space-y-8 lg:space-y-16">
       {/* DESCRIPTION */}
       <div>
         <h2 className="mb-2 text-2xl font-bold text-mainColor">
@@ -56,36 +56,40 @@ const StudentHomeworkDescription = (props: StudentHomeworkDescription_TP) => {
 
       {/* DATE */}
       <div className="space-y-4">
-        <div className="flex items-center gap-6">
-          <p className="text-2xl text-mainColor">{"date from"}:</p>
-          <p className="flex items-center gap-2">
-            <span>
-              <CiCalendarDate className="text-2xl text-mainColor" />
-            </span>
-            <span className="text-gray-700">{startDate}</span>
-          </p>
-          <p className="flex items-center gap-2">
-            <span>
-              <IoTimeOutline className="text-2xl text-mainColor" />
-            </span>
-            <span className="text-gray-700">{startTime}</span>
-          </p>
+        <div className="flex flex-wrap items-center gap-6">
+          <p className="text-2xl text-mainColor">{t("date from")}:</p>
+          <div className="flex items-center gap-6">
+            <p className="flex items-center gap-2">
+              <span>
+                <CiCalendarDate className="text-2xl text-mainColor" />
+              </span>
+              <span className="text-gray-700">{startDate}</span>
+            </p>
+            <p className="flex items-center gap-2">
+              <span>
+                <IoTimeOutline className="text-2xl text-mainColor" />
+              </span>
+              <span className="text-gray-700">{startTime}</span>
+            </p>
+          </div>
         </div>
 
-        <div className="flex items-center gap-6">
-          <p className="text-2xl text-mainColor">{"date to"}:</p>
-          <p className="flex items-center gap-2">
-            <span>
-              <CiCalendarDate className="text-2xl text-mainColor" />
-            </span>
-            <span className="text-gray-700">{endDate}</span>
-          </p>
-          <p className="flex items-center gap-2">
-            <span>
-              <IoTimeOutline className="text-2xl text-mainColor" />
-            </span>
-            <span className="text-gray-700">{endTime}</span>
-          </p>
+        <div className="flex flex-wrap items-center gap-6">
+          <p className="text-2xl text-mainColor">{t("date to")}:</p>
+          <div className="flex items-center gap-6">
+            <p className="flex items-center gap-2">
+              <span>
+                <CiCalendarDate className="text-2xl text-mainColor" />
+              </span>
+              <span className="text-gray-700">{endDate}</span>
+            </p>
+            <p className="flex items-center gap-2">
+              <span>
+                <IoTimeOutline className="text-2xl text-mainColor" />
+              </span>
+              <span className="text-gray-700">{endTime}</span>
+            </p>
+          </div>
         </div>
       </div>
 
@@ -131,7 +135,13 @@ const StudentHomeworkDescription = (props: StudentHomeworkDescription_TP) => {
       {/* ADD HOMEWORK OR PROJECT */}
       <div className="flex items-center justify-between w-full mt-24">
         <Button
-          action={() => navigate(`/students/addHomeworks/${id}`)}
+          action={() =>
+            navigate(
+              isProject
+                ? `/students/addProjects/${id}`
+                : `/students/addHomeworks/${id}`
+            )
+          }
           className="flex items-center gap-2 text-green-800 bg-transparent border border-mainColor"
         >
           <span>{!isProject ? t("add homework") : t("add project")}</span>

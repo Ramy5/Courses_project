@@ -10,7 +10,7 @@ import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 
 const AddHomeworkDelivery = (props) => {
-  const { startDate, startTime, endDate, endTime } = props;
+  const { startDate, startTime, endDate, endTime, isProject } = props;
   const { setFieldValue, values } = useFormikContext();
   const [fileUpload, setFileUpload] = useState(null);
   const navigate = useNavigate();
@@ -73,7 +73,7 @@ const AddHomeworkDelivery = (props) => {
   return (
     <div className="grid h-full gap-8 xl:grid-cols-3">
       {/* DELIVERY TIME  */}
-      <div className="col-span-1 p-6 bg-white rounded-xl">
+      <div className="col-span-2 p-6 bg-white lg:col-span-1 rounded-xl">
         <h2 className="mb-10 text-3xl font-bold text-mainColor">
           {t("delivery time")}
         </h2>
@@ -122,7 +122,7 @@ const AddHomeworkDelivery = (props) => {
 
           <div className="grid items-center justify-center grid-cols-2">
             <CircularProgressbar
-              className="w-32 text-xl"
+              className="text-lg w-28 lg:w-32 lg:text-xl"
               value={percentageDays}
               text={`${timeData.daysCompleted} ${t("days")}`}
               strokeWidth={9}
@@ -133,7 +133,7 @@ const AddHomeworkDelivery = (props) => {
               })}
             />
             <CircularProgressbar
-              className="w-32 text-xl"
+              className="text-lg w-28 lg:w-32 lg:text-xl"
               value={percentageTime}
               text={`${timeData.hoursCompleted}:${timeData.minutesCompleted}:${timeData.secondsCompleted}`}
               strokeWidth={9}
@@ -150,7 +150,7 @@ const AddHomeworkDelivery = (props) => {
       {/* HOMEWORK */}
       <div className="col-span-2 p-6 bg-white rounded-xl">
         <h2 className="mb-10 text-3xl font-bold text-mainColor">
-          <span>{t("homework")}:</span>
+          <span>{isProject ? t("project") : t("homework")}: </span>
           <span>الخطاب الخارجي</span>
         </h2>
 
@@ -184,7 +184,11 @@ const AddHomeworkDelivery = (props) => {
           >
             {t("cancel")}
           </Button>
-          <Button action={() => navigate("/students/homeworks")}>
+          <Button
+            action={() =>
+              navigate(isProject ? "/students/projects" : "/students/homeworks")
+            }
+          >
             {t("save")}
           </Button>
         </div>

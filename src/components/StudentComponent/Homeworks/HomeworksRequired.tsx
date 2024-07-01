@@ -5,7 +5,7 @@ const HomeworksRequired = () => {
     {
       id: 1,
       subject: "Physics",
-      professor: "Professor Abdullah Fares",
+      professor: "Abdullah Fares",
       taskName: "Homework",
       startDate: "23/3/2024",
       endDate: "30/3/2024",
@@ -14,7 +14,7 @@ const HomeworksRequired = () => {
     {
       id: 2,
       subject: "Mathematics",
-      professor: "Professor Ali Ahmed",
+      professor: "Ali Ahmed",
       taskName: "Homework",
       startDate: "1/4/2024",
       endDate: "8/4/2024",
@@ -23,7 +23,7 @@ const HomeworksRequired = () => {
     {
       id: 3,
       subject: "Mathematics",
-      professor: "Professor Ali Ahmed",
+      professor: "Ali Ahmed",
       taskName: "Homework",
       startDate: "1/4/2024",
       endDate: "8/4/2024",
@@ -32,7 +32,7 @@ const HomeworksRequired = () => {
     {
       id: 4,
       subject: "Mathematics",
-      professor: "Professor Ali Ahmed",
+      professor: "Ali Ahmed",
       taskName: "Homework",
       startDate: "1/4/2024",
       endDate: "8/4/2024",
