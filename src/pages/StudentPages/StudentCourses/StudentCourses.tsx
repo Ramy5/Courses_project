@@ -94,7 +94,6 @@ const StudentCourses = () => {
         {studentCoursesData.map((cource, index) => {
           const borderColor =
             borderColors[Math.floor(index / 3) % borderColors.length];
-            console.log(`/student/Courses/lectures/${cource.id}`);
             
           return (
             <div

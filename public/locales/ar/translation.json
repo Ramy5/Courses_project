@@ -122,6 +122,7 @@
   "payment receipt": "ايصال الدفع",
   "amount date": "تاريخ الدفع",
   "add program +": "اضافة برنامج +",
+  "add file": "اضافة ملف",
   "school schedule": "الجدول الدراسي",
   "delete program": "حذف البرنامج",
   "view program data": "عرض بيانات البرنامج",
@@ -260,6 +261,7 @@
   "view assignment": "عرض الواجب",
   "studentName": "اسم الطالب",
   "studentCode": "كود الطالب",
+  "absence rate":"نسبة الغياب",
   "studentAnswer": "اجابة الطالب",
   "attachedFile": "ملف مرفق",
   "professor": "البروفيسير",
@@ -369,5 +371,12 @@
   "change password":"تغيير كلمة المرور",
   "current password":"كلمة المرور الحالية",
   "record attendance":"تسجيل الحضور",
+  "presence":"حضور",
+  "login data":"بيانات تسجيل الدخول",
+  "personal data":"بيانات شخصية",
+  "lecture preparation":"إعداد المحاضرة",
+  "lecture title":"عنوان المحاضرة",
+  "attachments":"المرفقات",
+  "files included":"الملفات المدرجة",
   "enter the lecture": "دخول المحاضرة"
 }
