@@ -35,7 +35,7 @@ const StudySchedule = () => {
                 )}
               </div>
               <div className="absolute top-0 -left-3 w-28 -ml-10 mt-12 text-sm font-semibold text-mainColor">
-                {t(`${step.label}`)}
+                {/* {t(`${step.label}`)} */}
               </div>
             </div>
             {step.border && index < stepsOption.length - 1 && (
@@ -90,3 +90,6 @@ const StudySchedule = () => {
 };
 
 export default StudySchedule;
+
+
+
