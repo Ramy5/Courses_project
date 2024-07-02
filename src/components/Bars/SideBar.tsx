@@ -34,7 +34,7 @@ const SideBar: React.FC<SideBarProps> = ({
   const location = useLocation();
   const { sidebarColor } = useAppSelector((state) => state.global);
 
-  const userData = "student";
+  const userData = "instructor";
 
   const sideBarItemsOfAdmin = [
     {

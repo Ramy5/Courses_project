@@ -33,7 +33,6 @@ const Login = () => {
     <Formik
       initialValues={initialValues}
       onSubmit={(values) => {
-        console.log("🚀 ~ Login ~ values:", values);
         const loginType =
           values.loginType === "manager"
             ? "/informationPanel"
