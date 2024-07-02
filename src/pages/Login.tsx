@@ -36,9 +36,9 @@ const Login = () => {
         const loginType =
           values.loginType === "manager"
             ? "/informationPanel"
-            : values.loginType === "student"
-            ? "/student/informationPanel"
-            : "";
+            : values.loginType === "instructor"
+            ? "/instructor/informationPanel"
+            : "/student/informationPanel";
 
         navigate(loginType);
       }}

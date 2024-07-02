@@ -45,6 +45,16 @@ import StudentExams from "./pages/StudentPages/StudentExams/StudentExams";
 import StudentExamDetails from "./pages/StudentPages/StudentExams/StudentExamDetails";
 import StudentExam from "./pages/StudentPages/StudentExams/StudentExam";
 import StudentExamResults from "./pages/StudentPages/StudentExams/StudentExamResults";
+import StudentGrades from "./pages/StudentPages/StudentGrades/StudentGrades";
+import StudentSetting from "./pages/StudentPages/StudentSetting";
+import InstructorInformationPanel from "./pages/InstructorPage/InstructorInformationPanel";
+import InstructorProfile from "./pages/InstructorPage/InstructorProfile";
+import InstructorSchedule from "./pages/InstructorPage/InstructorSchedule";
+import RecordAttendance from "./pages/InstructorPage/RecordAttendance";
+import InstructorCourses from "./pages/InstructorPage/InstructorCourses/InstructorCourses";
+import InstructorLectures from "./pages/InstructorPage/InstructorCourses/InstructorLectures";
+import InstructorLectureDetails from "./pages/InstructorPage/InstructorCourses/InstructorLectureDetails";
+import LecturePreparation from "./pages/InstructorPage/InstructorCourses/LecturePreparation";
 
 function App() {
   const isRTL = useRTL();
@@ -87,7 +97,7 @@ function App() {
             element={<InstructorPersonalProfile />}
           />
           <Route
-            path="/instructors/instructorEdit/:id"
+            path="/instructors/instructorEdit/:id?"
             element={<InstructorEditProfile />}
           />
 
@@ -158,13 +168,17 @@ function App() {
             path="/student/exams/result"
             element={<StudentExamResults />}
           />
-
           {/* STUDENT VIRTUAL CLASSES */}
           <Route
             path="/students/virtualClasses"
             element={<StudentVirtualClasses />}
           />
 
+          {/* STUDENT GRADES */}
+          <Route path="/students/grades" element={<StudentGrades />} />
+
+          {/* STUDENT GRADES */}
+          <Route path="/students/setting" element={<StudentSetting />} />
           {/* STUDENT HOMEWORK */}
           <Route path="/students/homeworks" element={<StudentHomework />} />
           <Route
@@ -197,6 +211,42 @@ function App() {
 
           {/* ERROR PAGE */}
           <Route path="*" element={<Error />} />
+
+          {/* INSTRUCTOR INFORMATION PANEL */}
+          <Route
+            path="/instructor/informationPanel"
+            element={<InstructorInformationPanel />}
+          />
+
+          {/* INSTRUCTOR PROFILE */}
+          <Route path="/instructor/profile" element={<InstructorProfile />} />
+
+          {/* INSTRUCTOR SCHEDULE */}
+          <Route path="/instructor/schedule" element={<InstructorSchedule />} />
+
+          {/* INSTRUCTOR SCHEDULE */}
+          <Route path="/instructor/attendance" element={<RecordAttendance />} />
+
+          {/* INSTRUCTOR COURSES */}
+          <Route path="/instructor/Courses" element={<InstructorCourses />} />
+
+          {/* INSTRUCTOR LECTURES */}
+          <Route
+            path="/instructor/lectures/:id"
+            element={<InstructorLectures />}
+          />
+
+          {/* INSTRUCTOR LECTURES DETAILS */}
+          <Route
+            path="/instructor/lecture/details/:id"
+            element={<InstructorLectureDetails />}
+          />
+
+          {/* INSTRUCTOR LECTURES PREPARATION */}
+          <Route
+            path="/instructor/lecture/preparation/:id"
+            element={<LecturePreparation />}
+          />
         </Route>
 
         {/* STUDENT EXAMS */}
