@@ -66,6 +66,9 @@ import InstructorLectures from "./pages/InstructorPage/InstructorCourses/Instruc
 import InstructorLectureDetails from "./pages/InstructorPage/InstructorCourses/InstructorLectureDetails";
 import LecturePreparation from "./pages/InstructorPage/InstructorCourses/LecturePreparation";
 import InstructorViewHomework from "./pages/InstructorPage/InstructorHomework/InstructorViewHomework";
+import InstructorExams from "./pages/InstructorPage/InstructorExams/InstructorExams";
+import InstructorAddExam from "./pages/InstructorPage/InstructorExams/InstructorAddExam";
+import InstructorSetting from "./pages/InstructorPage/InstructorSetting";
 
 function App() {
   const isRTL = useRTL();
@@ -243,19 +246,19 @@ function App() {
 
           {/* INSTRUCTOR LECTURES */}
           <Route
-            path="/instructor/lectures/:id"
+            path="/instructor/Courses/lectures/:id"
             element={<InstructorLectures />}
           />
 
           {/* INSTRUCTOR LECTURES DETAILS */}
           <Route
-            path="/instructor/lecture/details/:id"
+            path="/instructor/Courses/lecture/details/:id"
             element={<InstructorLectureDetails />}
           />
 
           {/* INSTRUCTOR LECTURES PREPARATION */}
           <Route
-            path="/instructor/lecture/preparation/:id"
+            path="/instructor/Courses/lecture/preparation/:id"
             element={<LecturePreparation />}
           />
 
@@ -308,6 +311,15 @@ function App() {
             path="/instructors/addProject"
             element={<InstructorAddProject />}
           />
+
+          {/* INSTRUCTOR EXAMS*/}
+          <Route path="/instructor/exams" element={<InstructorExams />} />
+
+          {/* INSTRUCTOR ADD EXAM*/}
+          <Route path="/instructor/exams/add" element={<InstructorAddExam />} />
+
+          {/* INSTRUCTOR GRADES */}
+          <Route path="/instructor/setting" element={<InstructorSetting />} />
         </Route>
 
         {/* STUDENT EXAMS */}

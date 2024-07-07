@@ -232,22 +232,32 @@ const SideBar: React.FC<SideBarProps> = ({
 
   const getCurrentPathName = (path: string) => {
     const segments = path.split("/").filter(Boolean);
+    console.log("🚀 ~ getCurrentPathName ~ segments:", segments);
+
+    // const segmentsType =
+    //   userData === "admin"
+    //     ? segments.length > 0
+    //       ? `/${segments[0]}`
+    //       : ""
+    //     : userData === "student"
+    //     ? segments.length > 0
+    //       ? `/${segments[0]}/${segments[1]}`
+    //       : ""
+    //     : "";
 
     const segmentsType =
-      userData === "admin"
-        ? segments.length > 0
-          ? `/${segments[0]}`
-          : ""
-        : userData === "student"
-        ? segments.length > 0
-          ? `/${segments[0]}/${segments[1]}`
-          : ""
-        : "";
+      (userData === "student" || userData === "instructor") &&
+      segments.length > 0
+        ? `/${segments[0]}/${segments[1]}`
+        : `/${segments[0]}`;
+
+    console.log("🚀 ~ getCurrentPathName ~ segmentsType:", segmentsType);
 
     return segmentsType;
   };
 
   const currentPathtName = getCurrentPathName(location.pathname);
+  console.log("🚀 ~ currentPathtName:", currentPathtName)
 
   return (
     <aside
