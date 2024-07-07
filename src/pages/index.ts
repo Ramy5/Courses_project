@@ -23,6 +23,16 @@ import StudentProjects from "./StudentPages/StudentProjects/StudentProjects";
 import StudentProjectPage from "./StudentPages/StudentProjects/StudentProjectPage";
 import StudentAddProject from "./StudentPages/StudentProjects/StudentAddProject";
 import StudentViewProjects from "./StudentPages/StudentProjects/StudentViewProjects";
+import InstructorVirtualClasses from "./InstructorPage/InstructorVirtualClasses";
+import InstructorHomework from "./InstructorPage/InstructorHomework/InstructorHomework";
+import InstructorViewAllHomeworks from "./InstructorPage/InstructorHomework/InstructorViewAllHomeworks";
+import InstrunctorEvaluateHomework from "./InstructorPage/InstructorHomework/InstrunctorEvaluateHomework";
+import InstructorAddHomework from "./InstructorPage/InstructorHomework/InstructorAddHomework";
+import InstructorProjects from "./InstructorPage/InstructorProjects/InstructorProjects";
+import InstructorAddProject from "./InstructorPage/InstructorProjects/InstructorAddProject";
+import InstructorViewAllProject from "./InstructorPage/InstructorProjects/InstructorViewAllProject";
+import InstructorViewProject from "./InstructorPage/InstructorProjects/InstructorViewProject";
+import InstrunctorEvaluateProject from "./InstructorPage/InstructorProjects/InstrunctorEvaluateProject";
 
 export {
   StructurePage,
@@ -50,4 +60,14 @@ export {
   StudentProjectPage,
   StudentAddProject,
   StudentViewProjects,
+  InstructorVirtualClasses,
+  InstructorHomework,
+  InstructorViewAllHomeworks,
+  InstrunctorEvaluateHomework,
+  InstructorAddHomework,
+  InstructorProjects,
+  InstructorAddProject,
+  InstructorViewAllProject,
+  InstructorViewProject,
+  InstrunctorEvaluateProject,
 };
