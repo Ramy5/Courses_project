@@ -5,7 +5,7 @@ import { IoLocationOutline } from 'react-icons/io5'
 import { MdPhoneIphone } from 'react-icons/md'
 import { RiWhatsappFill } from 'react-icons/ri'
 
-const InstructorSocialInformation = ({instructorPersonalData}) => {
+const InstructorSocialInformation = ({personalData}: any) => {
   return (
     
     <div className="px-8 py-6 mx-5 bg-mainBg rounded-2xl mt-28">
@@ -19,7 +19,7 @@ const InstructorSocialInformation = ({instructorPersonalData}) => {
         </div>
         <div className="mt-[6px] lg:mt-3 font-medium">
           <p className="text-mainGray">{t("phone")}</p>
-          <span>{instructorPersonalData.phoneNumber}</span>
+          <span>{personalData.phoneNumber}</span>
         </div>
       </div>
       <div className="flex flex-col items-center gap-2 text-center lg:flex-row lg:text-start lg:items-start">
@@ -31,7 +31,7 @@ const InstructorSocialInformation = ({instructorPersonalData}) => {
         </div>
         <div className="mt-[6px] lg:mt-3 font-medium">
           <p className="text-mainGray">{t("E-mail")}</p>
-          <span>{instructorPersonalData.emial}</span>
+          <span>{personalData.emial}</span>
         </div>
       </div>
       <div className="flex flex-col items-center gap-2 text-center lg:flex-row lg:text-start lg:items-start">
@@ -43,7 +43,7 @@ const InstructorSocialInformation = ({instructorPersonalData}) => {
         </div>
         <div className="mt-[6px] lg:mt-3 font-medium">
           <p className="text-mainGray">{t("address")}</p>
-          <span>{instructorPersonalData.address}</span>
+          <span>{personalData.address}</span>
         </div>
       </div>
     </div>
@@ -51,19 +51,19 @@ const InstructorSocialInformation = ({instructorPersonalData}) => {
     <div className="grid grid-cols-1 gap-6 my-12 sm:grid-cols-2">
       <div className="flex flex-col items-center gap-3 sm:flex-row">
         <FaLinkedin size={32} className="rounded-xl fill-[#0A66C2]" />
-        <p className="font-medium">{instructorPersonalData.linkedIn}</p>
+        <p className="font-medium">{personalData.linkedIn}</p>
       </div>
       <div className="flex flex-col items-center gap-3 sm:flex-row">
         <FaFacebook size={32} fill="#1877F2" />
-        <p className="font-medium">{instructorPersonalData.facebook}</p>
+        <p className="font-medium">{personalData.facebook}</p>
       </div>
       <div className="flex flex-col items-center gap-3 sm:flex-row">
         <RiWhatsappFill size={32} fill="#60D669" />
-        <p className="font-medium">{instructorPersonalData.whatsapp}</p>
+        <p className="font-medium">{personalData.whatsapp}</p>
       </div>
       <div className="flex flex-col items-center gap-3 sm:flex-row">
         <FaTwitter size={32} fill="#55ACEE" />
-        <p className="font-medium">{instructorPersonalData.twitter}</p>
+        <p className="font-medium">{personalData.twitter}</p>
       </div>
     </div>
   </div>

@@ -100,7 +100,7 @@ const InstructorLectureDetails = () => {
             mainTitle="Courses"
             mainLink="/instructor/Courses"
             supTitle={`${t("lectures")} ${lecturesDate.instructor_name}`}
-            supLink="/instructor/lectures/1"
+            supLink="/instructor/Courses/lectures/1"
             ThirdTitle={`${t("Lecture")} ${lecturesDate.lecure_number}`}
             icon={<LiaBookReaderSolid size={25} className="fill-mainColor" />}
           />

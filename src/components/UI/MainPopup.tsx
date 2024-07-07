@@ -5,12 +5,14 @@ import { useRTL } from "../../hooks/useRTL";
 type MainPopup_TP = {
   children: ReactNode;
   className?: string;
+  classIcon?: string;
   onClose: () => void;
 };
 
 const MainPopup: React.FC<MainPopup_TP> = ({
   children,
   className,
+  classIcon,
   onClose,
 }: MainPopup_TP) => {
   const isRTL = useRTL();
@@ -18,7 +20,7 @@ const MainPopup: React.FC<MainPopup_TP> = ({
   return (
     <div>
       <div
-        className="fixed top-0 left-0 z-40 w-full h-full bg-black opacity-70"
+        className={` fixed top-0 left-0 z-40 w-full h-full bg-black opacity-70`}
         onClick={onClose}
       ></div>
       <div
@@ -27,9 +29,9 @@ const MainPopup: React.FC<MainPopup_TP> = ({
         <IoMdClose
           onClick={onClose}
           size={24}
-          className={`absolute text-white transition-all duration-200 cursor-pointer top-5 ${
+          className={`absolute transition-all duration-200 cursor-pointer top-5 ${
             isRTL ? "left-6 right-auto" : "right-6 left-auto"
-          }hover:scale-110`}
+          }hover:scale-110 ${className ? "text-mainColor" : "text-white"}`}
         >
           X
         </IoMdClose>

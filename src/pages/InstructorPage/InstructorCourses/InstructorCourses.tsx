@@ -126,7 +126,7 @@ const InstructorCourses = () => {
                 key={instructor.id}
                 className={`border-s-[12px] ${borderColor} py-5 px-4 bg-white rounded-lg cursor-pointer`}
                 onClick={() =>
-                  navigate(`/instructor/lectures/${instructor.id}`)
+                  navigate(`/instructor/Courses/lectures/${instructor.id}`)
                 }
               >
                 <div className="flex items-center gap-2">
@@ -167,7 +167,7 @@ const InstructorCourses = () => {
                 key={instructor.id}
                 className={`border-s-[12px] ${borderColor} py-5 px-4 bg-white rounded-lg cursor-pointer`}
                 onClick={() =>
-                  navigate(`/instructor/lectures/${instructor.id}`)
+                  navigate(`/instructor/Courses/lectures/${instructor.id}`)
                 }
               >
                 <div className="flex items-center gap-2">

@@ -25,7 +25,7 @@ const InstructorPersonalProfile = () => {
     id: 1,
     profileCover: ProfileCover,
     personalImage: PersonalImage,
-    instructorName: "Dimitres Viga",
+    name: "Dimitres Viga",
     jobTitle: "محاضر شبكات",
     phoneNumber: "+009735625632",
     emial: "Albert Adam@gmail.com",
@@ -183,12 +183,12 @@ const InstructorPersonalProfile = () => {
 
       <div className="pb-2 bg-white rounded-2xl">
         <ProfileIntroduction
-          instructorPersonalData={instructorPersonalData}
+          personalData={instructorPersonalData}
           blocking={true}
         />
 
         <InstructorSocialInformation
-          instructorPersonalData={instructorPersonalData}
+          personalData={instructorPersonalData}
         />
 
         <div className="bg-[#E6EAEE] rounded-2xl my-7 mx-5 py-6">

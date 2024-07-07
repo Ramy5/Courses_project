@@ -61,7 +61,6 @@ const Programs = () => {
     setOpenRow((prevOpenRow) => (prevOpenRow == id ? null : id));
   };
 
-
   return (
     <div>
       <div>
