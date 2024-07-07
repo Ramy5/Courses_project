@@ -38,6 +38,8 @@ import StudentHomeworkDescription from "./StudentComponent/Homeworks/StudentHome
 import AddHomeworkDelivery from "./StudentComponent/Homeworks/AddHomeworkDelivery";
 import ViewHomeworkTable from "./StudentComponent/Homeworks/ViewHomeworkTable";
 import ProjectsTabs from "./StudentComponent/Projects/ProjectsTabs";
+import InstructorHomeworkBox from "./InstructorComponent/InstructorHomework/InstructorHomeworkBox";
+import InstructorProjectBox from "./InstructorComponent/InstructorProjects/InstructorProjectBox";
 
 export {
   BaseInput,
@@ -80,4 +82,6 @@ export {
   AddHomeworkDelivery,
   ViewHomeworkTable,
   ProjectsTabs,
+  InstructorHomeworkBox,
+  InstructorProjectBox,
 };

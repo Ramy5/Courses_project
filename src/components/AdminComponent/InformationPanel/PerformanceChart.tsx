@@ -21,26 +21,7 @@ ChartJS.register(
   Legend
 );
 
-const PerformanceChart = () => {
-  const data = {
-    labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-    datasets: [
-      {
-        label: "Performance",
-        data: [100, 120, 150, 130, 200, 300],
-        fill: true,
-        backgroundColor: "rgba(54, 162, 235, 0.2)",
-        borderColor: "rgba(54, 162, 235, 1)",
-        pointBackgroundColor: "rgba(54, 162, 235, 1)",
-        pointBorderColor: "#fff",
-        tension: 0.4,
-        pointHoverRadius: 5,
-        pointRadius: 4,
-        pointBorderWidth: 1,
-      },
-    ],
-  };
-
+const PerformanceChart = ({ data }) => {
   const options = {
     responsive: true,
     plugins: {
