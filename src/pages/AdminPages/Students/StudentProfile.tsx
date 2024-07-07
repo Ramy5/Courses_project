@@ -174,7 +174,9 @@ const StudentProfile = () => {
                             />
                           }
                           isOpen={openRow == studentProfileData.id}
-                          onToggle={() => handleToggleDropDown(studentProfileData.id)}
+                          onToggle={() =>
+                            handleToggleDropDown(studentProfileData.id)
+                          }
                         />
                       </div>
                     </div>

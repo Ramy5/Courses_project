@@ -2,6 +2,16 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import {
   AddStudent,
   Error,
+  InstructorAddHomework,
+  InstructorAddProject,
+  InstructorHomework,
+  InstructorProjects,
+  InstructorViewAllHomeworks,
+  InstructorViewAllProject,
+  InstructorViewProject,
+  InstructorVirtualClasses,
+  InstrunctorEvaluateHomework,
+  InstrunctorEvaluateProject,
   LectureManagement,
   Login,
   Reports,
@@ -55,6 +65,7 @@ import InstructorCourses from "./pages/InstructorPage/InstructorCourses/Instruct
 import InstructorLectures from "./pages/InstructorPage/InstructorCourses/InstructorLectures";
 import InstructorLectureDetails from "./pages/InstructorPage/InstructorCourses/InstructorLectureDetails";
 import LecturePreparation from "./pages/InstructorPage/InstructorCourses/LecturePreparation";
+import InstructorViewHomework from "./pages/InstructorPage/InstructorHomework/InstructorViewHomework";
 import InstructorExams from "./pages/InstructorPage/InstructorExams/InstructorExams";
 import InstructorAddExam from "./pages/InstructorPage/InstructorExams/InstructorAddExam";
 import InstructorSetting from "./pages/InstructorPage/InstructorSetting";
@@ -249,6 +260,56 @@ function App() {
           <Route
             path="/instructor/Courses/lecture/preparation/:id"
             element={<LecturePreparation />}
+          />
+
+          {/* INSTRUCTOR VIRTUAL CLASSES */}
+          <Route
+            path="/instructors/virtualClasses"
+            element={<InstructorVirtualClasses />}
+          />
+
+          {/* INSTRUCTOR HOMEWORK */}
+          <Route
+            path="/instructors/homeworks"
+            element={<InstructorHomework />}
+          />
+          <Route
+            path="/instructors/viewHomework/:id"
+            element={<InstructorViewHomework />}
+          />
+          <Route
+            path="/instructors/viewAllHomeworks/:id"
+            element={<InstructorViewAllHomeworks />}
+          />
+          <Route
+            path="/instructors/evaluateHomework/:id"
+            element={<InstrunctorEvaluateHomework />}
+          />
+          <Route
+            path="/instructors/addHomeworks"
+            element={<InstructorAddHomework />}
+          />
+
+          {/* INSTRUCTOR PROJECT */}
+          <Route
+            path="/instructors/projects"
+            element={<InstructorProjects />}
+          />
+          <Route
+            path="/instructors/viewProject/:id"
+            element={<InstructorViewProject />}
+          />
+          <Route
+            path="/instructors/viewAllProject/:id"
+            element={<InstructorViewAllProject />}
+          />
+          <Route
+            path="/instructors/evaluateProject/:id"
+            element={<InstrunctorEvaluateProject />}
+          />
+          <Route
+            path="/instructors/addProject"
+            element={<InstructorAddProject />}
           />
 
           {/* INSTRUCTOR EXAMS*/}

@@ -17,6 +17,8 @@ interface StudentHomeworkDescription_TP {
   grade: number;
   pdf;
   links: object[];
+  isInstructotHomework?: boolean;
+  isInstructorProject?: boolean;
 }
 
 const StudentHomeworkDescription = (props: StudentHomeworkDescription_TP) => {
@@ -31,6 +33,8 @@ const StudentHomeworkDescription = (props: StudentHomeworkDescription_TP) => {
     grade,
     pdf,
     links,
+    isInstructotHomework,
+    isInstructorProject,
   } = props;
 
   const navigate = useNavigate();
@@ -41,7 +45,9 @@ const StudentHomeworkDescription = (props: StudentHomeworkDescription_TP) => {
       {/* DESCRIPTION */}
       <div>
         <h2 className="mb-2 text-2xl font-bold text-mainColor">
-          {isProject ? t("project description") : t("homework description")}
+          {isProject || isInstructorProject
+            ? t("project description")
+            : t("homework description")}
         </h2>
         <p>{description}</p>
       </div>
@@ -57,7 +63,9 @@ const StudentHomeworkDescription = (props: StudentHomeworkDescription_TP) => {
       {/* DATE */}
       <div className="space-y-4">
         <div className="flex flex-wrap items-center gap-6">
-          <p className="text-2xl text-mainColor">{t("date from")}:</p>
+          <p className="text-2xl text-mainColor">
+            {isInstructotHomework ? t("start of delivery") : t("date from")}:
+          </p>
           <div className="flex items-center gap-6">
             <p className="flex items-center gap-2">
               <span>
@@ -75,7 +83,9 @@ const StudentHomeworkDescription = (props: StudentHomeworkDescription_TP) => {
         </div>
 
         <div className="flex flex-wrap items-center gap-6">
-          <p className="text-2xl text-mainColor">{t("date to")}:</p>
+          <p className="text-2xl text-mainColor">
+            {isInstructotHomework ? t("end of delivery") : t("date to")}:
+          </p>
           <div className="flex items-center gap-6">
             <p className="flex items-center gap-2">
               <span>
@@ -102,7 +112,9 @@ const StudentHomeworkDescription = (props: StudentHomeworkDescription_TP) => {
       {/* SAMPLE */}
       <div className="">
         <h2 className="mb-4 text-2xl font-bold text-mainColor">
-          {isProject ? t("sample project") : t("sample assignments")}
+          {isProject || isInstructorProject
+            ? t("sample project")
+            : t("sample assignments")}
         </h2>
         <p className="flex items-center gap-1 px-4 py-2 bg-white border w-max">
           <span>
@@ -113,38 +125,58 @@ const StudentHomeworkDescription = (props: StudentHomeworkDescription_TP) => {
       </div>
 
       {/* LINKS */}
-      <div>
-        <h2 className="mb-4 text-2xl font-bold text-mainColor">
-          {t("enrichment links")}
-        </h2>
-        <div className="flex flex-col gap-4">
-          {links?.map((link) => {
-            return (
-              <Link
-                className="py-1 border-b w-max text-mainColor border-mainColor"
-                key={link.id}
-                to={link.url}
-              >
-                {link.url}
-              </Link>
-            );
-          })}
+      {!isInstructotHomework && (
+        <div>
+          <h2 className="mb-4 text-2xl font-bold text-mainColor">
+            {t("enrichment links")}
+          </h2>
+          <div className="flex flex-col gap-4">
+            {links?.map((link) => {
+              return (
+                <Link
+                  className="py-1 border-b w-max text-mainColor border-mainColor"
+                  key={link.id}
+                  to={link.url}
+                >
+                  {link.url}
+                </Link>
+              );
+            })}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* ADD HOMEWORK OR PROJECT */}
       <div className="flex items-center justify-between w-full mt-24">
         <Button
-          action={() =>
-            navigate(
-              isProject
-                ? `/students/addProjects/${id}`
-                : `/students/addHomeworks/${id}`
-            )
-          }
+          action={() => {
+            if (isProject) {
+              navigate(`/students/addProjects/${id}`);
+              return;
+            }
+
+            if (isInstructotHomework) {
+              navigate(`/instructors/viewAllHomeworks/${id}`);
+              return;
+            }
+
+            if (isInstructorProject) {
+              navigate(`/instructors/viewAllProject/${id}`);
+              return;
+            }
+
+            navigate(`/students/addHomeworks/${id}`);
+          }}
           className="flex items-center gap-2 text-green-800 bg-transparent border border-mainColor"
         >
-          <span>{!isProject ? t("add homework") : t("add project")}</span>
+          {isInstructotHomework && <span>{t("view students homework")}</span>}
+          {!isInstructotHomework && (
+            <span>
+              {!isProject || !isInstructorProject
+                ? t("add homework")
+                : t("add project")}
+            </span>
+          )}
           <GoArrowLeft />
         </Button>
         <Back />

@@ -238,6 +238,25 @@ const InformationPanel = () => {
     []
   );
 
+  const chartData = {
+    labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+    datasets: [
+      {
+        label: "Performance",
+        data: [100, 120, 150, 130, 200, 300],
+        fill: true,
+        backgroundColor: "rgba(54, 162, 235, 0.2)",
+        borderColor: "rgba(54, 162, 235, 1)",
+        pointBackgroundColor: "rgba(54, 162, 235, 1)",
+        pointBorderColor: "#fff",
+        tension: 0.4,
+        pointHoverRadius: 5,
+        pointRadius: 4,
+        pointBorderWidth: 1,
+      },
+    ],
+  };
+
   const sortOptions = [
     { value: "none", label: t("none") },
     { value: "asc", label: t("ascending") },
@@ -308,7 +327,7 @@ const InformationPanel = () => {
 
         {/* PERFORMANCE CHART */}
         <div className="col-span-2">
-          <PerformanceChart />
+          <PerformanceChart data={chartData} />
         </div>
       </div>
 
