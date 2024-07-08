@@ -4,7 +4,7 @@ import SideBar from "../components/Bars/SideBar";
 import { useEffect, useState } from "react";
 
 const StructurePage = () => {
-  const [toggleSideBar, setToggleSideBar] = useState<boolean>(false)
+  const [toggleSideBar, setToggleSideBar] = useState<boolean>(true);
 
   // useEffect(() => {
   //   const handleResize = () => {
@@ -25,10 +25,16 @@ const StructurePage = () => {
   return (
     <div className="grid h-screen grid-cols-view grid-rows-view bg-mainBg">
       <nav className="col-end-3 row-start-1 row-end-2 bg-white col-start-0">
-        <NavBar toggleSideBar={toggleSideBar} setToggleSideBar={setToggleSideBar}/>
+        <NavBar
+          toggleSideBar={toggleSideBar}
+          setToggleSideBar={setToggleSideBar}
+        />
       </nav>
 
-      <SideBar toggleSideBar={toggleSideBar} setToggleSideBar={setToggleSideBar}/>
+      <SideBar
+        toggleSideBar={toggleSideBar}
+        setToggleSideBar={setToggleSideBar}
+      />
 
       <main className="col-start-2 col-end-3 row-start-2 row-end-3 px-4 py-6 mb-5 overflow-y-auto lg:px-8">
         <Outlet />

@@ -5,7 +5,6 @@ import {
   LoginStep,
   ResetPasswordStep,
 } from "../components";
-import { useNavigate } from "react-router-dom";
 
 interface initialValues_TP {
   email: string;
@@ -18,31 +17,18 @@ interface initialValues_TP {
 
 const Login = () => {
   const [step, setStep] = useState<number>(1);
-  const navigate = useNavigate();
 
   const initialValues: initialValues_TP = {
-    email: "ramy@gmail.com",
-    password: "111111111",
-    loginType: "manager",
-    resetPasswordEmail: "ramy@gmail.com",
+    email: "",
+    password: "",
+    loginType: "",
+    resetPasswordEmail: "",
     newPassword: "",
     confirmNewpassword: "",
   };
 
   return (
-    <Formik
-      initialValues={initialValues}
-      onSubmit={(values) => {
-        const loginType =
-          values.loginType === "manager"
-            ? "/informationPanel"
-            : values.loginType === "instructor"
-            ? "/instructor/informationPanel"
-            : "/student/informationPanel";
-
-        navigate(loginType);
-      }}
-    >
+    <Formik initialValues={initialValues} onSubmit={(values) => {}}>
       <div className="flex items-center justify-center w-full h-screen bg-mainColor">
         <Form className="w-full lg:w-[70vw] rounded-xl px-2 lg:px-16 bg-white drop-shadow-xl transition-all duration-300 h-[80vh] lg:h-[70vh] hover:drop-shadow-2xl">
           {step === 1 ? (
