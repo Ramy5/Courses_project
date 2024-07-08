@@ -1,4 +1,4 @@
-import { useMemo, useRef } from "react";
+import { useMemo, useState } from "react";
 import { Button, SearchInput, Table, TitlePage } from "../../../components";
 import { t } from "i18next";
 import { PiStudent } from "react-icons/pi";
@@ -7,76 +7,94 @@ import { FiPrinter } from "react-icons/fi";
 import { ColumnDef } from "@tanstack/react-table";
 import { IoMdEye } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
+import customFetch from "../../../utils/axios";
+import { useQuery } from "@tanstack/react-query";
+import Loading from "../../../components/UI/Loading";
+
+const fetchStudent = async () => {
+  const response = await customFetch("students");
+  return response;
+};
 
 const Students = () => {
   const navigate = useNavigate();
+  const [page, setPage] = useState<number>(1);
 
-  const studentsData = [
-    {
-      id: 1,
-      studentName: "محمد يس احمد يس",
-      program: "علوم حاسب",
-      level: "الثالث",
-      email: "jacob@yahoo.com",
-      paymentStatus: "منتظم",
-    },
-    {
-      id: 2,
-      studentName: "محمد يس احمد يس",
-      program: "علوم حاسب",
-      level: "الثالث",
-      email: "jacob@yahoo.com",
-      paymentStatus: "محروم",
-    },
-    {
-      id: 3,
-      studentName: "محمد يس احمد يس",
-      program: "علوم حاسب",
-      level: "الثالث",
-      email: "jacob@yahoo.com",
-      paymentStatus: "منتظم",
-    },
-    {
-      id: 4,
-      studentName: "محمد يس احمد يس",
-      program: "علوم حاسب",
-      level: "الثالث",
-      email: "jacob@yahoo.com",
-      paymentStatus: "منتظم",
-    },
-    {
-      id: 5,
-      studentName: "محمد يس احمد يس",
-      program: "علوم حاسب",
-      level: "الثالث",
-      email: "jacob@yahoo.com",
-      paymentStatus: "منتظم",
-    },
-    {
-      id: 6,
-      studentName: "محمد يس احمد يس",
-      program: "علوم حاسب",
-      level: "الثالث",
-      email: "jacob@yahoo.com",
-      paymentStatus: "منتظم",
-    },
-    {
-      id: 7,
-      studentName: "محمد يس احمد يس",
-      program: "علوم حاسب",
-      level: "الثالث",
-      email: "jacob@yahoo.com",
-      paymentStatus: "منتظم",
-    },
-    {
-      id: 8,
-      studentName: "محمد يس احمد يس",
-      program: "علوم حاسب",
-      level: "الثالث",
-      email: "jacob@yahoo.com",
-      paymentStatus: "منتظم",
-    },
-  ];
+  const {
+    data: studentsData,
+    error,
+    isLoading,
+  } = useQuery({
+    queryKey: ["students"],
+    queryFn: fetchStudent,
+  });
+
+  // const studentsData = [
+  //   {
+  //     id: 1,
+  //     studentName: "محمد يس احمد يس",
+  //     program: "علوم حاسب",
+  //     level: "الثالث",
+  //     email: "jacob@yahoo.com",
+  //     paymentStatus: "منتظم",
+  //   },
+  //   {
+  //     id: 2,
+  //     studentName: "محمد يس احمد يس",
+  //     program: "علوم حاسب",
+  //     level: "الثالث",
+  //     email: "jacob@yahoo.com",
+  //     paymentStatus: "محروم",
+  //   },
+  //   {
+  //     id: 3,
+  //     studentName: "محمد يس احمد يس",
+  //     program: "علوم حاسب",
+  //     level: "الثالث",
+  //     email: "jacob@yahoo.com",
+  //     paymentStatus: "منتظم",
+  //   },
+  //   {
+  //     id: 4,
+  //     studentName: "محمد يس احمد يس",
+  //     program: "علوم حاسب",
+  //     level: "الثالث",
+  //     email: "jacob@yahoo.com",
+  //     paymentStatus: "منتظم",
+  //   },
+  //   {
+  //     id: 5,
+  //     studentName: "محمد يس احمد يس",
+  //     program: "علوم حاسب",
+  //     level: "الثالث",
+  //     email: "jacob@yahoo.com",
+  //     paymentStatus: "منتظم",
+  //   },
+  //   {
+  //     id: 6,
+  //     studentName: "محمد يس احمد يس",
+  //     program: "علوم حاسب",
+  //     level: "الثالث",
+  //     email: "jacob@yahoo.com",
+  //     paymentStatus: "منتظم",
+  //   },
+  //   {
+  //     id: 7,
+  //     studentName: "محمد يس احمد يس",
+  //     program: "علوم حاسب",
+  //     level: "الثالث",
+  //     email: "jacob@yahoo.com",
+  //     paymentStatus: "منتظم",
+  //   },
+  //   {
+  //     id: 8,
+  //     studentName: "محمد يس احمد يس",
+  //     program: "علوم حاسب",
+  //     level: "الثالث",
+  //     email: "jacob@yahoo.com",
+  //     paymentStatus: "منتظم",
+  //   },
+  // ];
 
   const studentsColumns = useMemo<ColumnDef<any>[]>(
     () => [
@@ -89,7 +107,7 @@ const Students = () => {
               className="mx-auto cursor-pointer lg:w-full text-mainColor"
               size={24}
               onClick={() =>
-                navigate(`/students/studentProfile/${info.row.original.id}`)
+                navigate(`/students/studentProfile/${info.row.index}`)
               }
             />
           );
@@ -97,17 +115,42 @@ const Students = () => {
       },
       {
         header: () => <span>{t("Student Name")}</span>,
-        accessorKey: "studentName",
+        accessorKey: "full_name",
         cell: (info) => info.getValue(),
       },
       {
-        header: () => <span>{t("Program")}</span>,
-        accessorKey: "program",
+        header: () => <span>{t("country")}</span>,
+        accessorKey: "country_residence",
         cell: (info) => info.getValue(),
       },
       {
-        header: () => <span>{t("Level")}</span>,
-        accessorKey: "level",
+        header: () => <span>{t("date birth")}</span>,
+        accessorKey: "date_birth",
+        cell: (info) => info.getValue(),
+      },
+      {
+        header: () => <span>{t("qualification")}</span>,
+        accessorKey: "qualification",
+        cell: (info) => info.getValue(),
+      },
+      {
+        header: () => <span>{t("type")}</span>,
+        accessorKey: "type",
+        cell: (info) => info.getValue(),
+      },
+      // {
+      //   header: () => <span>{t("Program")}</span>,
+      //   accessorKey: "program",
+      //   cell: (info) => info.getValue(),
+      // },
+      // {
+      //   header: () => <span>{t("Level")}</span>,
+      //   accessorKey: "level",
+      //   cell: (info) => <span>{t(`${info.getValue()}`)}</span>,
+      // },
+      {
+        header: () => <span>{t("nationality")}</span>,
+        accessorKey: "nationality",
         cell: (info) => <span>{t(`${info.getValue()}`)}</span>,
       },
       {
@@ -137,6 +180,9 @@ const Students = () => {
     ],
     []
   );
+
+  if (isLoading) return <Loading />;
+  if (error) return <div>{error.message}</div>;
 
   return (
     <div>
@@ -174,11 +220,11 @@ const Students = () => {
         {/* TABLE */}
         <div className="mt-6">
           <Table
-            data={studentsData}
+            data={studentsData?.data?.data?.students}
             columns={studentsColumns}
             showNavigation={true}
             totalPages={40}
-            currentPage={"1"}
+            currentPage={page}
           />
         </div>
       </div>

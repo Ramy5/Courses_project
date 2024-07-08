@@ -393,6 +393,11 @@
   "view students homework": "عرض اجابات الطلاب",
   "start of delivery": "بداية التسليم",
   "end of delivery": "نهاية التسليم",
+  "evaluate": "تقييم",
+  "admin": "مدير",
+  "Please fill out all fields": "قم بادخال جميع البيانات",
+  "logout": "تسجيل الخروج",
+  "you have successfully logged out!": "تم تسجيل الخروج بنجاح"
   "evaluate": "تقييم"
   "duty":"الواجب ",
   "delivered":"تم التسليم",

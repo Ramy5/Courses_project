@@ -1,7 +1,7 @@
 import { t } from "i18next";
 import LoginStepImg from "../../assets/login/LoginStepImg.gif";
 import { AiOutlineMail } from "react-icons/ai";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IoMdEyeOff } from "react-icons/io";
 import { IoEye } from "react-icons/io5";
 import { useRTL } from "../../hooks/useRTL";
@@ -9,6 +9,10 @@ import { RiLockPasswordLine } from "react-icons/ri";
 import MainRadio from "../UI/MainRadio";
 import { useFormikContext } from "formik";
 import { Button } from "..";
+import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
+import { loginUser } from "../../features/user/userSlice";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 interface LoginStepProps_TP {
   setStep: (step: number) => void;
@@ -16,12 +20,35 @@ interface LoginStepProps_TP {
 
 const LoginStep = (props: LoginStepProps_TP) => {
   const { setStep } = props;
-
+  const dispatch = useAppDispatch();
   const { setFieldValue, values } = useFormikContext();
-  const isRTL = useRTL();
-
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const { role, user, isLoading } = useAppSelector((store) => store.user);
+  const isRTL = useRTL();
+  const navigate = useNavigate();
+
   const handleShowPassword = () => setShowPassword((prev) => !prev);
+
+  const handleLogin = async () => {
+    const { email, password, loginType } = values;
+
+    if (!email || !password || !loginType) {
+      toast.error(t("Please fill out all fields"));
+      return;
+    }
+
+    await dispatch(loginUser({ email, password, loginType }));
+  };
+
+  useEffect(() => {
+    if (!user) return;
+
+    setTimeout(() => {
+      if (role === "admin") navigate("/informationPanel");
+      else if (role === "instructor") navigate("/instructor/informationPanel");
+      else navigate("/student/informationPanel");
+    }, 200);
+  }, [user, role, navigate]);
 
   return (
     <div className="grid items-center justify-center h-full lg:justify-between lg:grid-cols-2">
@@ -40,10 +67,11 @@ const LoginStep = (props: LoginStepProps_TP) => {
           <input
             type="text"
             value={values?.email}
+            autoComplete="off"
             onChange={(e) => {
               setFieldValue("email", e.target.value);
             }}
-            className="w-full px-2 py-3 text-xl bg-transparent text-slate-800 focus-within:outline-none"
+            className="w-full px-2 py-3 text-xl bg-transparent text-slate-800 focus-within:bg-transparent focus-within:outline-none"
             placeholder={t("email")}
             name="email"
           />
@@ -55,8 +83,9 @@ const LoginStep = (props: LoginStepProps_TP) => {
           <input
             name="password"
             value={values?.password}
+            autoComplete="off"
             onChange={(e) => {
-              setFieldValue("email", e.target.value);
+              setFieldValue("password", e.target.value);
             }}
             className="w-full px-2 py-3 text-xl bg-transparent text-slate-800 focus-within:outline-none"
             placeholder={t("password")}
@@ -118,11 +147,11 @@ const LoginStep = (props: LoginStepProps_TP) => {
             }}
           />
           <MainRadio
-            id={"manager"}
-            label={t("manager")}
+            id={"admin"}
+            label={t("admin")}
             name="loginType"
-            value={"manager"}
-            checked={values.loginType === "manager"}
+            value={"admin"}
+            checked={values.loginType === "admin"}
             onChange={(e) => {
               setFieldValue("loginType", e.target.value);
             }}
@@ -130,7 +159,11 @@ const LoginStep = (props: LoginStepProps_TP) => {
         </div>
 
         {/* BUTTON */}
-        <Button type="submit" className="py-3 text-xl rounded-full">
+        <Button
+          loading={isLoading}
+          action={handleLogin}
+          className="py-3 text-xl rounded-full"
+        >
           {t("login")}
         </Button>
       </div>
