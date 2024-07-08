@@ -5,11 +5,11 @@ import { FaRegEdit } from "react-icons/fa";
 import { useState } from "react";
 
 interface PersonlyProfile {
-  instructorPersonalData: any;
+  personalData: any;
   blocking?: boolean
 }
 
-const ProfileIntroduction = ({ instructorPersonalData, blocking }: PersonlyProfile) => {
+const ProfileIntroduction = ({ personalData, blocking }: PersonlyProfile) => {
   const [openRow, setOpenRow] = useState<number | null>(null);
 
   const handleToggleDropDown = (id: number) => {
@@ -22,16 +22,16 @@ const ProfileIntroduction = ({ instructorPersonalData, blocking }: PersonlyProfi
       <div className="absolute flex items-end justify-between w-full md:px-12 px-5 md:top-32 top-[155px]">
         <div className="flex items-end gap-3">
           <img
-            src={instructorPersonalData.personalImage}
+            src={personalData.personalImage}
             alt="personal Image"
             className="border-[3px] border-[#393D94] rounded-full md:w-[134px] w-24"
           />
           <div className="text-black">
             <h2 className="md:text-xl font-semibold text-lg">
-              {instructorPersonalData.instructorName}
+              {personalData.name}
             </h2>
             <p className="md:text-base font-medium text-sm">
-              {instructorPersonalData.jobTitle}
+              {personalData.jobTitle}
             </p>
           </div>
         </div>
@@ -48,7 +48,7 @@ const ProfileIntroduction = ({ instructorPersonalData, blocking }: PersonlyProfi
             </div>
             <div>
               <DotsDropDown
-                instructorId={instructorPersonalData.id}
+                instructorId={personalData.id}
                 instructorRoute="/instructors/instructorEdit"
                 firstName="edit"
                 firstIcon={<FaRegEdit size={22} className="fill-mainColor" />}
@@ -56,8 +56,8 @@ const ProfileIntroduction = ({ instructorPersonalData, blocking }: PersonlyProfi
                 secondIcon={
                   <RiDeleteBin5Line size={22} className="fill-mainRed" />
                 }
-                isOpen={openRow == instructorPersonalData.id}
-                onToggle={() => handleToggleDropDown(instructorPersonalData.id)}
+                isOpen={openRow == personalData.id}
+                onToggle={() => handleToggleDropDown(personalData.id)}
               />
             </div>
           </>

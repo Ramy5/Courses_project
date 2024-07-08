@@ -102,7 +102,7 @@ const InstructorLectures = () => {
               key={instructor.id}
               className={`border-s-[12px] ${borderColor} py-5 px-4 bg-white rounded-lg  cursor-pointer`}
               onClick={() =>
-                navigate(`/instructor/lecture/details/${instructor.id}`)
+                navigate(`/instructor/Courses/lecture/details/${instructor.id}`)
               }
             >
               <div className="flex items-center gap-2">
@@ -128,7 +128,7 @@ const InstructorLectures = () => {
                   action={(e) => {
                     e.stopPropagation();
                     navigate(
-                      `/instructor/lecture/preparation/${instructor.id}`
+                      `/instructor/Courses/lecture/preparation/${instructor.id}`
                     );
                   }}
                 >

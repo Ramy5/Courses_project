@@ -25,7 +25,7 @@ const PersonlyProfile = () => {
     id: 1,
     profileCover: studentProfileCover,
     personalImage: studentProfileImg,
-    studentName: "moaz",
+    name: "معاذ ادم",
     phoneNumber: "+009735625632",
     email: "Albert Adam@gmail.com",
     address: "123,المنصورة الجديدة",
@@ -202,7 +202,7 @@ const PersonlyProfile = () => {
     <div>
       <div className="pb-2 bg-white rounded-2xl">
         <ProfileIntroduction
-          instructorPersonalData={studentProfileData}
+          personalData={studentProfileData}
           blocking={false}
         />
         {/* 
