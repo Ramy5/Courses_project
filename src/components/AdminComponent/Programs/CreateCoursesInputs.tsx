@@ -14,11 +14,12 @@ import {
 } from "@tanstack/react-table";
 import selectStyle from "../../../utils/selectStyle";
 
-const CreateCourses = () => {
+const CreateCoursesInputs = ({ setCoursesData, setStep }) => {
   const [selectedInstructor, setSelectedInstructor] = useState<any>([]);
-  let [dataSource, setDataSource] = useState<any>([]);
+  const [suggestedReferences, setSuggestedReferences] = useState([]);
 
   const initialValues = {
+    id: crypto.randomUUID(),
     course_name: "",
     course_code: "",
     level: "",
@@ -91,10 +92,12 @@ const CreateCourses = () => {
           return (
             <RiDeleteBin5Line
               onClick={() => {
-                const dataSourceFilter = dataSource?.filter((data: any) => {
-                  return data.id !== info.row.original.id;
-                });
-                setDataSource(dataSourceFilter);
+                const suggestedReferencesFilter = suggestedReferences?.filter(
+                  (data: any) => {
+                    return data.id !== info.row.original.id;
+                  }
+                );
+                setSuggestedReferences(suggestedReferencesFilter);
               }}
               size={22}
               className="fill-mainRed m-auto cursor-pointer"
@@ -103,11 +106,11 @@ const CreateCourses = () => {
         },
       },
     ],
-    [dataSource]
+    [suggestedReferences]
   );
 
   const table = useReactTable({
-    data: dataSource,
+    data: suggestedReferences,
     columns: suggestedReferencesColumns,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
@@ -121,6 +124,7 @@ const CreateCourses = () => {
         validationSchema=""
         onSubmit={(values) => {
           console.log("🚀 ~ CreateProgram ~ values:", values);
+          setCoursesData(values);
         }}
       >
         {({ setFieldValue, values }) => {
@@ -413,7 +417,9 @@ const CreateCourses = () => {
                 </div>
 
                 <div className="bg-[#EEEDED]">
-                  <h2 className="text-2xl font-medium p-6">{t("Courses")}</h2>
+                  <h2 className="text-2xl font-medium p-6">
+                    {t("suggested references")}
+                  </h2>
                   <div className="overflow-auto">
                     <table className="min-w-full text-center">
                       <thead className="bg-mainColor text-white">
@@ -489,7 +495,7 @@ const CreateCourses = () => {
                                   );
                                   return;
                                 }
-                                setDataSource((prev: any) => [
+                                setSuggestedReferences((prev: any) => [
                                   {
                                     id: crypto.randomUUID(),
                                     reference_title: values.reference_title,
@@ -536,10 +542,27 @@ const CreateCourses = () => {
                 </div>
 
                 <div className="mt-8 px-8 flex justify-end">
-                  <Button type="submit" className="me-5">
+                  <Button
+                    type="button"
+                    className="me-5"
+                    action={() =>
+                      setCoursesData((prev) => [
+                        ...prev,
+                        {
+                          ...values,
+                          course_teachers: selectedInstructor,
+                          references: suggestedReferences,
+                        },
+                      ])
+                    }
+                  >
                     {t("submit")}
                   </Button>
-                  <Button type="button" className="bg-[#E6EAEE] text-mainColor">
+                  <Button
+                    type="button"
+                    className="bg-[#E6EAEE] text-mainColor"
+                    action={() => setStep(1)}
+                  >
                     {t("cancel")}
                   </Button>
                 </div>
@@ -552,4 +575,4 @@ const CreateCourses = () => {
   );
 };
 
-export default CreateCourses;
+export default CreateCoursesInputs;

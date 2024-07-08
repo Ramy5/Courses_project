@@ -42,7 +42,6 @@ import InstructorEditProfile from "./pages/AdminPages/Instructors/InstructorEdit
 import ProgramInformation from "./pages/AdminPages/Programs/ProgramInformation";
 import ViewCourseDescription from "./pages/AdminPages/Programs/ViewCourseDescription";
 import CreateProgram from "./pages/AdminPages/Programs/CreateProgram";
-import CreateCourses from "./pages/AdminPages/Programs/CreateCourses";
 import StudySchedule from "./pages/AdminPages/Programs/StudySchedule";
 import AddLectureTiming from "./pages/AdminPages/Programs/AddLectureTiming";
 import StudentInformationPanel from "./pages/StudentPages/StudentInformationPanel";
@@ -97,7 +96,6 @@ function App() {
             element={<ViewCourseDescription />}
           />
           <Route path="/programs/create" element={<CreateProgram />} />
-          <Route path="/programs/courses/create" element={<CreateCourses />} />
           <Route
             path="/programs/StudySchedule/:id"
             element={<StudySchedule />}
