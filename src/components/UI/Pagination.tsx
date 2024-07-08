@@ -6,8 +6,8 @@ import { t } from "i18next";
 type Pagination_TP = {
   showNavigation?: Boolean;
   table?: any;
-  currentPage?: String;
-  totalPages?: Number;
+  currentPage?: number;
+  totalPages?: number;
   children?: any;
 };
 
@@ -16,9 +16,8 @@ const Pagination = ({
   table,
   currentPage,
   totalPages,
-//   children,
-}: Pagination_TP) => {
-
+}: //   children,
+Pagination_TP) => {
   const renderPageNumbers = () => {
     const pageNumbers = [];
     const maxDisplayPages = 5;
@@ -60,8 +59,8 @@ const Pagination = ({
   return (
     <div>
       {showNavigation ? (
-        <div className="flex items-center justify-between border-t border-gray-200 bg-transparent px-4 pb-3 pt-5 sm:px-6">
-          <div className="flex flex-1 justify-between sm:hidden">
+        <div className="flex items-center justify-between px-4 pt-5 pb-3 bg-transparent border-t border-gray-200 sm:px-6">
+          <div className="flex justify-between flex-1 sm:hidden">
             <Button
               className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-[#404B52] hover:bg-gray-50"
               action={() => table.nextPage()}
@@ -80,7 +79,7 @@ const Pagination = ({
           <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
             <div>
               <nav
-                className="isolate inline-flex -space-x-px gap-2"
+                className="inline-flex gap-2 -space-x-px isolate"
                 aria-label="Pagination"
               >
                 <Button

@@ -19,7 +19,7 @@ interface ReactTableProps<T extends object> {
   footered?: boolean;
   children?: ReactNode;
   totalPages?: number;
-  currentPage?: string;
+  currentPage?: number;
   className?: any;
 }
 
