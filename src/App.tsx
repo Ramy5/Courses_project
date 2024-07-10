@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import {
   AddStudent,
+  EditStudent,
   Error,
   InstructorAddHomework,
   InstructorAddProject,
@@ -119,6 +120,7 @@ function App() {
             element={<StudentProfile />}
           />
           <Route path="/students/addStudent" element={<AddStudent />} />
+          <Route path="/students/:id" element={<EditStudent />} />
 
           {/* LECTURE MANAGEMENT */}
           <Route path="/lectureManagement" element={<LectureManagement />} />

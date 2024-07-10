@@ -394,5 +394,8 @@
   "admin": "مدير",
   "Please fill out all fields": "قم بادخال جميع البيانات",
   "logout": "تسجيل الخروج",
-  "you have successfully logged out!": "تم تسجيل الخروج بنجاح"
+  "you have successfully logged out!": "تم تسجيل الخروج بنجاح",
+  "qualification": "المؤهل",
+  "date birth": "تاريخ الميلاد",
+  "the receipt added successfully": "تم اضافة الايصال بنجاح"
 }
