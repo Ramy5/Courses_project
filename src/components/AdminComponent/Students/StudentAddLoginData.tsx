@@ -3,10 +3,10 @@ import { t } from "i18next";
 import { Button } from "../..";
 import PasswordInput from "../../UI/PasswordInput";
 import customFetch from "../../../utils/axios";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Form, Formik } from "formik";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 interface AddStudentLogin_TP {
   email_login: string;
@@ -16,37 +16,70 @@ interface AddStudentLogin_TP {
 
 interface StudentAddLoginData_TP {
   editObj?: AddStudentLogin_TP;
-  studentID: number | null;
+  setActiveTab: (activeTab: string) => void;
   setStudentID: (id: number) => void;
 }
 
 const postStudentLogin = async (newStudent: any) => {
-  const { data } = customFetch.post("studentLoginData", newStudent);
+  const data = await customFetch.post("studentLoginData", newStudent);
+  return data;
+};
+
+const editStudentLogin = async (editStudent: any, id: number) => {
+  const data = await customFetch.post(
+    `updateStudentLoginData/${id}`,
+    editStudent
+  );
   return data;
 };
 
 const StudentAddLoginData = ({
   editObj,
-  studentID,
   setStudentID,
+  setActiveTab,
 }: StudentAddLoginData_TP) => {
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
 
   const initialValues = {
-    // LOGIN DATA
     email_login: editObj?.email_login || "",
     password_login: editObj?.password_login || "",
     confirm_password_login: editObj?.confirm_password_login || "",
   };
 
-  const mutation = useMutation({
-    mutationKey: ["add-student"],
+  const { mutate } = useMutation({
+    mutationKey: ["add-student-login"],
     mutationFn: postStudentLogin,
     onSuccess: (data) => {
-      console.log("🚀 ~ data:", data);
+      setStudentID(data?.data?.data?.student?.id);
+      queryClient.invalidateQueries("students");
+      toast.success(t("student login information has been added successfully"));
+      setActiveTab("personal");
     },
     onError: (error) => {
-      toast.error(error.message);
+      const errorMessage =
+        error?.response?.data?.error[0]?.email[0] ||
+        error?.response?.data?.error[0]?.password[0];
+      toast.error(errorMessage);
+    },
+  });
+
+  const { mutate: editMutate } = useMutation({
+    mutationKey: ["edit-student-login"],
+    mutationFn: (editStudent: any) =>
+      editStudentLogin(editStudent, Number(editObj?.id)),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries("students");
+      toast.success(
+        t("student login information has been edited successfully")
+      );
+      setActiveTab("personal");
+    },
+    onError: (error) => {
+      const errorMessage =
+        error?.response?.data?.error[0]?.email[0] ||
+        error?.response?.data?.error[0]?.password[0];
+      toast.error(errorMessage);
     },
   });
 
@@ -57,10 +90,14 @@ const StudentAddLoginData = ({
       password_confirmation: values.confirm_password_login,
     };
 
-    await mutation.mutate(newStudent);
+    const editStudent = {
+      email: values.email_login,
+      password: values.password_login,
+      password_confirmation: values.confirm_password_login,
+      student_id: editObj?.id,
+    };
 
-    navigate("/students");
-    toast.success(t("student login information has been added successfully"));
+    editObj ? await editMutate(editStudent) : await mutate(newStudent);
   };
 
   return (
@@ -121,7 +158,10 @@ const StudentAddLoginData = ({
               <Button className="me-5" type="submit">
                 {t("confirm")}
               </Button>
-              <Button className="bg-[#E6EAEE] text-mainColor">
+              <Button
+                action={() => navigate(-1)}
+                className="bg-[#E6EAEE] text-mainColor"
+              >
                 {t("cancel")}
               </Button>
             </div>

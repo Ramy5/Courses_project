@@ -1,4 +1,3 @@
-import { Form, Formik } from "formik";
 import { t } from "i18next";
 import { useState } from "react";
 import {
@@ -39,27 +38,24 @@ const AddStudent = () => {
       <div className="py-8 bg-white rounded-br-2xl rounded-bl-2xl">
         {activeTab === "login" && (
           <StudentAddLoginData
-            studentID={studentID}
             setStudentID={setStudentID}
+            setActiveTab={setActiveTab}
           />
         )}
         {activeTab === "personal" && (
           <StudentAddPersonalData
             studentID={studentID}
-            setStudentID={setStudentID}
+            setActiveTab={setActiveTab}
           />
         )}
         {activeTab === "father" && (
           <StudentAddFatherData
             studentID={studentID}
-            setStudentID={setStudentID}
+            setActiveTab={setActiveTab}
           />
         )}
         {activeTab === "academic" && (
-          <StudentAddAcademicData
-            studentID={studentID}
-            setStudentID={setStudentID}
-          />
+          <StudentAddAcademicData studentID={studentID} />
         )}
       </div>
     </div>

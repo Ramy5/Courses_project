@@ -107,7 +107,7 @@ const Students = () => {
               className="mx-auto cursor-pointer lg:w-full text-mainColor"
               size={24}
               onClick={() =>
-                navigate(`/students/studentProfile/${info.row.index}`)
+                navigate(`/students/studentProfile/${info.row.original.id}`)
               }
             />
           );
@@ -182,7 +182,12 @@ const Students = () => {
   );
 
   if (isLoading) return <Loading />;
-  if (error) return <div>{error.message}</div>;
+  if (error)
+    return (
+      <div className="">
+        <h2>{error.message}</h2>
+      </div>
+    );
 
   return (
     <div>
@@ -220,7 +225,7 @@ const Students = () => {
         {/* TABLE */}
         <div className="mt-6">
           <Table
-            data={studentsData?.data?.data?.students}
+            data={studentsData?.data?.data?.students || []}
             columns={studentsColumns}
             showNavigation={true}
             totalPages={40}
