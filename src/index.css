@@ -19,6 +19,25 @@ body {
   box-shadow: 0px 4px 4px 0px #00000040;
 }
 
+/* RADIO */
+/* input[type="radio"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: #fff;
+  width: 1.2rem;
+  height: 1.2rem;
+  border-radius: 100%;
+  border: 0.1rem solid #08B839;
+  place-content: center;
+  color: #08B839;
+} */
+
+.answer_checked {
+  accent-color: green;
+  opacity: 0.7;
+}
+
 /* SWIPER CUSTOM STYLE */
 /* SwiperComponent.css */
 .swiper-button-prev,
