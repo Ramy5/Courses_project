@@ -14,6 +14,8 @@ type DotsDropDown_TP = {
   isOpen: boolean;
   isLastRow?: boolean;
   onToggle: () => void;
+  onFirstClick: () => void;
+  onSecondClick: () => void;
 };
 
 const DotsDropDown = ({
@@ -26,14 +28,20 @@ const DotsDropDown = ({
   isOpen,
   isLastRow,
   onToggle,
+  onFirstClick,
+  onSecondClick
 }: DotsDropDown_TP) => {
 
   const isRTL = useRTL();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
-  const handleClickEdit = () => {
-    navigate(`${instructorRoute}/${instructorId}`);
-  };
+  // const handleClickEdit = () => {
+  //   if (instructorRoute) {
+  //     navigate(`${instructorRoute}/${instructorId}`);
+  //   } else {
+  //     setData()
+  //   }
+  // };
 
   const handleClickDelete = () => {};
 
@@ -56,7 +64,7 @@ const DotsDropDown = ({
         <li
           className="py-1 cursor-pointer"
           role="none"
-          onClick={handleClickEdit}
+          onClick={onFirstClick}
         >
           <div className="flex items-center gap-2 px-4 py-2 text-mainColor">
             {firstIcon}
@@ -67,7 +75,7 @@ const DotsDropDown = ({
         <li
           className="py-1 cursor-pointer"
           role="none"
-          onClick={handleClickDelete}
+          onClick={onSecondClick}
         >
           <div
             className={`${

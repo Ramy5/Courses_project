@@ -11,14 +11,15 @@ import CreateCoursesInputs from "../../../components/AdminComponent/Programs/Cre
 const CreateProgram = () => {
   const [step, setStep] = useState<number>(1);
   const [coursesData, setCoursesData] = useState([]);
+  const [editCoursesData, setEditCoursesData] = useState({});
+  console.log("🚀 ~ CreateProgram ~ editCoursesData:", editCoursesData);
   console.log("🚀 ~ CreateProgram ~ coursesData:", coursesData);
 
   const dispatch = useDispatch<AppDispatch>();
-  const { loading, error } = useSelector((state: RootState) => state.program);
 
   const initialValues = {
     program_name: "",
-    program_type: "",
+    program_type: false,
     program_code: "",
     specialization: "",
     academic_levels: "",
@@ -37,18 +38,28 @@ const CreateProgram = () => {
         initialValues={initialValues}
         validationSchema=""
         onSubmit={(values) => {
-          console.log("🚀 ~ CreateProgram ~ values:", {...values, courses: coursesData,});
-          dispatch(postProgramData({...values, courses: coursesData}));
+          console.log("🚀 ~ CreateProgram ~ values:", {
+            ...values,
+            courses: coursesData,
+          });
+          dispatch(postProgramData({ ...values, courses: coursesData }));
         }}
       >
         <Form>
           {step === 1 && (
-            <CreateProgramInputs setStep={setStep} coursesData={coursesData} />
+            <CreateProgramInputs
+              setStep={setStep}
+              coursesData={coursesData}
+              setCoursesData={setCoursesData}
+              setEditCoursesData={setEditCoursesData}
+            />
           )}
           {step === 2 && (
             <CreateCoursesInputs
               setStep={setStep}
               setCoursesData={setCoursesData}
+              coursesData={coursesData}
+              editCoursesData={editCoursesData}
             />
           )}
         </Form>

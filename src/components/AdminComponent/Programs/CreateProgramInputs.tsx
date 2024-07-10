@@ -1,3 +1,4 @@
+
 import { Form, Formik, useFormikContext } from "formik";
 import {
   BaseInput,
@@ -15,13 +16,18 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "@reduxjs/toolkit/query";
 
-const CreateProgramInputs = ({ setStep, coursesData }: any) => {
+const CreateProgramInputs = ({
+  setStep,
+  coursesData,
+  setEditCoursesData,
+  setCoursesData,
+}: any) => {
+  console.log("🚀 ~ coursesData:", coursesData)
   const [openRow, setOpenRow] = useState<number | null>(null);
 
   const navigate = useNavigate();
 
   const { loading, error } = useSelector((state: RootState) => state.program);
-
 
   const { values, setFieldValue } = useFormikContext();
   console.log("🚀 ~ CreateProgramInputs ~ values:", values);
@@ -29,7 +35,7 @@ const CreateProgramInputs = ({ setStep, coursesData }: any) => {
   const initialValues = {
     program_name: "",
     program_type: "",
-    program_code: "",
+    program_code: 0,
     specialization: "",
     academic_levels: "",
     number_classes: "",
@@ -102,10 +108,22 @@ const CreateProgramInputs = ({ setStep, coursesData }: any) => {
               firstIcon={<FaRegEdit size={22} className="fill-mainColor" />}
               secondName="delete"
               secondIcon={
-                <RiDeleteBin5Line size={22} className="fill-mainColor" />
+                <RiDeleteBin5Line size={22} className="fill-mainRed" />
               }
               isOpen={openRow == info.row.original.id}
-              onToggle={() => handleToggleDropDown(info.row.original.id)}
+              onToggle={() => {
+                handleToggleDropDown(info.row.original.id);
+              }}
+              onFirstClick={() => {
+                setEditCoursesData(coursesData[info.row.index]); 
+                setStep(2);
+              }}
+              onSecondClick={() => {
+                const fliterCoursesData = coursesData?.filter(
+                  (course) => course.id !== info.row.original.id
+                );
+                setCoursesData(fliterCoursesData);
+              }}
               isLastRow={rowIndex === totalRows - 1}
             />
           );
@@ -115,8 +133,8 @@ const CreateProgramInputs = ({ setStep, coursesData }: any) => {
     [openRow]
   );
 
-  const handleToggleDropDown = (id: number) => {
-    setOpenRow((prevOpenRow) => (prevOpenRow == id ? null : id));
+  const handleToggleDropDown = (index: number) => {
+    setOpenRow((prevOpenRow) => (prevOpenRow == index ? null : index));
   };
 
   return (
@@ -145,9 +163,9 @@ const CreateProgramInputs = ({ setStep, coursesData }: any) => {
                   label={`${t("Study program")}`}
                   className="checked:accent-mainColor"
                   labelClassName="font-semibold !text-base"
-                  checked={values.program_type === "Study program"}
+                  checked={values.program_type === "educational"}
                   onChange={() => {
-                    setFieldValue("program_type", "Study program");
+                    setFieldValue("program_type", "educational");
                   }}
                 />
                 <MainRadio
@@ -156,9 +174,9 @@ const CreateProgramInputs = ({ setStep, coursesData }: any) => {
                   label={`${t("training program")}`}
                   className="checked:accent-mainColor"
                   labelClassName="font-semibold !text-base"
-                  checked={values.program_type === "training program"}
+                  checked={values.program_type === "intern"}
                   onChange={() => {
-                    setFieldValue("program_type", "training program");
+                    setFieldValue("program_type", "intern");
                   }}
                 />
               </div>
@@ -168,7 +186,7 @@ const CreateProgramInputs = ({ setStep, coursesData }: any) => {
             <BaseInput
               name="program_code"
               id="program_code"
-              type="text"
+              type="number"
               className="w-full text-lg py-2 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
               placeholder={t("program code")}
               label={t("program code")}
@@ -288,7 +306,7 @@ const CreateProgramInputs = ({ setStep, coursesData }: any) => {
           </div>
           {coursesData && coursesData.length !== 0 ? (
             <Table
-              data={coursesData && coursesData || []}
+              data={(coursesData && coursesData) || []}
               columns={CoursesColumns}
               className="bg-mainColor"
             />

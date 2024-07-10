@@ -15,7 +15,13 @@ import Instructor_4 from "../../../assets/instructors/instructor_4.svg";
 import { FaUserAlt } from "react-icons/fa";
 import { GrView } from "react-icons/gr";
 import { RiDeleteBin5Line } from "react-icons/ri";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import customFetch from "../../../utils/axios";
+import { useQuery } from "@tanstack/react-query";
+import { toast } from "react-toastify";
+import Loading from "../../../components/UI/Loading";
+import { useSelector } from "react-redux";
+import { RootState } from "@reduxjs/toolkit/query";
 
 const Instructors = () => {
   const [openRow, setOpenRow] = useState<number | null>(null);
@@ -28,38 +34,57 @@ const Instructors = () => {
     { value: "vanilla", label: "Vanilla" },
   ];
 
-  const instructorsData = [
-    {
-      id: 1,
-      image: Instructor,
-      name: "Dimitres Viga",
-      jobTitle: "مصمم مواقع",
-    },
-    {
-      id: 2,
-      image: Instructor_2,
-      name: "Viga Dimitres",
-      jobTitle: "مصمم مواقع",
-    },
-    {
-      id: 3,
-      image: Instructor_3,
-      name: "Dimitres Viga",
-      jobTitle: "مصمم مواقع",
-    },
-    {
-      id: 4,
-      image: Instructor_4,
-      name: "Viga Dimitres",
-      jobTitle: "مصمم مواقع",
-    },
-    {
-      id: 5,
-      image: Instructor,
-      name: "Dimitres Viga",
-      jobTitle: "مصمم مواقع",
-    },
-  ];
+  // const instructorsData = [
+  //   {
+  //     id: 1,
+  //     image: Instructor,
+  //     name: "Dimitres Viga",
+  //     jobTitle: "مصمم مواقع",
+  //   },
+  //   {
+  //     id: 2,
+  //     image: Instructor_2,
+  //     name: "Viga Dimitres",
+  //     jobTitle: "مصمم مواقع",
+  //   },
+  //   {
+  //     id: 3,
+  //     image: Instructor_3,
+  //     name: "Dimitres Viga",
+  //     jobTitle: "مصمم مواقع",
+  //   },
+  //   {
+  //     id: 4,
+  //     image: Instructor_4,
+  //     name: "Viga Dimitres",
+  //     jobTitle: "مصمم مواقع",
+  //   },
+  //   {
+  //     id: 5,
+  //     image: Instructor,
+  //     name: "Dimitres Viga",
+  //     jobTitle: "مصمم مواقع",
+  //   },
+  // ];
+
+  const fetchInstructorData = async () => {
+    const response = await customFetch(`/allTeachers`);
+    return response;
+  };
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["allTeacher_data"],
+    queryFn: fetchInstructorData,
+  });
+
+  const instructorData = data?.data.data.teachers || {};
+  console.log("🚀 ~ ProgramInformation ~ instructorData:", instructorData);
+
+  useEffect(() => {
+    if (error) {
+      toast.error(`${error.message}`);
+    }
+  }, [error]);
 
   const handleProfileClick = (instructorId: number) => {
     navigate(`/instructors/instructorProfile/${instructorId}`);
@@ -68,6 +93,8 @@ const Instructors = () => {
   const handleToggleDropDown = (id: number) => {
     setOpenRow((prevOpenRow) => (prevOpenRow == id ? null : id));
   };
+
+  if (isLoading) return <Loading />
 
   return (
     <div>
@@ -84,21 +111,25 @@ const Instructors = () => {
 
         <SearchInput />
 
-        <Button type="button" className="text-xl font-medium" action={() => navigate("/instructors/instructorEdit")}>
+        <Button
+          type="button"
+          className="text-xl font-medium"
+          action={() => navigate("/instructors/instructorEdit")}
+        >
           {t("add lecturer +")}
         </Button>
       </div>
 
       <div className="grid grid-cols-1 gap-4 my-8 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4">
-        {instructorsData.map((instructor, index) => (
+        {instructorData?.map((instructor, index) => (
           <div
             key={index}
             className="p-4 text-center bg-white rounded-2xl main_shadow"
           >
             <div className="flex items-center justify-end w-full">
               <DotsDropDown
-                instructorId={instructor.id}
-                instructorRoute="/instructors/instructorEdit"
+                // instructorId={instructor.id}
+                // instructorRoute="/instructors/instructorEdit"
                 firstName="edit"
                 firstIcon={<GrView size={22} className="fill-mainColor" />}
                 secondName="delete"
@@ -107,18 +138,23 @@ const Instructors = () => {
                 }
                 isOpen={openRow == instructor.id}
                 onToggle={() => handleToggleDropDown(instructor.id)}
+                onFirstClick={() => {
+                  navigate(`/instructors/instructorEdit/${instructor.id}`);
+                  console.log("🚀 ~ Instructors ~ instructor.id:", instructor.id)
+                }}
+                onSecondClick={() => {}}
               />
             </div>
             <div className="w-full my-2">
               <img
-                src={instructor.image}
+                src={instructor.personal_image}
                 alt={instructor.name}
                 className="rounded-full  m-auto w-[135px] h-[135px]"
               />
             </div>
             <div className="text-mainGray opacity-55">
-              <p>{instructor.name}</p>
-              <p>{instructor.jobTitle}</p>
+              <p>{instructor.full_name}</p>
+              <p>{instructor.job_title}</p>
             </div>
             <Button
               className="border border-[#404B52] text-black font-medium mt-3"

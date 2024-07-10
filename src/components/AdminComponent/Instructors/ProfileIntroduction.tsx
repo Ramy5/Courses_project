@@ -6,7 +6,7 @@ import { useState } from "react";
 
 interface PersonlyProfile {
   personalData: any;
-  blocking?: boolean
+  blocking?: boolean;
 }
 
 const ProfileIntroduction = ({ personalData, blocking }: PersonlyProfile) => {
@@ -16,22 +16,25 @@ const ProfileIntroduction = ({ personalData, blocking }: PersonlyProfile) => {
     setOpenRow((prevOpenRow) => (prevOpenRow == id ? null : id));
   };
 
+  const jobTitle = personalData?.qualifications[0] && personalData?.qualifications[0]?.job_title
+
+
   return (
     <div className="relative">
       <div className="profileCover"></div>
       <div className="absolute flex items-end justify-between w-full md:px-12 px-5 md:top-32 top-[155px]">
         <div className="flex items-end gap-3">
           <img
-            src={personalData.personalImage}
+            src={personalData.personal_image}
             alt="personal Image"
             className="border-[3px] border-[#393D94] rounded-full md:w-[134px] w-24"
           />
           <div className="text-black">
             <h2 className="md:text-xl font-semibold text-lg">
-              {personalData.name}
+              {personalData.full_name}
             </h2>
             <p className="md:text-base font-medium text-sm">
-              {personalData.jobTitle}
+              {jobTitle}
             </p>
           </div>
         </div>

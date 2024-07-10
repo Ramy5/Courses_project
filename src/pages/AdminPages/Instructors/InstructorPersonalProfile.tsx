@@ -3,12 +3,16 @@ import ProfileCover from "../../../assets/instructors/profile-cover.svg";
 import PersonalImage from "../../../assets/instructors/instructor_2.svg";
 import { t } from "i18next";
 import { DotsDropDown, ProfileIntroduction, Table } from "../../../components";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { GrView } from "react-icons/gr";
 import InstructorSocialInformation from "../../../components/AdminComponent/Instructors/InstructorSocialInformation";
 import { FaRegEdit } from "react-icons/fa";
 import InstructorSpecialization from "../../../components/AdminComponent/Instructors/InstructorSpecialization";
+import customFetch from "../../../utils/axios";
+import { useQuery } from "@tanstack/react-query";
+import Loading from "../../../components/UI/Loading";
+import { useNavigate, useParams } from "react-router-dom";
 
 export type InstructorPersonalData_TP = {
   profileCover?: string;
@@ -20,44 +24,69 @@ const InstructorPersonalProfile = () => {
   const [selectAll, setSelectAll] = useState<Boolean>(false);
   const [selectedRows, setSelectedRows] = useState<any>([]);
   const [openRow, setOpenRow] = useState<number | null>(null);
+  const { id } = useParams();
+  const navigate = useNavigate();
+  console.log("🚀 ~ InstructorPersonalProfile ~ id:", id);
 
-  const instructorPersonalData = {
-    id: 1,
-    profileCover: ProfileCover,
-    personalImage: PersonalImage,
-    name: "Dimitres Viga",
-    jobTitle: "محاضر شبكات",
-    phoneNumber: "+009735625632",
-    emial: "Albert Adam@gmail.com",
-    address: "123,المنصورة الجديدة",
-    linkedIn: "user@example.com",
-    facebook: "user@example.com",
-    whatsapp: "+009759568548",
-    twitter: "user@example.com",
+  // const instructorPersonalData = {
+  //   id: 1,
+  //   profileCover: ProfileCover,
+  //   personalImage: PersonalImage,
+  //   name: "Dimitres Viga",
+  //   jobTitle: "محاضر شبكات",
+  //   phoneNumber: "+009735625632",
+  //   emial: "Albert Adam@gmail.com",
+  //   address: "123,المنصورة الجديدة",
+  //   linkedIn: "user@example.com",
+  //   facebook: "user@example.com",
+  //   whatsapp: "+009759568548",
+  //   twitter: "user@example.com",
+  // };
+
+  const fetchInstructorPersonal = async () => {
+    const response = await customFetch(`/teacher/${id}`);
+    return response;
   };
 
-  const studentsDataFee = [
-    {
-      index: 1,
-      id: 1,
-      type_certificate: "بكالروريوس",
-      certificate_name: "حاسبات ومعلومات",
-      donor: "معد مصر",
-      date_acquisition: "25/3/2001",
-      specialization: "علوم الحاسب",
-      appreciation: "جيد جدا",
-    },
-    {
-      index: 2,
-      id: 2,
-      type_certificate: "بكالروريوس",
-      certificate_name: "حاسبات ومعلومات",
-      donor: "معد مصر",
-      date_acquisition: "25/3/2001",
-      specialization: "علوم الحاسب",
-      appreciation: "جيد جدا",
-    },
-  ];
+  const { data, isLoading, error, isRefetching } = useQuery({
+    queryKey: ["instructor_personal"],
+    queryFn: fetchInstructorPersonal,
+  });
+
+  const instructorPersonalData = data?.data.data.teacher || {};
+  console.log(
+    "🚀 ~ ProgramInformation ~ instructorData:",
+    instructorPersonalData
+  );
+
+  useEffect(() => {
+    if (error) {
+      toast.error(`${error.message}`);
+    }
+  }, [error]);
+
+  // const studentsDataFee = [
+  //   {
+  //     index: 1,
+  //     id: 1,
+  //     type_certificate: "بكالروريوس",
+  //     certificate_name: "حاسبات ومعلومات",
+  //     donor: "معد مصر",
+  //     date_acquisition: "25/3/2001",
+  //     specialization: "علوم الحاسب",
+  //     appreciation: "جيد جدا",
+  //   },
+  //   {
+  //     index: 2,
+  //     id: 2,
+  //     type_certificate: "بكالروريوس",
+  //     certificate_name: "حاسبات ومعلومات",
+  //     donor: "معد مصر",
+  //     date_acquisition: "25/3/2001",
+  //     specialization: "علوم الحاسب",
+  //     appreciation: "جيد جدا",
+  //   },
+  // ];
 
   const handleHeaderCheckboxClick = () => {
     const allCheckBoxes = document.querySelectorAll(
@@ -87,7 +116,7 @@ const InstructorPersonalProfile = () => {
     setOpenRow((prevOpenRow) => (prevOpenRow == id ? null : id));
   };
 
-  const studentsColumnsFee = useMemo<ColumnDef<any>[]>(
+  const instructorPersonalColumns = useMemo<ColumnDef<any>[]>(
     () => [
       {
         header: () => {
@@ -154,14 +183,16 @@ const InstructorPersonalProfile = () => {
           const totalRows = info.table.getCoreRowModel().rows.length;
           return (
             <DotsDropDown
-              instructorRoute=""
-              instructorId={info.row.original.id}
+              // instructorRoute=""
+              // instructorId={info.row.original.id}
               firstName="view course description"
               firstIcon={<GrView size={22} className="fill-mainColor" />}
               secondName="edit course description"
               secondIcon={<FaRegEdit size={22} className="fill-mainColor" />}
               isOpen={openRow == info.row.original.id}
               onToggle={() => handleToggleDropDown(info.row.original.id)}
+              onFirstClick={() => {}}
+              onSecondClick={() => {}}
               isLastRow={rowIndex === totalRows - 1}
             />
           );
@@ -171,12 +202,14 @@ const InstructorPersonalProfile = () => {
     [openRow]
   );
 
+  if (isLoading || isRefetching) return <Loading />;
+
   return (
     <div>
       <div>
         <TitlePage
           mainTitle="instructors"
-          supTitle="Dimitres Viga"
+          supTitle={`${instructorPersonalData?.full_name}`}
           mainLink="/instructors"
         />
       </div>
@@ -187,17 +220,15 @@ const InstructorPersonalProfile = () => {
           blocking={true}
         />
 
-        <InstructorSocialInformation
-          personalData={instructorPersonalData}
-        />
+        <InstructorSocialInformation personalData={instructorPersonalData} />
 
         <div className="bg-[#E6EAEE] rounded-2xl my-7 mx-5 py-6">
           <h2 className="mb-5 text-2xl font-semibold text-center ms-5 sm:text-start">
             {t("scientific certificates")}
           </h2>
           <Table
-            data={studentsDataFee}
-            columns={studentsColumnsFee}
+            data={instructorPersonalData?.certificates}
+            columns={instructorPersonalColumns}
             className="bg-mainColor"
           />
         </div>

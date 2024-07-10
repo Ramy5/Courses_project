@@ -34,7 +34,6 @@ const SideBar: React.FC<SideBarProps> = ({
   const location = useLocation();
   const { sidebarColor } = useAppSelector((state) => state.global);
 
-  const userData = "admin";
   const { role: userData } = useAppSelector((state) => state.user);
 
   const sideBarItemsOfAdmin = [
