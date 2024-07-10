@@ -27,7 +27,6 @@ const DotsDropDown = ({
   isLastRow,
   onToggle,
 }: DotsDropDown_TP) => {
-
   const isRTL = useRTL();
   const navigate = useNavigate();
 
@@ -51,7 +50,13 @@ const DotsDropDown = ({
       </Button>
 
       <ul
-        className={`${isOpen ? "block" : "hidden"} ${isLastRow ? "bottom-11" : "top-7"} ${isLastRow != undefined ? `${isRTL ? "left-4" : "right-4"}`: `${isRTL ? "left-0" : "right-0"}`} transition-all duration-150 absolute z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
+        className={`${isOpen ? "block" : "hidden"} ${
+          isLastRow ? "bottom-11" : "top-7"
+        } ${
+          isLastRow != undefined
+            ? `${isRTL ? "left-4" : "right-4"}`
+            : `${isRTL ? "left-0" : "right-0"}`
+        } transition-all duration-150 absolute z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
       >
         <li
           className="py-1 cursor-pointer"

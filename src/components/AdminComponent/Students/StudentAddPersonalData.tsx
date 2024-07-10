@@ -1,17 +1,24 @@
-import { Form, Formik, useFormikContext } from "formik";
+import { Form, Formik } from "formik";
 import BaseInput from "../../UI/BaseInput";
 import { t } from "i18next";
 import { DateInputField } from "../../UI/DateInputField";
 import MainRadio from "../../UI/MainRadio";
 import { Button } from "../..";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import User from "../../../assets/instructors/user 1.svg";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import customFetch from "../../../utils/axios";
 import { toast } from "react-toastify";
+import { formatDate } from "../../../utils/helpers";
+import { useNavigate } from "react-router-dom";
 
 const postStudentPersonal = async (newStudent: any) => {
-  const { data } = customFetch.post("studentPersonalData", newStudent);
+  const data = customFetch.post("studentPersonalData", newStudent);
+  return data;
+};
+
+const editStudentPersonal = async (editStudent: any, id: number) => {
+  const data = customFetch.post(`studentPersonalData/${id}`, editStudent);
   return data;
 };
 
@@ -27,11 +34,20 @@ interface AddStudentPersonal_TP {
   image_upload_personal: [];
 }
 
+interface StudentAddPersonalData {
+  editObj?: AddStudentPersonal_TP;
+  studentID: number;
+  setActiveTab: (activeTab: string) => void;
+}
+
 const StudentAddPersonalData = ({
   editObj,
-}: {
-  editObj?: AddStudentPersonal_TP;
-}) => {
+  studentID,
+  setActiveTab,
+}: StudentAddPersonalData) => {
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+
   const initialValues = {
     // PERSONAL DATA
     fullName_personal: editObj?.fullName_personal || "",
@@ -43,13 +59,24 @@ const StudentAddPersonalData = ({
     address_personal: editObj?.address_personal || "",
     date_birth_personal: editObj?.date_birth_personal || "",
     type_personal: editObj?.type_personal || "male",
-    image_upload_personal: editObj?.image_upload_personal || [],
   };
+
+  const errorFields = [
+    "full_name",
+    "nationality",
+    "id_number",
+    "country_residence",
+    "qualification",
+    "address",
+    "date_birth",
+    "personal_image",
+  ];
 
   const [selectedImage, setSelectedImage] = useState(User);
 
   const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event?.target?.files[0];
+    // setSelectedImage(file);
 
     if (file) {
       const reader = new FileReader();
@@ -64,31 +91,65 @@ const StudentAddPersonalData = ({
     setSelectedImage(User);
   };
 
-  const mutation = useMutation({
-    mutationKey: ["add-student"],
+  const { mutate } = useMutation({
+    mutationKey: ["add-student-personal"],
     mutationFn: postStudentPersonal,
+    onSuccess: (data: any) => {
+      queryClient.invalidateQueries("students");
+      toast.success(
+        t("student personal information has been added successfully")
+      );
+      setActiveTab("father");
+    },
     onError: (error) => {
-      toast.error(error.message);
+      const errorMessage = errorFields
+        .map((field) => error?.response?.data?.error[0]?.[field]?.[0])
+        .find((message) => message);
+
+      toast.error(errorMessage || error.message);
+    },
+  });
+
+  const { mutate: editStudentMutate } = useMutation({
+    mutationKey: ["edit-student-personal"],
+    mutationFn: (editStudent: any) =>
+      editStudentPersonal(editStudent, editObj?.id),
+    onSuccess: (data: any) => {
+      queryClient.invalidateQueries("students");
+      toast.success(
+        t("student personal information has been edited successfully")
+      );
+      setActiveTab("father");
+    },
+    onError: (error) => {
+      const errorMessage = errorFields
+        .map((field) => error?.response?.data?.error[0]?.[field]?.[0])
+        .find((message) => message);
+
+      toast.error(errorMessage || error.message);
     },
   });
 
   const handleAddStudent = async (values: AddStudentPersonal_TP) => {
-    const newStudent = {
-      full_name: editObj?.fullName_personal || "",
-      nationality: editObj?.nationality_personal || "",
-      id_number: editObj?.id_number_personal || "",
-      country_residence: editObj?.country_residence_personal || "",
-      qualification: editObj?.educational_qualification_personal || "",
-      address: editObj?.address_personal || "",
-      date_birth: editObj?.date_birth_personal || "",
-      type: editObj?.type_personal || "male",
-      personal_image: editObj?.image_upload_personal || [],
+    let newStudent = {
+      full_name: values?.fullName_personal,
+      nationality: values?.nationality_personal,
+      id_number: +values?.id_number_personal,
+      country_residence: values?.country_residence_personal,
+      qualification: values?.educational_qualification_personal,
+      address: values?.address_personal,
+      date_birth: formatDate(values?.date_birth_personal),
+      type: values?.type_personal,
+      personal_image: selectedImage?.name,
+      student_id: studentID,
     };
 
-    await mutation.mutate(newStudent);
+    if (editObj) newStudent = { ...newStudent, student_id: editObj?.id };
 
-    toast.success(t("student login information has been added successfully"));
+    editObj ? await editStudentMutate(newStudent) : await mutate(newStudent);
   };
+
+  useEffect(() => setSelectedImage(editObj?.image), []);
 
   return (
     <Formik
@@ -250,8 +311,13 @@ const StudentAddPersonalData = ({
             </div>
 
             <div className="mt-8">
-              <Button className="me-5">{t("confirm")}</Button>
-              <Button className="bg-[#E6EAEE] text-mainColor">
+              <Button type="submit" className="me-5">
+                {t("confirm")}
+              </Button>
+              <Button
+                action={() => navigate(-1)}
+                className="bg-[#E6EAEE] text-mainColor"
+              >
                 {t("cancel")}
               </Button>
             </div>

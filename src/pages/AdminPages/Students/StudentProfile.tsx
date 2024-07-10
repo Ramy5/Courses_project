@@ -21,27 +21,70 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Form, Formik } from "formik";
 import { FaRegEdit } from "react-icons/fa";
 import { RiDeleteBin5Line } from "react-icons/ri";
-import Back from "../../../components/UI/Back";
+import { useParams } from "react-router-dom";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import customFetch from "../../../utils/axios";
+import { toast } from "react-toastify";
+import { formatDate } from "../../../utils/helpers";
+import Loading from "../../../components/UI/Loading";
+
+const getStudentProfile = async (id: string) => {
+  const response = await customFetch(`student/${id}`);
+  return response.data;
+};
+
+const addNewReceipt = async (newReceipt: any) => {
+  const data = customFetch.post("receiptStore", newReceipt);
+  return data;
+};
 
 const StudentProfile = () => {
-  const [showReceiptModal, setShowReceiptModal] = useState(false);
-
-  const [openRow, setOpenRow] = useState<number | null>(null);
-
-  const [receiptData, setreceiptData] = useState([
-    {
-      amountPaid: 500,
-      amountDeserved: 1000,
-      date: "23/10/2024",
-      receiptNumber: 4657763746,
-    },
-  ]);
-
   const initialValues = {
     receipt_number: "",
     amount_paid: "",
     amount_date: "",
   };
+
+  const [showReceiptModal, setShowReceiptModal] = useState(false);
+  const [openRow, setOpenRow] = useState<number | null>(null);
+  const { id: studentProfileId } = useParams();
+  const queryClient = useQueryClient();
+
+  const { data, isLoading, isFetching, isRefetching } = useQuery({
+    queryKey: ["show-student"],
+    queryFn: () => getStudentProfile(studentProfileId),
+  });
+
+  const { mutate, isPending } = useMutation({
+    mutationKey: ["add-receipt"],
+    mutationFn: addNewReceipt,
+    onSuccess: (data: any) => {
+      setShowReceiptModal(false);
+      toast.success(t("the receipt added successfully"));
+      queryClient.invalidateQueries("show-student");
+    },
+    onError: (error) => {
+      const errorMessage =
+        error?.response?.data?.error[0]?.receipt_number[0] ||
+        error?.response?.data?.error[0]?.amount_paid[0] ||
+        error?.response?.data?.error[0]?.amount_date[0];
+
+      toast.error(errorMessage);
+    },
+  });
+
+  const {
+    full_name = "",
+    id_number = "",
+    email = "",
+    address = "",
+    qualification = "",
+    personal_image = "",
+    academicData = {},
+    parent = {},
+    receipts = [],
+  } = data?.data?.student || {};
+  console.log("🚀 ~ StudentPxrofile ~ receipts:", receipts);
 
   const studentProfileData = {
     id: 1,
@@ -61,27 +104,27 @@ const StudentProfile = () => {
   const studentAcademicData = [
     {
       title: t("academic number"),
-      value: "123456789012",
+      value: academicData?.Academic_code,
     },
     {
       title: t("program"),
-      value: "Software Engineering",
+      value: academicData?.program?.specialization,
     },
     {
       title: t("level"),
-      value: "4",
+      value: academicData?.program?.academic_levels,
     },
     {
       title: t("date of enrollment"),
-      value: "01/09/2022",
+      value: academicData?.joined_date,
     },
     {
       title: t("section number"),
-      value: "2",
+      value: academicData?.group,
     },
     {
       title: t("educational qualification"),
-      value: "درجة البكالوريوس في علوم الكمبيوتر",
+      value: academicData?.program?.program_name,
     },
   ];
 
@@ -89,7 +132,7 @@ const StudentProfile = () => {
     () => [
       {
         header: () => <span>{t("amount paid")}</span>,
-        accessorKey: "amountPaid",
+        accessorKey: "price",
         cell: (info) => `${info.getValue()}$`,
       },
       {
@@ -99,21 +142,34 @@ const StudentProfile = () => {
       },
       {
         header: () => <span>{t("date")}</span>,
-        accessorKey: "date",
+        accessorKey: "receipt_date",
         cell: (info) => info.getValue(),
       },
       {
         header: () => <span>{t("receipt number")}</span>,
-        accessorKey: "receiptNumber",
+        accessorKey: "receipt_num",
         cell: (info) => info.getValue(),
       },
     ],
     []
   );
 
+  const handleAddNewReceipt = async (values: any) => {
+    const newReceipt = {
+      student_id: +studentProfileId,
+      price: +values.amount_paid,
+      receipt_date: formatDate(values.amount_date),
+      receipt_num: +values.receipt_number,
+    };
+
+    await mutate(newReceipt);
+  };
+
   const handleToggleDropDown = (id: number) => {
     setOpenRow((prevOpenRow) => (prevOpenRow == id ? null : id));
   };
+
+  if (isRefetching || isLoading || isFetching) return <Loading />;
 
   return (
     <Formik initialValues={initialValues} onSubmit={(values) => {}}>
@@ -123,7 +179,7 @@ const StudentProfile = () => {
             <div>
               <TitlePage
                 mainTitle={t("students data")}
-                supTitle="moaz"
+                supTitle={full_name}
                 mainLink="/students"
                 icon={
                   <PiStudent size={28} className="font-bold fill-mainColor" />
@@ -144,13 +200,11 @@ const StudentProfile = () => {
                   <div className="flex flex-wrap items-center justify-between -translate-y-8 lg:-translate-y-12">
                     <div className="flex items-center gap-3">
                       <img
-                        src={studentProfileData.personalImage}
+                        src={personal_image || studentProfileImg}
                         alt="student profile image"
-                        className="w-24 h-24 lg:h-auto lg:w-auto -translate-y-0 lg:-translate-y-8"
+                        className="w-24 h-24 rounded-full lg:h-auto lg:w-auto -translate-y-0 lg:-translate-y-8"
                       />
-                      <p className="text-3xl font-bold">
-                        {studentProfileData.studentName}
-                      </p>
+                      <p className="text-3xl font-bold">{full_name}</p>
                     </div>
                     <div className="flex items-center gap-24">
                       <MainCheckBox
@@ -160,7 +214,7 @@ const StudentProfile = () => {
                       />
                       <div className="translate-y-2">
                         <DotsDropDown
-                          instructorId={studentProfileData.id}
+                          instructorId={studentProfileId}
                           instructorRoute="/students"
                           firstName="edit"
                           firstIcon={
@@ -173,9 +227,9 @@ const StudentProfile = () => {
                               className="fill-mainRed"
                             />
                           }
-                          isOpen={openRow == studentProfileData.id}
+                          isOpen={openRow == studentProfileId}
                           onToggle={() =>
-                            handleToggleDropDown(studentProfileData.id)
+                            handleToggleDropDown(studentProfileId)
                           }
                         />
                       </div>
@@ -190,7 +244,7 @@ const StudentProfile = () => {
                   <div className="grid items-center gap-8 md:grid-cols-2 lg:grid-cols-3 lg:gap-14">
                     <StudentPersonalContact
                       contactTitle={t("address")}
-                      contactValue={studentProfileData.address}
+                      contactValue={address}
                       icon={<PiMapPinLight size={30} />}
                     />
                     <StudentPersonalContact
@@ -200,12 +254,12 @@ const StudentProfile = () => {
                     />
                     <StudentPersonalContact
                       contactTitle={t("email")}
-                      contactValue={studentProfileData.email}
+                      contactValue={email}
                       icon={<MdOutlineEmail size={30} />}
                     />
                     <StudentPersonalContactWithOptionalIcon
                       contactTitle={t("id number")}
-                      contactValue={studentProfileData.idNumber}
+                      contactValue={id_number}
                       icon={
                         <HiOutlineIdentification
                           className="text-mainColor"
@@ -215,7 +269,7 @@ const StudentProfile = () => {
                     />
                     <StudentPersonalContactWithOptionalIcon
                       contactTitle={t("educational qualification")}
-                      contactValue={studentProfileData.educationalQualification}
+                      contactValue={qualification}
                       icon={
                         <PiCertificate className="text-mainColor" size={30} />
                       }
@@ -249,17 +303,17 @@ const StudentProfile = () => {
                   <div className="grid items-center gap-8 md:grid-cols-2 lg:grid-cols-3 lg:gap-14">
                     <StudentPersonalContact
                       contactTitle={t("name")}
-                      contactValue={studentProfileData.fatherName}
+                      contactValue={parent.full_name}
                       icon={<MdPeople size={30} />}
                     />
                     <StudentPersonalContact
                       contactTitle={t("phone")}
-                      contactValue={studentProfileData.fatherPhone}
+                      contactValue={parent.phone}
                       icon={<IoMdPhonePortrait size={30} />}
                     />
                     <StudentPersonalContact
                       contactTitle={t("email")}
-                      contactValue={studentProfileData.fatherEmail}
+                      contactValue={parent.email}
                       icon={<MdOutlineEmail size={30} />}
                     />
                   </div>
@@ -276,7 +330,7 @@ const StudentProfile = () => {
 
                   <Table
                     className={"bg-mainColor/90"}
-                    data={receiptData || []}
+                    data={receipts || []}
                     columns={receiptColumn}
                   />
                 </div>
@@ -318,17 +372,8 @@ const StudentProfile = () => {
                 <div className="flex items-center justify-end gap-8 mt-12">
                   <Button
                     className="bg-white text-mainColor"
-                    action={() => {
-                      const newReceipt = {
-                        amountPaid: values.amount_paid,
-                        amountDeserved: 1000,
-                        date: values.amount_date,
-                        receiptNumber: values.receipt_number,
-                      };
-
-                      setreceiptData((prev: any) => [...prev, newReceipt]);
-                      setShowReceiptModal(false);
-                    }}
+                    loading={isPending}
+                    action={() => handleAddNewReceipt(values)}
                   >
                     {t("confirm")}
                   </Button>

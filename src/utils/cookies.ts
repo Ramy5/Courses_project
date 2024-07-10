@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 // ADD TO COOKIES
 export const addToCookies = (user: User_TP) => {
   if (typeof window !== "undefined") {
-    Cookies.set("user", JSON.stringify(user), { expires: 7 });
+    Cookies.set("user", JSON.stringify(user), { expires: 1 });
   }
 };
 

@@ -33,6 +33,7 @@ import InstructorAddProject from "./InstructorPage/InstructorProjects/Instructor
 import InstructorViewAllProject from "./InstructorPage/InstructorProjects/InstructorViewAllProject";
 import InstructorViewProject from "./InstructorPage/InstructorProjects/InstructorViewProject";
 import InstrunctorEvaluateProject from "./InstructorPage/InstructorProjects/InstrunctorEvaluateProject";
+import EditStudent from "./AdminPages/Students/EditStudent";
 
 export {
   StructurePage,
@@ -70,4 +71,5 @@ export {
   InstructorViewAllProject,
   InstructorViewProject,
   InstrunctorEvaluateProject,
+  EditStudent,
 };
