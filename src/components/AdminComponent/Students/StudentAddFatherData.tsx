@@ -26,6 +26,11 @@ const postStudentParent = async (newStudent: any) => {
   return data;
 };
 
+const updateStudentParent = async (editStudent: any, id: number) => {
+  const data = customFetch.post(`updateParentDetails/${id}`, editStudent);
+  return data;
+};
+
 const StudentAddFatherData = ({
   editObj,
   studentID,
@@ -51,7 +56,7 @@ const StudentAddFatherData = ({
     "address",
   ];
 
-  const mutation = useMutation({
+  const { mutate } = useMutation({
     mutationKey: ["add-student-father"],
     mutationFn: postStudentParent,
     onSuccess: (data: any) => {
@@ -70,8 +75,28 @@ const StudentAddFatherData = ({
     },
   });
 
+  const { mutate: updateMutate } = useMutation({
+    mutationKey: ["update-student-father"],
+    mutationFn: (updateStudet: any) =>
+      updateStudentParent(updateStudet, Number(editObj?.id)),
+    onSuccess: (data: any) => {
+      queryClient.invalidateQueries("students");
+      toast.success(
+        t("student parent information has been edited successfully")
+      );
+      setActiveTab("academic");
+    },
+    onError: (error) => {
+      const errorMessage = errorFields
+        .map((field) => error?.response?.data?.error[0]?.[field]?.[0])
+        .find((message) => message);
+
+      toast.error(errorMessage || error.message);
+    },
+  });
+
   const handleAddStudent = async (values: AddStudentParent_TP) => {
-    const newStudent = {
+    let newStudent = {
       full_name: values?.fullName_father,
       email: values?.email_father,
       phone: values?.phone_father,
@@ -80,7 +105,9 @@ const StudentAddFatherData = ({
       student_id: studentID,
     };
 
-    await mutation.mutate(newStudent);
+    if (editObj) newStudent = { ...newStudent, student_id: editObj?.id };
+
+    editObj ? await updateMutate(newStudent) : await mutate(newStudent);
   };
 
   return (
