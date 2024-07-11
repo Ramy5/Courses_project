@@ -183,16 +183,16 @@ const InstructorPersonalProfile = () => {
           const totalRows = info.table.getCoreRowModel().rows.length;
           return (
             <DotsDropDown
-              // instructorRoute=""
-              // instructorId={info.row.original.id}
               firstName="view course description"
               firstIcon={<GrView size={22} className="fill-mainColor" />}
               secondName="edit course description"
               secondIcon={<FaRegEdit size={22} className="fill-mainColor" />}
-              isOpen={openRow == info.row.original.id}
-              onToggle={() => handleToggleDropDown(info.row.original.id)}
+              isOpen={openRow == info.row.index}
+              onToggle={() => handleToggleDropDown(info.row.index)}
               onFirstClick={() => {}}
-              onSecondClick={() => {}}
+              onSecondClick={() => {
+                navigate(`/instructors/edit/${id}`);
+              }}
               isLastRow={rowIndex === totalRows - 1}
             />
           );
@@ -233,7 +233,12 @@ const InstructorPersonalProfile = () => {
           />
         </div>
 
-        <InstructorSpecialization />
+        <InstructorSpecialization
+          personalData={
+            instructorPersonalData?.qualifications &&
+            instructorPersonalData?.qualifications[0]
+          }
+        />
       </div>
     </div>
   );

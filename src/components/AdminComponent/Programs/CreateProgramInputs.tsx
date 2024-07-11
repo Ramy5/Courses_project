@@ -1,4 +1,3 @@
-
 import { Form, Formik, useFormikContext } from "formik";
 import {
   BaseInput,
@@ -12,40 +11,34 @@ import { useMemo, useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { FaRegEdit } from "react-icons/fa";
 import { RiDeleteBin5Line } from "react-icons/ri";
-import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { RootState } from "@reduxjs/toolkit/query";
 
 const CreateProgramInputs = ({
   setStep,
   coursesData,
   setEditCoursesData,
   setCoursesData,
+  isPending,
 }: any) => {
-  console.log("🚀 ~ coursesData:", coursesData)
+  console.log("🚀 ~ coursesData:", coursesData);
   const [openRow, setOpenRow] = useState<number | null>(null);
-
-  const navigate = useNavigate();
-
-  const { loading, error } = useSelector((state: RootState) => state.program);
 
   const { values, setFieldValue } = useFormikContext();
   console.log("🚀 ~ CreateProgramInputs ~ values:", values);
 
-  const initialValues = {
-    program_name: "",
-    program_type: "",
-    program_code: 0,
-    specialization: "",
-    academic_levels: "",
-    number_classes: "",
-    vision: "",
-    message: "",
-    excellence: "",
-    very_good: "",
-    good: "",
-    acceptable: "",
-  };
+  // const initialValues = {
+  //   program_name: "",
+  //   program_type: "",
+  //   program_code: 0,
+  //   specialization: "",
+  //   academic_levels: "",
+  //   number_classes: "",
+  //   vision: "",
+  //   message: "",
+  //   excellence: "",
+  //   very_good: "",
+  //   good: "",
+  //   acceptable: "",
+  // };
 
   // const validationSchema = Yup.object({
   //   program_name: Yup.string().required(t("Required")),
@@ -62,20 +55,20 @@ const CreateProgramInputs = ({
   //   acceptable: Yup.number().required(t("Required")),
   // });
 
-  const CoursesData = [
-    {
-      id: 1,
-      course_code: "#65654SD",
-      course_name: "تحليل نظم",
-      level: "الثالث",
-    },
-    {
-      id: 2,
-      course_code: "#65654SD",
-      course_name: "تحليل نظم",
-      level: "الثالث",
-    },
-  ];
+  // const CoursesData = [
+  //   {
+  //     id: 1,
+  //     course_code: "#65654SD",
+  //     course_name: "تحليل نظم",
+  //     level: "الثالث",
+  //   },
+  //   {
+  //     id: 2,
+  //     course_code: "#65654SD",
+  //     course_name: "تحليل نظم",
+  //     level: "الثالث",
+  //   },
+  // ];
 
   const CoursesColumns = useMemo<ColumnDef<any>[]>(
     () => [
@@ -115,7 +108,7 @@ const CreateProgramInputs = ({
                 handleToggleDropDown(info.row.original.id);
               }}
               onFirstClick={() => {
-                setEditCoursesData(coursesData[info.row.index]); 
+                setEditCoursesData(coursesData[info.row.index]);
                 setStep(2);
               }}
               onSecondClick={() => {
@@ -232,6 +225,7 @@ const CreateProgramInputs = ({
                 id="vision"
                 className="w-full text-lg py-2 px-4 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
                 placeholder={t("vision")}
+                value={values.vision}
                 onChange={(e) => {
                   setFieldValue("vision", e.target.value);
                 }}
@@ -246,6 +240,7 @@ const CreateProgramInputs = ({
                 id="message"
                 className="w-full text-lg py-2 px-4 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
                 placeholder={t("message")}
+                value={values.message}
                 onChange={(e) => {
                   setFieldValue("message", e.target.value);
                 }}
@@ -316,7 +311,7 @@ const CreateProgramInputs = ({
         </div>
 
         <div className="mt-8 px-8 flex justify-end">
-          <Button type="submit" className="me-5" loading={loading}>
+          <Button type="submit" className="me-5" loading={isPending}>
             {t("create program")}
           </Button>
           <Button type="button" className="bg-[#E6EAEE] text-mainColor">

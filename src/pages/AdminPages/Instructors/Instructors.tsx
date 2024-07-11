@@ -114,7 +114,7 @@ const Instructors = () => {
         <Button
           type="button"
           className="text-xl font-medium"
-          action={() => navigate("/instructors/instructorEdit")}
+          action={() => navigate("/instructors/add")}
         >
           {t("add lecturer +")}
         </Button>
@@ -139,7 +139,7 @@ const Instructors = () => {
                 isOpen={openRow == instructor.id}
                 onToggle={() => handleToggleDropDown(instructor.id)}
                 onFirstClick={() => {
-                  navigate(`/instructors/instructorEdit/${instructor.id}`);
+                  navigate(`/instructors/edit/${instructor.id}`);
                   console.log("🚀 ~ Instructors ~ instructor.id:", instructor.id)
                 }}
                 onSecondClick={() => {}}

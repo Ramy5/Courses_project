@@ -19,6 +19,7 @@ const CreateCoursesInputs = ({
   setStep,
   editCoursesData,
   coursesData,
+  setEditCoursesData,
 }) => {
   console.log("🚀 ~ CreateCoursesInputs ~ coursesData:", coursesData);
   console.log("🚀 ~ CreateCoursesInputs ~ editCoursesData:", editCoursesData);
@@ -27,7 +28,9 @@ const CreateCoursesInputs = ({
   //     "🚀 ~ CreateCoursesInputs ~ selectedInstructor:",
   //     selectedInstructor
   //   );
-  const [suggestedReferences, setSuggestedReferences] = useState(editCoursesData?.references || []);
+  const [suggestedReferences, setSuggestedReferences] = useState(
+    editCoursesData?.references || []
+  );
   console.log(
     "🚀 ~ CreateCoursesInputs ~ suggestedReferences:",
     suggestedReferences
@@ -37,6 +40,7 @@ const CreateCoursesInputs = ({
   console.log("🚀 ~ CreateCoursesInputs ~ level:", level);
 
   const initialValues = {
+    id: editCoursesData?.id || 0,
     course_name: editCoursesData?.course_name || "",
     course_teachers: editCoursesData?.course_teachers || [],
     course_code: editCoursesData?.course_code || 0,
@@ -62,7 +66,10 @@ const CreateCoursesInputs = ({
     { id: 1, value: "محمد احمد", label: "محمد احمد" },
     { id: 2, value: "محمود سالم", label: "محمود سالم" },
     { id: 3, value: "احمد محمد", label: "احمد محمد" },
-    { id: 4, value: "سالم محمود", label: "سالم محمود" },
+    { id: 4, value: "احمد محمود", label: "احمد محمود" },
+    { id: 5, value: "سالم احمد", label: "سالم احمد" },
+    { id: 6, value: "سالم محمد", label: "سالم محمد" },
+    { id: 7, value: "محمد محمود", label: "محمد محمود" },
   ];
 
   //   const courseTeachers = editCoursesData?.course_teachers?.map(
@@ -157,14 +164,64 @@ const CreateCoursesInputs = ({
     setLevel(editLevel);
   }, []);
 
-//   useEffect(() => {
-//     const editSelectTeacher = {
-//       id: editCoursesData?.course_teachers || "",
-//       value: editCoursesData?.course_teachers || "",
-//       label: editCoursesData?.course_teachers || `${t("courseteachers")}`,
-//     };
-//     setSelectTeacher(editSelectTeacher);
-//   }, []);
+  const customStyles = {
+    control: (provided) => ({
+      ...provided,
+      backgroundColor: "#E6EAEE",
+      borderRadius: "10px",
+      boxShadow: "0px 4px 4px 0px #00000040",
+      border: "0",
+      minHeight: "44px",
+      cursor: "pointer",
+      padding: "6px 8px",
+    }),
+    option: (provided, state) => {
+      let backgroundColor = "";
+      let color = "";
+      if (state.isSelected) {
+        backgroundColor = "#393D94";
+        color = "white";
+      } else if (state.isFocused) {
+        backgroundColor = "white";
+        color = "#000";
+      }
+      return {
+        ...provided,
+        backgroundColor,
+        color,
+        fontWeight: "500",
+      };
+    },
+    multiValue: (provided) => ({
+      ...provided,
+      color: "black",
+      fontWeight: "500",
+      backgroundColor: "#d3d2d2d8",
+      borderRadius: "6px",
+      padding: "0.5px 4px",
+    }),
+    multiValueLabel: (provided) => ({
+      ...provided,
+      color: "#393d94dc",
+      fontWeight: "600",
+      // backgroundColor: "red",
+    }),
+    multiValueRemove: (provided) => ({
+      ...provided,
+      color: "#393D94",
+      "&:hover": {
+        backgroundColor: "transparent",
+        color: "#D42828",
+      },
+    }),
+    menu: (provided) => ({
+      ...provided,
+      borderRadius: "10px",
+      boxShadow: "0px 4px 4px 0px #00000040",
+      backgroundColor: "#E6EAEE",
+    }),
+  };
+
   return (
     <div>
       <Formik
@@ -175,7 +232,7 @@ const CreateCoursesInputs = ({
           //   setCoursesData(values);
         }}
       >
-        {({ setFieldValue, values }) => {
+        {({ setFieldValue, values, resetForm }) => {
           console.log("🚀 ~ CreateCoursesInputs ~ values:", values);
           return (
             <Form>
@@ -327,7 +384,7 @@ const CreateCoursesInputs = ({
                         label={`${t("lectures")}`}
                         className="checked:accent-mainColor"
                         labelClassName="font-semibold !text-base"
-                        checked={values.lectures === 1}
+                        checked={values.lectures === 1 ? 1 : 0}
                         onChange={() => {
                           setFieldValue(
                             "lectures",
@@ -341,7 +398,7 @@ const CreateCoursesInputs = ({
                         label={`${t("practical/laboratory training")}`}
                         className="checked:accent-mainColor"
                         labelClassName="font-semibold !text-base"
-                        checked={values.practical_training === 1}
+                        checked={values.practical_training === 1 ? 1 : 0}
                         onChange={() => {
                           setFieldValue(
                             "practical_training",
@@ -355,7 +412,7 @@ const CreateCoursesInputs = ({
                         label={`${t("applications")}`}
                         className="checked:accent-mainColor"
                         labelClassName="font-semibold !text-base"
-                        checked={values.applications === 1}
+                        checked={values.applications === 1 ? 1 : 0}
                         onChange={() => {
                           setFieldValue(
                             "applications",
@@ -369,7 +426,7 @@ const CreateCoursesInputs = ({
                         label={`${t("research")}`}
                         className="checked:accent-mainColor"
                         labelClassName="font-semibold !text-base"
-                        checked={values.research === 1}
+                        checked={values.research === 1 ? 1 : 0}
                         onChange={() => {
                           setFieldValue(
                             "research",
@@ -383,7 +440,7 @@ const CreateCoursesInputs = ({
                         label={`${t("case studies")}`}
                         className="checked:accent-mainColor"
                         labelClassName="font-semibold !text-base"
-                        checked={values.case_studies === 1}
+                        checked={values.case_studies === 1 ? 1 : 0}
                         onChange={() => {
                           setFieldValue(
                             "case_studies",
@@ -397,7 +454,7 @@ const CreateCoursesInputs = ({
                         label={`${t("project")}`}
                         className="checked:accent-mainColor"
                         labelClassName="font-semibold !text-base"
-                        checked={values.project === 1}
+                        checked={values.project === 1 ? 1 : 0}
                         onChange={() => {
                           setFieldValue(
                             "project",
@@ -525,7 +582,9 @@ const CreateCoursesInputs = ({
                           isMulti
                           className="basic-multi-select"
                           classNamePrefix="select"
-                        //   value={values.course_teachers}
+                          value={instructorsName.filter((option) =>
+                            values.course_teachers.includes(option.id)
+                          )}
                           onChange={(option) => {
                             setFieldValue(
                               "course_teachers",
@@ -534,7 +593,7 @@ const CreateCoursesInputs = ({
                           }}
                           options={instructorsName}
                           placeholder={t("instructor name")}
-                          styles={selectStyle}
+                          styles={customStyles}
                         />
                       </div>
                     </div>
@@ -671,14 +730,36 @@ const CreateCoursesInputs = ({
                     type="button"
                     className="me-5"
                     action={() => {
-                      setCoursesData((prev) => [
-                        ...prev,
-                        {
-                          ...values,
-                          references: suggestedReferences,
-                          id: coursesData?.length + 1,
-                        },
-                      ]);
+                      setCoursesData((prev) => {
+                        const existingIndex = prev.findIndex(
+                          (course) => course.id === values.id
+                        );
+
+                        if (existingIndex !== -1) {
+                          // Update existing data
+                          const updatedCourses = [...prev];
+                          updatedCourses[existingIndex] = {
+                            ...values,
+                            references: suggestedReferences,
+                            id: values.id,
+                          };
+                          return updatedCourses;
+                        } else {
+                          // Add new data
+                          return [
+                            ...prev,
+                            {
+                              ...values,
+                              references: suggestedReferences,
+                              id: prev.length + 1,
+                            },
+                          ];
+                        }
+                      });
+
+                      setEditCoursesData([]);
+
+                      resetForm();
 
                       setStep(1);
                     }}
