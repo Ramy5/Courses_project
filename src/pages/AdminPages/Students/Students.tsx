@@ -24,6 +24,8 @@ const Students = () => {
     data: studentsData,
     error,
     isLoading,
+    isRefetching,
+    isFetching,
   } = useQuery({
     queryKey: ["students"],
     queryFn: fetchStudent,
@@ -181,7 +183,8 @@ const Students = () => {
     []
   );
 
-  if (isLoading) return <Loading />;
+  if (isLoading || isRefetching || isFetching) return <Loading />;
+
   if (error)
     return (
       <div className="">
