@@ -17,8 +17,8 @@ const postStudentPersonal = async (newStudent: any) => {
   return data;
 };
 
-const editStudentPersonal = async (editStudent: any, id: number) => {
-  const data = customFetch.post(`studentPersonalData/${id}`, editStudent);
+const editStudentPersonal = async (editStudent: any) => {
+  const data = customFetch.post(`studentPersonalData`, editStudent);
   return data;
 };
 
@@ -72,7 +72,8 @@ const StudentAddPersonalData = ({
     "personal_image",
   ];
 
-  const [selectedImage, setSelectedImage] = useState(User);
+  const [selectedImage, setSelectedImage] = useState(null);
+  console.log("🚀 ~ selectedImage:", selectedImage);
 
   const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event?.target?.files[0];
@@ -94,7 +95,7 @@ const StudentAddPersonalData = ({
   const { mutate } = useMutation({
     mutationKey: ["add-student-personal"],
     mutationFn: postStudentPersonal,
-    onSuccess: (data: any) => {
+    onSuccess: () => {
       queryClient.invalidateQueries("students");
       toast.success(
         t("student personal information has been added successfully")
@@ -112,9 +113,8 @@ const StudentAddPersonalData = ({
 
   const { mutate: editStudentMutate } = useMutation({
     mutationKey: ["edit-student-personal"],
-    mutationFn: (editStudent: any) =>
-      editStudentPersonal(editStudent, editObj?.id),
-    onSuccess: (data: any) => {
+    mutationFn: editStudentPersonal,
+    onSuccess: () => {
       queryClient.invalidateQueries("students");
       toast.success(
         t("student personal information has been edited successfully")
@@ -271,7 +271,7 @@ const StudentAddPersonalData = ({
 
               <div className="w-full md:w-1/2">
                 <img
-                  src={selectedImage}
+                  src={selectedImage || User}
                   alt="user"
                   className="m-auto w-[180px] h-[180px] rounded-full"
                 />

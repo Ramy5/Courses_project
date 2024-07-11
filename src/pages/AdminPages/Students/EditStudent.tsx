@@ -29,6 +29,7 @@ const EditStudent = () => {
     queryKey: ["get-students-edit"],
     queryFn: () => getStudentsEdit(studentParamID),
   });
+  console.log("🚀 ~ EditStudent ~ data:", data);
 
   useEffect(() => {
     if (isSuccess && data) {
@@ -53,7 +54,7 @@ const EditStudent = () => {
       });
 
       setFatherEditData({
-        id: studentParamID,
+        id: data?.parent?.id,
         address_father: data?.parent?.address,
         country_father: data?.parent?.country_residence,
         phone_father: data?.parent?.phone,
@@ -62,7 +63,7 @@ const EditStudent = () => {
       });
 
       setAcademicEditData({
-        id: studentParamID,
+        id: data?.academicData?.id,
         number_academic: data?.academicData?.Academic_code,
         program_academic: data?.academicData?.program,
         level_academic: [

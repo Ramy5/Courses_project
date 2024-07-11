@@ -138,7 +138,7 @@ const StudentProfile = () => {
       {
         header: () => <span>{t("amount deserved")}</span>,
         accessorKey: "amountDeserved",
-        cell: (info) => `${info.getValue()}$`,
+        cell: (info) => `${1000}$`,
       },
       {
         header: () => <span>{t("date")}</span>,
@@ -303,17 +303,17 @@ const StudentProfile = () => {
                   <div className="grid items-center gap-8 md:grid-cols-2 lg:grid-cols-3 lg:gap-14">
                     <StudentPersonalContact
                       contactTitle={t("name")}
-                      contactValue={parent.full_name}
+                      contactValue={parent?.full_name}
                       icon={<MdPeople size={30} />}
                     />
                     <StudentPersonalContact
                       contactTitle={t("phone")}
-                      contactValue={parent.phone}
+                      contactValue={parent?.phone}
                       icon={<IoMdPhonePortrait size={30} />}
                     />
                     <StudentPersonalContact
                       contactTitle={t("email")}
-                      contactValue={parent.email}
+                      contactValue={parent?.email}
                       icon={<MdOutlineEmail size={30} />}
                     />
                   </div>
