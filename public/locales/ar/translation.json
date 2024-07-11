@@ -36,6 +36,7 @@
   "retreat": "تراجع",
   "courses": "المقررات",
   "course": "المقرر",
+  "Course": "مقرر",
   "Courses": "المقررات الدراسية",
   "number of lectures": "عدد المحاضرات",
   "lecture hours": "ساعات المحاضرات",
@@ -412,5 +413,12 @@
   "you have successfully logged out!": "تم تسجيل الخروج بنجاح",
   "qualification": "المؤهل",
   "date birth": "تاريخ الميلاد",
-  "the receipt added successfully": "تم اضافة الايصال بنجاح"
+  "the receipt added successfully": "تم اضافة الايصال بنجاح",
+  "operation accomplished successfully":"تمت العملية بنجاح",
+  "job title":"المسمي الوظيفي",
+  "instructor qualification data has been added successfully":"تمت إضافة بيانات مؤهلات المدرب بنجاح",
+  "instructor login information has been added successfully":"تمت إضافة معلومات تسجيل دخول المعلم بنجاح",
+  "instructor personal information has been added successfully":"تمت إضافة المعلومات الشخصية للمدرب بنجاح",
+  "instructor contact information has been added successfully":"تمت إضافة معلومات الاتصال بالمدرس بنجاح",
+  "something went wrong, try again later.":"حدث خطأ ما ، حاول لاحقاً"
 }

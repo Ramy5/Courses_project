@@ -41,8 +41,6 @@ const selectStyle: StylesConfig<CustomOption, false, GroupBase<CustomOption>> = 
     }),
     valueContainer: (provided) => ({
       ...provided,
-    //   overflowX: "auto",
-    //   overflowY: "hidden",
       whiteSpace: "nowrap",
     }),
     menu: (provided) => ({

@@ -33,6 +33,7 @@ const SideBar: React.FC<SideBarProps> = ({
   const navigate = useNavigate();
   const location = useLocation();
   const { sidebarColor } = useAppSelector((state) => state.global);
+
   const { role: userData } = useAppSelector((state) => state.user);
 
   const sideBarItemsOfAdmin = [
@@ -245,8 +246,7 @@ const SideBar: React.FC<SideBarProps> = ({
     //     : "";
 
     const segmentsType =
-      (userData === "student" || userData === "instructor") &&
-      segments.length > 0
+      userData !== "admin" && segments.length > 0
         ? `/${segments[0]}/${segments[1]}`
         : `/${segments[0]}`;
 
@@ -256,7 +256,7 @@ const SideBar: React.FC<SideBarProps> = ({
   };
 
   const currentPathtName = getCurrentPathName(location.pathname);
-  console.log("🚀 ~ currentPathtName:", currentPathtName)
+  console.log("🚀 ~ currentPathtName:", currentPathtName);
 
   return (
     <aside

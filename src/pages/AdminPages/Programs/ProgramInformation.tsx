@@ -4,56 +4,64 @@ import { FaFolder, FaUserAlt } from "react-icons/fa";
 import { CgNotes } from "react-icons/cg";
 import { PiStudentBold } from "react-icons/pi";
 import { GoDotFill } from "react-icons/go";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { GrView } from "react-icons/gr";
 import { FaRegEdit } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import customFetch from "../../../utils/axios";
+import { toast } from "react-toastify";
+import Loading from "../../../components/UI/Loading";
 
 const ProgramInformation = () => {
   const [openRow, setOpenRow] = useState<number | null>(null);
+  const navigate = useNavigate();
 
   const handleToggleDropDown = (id: number) => {
     setOpenRow((prevOpenRow) => (prevOpenRow == id ? null : id));
   };
 
-  const ProgramInf = {
-    program_name: "علوم حاسب",
-    program_code: "#1545456",
-    strat_Period: "24/5/2024",
-    end_Period: "24/5/2024",
-    vision:
-      "Acsapienmor bigravidaplace ratvariusvit aemorbi lobortis bibe ndum.lobortis bibendum.lobortis bibendum.",
-    message:
-      " Acsapienmor bigravidaplace ratvariusvit aemorbi lobortis bibe ndum.lobortis bibendum.lobortis bibendum. Acsapienm orbigravi daplacerat variusv itaem orbi  lobor tis biben  dum.lobortis bibend um.lobortis bibendum.",
-    rating_excellent: "85%",
-    rating_veryGood: "75%",
-    rating_good: "65%",
-    rating_acceptable: "50%",
-    statistics_courses: "20 مقرر",
-    statistics_Instructors: "15 محاضر",
-    statistics_students: "+5000 طالب",
-    academic_levels: 4,
-    number_classes: 4,
+  const fetchProgramData = async () => {
+    const response = await customFetch(`/program/${10}`);
+    return response;
   };
 
-  const studentsDataFee = [
-    {
-      index: 1,
-      id: 1,
-      course_code: "#65654SD",
-      course_name: "تحليل نظم",
-      level: "الثالث",
-    },
-    {
-      index: 2,
-      id: 2,
-      course_code: "#65654SD",
-      course_name: "تحليل نظم",
-      level: "الثالث",
-    },
-  ];
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["program_data"],
+    queryFn: fetchProgramData,
+  });
 
-  const studentsColumnsFee = useMemo<ColumnDef<any>[]>(
+  const programData = data?.data.data || {};
+  console.log("🚀 ~ ProgramInformation ~ programData:", programData);
+
+  useEffect(() => {
+    if (error) {
+      toast.error(`${error.message}`);
+    }
+  }, [error]);
+
+  // const ProgramInf = {
+  //   program_name: "علوم حاسب",
+  //   program_code: "#1545456",
+  //   strat_Period: "24/5/2024",
+  //   end_Period: "24/5/2024",
+  //   vision:
+  //     "Acsapienmor bigravidaplace ratvariusvit aemorbi lobortis bibe ndum.lobortis bibendum.lobortis bibendum.",
+  //   message:
+  //     " Acsapienmor bigravidaplace ratvariusvit aemorbi lobortis bibe ndum.lobortis bibendum.lobortis bibendum. Acsapienm orbigravi daplacerat variusv itaem orbi  lobor tis biben  dum.lobortis bibend um.lobortis bibendum.",
+  //   rating_excellent: "85%",
+  //   rating_veryGood: "75%",
+  //   rating_good: "65%",
+  //   rating_acceptable: "50%",
+  //   statistics_courses: "20 مقرر",
+  //   statistics_Instructors: "15 محاضر",
+  //   statistics_students: "+5000 طالب",
+  //   academic_levels: 4,
+  //   number_classes: 4,
+  // };
+
+  const ProgramColumnsFee = useMemo<ColumnDef<any>[]>(
     () => [
       {
         header: () => <span>{t("type of certificate")}</span>,
@@ -70,7 +78,7 @@ const ProgramInformation = () => {
         accessorKey: "level",
         cell: (info) => info.getValue(),
       },
-      { 
+      {
         header: () => <span>{t("")}</span>,
         accessorKey: "action",
         cell: (info) => {
@@ -79,13 +87,17 @@ const ProgramInformation = () => {
           return (
             <DotsDropDown
               instructorRoute="/programs/courseDescription"
-              instructorId={info.row.original.id} 
+              instructorId={info.row.original.id}
               firstName="view course description"
               firstIcon={<GrView size={22} className="fill-mainColor" />}
               secondName="edit course description"
               secondIcon={<FaRegEdit size={22} className="fill-mainColor" />}
               isOpen={openRow == info.row.original.id}
               onToggle={() => handleToggleDropDown(info.row.original.id)}
+              onFirstClick={() => {
+                navigate(`/programs/courseDescription/${info.row.original.id}`);
+              }}
+              onSecondClick={() => {}}
               isLastRow={rowIndex === totalRows - 1}
             />
           );
@@ -94,6 +106,8 @@ const ProgramInformation = () => {
     ],
     [openRow]
   );
+
+  if (isLoading) return <Loading />;
 
   return (
     <div>
@@ -108,12 +122,12 @@ const ProgramInformation = () => {
         <div className="text-center w-full mb-6">
           <span className="font-medium">{t("training program")}</span>
           <h2 className="font-semibold text-3xl text-mainColor">
-            {ProgramInf.program_name}
+            {programData.program_name}
           </h2>
-          <span className="font-medium">{ProgramInf.program_code}</span>
+          <span className="font-medium">{programData.program_code}</span>
           <p className="font-medium">
-            {t("time period :")} {ProgramInf.strat_Period} -{" "}
-            {ProgramInf.end_Period}
+            {t("time period :")} {programData.strat_Period} -{" "}
+            {programData.end_Period}
           </p>
         </div>
 
@@ -121,14 +135,14 @@ const ProgramInformation = () => {
           <h2 className="font-semibold text-2xl text-mainColor mb-2">
             {t("vision")}
           </h2>
-          <p className="text-2xl font-medium">{ProgramInf.vision}</p>
+          <p className="text-2xl font-medium">{programData.vision}</p>
         </div>
 
         <div className="my-6">
           <h2 className="font-semibold text-2xl text-mainColor mb-2">
             {t("message")}
           </h2>
-          <p className="text-2xl font-medium">{ProgramInf.message}</p>
+          <p className="text-2xl font-medium">{programData.message}</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2">
@@ -142,28 +156,28 @@ const ProgramInformation = () => {
                   <GoDotFill size={25} className="fill-mainColor" />
                   <p>{t("excellent")}</p>
                 </div>
-                <p>{ProgramInf.rating_excellent}</p>
+                <p>{programData.excellence}</p>
               </li>
               <li className="grid grid-cols-2 my-3">
                 <div className="flex gap-3 items-center">
                   <GoDotFill size={25} className="fill-mainColor" />
                   <p>{t("very good")}</p>
                 </div>
-                <p>{ProgramInf.rating_veryGood}</p>
+                <p>{programData.very_good}</p>
               </li>
               <li className="grid grid-cols-2">
                 <div className="flex gap-3 items-center">
                   <GoDotFill size={25} className="fill-mainColor" />
                   <p>{t("good")}</p>
                 </div>
-                <p>{ProgramInf.rating_good}</p>
+                <p>{programData.good}</p>
               </li>
               <li className="grid grid-cols-2 my-3">
                 <div className="flex gap-3 items-center">
                   <GoDotFill size={25} className="fill-mainColor" />
                   <p>{t("acceptable")}</p>
                 </div>
-                <p>{ProgramInf.rating_acceptable}</p>
+                <p>{programData.acceptable}</p>
               </li>
             </ul>
           </div>
@@ -174,19 +188,20 @@ const ProgramInformation = () => {
             <div className="flex gap-3 items-center justify-center mt-5">
               <CgNotes size={25} className=" text-mainColor" />
               <p className="font-medium text-xl">
-                {ProgramInf.statistics_courses}
+                {programData.statistics_courses} <span>{t("Course")}</span>
               </p>
             </div>
             <div className="flex gap-3 items-center justify-center my-3 ms-5">
               <FaUserAlt size={25} className="fill-mainColor" />
               <p className="font-medium text-xl">
-                {ProgramInf.statistics_Instructors}
+                {programData.statistics_Instructors}{" "}
+                <span>{t("instructor")}</span>
               </p>
             </div>
             <div className="flex gap-3 items-center justify-center ms-11">
               <PiStudentBold size={25} className="fill-mainColor" />
               <p className="font-medium text-xl">
-                {ProgramInf.statistics_students}
+                {programData.statistics_students} <span>{t("student")}</span>
               </p>
             </div>
           </div>
@@ -198,7 +213,7 @@ const ProgramInformation = () => {
               {t("number academic levels")}
             </h2>
             <p className="font-semibold text-xl mt-3 ms-0 md:ms-16">
-              {ProgramInf.academic_levels}
+              {programData.academic_levels}
             </p>
           </div>
           <div className="text-center">
@@ -206,7 +221,7 @@ const ProgramInformation = () => {
               {t("number classes")}
             </h2>
             <p className="font-semibold text-xl text-center mt-3">
-              {ProgramInf.number_classes}
+              {programData.number_classes}
             </p>
           </div>
         </div>
@@ -217,8 +232,8 @@ const ProgramInformation = () => {
           {t("Courses")}
         </h2>
         <Table
-          data={studentsDataFee}
-          columns={studentsColumnsFee}
+          data={programData.courses}
+          columns={ProgramColumnsFee}
           className="bg-mainColor"
         />
       </div>

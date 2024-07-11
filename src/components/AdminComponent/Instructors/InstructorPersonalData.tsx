@@ -4,23 +4,140 @@ import { t } from "i18next";
 import { Button, MainRadio } from "../..";
 import { DateInputField } from "../../UI/DateInputField";
 import User from "../../../assets/instructors/user 1.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import customFetch from "../../../utils/axios";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { formatDate } from "../../../utils/helpers";
 
-const InstructorPersonalData = () => {
-  const [selectedImage, setSelectedImage] = useState(User); // Initial state is the default image
+const postInstructorPersonal = async (newStudent: any) => {
+  const data = customFetch.post("addPersonalData", newStudent);
+  return data;
+};
+
+const editInstructorPersonal = async (editInstructor: any) => {
+  const data = customFetch.post(`addPersonalData`, editInstructor);
+  return data;
+};
+
+interface AddInstructorPersonal_TP {
+  fullName_personal: string;
+  nationality: string;
+  id_number: string | number;
+  country_residence: string;
+  teacher_id: number;
+  address: string;
+  date_birth: string | Date;
+  type: "male" | "female";
+  personal_image: [];
+}
+
+interface InstructorAddPersonalData {
+  editObj?: AddInstructorPersonal_TP;
+  instructorID: number;
+  setActiveTab: (activeTab: string) => void;
+  setInstructorID: (instructorID: number) => void;
+}
+
+const InstructorPersonalData = ({
+  editObj,
+  instructorID,
+  setActiveTab,
+  setInstructorID
+}: InstructorAddPersonalData) => {
+  console.log("🚀 ~ editObj:", editObj);
+  console.log("🚀 ~ instructorID:", instructorID);
+  const [selectedImage, setSelectedImage] = useState(); // Initial state is the default image
+  console.log("🚀 ~ selectedImage:", selectedImage);
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const initialValues = {
-    nationality: "",
-    id_number: "",
-    country_residence: "",
-    address: "",
-    date_birth: "",
-    type: "",
-    personal_image: "",
+    // PERSONAL DATA
+    nationality: editObj?.nationality || "",
+    id_number: editObj?.id_number || "",
+    country_residence: editObj?.country_residence || "",
+    address: editObj?.address || "",
+    date_birth: editObj?.date_birth || "",
+    type: editObj?.type || "male",
+    personal_image: editObj?.personal_image,
+    teacher_id: editObj?.teacher_id || 0,
   };
 
+  const errorFields = [
+    "nationality",
+    "id_number",
+    "country_residence",
+    "address",
+    "date_birth",
+    "type",
+    "personal_image",
+    "teacher_id",
+  ];
+
+  const { mutate, isPending } = useMutation({
+    mutationKey: ["add-instructor-personal"],
+    mutationFn: postInstructorPersonal,
+    onSuccess: (data: any) => {
+      queryClient.invalidateQueries("instructor");
+      toast.success(
+        t("instructor personal information has been added successfully")
+      );
+      setActiveTab("contact information");
+    },
+    onError: (error) => {
+      const errorMessage = errorFields
+        .map((field) => error?.response?.data?.error[0]?.[field]?.[0])
+        .find((message) => message);
+
+      toast.error(errorMessage || error.message);
+    },
+  });
+
+  const { mutate: editStudentMutate } = useMutation({
+    mutationKey: ["edit-student-personal"],
+    mutationFn: (editInstructor: any) => editInstructorPersonal(editInstructor),
+    onSuccess: (data: any) => {
+      queryClient.invalidateQueries("instructor");
+      toast.success(
+        t("instructor personal information has been added successfully")
+      );
+      setInstructorID()
+      setActiveTab("contact information");
+    },
+    onError: (error) => {
+      const errorMessage = errorFields
+        .map((field) => error?.response?.data?.error[0]?.[field]?.[0])
+        .find((message) => message);
+
+      toast.error(errorMessage || error.message);
+    },
+  });
+
+  const handleAddInstructor = async (values: AddInstructorPersonal_TP) => {
+    let newStudent = {
+      nationality: values?.nationality,
+      id_number: values?.id_number,
+      country_residence: values?.country_residence,
+      address: values?.address,
+      date_birth: formatDate(values?.date_birth),
+      type: values?.type || "male",
+      personal_image: selectedImage.name,
+      teacher_id: instructorID,
+    };
+
+    if (editObj) newStudent = { ...newStudent, teacher_id: editObj?.id };
+
+    editObj ? await editStudentMutate(newStudent) : await mutate(newStudent);
+  };
+
+  useEffect(() => setSelectedImage(editObj?.image), []);
+
   const handleImageChange = (event) => {
+    console.log("🚀 ~ handleImageChange ~ event:", event)
     const file = event.target.files[0];
+    console.log("🚀 ~ handleImageChange ~ file:", file)
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -38,11 +155,10 @@ const InstructorPersonalData = () => {
     <div>
       <Formik
         initialValues={initialValues}
-        onSubmit={(values) => {
-          console.log("🚀 ~ InstructorLoginData ~ values:", values);
-        }}
+        onSubmit={(values) => handleAddInstructor(values)}
       >
         {({ setFieldValue, values }) => {
+          console.log("🚀 ~ values:", values);
           return (
             <Form className="flex flex-col gap-5 px-8 md:px-16 ">
               <div className="flex flex-col-reverse justify-between gap-8 md:flex-row">
@@ -89,6 +205,7 @@ const InstructorPersonalData = () => {
                       id="address"
                       className="w-full text-lg py-2 px-4 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
                       placeholder={t("address")}
+                      value={values?.address}
                       onChange={(e) => {
                         setFieldValue("address", e.target.value);
                       }}
@@ -133,11 +250,19 @@ const InstructorPersonalData = () => {
                 </div>
 
                 <div className="w-full md:w-1/2">
-                  <img
-                    src={selectedImage}
-                    alt="user"
-                    className="m-auto w-[180px] h-[180px] rounded-full"
-                  />
+                  {selectedImage ? (
+                    <img
+                      src={selectedImage}
+                      alt="user"
+                      className="m-auto w-[180px] h-[180px] rounded-full"
+                    />
+                  ) : (
+                    <img
+                      src={editObj ? editObj.personal_image : User}
+                      alt="user"
+                      className="m-auto w-[180px] h-[180px] rounded-full"
+                    />
+                  )}
                   <div className="flex justify-center gap-5 mt-6">
                     <input
                       type="file"
@@ -170,7 +295,7 @@ const InstructorPersonalData = () => {
               </div>
 
               <div className="flex justify-end mt-5">
-                <Button type="submit" className="me-5">
+                <Button type="submit" className="me-5" loading={isPending}>
                   {t("confirm")}
                 </Button>
                 <Button type="button" className="bg-[#E6EAEE] text-mainColor">

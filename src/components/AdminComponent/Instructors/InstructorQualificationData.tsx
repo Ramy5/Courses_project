@@ -4,7 +4,7 @@ import { t } from "i18next";
 import { Button, Table } from "../..";
 import { AiOutlineCloudUpload } from "react-icons/ai";
 import { RiDeleteBin5Line } from "react-icons/ri";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { HiMiniFolderArrowDown } from "react-icons/hi2";
 import { IoIosCheckmarkCircleOutline } from "react-icons/io";
 
@@ -16,48 +16,163 @@ import {
   getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import customFetch from "../../../utils/axios";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import AddNewCertificatesInput from "./AddNewCertificatesInput";
 
-const InstructorQualificationData = () => {
+interface AddInstructorQualification_TP {
+  general_specialization: string;
+  specialization: string;
+  degree: string;
+  year_acquisition: string;
+  cv_file: string;
+  job_title: string;
+}
+interface InstructorAddQualificationData_TP {
+  editObj?: AddInstructorQualification_TP;
+  instructorID: number;
+}
+
+const postInstructorQualification = async (newInstructor: any) => {
+  const data = customFetch.post("/qualification", newInstructor);
+  return data;
+};
+
+const editInstructorQualification = async (editInstructor: any, id: number) => {
+  const data = customFetch.post(`/updateCertificate/${id}`, editInstructor);
+  return data;
+};
+
+const InstructorQualificationData = ({
+  editObj,
+  instructorID,
+}: InstructorAddQualificationData_TP) => {
+  console.log("🚀 ~ editObj:", editObj);
   const [file, setFile] = useState(null);
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+
   const [addNewCertificates, setAddNewCertificates] = useState(false);
+  console.log("🚀 ~ addNewCertificates:", addNewCertificates);
 
-  const studentsDataFee = [
-    {
-      index: 1,
-      type_certificate: "بكالروريوس",
-      certificate_name: "حاسبات ومعلومات",
-      donor: "معد مصر",
-      date_acquisition: "25/3/2001",
-      specialization: "علوم الحاسب",
-      appreciation: "جيد جدا",
-    },
-    {
-      index: 2,
-      type_certificate: "بكالروريوس",
-      certificate_name: "حاسبات ومعلومات",
-      donor: "معد مصر",
-      date_acquisition: "25/3/2001",
-      specialization: "علوم الحاسب",
-      appreciation: "جيد جدا",
-    },
-  ];
+  const [newCertificates, setNewCertificates] = useState([]);
+  console.log("🚀 ~ newCertificates:", newCertificates);
 
-  const [dataSource, setDataSource] = useState(studentsDataFee);
+  const initialValues: AddInstructorQualification_TP = {
+    general_specialization: editObj?.general_specialization || "",
+    specialization: editObj?.specialization || "",
+    degree: editObj?.degree || "",
+    year_acquisition: editObj?.year_acquisition || "",
+    cv_file: editObj?.cv_file || "",
+    job_title: editObj?.job_title || "",
+    // newCertificate: {
+    //   type_certificate: editObj?.type_certificate || "",
+    //   certificate_name: editObj?.certificate_name || "",
+    //   donor: editObj?.donor || "",
+    //   date_acquisition: editObj?.date_acquisition || "",
+    //   specialization: editObj?.specialization || "",
+    //   appreciation: editObj?.appreciation || "",
+    // },
+  };
 
-  const initialValues = {
-    general_specialization: "",
-    specialization: "",
-    degree: "",
-    year_acquisition: "",
-    cv_file: "",
-    newCertificate: {
-      type_certificate: "",
-      certificate_name: "",
-      donor: "",
-      date_acquisition: "",
-      specialization: "",
-      appreciation: "",
+  // const errorFields = [
+  //   "general_specialization",
+  //   "specialization",
+  //   "degree",
+  //   "year_acquisition",
+  //   "cv_file",
+  //   "job_title",
+  //   "newCertificate",
+  // ];
+
+  // const mutation = useMutation({
+  //   mutationKey: ["add-qualification"],
+  //   mutationFn: postInstructorQualification,
+  //   onSuccess: (data: any) => {
+  //     queryClient.invalidateQueries("instructor");
+  //     toast.success(
+  //       t("instructor qualification data has been added successfully")
+  //     );
+
+  //     navigate("/instructors");
+  //   },
+  //   onError: (error) => {
+  //     const errorMessage = errorFields
+  //       .map((field) => error?.response?.data?.error[0]?.[field]?.[0])
+  //       .find((message) => message);
+
+  //     toast.error(errorMessage || error.message);
+  //   },
+  // });
+
+  const { mutate, isPending } = useMutation({
+    mutationKey: ["add-instructor-contact"],
+    mutationFn: postInstructorQualification,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries("instructors");
+      toast.success(
+        t("instructor login information has been added successfully")
+      );
+      navigate("/instructors");
     },
+    onError: (error) => {
+      console.log("🚀 ~ error:", error);
+      const errorMessage =
+        error?.response?.data?.error[0]?.email[0] ||
+        error?.response?.data?.error[0]?.password[0];
+      toast.error(errorMessage);
+    },
+  });
+
+  const { mutate: editMutate } = useMutation({
+    mutationKey: ["edit-instructor-login"],
+    mutationFn: (editInstructor: any) =>
+      editInstructorQualification(editInstructor, Number(editObj?.id)),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries("instructors");
+      toast.success(
+        t("instructor qualification data has been added successfully")
+      );
+      navigate("/instructors");
+    },
+    onError: (error) => {
+      const errorMessage =
+        error?.response?.data?.error[0]?.email[0] ||
+        error?.response?.data?.error[0]?.password[0];
+      toast.error(errorMessage);
+    },
+  });
+
+  const handleAddQualification = async (
+    values: AddInstructorQualification_TP
+  ) => {
+    const newInstructor = {
+      general_specialization: values?.general_specialization,
+      specialization: values?.specialization,
+      degree: values?.degree,
+      year_acquisition: values?.year_acquisition,
+      cv_file: values?.cv_file,
+      job_title: values?.job_title,
+      newCertificate: newCertificates,
+      teacher_id: instructorID,
+    };
+
+    const editInstructor = {
+      id: editObj?.id,
+      general_specialization: editObj?.general_specialization,
+      specialization: editObj?.specialization,
+      degree: editObj?.degree,
+      year_acquisition: editObj?.year_acquisition,
+      cv_file: editObj?.cv_file,
+      job_title: editObj?.job_title,
+      newCertificate: newCertificates,
+      teacher_id: editObj?.teacher_id,
+    };
+    console.log("🚀 ~ editInstructor:", editInstructor);
+
+    editObj ? await editMutate(editInstructor) : await mutate(newInstructor);
   };
 
   const handleFileChange = (event) => {
@@ -68,70 +183,27 @@ const InstructorQualificationData = () => {
     setFile(null);
   };
 
-  const studentsColumnsFee = useMemo<ColumnDef<any>[]>(
-    () => [
-      {
-        header: () => <span>{t("type of certificate")}</span>,
-        accessorKey: "type_certificate",
-        cell: (info) => info.getValue(),
-      },
-      {
-        header: () => <span>{t("certificate name")}</span>,
-        accessorKey: "certificate_name",
-        cell: (info) => <span>{t(`${info.getValue()}`)}</span>,
-      },
-      {
-        header: () => <span>{t("donor")}</span>,
-        accessorKey: "donor",
-        cell: (info) => info.getValue(),
-      },
-      {
-        header: () => <span>{t("date of acquisition")}</span>,
-        accessorKey: "date_acquisition",
-        cell: (info) => info.getValue(),
-      },
-      {
-        header: () => <span>{t("specialization")}</span>,
-        accessorKey: "specialization",
-        cell: (info) => info.getValue(),
-      },
-      {
-        header: () => <span>{t("appreciation")}</span>,
-        accessorKey: "appreciation",
-        cell: (info) => info.getValue(),
-      },
-      {
-        header: () => <span>{t("")}</span>,
-        accessorKey: "action",
-        cell: () => null,
-      },
-    ],
-    []
-  );
-
-  const table = useReactTable({
-    data: dataSource,
-    columns: studentsColumnsFee,
-    getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-  });
-
-  const addNewCertificate = (newCertificate: any) => {
-    setDataSource((prev) => [newCertificate, ...prev]);
-  };
-
   return (
     <Formik
       initialValues={initialValues}
-      onSubmit={(values) => {
-        console.log("🚀 ~ InstructorLoginData ~ values:", values);
-      }}
+      onSubmit={(values) => handleAddQualification(values)}
     >
-      {({ setFieldValue, values }) => {
+      {({ values }) => {
+        console.log("🚀 ~ InstructorQualificationData ~ values:", values);
         return (
           <Form>
             <div className="flex flex-col gap-5 w-full md:w-3/4 px-8 md:px-16">
+              <div>
+                <BaseInput
+                  name="general_specialization"
+                  id="general_specialization"
+                  type="text"
+                  className="w-full text-lg py-2 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                  placeholder={t("general specialization")}
+                  label={t("general specialization")}
+                  labelProps="!font-semibold"
+                />
+              </div>
               <div>
                 <BaseInput
                   name="specialization"
@@ -140,17 +212,6 @@ const InstructorQualificationData = () => {
                   className="w-full text-lg py-2 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
                   placeholder={t("Specialization")}
                   label={t("Specialization")}
-                  labelProps="!font-semibold"
-                />
-              </div>
-              <div>
-                <BaseInput
-                  name="facebook"
-                  id="facebook"
-                  type="text"
-                  className="w-full text-lg py-2 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
-                  placeholder={t("facebook")}
-                  label={t("facebook")}
                   labelProps="!font-semibold"
                 />
               </div>
@@ -173,6 +234,17 @@ const InstructorQualificationData = () => {
                   className="w-full text-lg py-2 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
                   placeholder={t("year acquisition")}
                   label={t("year acquisition")}
+                  labelProps="!font-semibold"
+                />
+              </div>
+              <div>
+                <BaseInput
+                  name="job_title"
+                  id="job_title"
+                  type="text"
+                  className="w-full text-lg py-2 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                  placeholder={t("job title")}
+                  label={t("job title")}
                   labelProps="!font-semibold"
                 />
               </div>
@@ -239,128 +311,18 @@ const InstructorQualificationData = () => {
                 </Button>
               </div>
               <div className="overflow-auto">
-                <table className="min-w-full text-center">
-                  <thead className="bg-mainColor text-white">
-                    {table.getHeaderGroups().map((headerGroup) => (
-                      <tr key={headerGroup.id} className="py-4 px-2 w-full">
-                        {headerGroup.headers.map((header) => (
-                          <th
-                            key={header.id}
-                            className=" px-6 py-4 text-md font-medium"
-                          >
-                            {header.isPlaceholder
-                              ? null
-                              : flexRender(
-                                  header.column.columnDef.header,
-                                  header.getContext()
-                                )}
-                          </th>
-                        ))}
-                      </tr>
-                    ))}
-                  </thead>
-                  <tbody>
-                    {addNewCertificates && (
-                      <tr className="border-b-2 border-mainColor text-center">
-                        <td className="p-4">
-                          <BaseInput
-                            name="newCertificate.type_certificate"
-                            id="type_certificate"
-                            type="text"
-                            className="w-full text-lg py-1 !border-2 !border-black rounded-lg text-center"
-                            placeholder={t("")}
-                          />
-                        </td>
-                        <td className="p-4">
-                          <BaseInput
-                            name="newCertificate.certificate_name"
-                            id="certificate_name"
-                            type="text"
-                            className="w-full text-lg py-1 !border-2 !border-black rounded-lg text-center"
-                            placeholder={t("")}
-                          />
-                        </td>
-                        <td className="p-4">
-                          <BaseInput
-                            name="newCertificate.donor"
-                            id="donor"
-                            type="text"
-                            className="w-full text-lg py-1 !border-2 !border-black rounded-lg text-center"
-                            placeholder={t("")}
-                          />
-                        </td>
-                        <td className="p-4">
-                          <BaseInput
-                            name="newCertificate.date_acquisition"
-                            id="date_acquisition"
-                            type="text"
-                            className="w-full text-lg py-1 !border-2 !border-black rounded-lg text-center"
-                            placeholder={t("")}
-                          />
-                        </td>
-                        <td className="p-4">
-                          <BaseInput
-                            name="newCertificate.specialization"
-                            id="specialization"
-                            type="text"
-                            className="w-full text-lg py-1 !border-2 !border-black rounded-lg text-center"
-                            placeholder={t("")}
-                          />
-                        </td>
-                        <td className="p-4">
-                          <BaseInput
-                            name="newCertificate.appreciation"
-                            id="appreciation"
-                            type="text"
-                            className="w-full text-lg py-1 !border-2 !border-black rounded-lg text-center"
-                            placeholder={t("")}
-                          />
-                        </td>
-                        <td>
-                          <Button
-                            className="bg-transparent"
-                            action={() => {
-                              addNewCertificate(values.newCertificate);
-                            }}
-                          >
-                            <IoIosCheckmarkCircleOutline
-                              size={30}
-                              className="fill-[#4ECB71]"
-                            />
-                          </Button>
-                        </td>
-                      </tr>
-                    )}
-                    {table.getRowModel().rows.map((row) => {
-                      return (
-                        <tr
-                          key={row.id}
-                          className="text-center border-b-2 border-mainColor"
-                        >
-                          {row.getVisibleCells().map((cell, i) => (
-                            <td
-                              className="whitespace-nowrap px-6 py-4 text-md font-medium !text-[#292D32]"
-                              key={cell.id}
-                            >
-                              {flexRender(
-                                cell.column.columnDef.cell,
-                                cell.getContext()
-                              )}
-                            </td>
-                          ))}
-                          {/* <td className="bg-lightGreen p-0 border border-[#C4C4C4]">
-                        xxx
-                      </td> */}
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
+                {(addNewCertificates || editObj?.newCertificate) && (
+                  <AddNewCertificatesInput
+                    setNewCertificates={setNewCertificates}
+                    editObj={editObj}
+                    newCertificates={newCertificates}
+                  />
+                )}
               </div>
             </div>
 
             <div className="mt-12 px-8 flex justify-end">
-              <Button type="submit" className="me-5">
+              <Button type="submit" className="me-5" loading={isPending}>
                 {t("confirm")}
               </Button>
               <Button type="button" className="bg-[#E6EAEE] text-mainColor">

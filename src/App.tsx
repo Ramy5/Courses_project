@@ -43,7 +43,6 @@ import InstructorEditProfile from "./pages/AdminPages/Instructors/InstructorEdit
 import ProgramInformation from "./pages/AdminPages/Programs/ProgramInformation";
 import ViewCourseDescription from "./pages/AdminPages/Programs/ViewCourseDescription";
 import CreateProgram from "./pages/AdminPages/Programs/CreateProgram";
-import CreateCourses from "./pages/AdminPages/Programs/CreateCourses";
 import StudySchedule from "./pages/AdminPages/Programs/StudySchedule";
 import AddLectureTiming from "./pages/AdminPages/Programs/AddLectureTiming";
 import StudentInformationPanel from "./pages/StudentPages/StudentInformationPanel";
@@ -70,6 +69,8 @@ import InstructorViewHomework from "./pages/InstructorPage/InstructorHomework/In
 import InstructorExams from "./pages/InstructorPage/InstructorExams/InstructorExams";
 import InstructorAddExam from "./pages/InstructorPage/InstructorExams/InstructorAddExam";
 import InstructorSetting from "./pages/InstructorPage/InstructorSetting";
+import AddInstructor from "./components/AdminComponent/Instructors/AddInstructor";
+import EditInstructor from "./components/AdminComponent/Instructors/EditInstructor";
 
 function App() {
   const isRTL = useRTL();
@@ -98,7 +99,6 @@ function App() {
             element={<ViewCourseDescription />}
           />
           <Route path="/programs/create" element={<CreateProgram />} />
-          <Route path="/programs/courses/create" element={<CreateCourses />} />
           <Route
             path="/programs/StudySchedule/:id"
             element={<StudySchedule />}
@@ -111,10 +111,8 @@ function App() {
             path="/instructors/instructorProfile/:id"
             element={<InstructorPersonalProfile />}
           />
-          <Route
-            path="/instructors/instructorEdit/:id?"
-            element={<InstructorEditProfile />}
-          />
+          <Route path="/instructors/add" element={<AddInstructor />} />
+          <Route path="/instructors/edit/:id" element={<EditInstructor />} />
 
           {/* STUDENTS */}
           <Route path="/students" element={<Students />} />

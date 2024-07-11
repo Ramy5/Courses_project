@@ -68,7 +68,7 @@ const Button = ({
   ...props
 }: ButtonProps_TP) => {
   var newClass =
-    className + " " + (loading ? "inline-flex items-center gap-2" : "");
+    className + " " + (loading ? "inline-flex items-center gap-2 " : "");
   return (
     <button
       type={type}
@@ -82,9 +82,8 @@ const Button = ({
       onClick={action}
       {...props}
     >
-      {loading && <Spinner />}
-
       {children}
+      {loading && <Spinner />}
     </button>
   );
 };

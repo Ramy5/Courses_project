@@ -1,10 +1,14 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import { Table, TitlePage } from "../../../components";
 import { FaFolder, FaUserAlt } from "react-icons/fa";
 import { t } from "i18next";
 import { GoDotFill } from "react-icons/go";
 import { FaDotCircle } from "react-icons/fa";
 import { ColumnDef } from "@tanstack/react-table";
+import customFetch from "../../../utils/axios";
+import { useQuery } from "@tanstack/react-query";
+import Loading from "../../../components/UI/Loading";
+import { toast } from "react-toastify";
 
 const ViewCourseDescription = () => {
   const courseDescriptionData = {
@@ -64,6 +68,27 @@ const ViewCourseDescription = () => {
     ],
   };
 
+  const fetchCourseData = async () => {
+    const response = await customFetch(`/course/${3}`);
+    return response;
+  };
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["course_data"],
+    queryFn: fetchCourseData,
+  });
+  console.log("🚀 ~ ProgramInformation ~ data:", data);
+  console.log("🚀 ~ ProgramInformation ~ error:", error);
+
+  const courseData = data?.data.data.course || {};
+  console.log("🚀 ~ ProgramInformation ~ courseData:", courseData);
+
+  useEffect(() => {
+    if (error) {
+      toast.error(`${error.message}`);
+    }
+  }, [error]);
+
   const Section = ({ title, items }: any) => {
     return (
       <div
@@ -89,31 +114,31 @@ const ViewCourseDescription = () => {
     );
   };
 
-  const suggestedReferencesData = [
-    {
-      index: 1,
-      reference_title: "W3School",
-      author: "",
-      date: "21/5/2023",
-      link: "http://www.w3school.com",
-    },
-    {
-      index: 2,
-      reference_title: "W3School",
-      author: "",
-      date: "21/5/2023",
-      link: "http://www.w3school.com",
-    },
-    {
-      index: 3,
-      reference_title: "W3School",
-      author: "",
-      date: "21/5/2023",
-      link: "http://www.w3school.com",
-    },
-  ];
+  // const suggestedReferencesData = [
+  //   {
+  //     index: 1,
+  //     reference_title: "W3School",
+  //     author: "",
+  //     date: "21/5/2023",
+  //     link: "http://www.w3school.com",
+  //   },
+  //   {
+  //     index: 2,
+  //     reference_title: "W3School",
+  //     author: "",
+  //     date: "21/5/2023",
+  //     link: "http://www.w3school.com",
+  //   },
+  //   {
+  //     index: 3,
+  //     reference_title: "W3School",
+  //     author: "",
+  //     date: "21/5/2023",
+  //     link: "http://www.w3school.com",
+  //   },
+  // ];
 
-  const suggestedReferencesColumns = useMemo<ColumnDef<any>[]>(
+  const referencesColumns = useMemo<ColumnDef<any>[]>(
     () => [
       {
         header: () => <span>{t("reference title")}</span>,
@@ -139,6 +164,8 @@ const ViewCourseDescription = () => {
     []
   );
 
+  if (isLoading) return <Loading />;
+
   return (
     <div>
       <TitlePage
@@ -156,21 +183,23 @@ const ViewCourseDescription = () => {
                 <FaDotCircle size={18} className="fill-mainColor" />
                 <p className="font-semibold">{t("course code")}</p>
               </div>
-              <p className="ms-7">{courseDescriptionData.courceCode}</p>
+              <p className="ms-7">{courseData.course_code}</p>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 text-lg font-medium">
               <div className="flex gap-2 items-center">
                 <FaDotCircle size={18} className="fill-mainColor" />
                 <p className="font-semibold">{t("level")}</p>
               </div>
-              <p className="ms-7">{courseDescriptionData.level}</p>
+              <p className="ms-7">{courseData.level}</p>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 text-lg font-medium">
               <div className="flex gap-2 items-center">
                 <FaDotCircle size={18} className="fill-mainColor" />
                 <p className="font-semibold">{t("number students")}</p>
               </div>
-              <p className="ms-7">{courseDescriptionData.student_number}</p>
+              <p className="ms-7">
+                {courseData.student_number} <span>{t("student")}</span>
+              </p>
             </div>
           </div>
 
@@ -180,12 +209,12 @@ const ViewCourseDescription = () => {
               <p className="font-semibold">{t("instructors")}</p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 ms-6">
-              {courseDescriptionData.instructors.map((instructor) => (
+              {/* {courseData?.course_teachers?.map((instructor) => (
                 <div className="flex gap-2">
                   <FaUserAlt size={20} className="fill-mainColor" />
                   <p>{instructor}</p>
                 </div>
-              ))}
+              ))} */}
             </div>
           </div>
 
@@ -210,7 +239,7 @@ const ViewCourseDescription = () => {
               </p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 ms-6">
-              {courseDescriptionData.teaching_learning_methods.map(
+              {courseData.teaching_learning_methods.split(',').map(
                 (instructor) => (
                   <div className="flex gap-2 items-center">
                     <GoDotFill size={20} className="fill-mainColor" />
@@ -227,8 +256,8 @@ const ViewCourseDescription = () => {
             {t("suggested references")}
           </h2>
           <Table
-            data={suggestedReferencesData}
-            columns={suggestedReferencesColumns}
+            data={courseData.references}
+            columns={referencesColumns}
             className="bg-mainColor"
           />
         </div>

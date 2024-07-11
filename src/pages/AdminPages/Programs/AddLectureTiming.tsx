@@ -72,6 +72,7 @@ const AddLectureTiming = () => {
                     styles={selectStyle}
                     id="course"
                     name="course"
+                    placeholder={t("course")}
                     options={courseOption}
                     // value={values?.course}
                     onChange={(e) => {
@@ -82,12 +83,13 @@ const AddLectureTiming = () => {
 
                 <div>
                   <label htmlFor="section" className="font-bold">
-                    {t("section")}
+                    {t("branch")}
                   </label>
                   <Select
                     styles={selectStyle}
                     id="section"
                     name="section"
+                    placeholder={t("branch")}
                     options={sectionOption}
                     onChange={(e) => {
                       setFieldValue("section", e.value);

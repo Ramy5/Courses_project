@@ -5,8 +5,10 @@ import InstructorPersonalData from "../../../components/AdminComponent/Instructo
 import InstructorContactInformation from "../../../components/AdminComponent/Instructors/InstructorContactInformation";
 import InstructorQualificationData from "../../../components/AdminComponent/Instructors/InstructorQualificationData";
 
-const InstructorEditProfile = () => {
+const AddInstructor = () => {
   const [activeTab, setActiveTab] = useState<string>("login data");
+  console.log("🚀 ~ AddInstructor ~ activeTab:", activeTab);
+  const [instructorID, setInstructorID] = useState<number | null>(null);
 
   const tabs = [
     { id: 0, title: "login data" },
@@ -34,15 +36,30 @@ const InstructorEditProfile = () => {
         </ul>
       </div>
       <div className="py-8 bg-white rounded-br-2xl rounded-bl-2xl">
-        {activeTab === "login data" && <InstructorLoginData />}
-        {activeTab === "personal data" && <InstructorPersonalData />}
-        {activeTab === "contact information" && (
-          <InstructorContactInformation />
+        {activeTab === "login data" && (
+          <InstructorLoginData
+            setActiveTab={setActiveTab}
+            setInstructorID={setInstructorID}
+          />
         )}
-        {activeTab === "qualification data" && <InstructorQualificationData />}
+        {activeTab === "personal data" && (
+          <InstructorPersonalData
+            instructorID={instructorID}
+            setActiveTab={setActiveTab}
+          />
+        )}
+        {activeTab === "contact information" && (
+          <InstructorContactInformation
+            instructorID={instructorID}
+            setActiveTab={setActiveTab}
+          />
+        )}
+        {activeTab === "qualification data" && (
+          <InstructorQualificationData instructorID={instructorID} />
+        )}
       </div>
     </div>
   );
 };
 
-export default InstructorEditProfile;
+export default AddInstructor;

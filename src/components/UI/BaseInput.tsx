@@ -1,6 +1,7 @@
 import { useFormikContext } from "formik";
 import { t } from "i18next";
 import { tv } from "tailwind-variants";
+import { FormikError } from "./FormikError";
 
 export type BaseInput_TP = {
   label?: string;
