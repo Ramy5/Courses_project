@@ -6,9 +6,31 @@ import {
   OrganizationSettingData,
   SideBarMenuColor,
 } from "../../../components";
+import customFetch from "../../../utils/axios";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "react-toastify";
+
+interface organizationData_TP {
+  organization_name: string;
+  organization_email: string;
+  organization_vision: string;
+  organization_mission: string;
+  organization_logo: string;
+  organization_cover: string;
+  color: string;
+}
+
+const postOrganizationSetting = async (
+  organizationData: organizationData_TP
+) => {
+  const response = await customFetch.post("setting", organizationData);
+  return response;
+};
 
 const Settings = () => {
   const [activeTab, setActiveTab] = useState<string>("organization data");
+  const [organizationFile, setOrganizationFile] = useState(null);
+  const [organizationCoverFile, setOrganizationCoverFile] = useState(null);
 
   const initialValues = {
     organization_name: "",
@@ -24,8 +46,37 @@ const Settings = () => {
     { id: 2, title: "side menu color" },
   ];
 
+  const { mutate } = useMutation({
+    mutationKey: ["add-organization-data"],
+    mutationFn: postOrganizationSetting,
+    onSuccess: () => {
+      toast.success(t("organization data has successfully added"));
+    },
+    onError: (error: any) => {
+      const errorMessage = error.message;
+      toast.error(errorMessage);
+    },
+  });
+
+  const handleSubmitSettingData = (values) => {
+    const organizationData: organizationData_TP = {
+      organization_name: values?.organization_name,
+      organization_email: values?.organization_email,
+      organization_vision: values?.organization_vision,
+      organization_mission: values?.organization_mission,
+      organization_logo: organizationFile?.name,
+      organization_cover: organizationCoverFile?.name,
+      color: values?.color,
+    };
+
+    mutate(organizationData);
+  };
+
   return (
-    <Formik initialValues={initialValues} onSubmit={(values) => {}}>
+    <Formik
+      initialValues={initialValues}
+      onSubmit={(values) => handleSubmitSettingData(values)}
+    >
       <Form>
         <h2 className="mb-8 text-3xl font-bold text-gray-600">
           {t("settings")}
@@ -46,8 +97,18 @@ const Settings = () => {
           </ul>
         </div>
         <div className="py-8 bg-white rounded-br-2xl rounded-bl-2xl">
-          {activeTab === "organization data" && <OrganizationSettingData />}
-          {activeTab === "organization logo" && <OrganizationLogo />}
+          {activeTab === "organization data" && (
+            <OrganizationSettingData setActiveTab={setActiveTab} />
+          )}
+          {activeTab === "organization logo" && (
+            <OrganizationLogo
+              setOrganizationCoverFile={setOrganizationCoverFile}
+              setOrganizationFile={setOrganizationFile}
+              organizationCoverFile={organizationCoverFile}
+              organizationFile={organizationFile}
+              setActiveTab={setActiveTab}
+            />
+          )}
           {activeTab === "side menu color" && <SideBarMenuColor />}
         </div>
       </Form>

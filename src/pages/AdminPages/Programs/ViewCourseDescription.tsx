@@ -77,11 +77,8 @@ const ViewCourseDescription = () => {
     queryKey: ["course_data"],
     queryFn: fetchCourseData,
   });
-  console.log("🚀 ~ ProgramInformation ~ data:", data);
-  console.log("🚀 ~ ProgramInformation ~ error:", error);
 
   const courseData = data?.data.data.course || {};
-  console.log("🚀 ~ ProgramInformation ~ courseData:", courseData);
 
   useEffect(() => {
     if (error) {
@@ -98,7 +95,7 @@ const ViewCourseDescription = () => {
             : "w-full lg:w-4/5"
         } grid grid-cols-1 text-lg font-medium gap-4 mt-5`}
       >
-        <div className="flex gap-2 items-center">
+        <div className="flex items-center gap-2">
           <FaDotCircle size={18} className="fill-mainColor" />
           <p className="font-semibold">{t(`${title}`)}</p>
         </div>
@@ -175,25 +172,25 @@ const ViewCourseDescription = () => {
         icon={<FaFolder size={28} className="fill-mainColor" />}
       />
 
-      <div className="pb-2 bg-white rounded-2xl py-6">
+      <div className="py-6 pb-2 bg-white rounded-2xl">
         <div className="px-6">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            <div className="grid grid-cols-2 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 text-lg font-medium">
-              <div className="flex gap-2 items-center">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
+            <div className="grid grid-cols-2 text-lg font-medium sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2">
+              <div className="flex items-center gap-2">
                 <FaDotCircle size={18} className="fill-mainColor" />
                 <p className="font-semibold">{t("course code")}</p>
               </div>
               <p className="ms-7">{courseData.course_code}</p>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 text-lg font-medium">
-              <div className="flex gap-2 items-center">
+            <div className="grid grid-cols-2 text-lg font-medium sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2">
+              <div className="flex items-center gap-2">
                 <FaDotCircle size={18} className="fill-mainColor" />
                 <p className="font-semibold">{t("level")}</p>
               </div>
               <p className="ms-7">{courseData.level}</p>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 text-lg font-medium">
-              <div className="flex gap-2 items-center">
+            <div className="grid grid-cols-2 text-lg font-medium sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2">
+              <div className="flex items-center gap-2">
                 <FaDotCircle size={18} className="fill-mainColor" />
                 <p className="font-semibold">{t("number students")}</p>
               </div>
@@ -203,12 +200,12 @@ const ViewCourseDescription = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 w-full lg:w-2/3 text-lg font-medium gap-4 mt-5">
-            <div className="flex gap-2 items-center">
+          <div className="grid w-full grid-cols-1 gap-4 mt-5 text-lg font-medium lg:w-2/3">
+            <div className="flex items-center gap-2">
               <FaDotCircle size={18} className="fill-mainColor" />
               <p className="font-semibold">{t("instructors")}</p>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 ms-6">
+            <div className="grid grid-cols-1 gap-2 sm:grid-cols-3 ms-6">
               {/* {courseData?.course_teachers?.map((instructor) => (
                 <div className="flex gap-2">
                   <FaUserAlt size={20} className="fill-mainColor" />
@@ -231,22 +228,22 @@ const ViewCourseDescription = () => {
 
           <Section title="general skills" items="general_skills" />
 
-          <div className="grid grid-cols-1 w-full lg:w-1/2 text-lg font-medium gap-4 mt-5">
-            <div className="flex gap-2 items-center">
+          <div className="grid w-full grid-cols-1 gap-4 mt-5 text-lg font-medium lg:w-1/2">
+            <div className="flex items-center gap-2">
               <FaDotCircle size={18} className="fill-mainColor" />
               <p className="font-semibold">
                 {t("teaching and learning methods")}
               </p>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 ms-6">
-              {courseData.teaching_learning_methods.split(',').map(
-                (instructor) => (
-                  <div className="flex gap-2 items-center">
+            <div className="grid grid-cols-1 gap-2 sm:grid-cols-3 ms-6">
+              {courseData.teaching_learning_methods
+                .split(",")
+                .map((instructor) => (
+                  <div className="flex items-center gap-2">
                     <GoDotFill size={20} className="fill-mainColor" />
                     <p>{instructor}</p>
                   </div>
-                )
-              )}
+                ))}
             </div>
           </div>
         </div>

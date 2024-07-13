@@ -6,7 +6,6 @@ import { ColumnDef } from "@tanstack/react-table";
 
 const TestApproved = () => {
   const [approvalStudent, setApprovalStudent] = useState([]);
-  console.log("🚀 ~ TestApproved ~ approvalStudent:", approvalStudent);
   const [allIsChecked, setAllIsChecked] = useState(null);
 
   const studentsApprovalData = [
@@ -54,7 +53,6 @@ const TestApproved = () => {
     },
   ];
   const [test, setTest] = useState(studentsApprovalData);
-  console.log("🚀 ~ TestApproved ~ test:", test);
 
   const handleSelectAll = (isChecked) => {
     setAllIsChecked(isChecked);

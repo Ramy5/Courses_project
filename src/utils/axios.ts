@@ -3,6 +3,7 @@ import axios from "axios";
 import { BASE_URL } from "./constants";
 import { toast } from "react-toastify";
 import { logoutUser } from "../features/user/userSlice";
+import i18next from "i18next";
 
 const customFetch = axios.create({
   baseURL: BASE_URL,
@@ -11,10 +12,13 @@ const customFetch = axios.create({
 customFetch.interceptors.request.use(
   (config) => {
     const token = Cookies.get("token");
+    const lang = i18next?.language?.startsWith("ar") ? "ar" : "en";
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+
+    config.headers["Accept-Language"] = lang;
 
     return config;
   },

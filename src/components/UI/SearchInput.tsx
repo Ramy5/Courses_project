@@ -8,9 +8,8 @@ type InitialValues_TP = {
 };
 
 const SearchInput = () => {
-
   const isRTL = useRTL();
-    
+
   const initialValues: InitialValues_TP = {
     search: "",
   };
@@ -18,16 +17,16 @@ const SearchInput = () => {
   return (
     <Formik
       initialValues={initialValues}
-      onSubmit={(values) => {
-        console.log("🚀 ~ NavBar ~ values:", values);
-      }}
+      onSubmit={(values) => {}}
       validationSchema={""}
     >
       <Form className="relative">
         <img
           src={SearchImg}
           alt="Search"
-          className={`${isRTL ? "right-2" : "left-2"} absolute z-50 w-5 h-5 -translate-y-1/2 top-1/2`}
+          className={`${
+            isRTL ? "right-2" : "left-2"
+          } absolute z-50 w-5 h-5 -translate-y-1/2 top-1/2`}
         />
         <BaseInput
           type="text"

@@ -11,7 +11,7 @@ import customFetch from "../../../utils/axios";
 import { useParams } from "react-router-dom";
 import Loading from "../../../components/UI/Loading";
 
-const getStudentsEdit = async (id: number) => {
+const getStudentsEdit = async (id: string) => {
   const response = await customFetch(`student/${id}`);
   return response.data.data.student;
 };
@@ -29,7 +29,6 @@ const EditStudent = () => {
     queryKey: ["get-students-edit"],
     queryFn: () => getStudentsEdit(studentParamID),
   });
-  console.log("🚀 ~ EditStudent ~ data:", data);
 
   useEffect(() => {
     if (isSuccess && data) {
@@ -65,25 +64,25 @@ const EditStudent = () => {
       setAcademicEditData({
         id: data?.academicData?.id,
         number_academic: data?.academicData?.Academic_code,
-        program_academic: data?.academicData?.program,
-        level_academic: [
-          {
-            id: data?.academicData?.group,
-            label: data?.academicData?.group,
-            value: data?.academicData?.group,
-          },
-        ],
-        division_number_academic: [
-          {
-            id: data?.academicData?.level,
-            label: data?.academicData?.level,
-            value: data?.academicData?.level,
-          },
-        ],
+        program_academic: {
+          id: data?.academicData?.program?.id,
+          label: data?.academicData?.program?.program_name,
+          value: data?.academicData?.program?.id,
+        },
+        level_academic: {
+          id: data?.academicData?.level,
+          label: data?.academicData?.level,
+          value: data?.academicData?.level,
+        },
+        division_number_academic: {
+          id: data?.academicData?.group,
+          label: data?.academicData?.group,
+          value: data?.academicData?.group,
+        },
         join_date_academic: new Date(data?.academicData?.joined_date),
       });
     }
-  }, [data, isSuccess]);
+  }, [data, isSuccess, studentParamID]);
 
   const tabs = [
     { id: 0, title: "login" },

@@ -80,6 +80,12 @@ const SideBarMenuColor = () => {
           ></label>
         </div>
       </div>
+
+      <div className="flex justify-end">
+        <Button type="submit" className="mt-8">
+          {t("confirm")}
+        </Button>
+      </div>
     </div>
   );
 };

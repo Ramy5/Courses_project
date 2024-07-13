@@ -172,7 +172,6 @@ const StudentExam = () => {
     <Formik
       initialValues={initialValues}
       onSubmit={(values) => {
-        console.log("🚀 ~ StudentExam ~ values:", values);
       }}
     >
       <Form>

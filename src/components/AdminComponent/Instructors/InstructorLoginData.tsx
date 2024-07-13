@@ -41,7 +41,6 @@ const InstructorLoginData = ({
   setActiveTab,
   setInstructorID,
 }: instructorAddLoginData_TP) => {
-  console.log("🚀 ~ editObj:", editObj)
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] =
     useState<boolean>(false);
@@ -72,7 +71,6 @@ const InstructorLoginData = ({
       setActiveTab("personal data");
     },
     onError: (error) => {
-      console.log("🚀 ~ error:", error);
       const errorMessage =
         error?.response?.data?.error[0]?.email[0] ||
         error?.response?.data?.error[0]?.password[0];
@@ -124,7 +122,7 @@ const InstructorLoginData = ({
         initialValues={initialValues}
         onSubmit={(values) => handleAddInstructor(values)}
       >
-        <Form className="flex flex-col gap-5 w-full md:w-3/4 px-8 md:px-16">
+        <Form className="flex flex-col w-full gap-5 px-8 md:w-3/4 md:px-16">
           <div>
             <BaseInput
               name="full_name"
@@ -160,13 +158,13 @@ const InstructorLoginData = ({
             {isRTL && showPassword ? (
               <IoMdEyeOff
                 size={28}
-                className="cursor-pointer text-mainColor absolute top-1/2 end-5"
+                className="absolute cursor-pointer text-mainColor top-1/2 end-5"
                 onClick={handleShowPassword}
               />
             ) : (
               <IoEye
                 size={28}
-                className="cursor-pointer text-mainColor absolute top-1/2 end-5"
+                className="absolute cursor-pointer text-mainColor top-1/2 end-5"
                 onClick={handleShowPassword}
               />
             )}
@@ -196,7 +194,7 @@ const InstructorLoginData = ({
             )}
           </div>
 
-          <div className="mt-5 flex justify-end">
+          <div className="flex justify-end mt-5">
             <Button type="submit" className="me-5" loading={isPending}>
               {t("confirm")}
             </Button>

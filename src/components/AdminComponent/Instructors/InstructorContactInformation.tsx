@@ -36,8 +36,6 @@ const InstructorContactInformation = ({
   instructorID,
   setActiveTab,
 }: instructorAddParentData_TP) => {
-  console.log("🚀 ~ editObj:", editObj)
-  console.log("🚀 ~ instructorID:", instructorID)
   const queryClient = useQueryClient();
 
   const initialValues: AddInstructorParent_TP = {
@@ -57,7 +55,6 @@ const InstructorContactInformation = ({
       setActiveTab("qualification data");
     },
     onError: (error) => {
-      console.log("🚀 ~ error:", error)
       const errorMessage =
         error?.response?.data?.error[0]?.email[0] ||
         error?.response?.data?.error[0]?.password[0];
@@ -112,7 +109,7 @@ const InstructorContactInformation = ({
       initialValues={initialValues}
       onSubmit={(values) => handleAddInstructorContact(values)}
     >
-      <Form className="flex flex-col gap-5 w-full md:w-3/4 px-8 md:px-16 ">
+      <Form className="flex flex-col w-full gap-5 px-8 md:w-3/4 md:px-16 ">
         <div>
           <BaseInput
             name="phone"
@@ -169,7 +166,7 @@ const InstructorContactInformation = ({
           />
         </div>
 
-        <div className="mt-5 flex justify-end">
+        <div className="flex justify-end mt-5">
           <Button type="submit" className="me-5" loading={isPending}>
             {t("confirm")}
           </Button>

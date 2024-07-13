@@ -2,7 +2,6 @@ import { t } from "i18next";
 import React from "react";
 
 const InstructorSpecialization = ({ personalData }: any) => {
-  console.log("🚀 ~ InstructorSpecialization ~ personalData:", personalData)
   return (
     <div className="bg-[#E6EAEE] rounded-2xl my-7 mx-5 py-6 px-8">
       <h2 className="text-2xl font-semibold text-center sm:text-start">

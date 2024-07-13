@@ -19,11 +19,9 @@ const CreateProgramInputs = ({
   setCoursesData,
   isPending,
 }: any) => {
-  console.log("🚀 ~ coursesData:", coursesData);
   const [openRow, setOpenRow] = useState<number | null>(null);
 
   const { values, setFieldValue } = useFormikContext();
-  console.log("🚀 ~ CreateProgramInputs ~ values:", values);
 
   // const initialValues = {
   //   program_name: "",

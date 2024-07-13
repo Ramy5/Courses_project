@@ -21,23 +21,12 @@ const CreateCoursesInputs = ({
   coursesData,
   setEditCoursesData,
 }) => {
-  console.log("🚀 ~ CreateCoursesInputs ~ coursesData:", coursesData);
-  console.log("🚀 ~ CreateCoursesInputs ~ editCoursesData:", editCoursesData);
   //   const [selectedInstructor, setSelectedInstructor] = useState<any>([]);
-  //   console.log(
-  //     "🚀 ~ CreateCoursesInputs ~ selectedInstructor:",
-  //     selectedInstructor
-  //   );
   const [suggestedReferences, setSuggestedReferences] = useState(
     editCoursesData?.references || []
   );
-  console.log(
-    "🚀 ~ CreateCoursesInputs ~ suggestedReferences:",
-    suggestedReferences
-  );
 
   const [level, setLevel] = useState();
-  console.log("🚀 ~ CreateCoursesInputs ~ level:", level);
 
   const initialValues = {
     id: editCoursesData?.id || 0,
@@ -75,7 +64,6 @@ const CreateCoursesInputs = ({
   //   const courseTeachers = editCoursesData?.course_teachers?.map(
   //     (teacher) => teacher
   //   );
-  //   console.log("🚀 ~ CreateCoursesInputs ~ courseTeachers:", courseTeachers);
 
   //   const instructorsNameInclude = instructorsName?.filter((instructor) =>
   //     courseTeachers?.includes(instructor.id)
@@ -85,7 +73,6 @@ const CreateCoursesInputs = ({
   //     editCoursesData && editCoursesData
   //       ? instructorsNameInclude
   //       : selectedInstructor;
-  //   console.log("🚀 ~ CreateCoursesInputs ~ editInstructors:", editInstructors);
 
   const levelsOption = [
     { id: 1, value: 1, label: 1 },
@@ -138,7 +125,7 @@ const CreateCoursesInputs = ({
                 setSuggestedReferences(suggestedReferencesFilter);
               }}
               size={22}
-              className="fill-mainRed m-auto cursor-pointer"
+              className="m-auto cursor-pointer fill-mainRed"
             />
           );
         },
@@ -228,15 +215,13 @@ const CreateCoursesInputs = ({
         initialValues={initialValues}
         validationSchema=""
         onSubmit={(values) => {
-          console.log("🚀 ~ CreateProgram ~ values:", values);
           //   setCoursesData(values);
         }}
       >
         {({ setFieldValue, values, resetForm }) => {
-          console.log("🚀 ~ CreateCoursesInputs ~ values:", values);
           return (
             <Form>
-              <div className="bg-white rounded-3xl pb-8">
+              <div className="pb-8 bg-white rounded-3xl">
                 <h2 className="py-4 px-7 !m-0 border-b-4 border-[#E6EAEE] font-semibold text-xl">
                   {t("create program")} /{" "}
                   <span>{t("edit course description")}</span>
@@ -301,7 +286,7 @@ const CreateCoursesInputs = ({
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-5 my-5">
+                  <div className="grid grid-cols-1 my-5 md:grid-cols-2 gap-x-12 gap-y-5">
                     <div>
                       <label
                         htmlFor="information_concepts"
@@ -337,7 +322,7 @@ const CreateCoursesInputs = ({
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-5 my-5">
+                  <div className="grid grid-cols-1 my-5 md:grid-cols-2 gap-x-12 gap-y-5">
                     <div>
                       <label
                         htmlFor="professional_skills"
@@ -374,10 +359,10 @@ const CreateCoursesInputs = ({
                   </div>
 
                   <div>
-                    <p className="font-semibold mb-4">
+                    <p className="mb-4 font-semibold">
                       {t("teaching and learning methods")}
                     </p>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full lg:w-2/3">
+                    <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:w-2/3">
                       <MainRadio
                         name="lectures"
                         id="lectures"
@@ -465,15 +450,15 @@ const CreateCoursesInputs = ({
                     </div>
                   </div>
 
-                  {/* <div className="w-full md:w-3/4 border-2 border-mainGray rounded-2xl shadow-lg my-12">
-                    <div className="mx-6 py-5">
+                  {/* <div className="w-full my-12 border-2 shadow-lg md:w-3/4 border-mainGray rounded-2xl">
+                    <div className="py-5 mx-6">
                       <label
                         htmlFor="instructors_name"
                         className="font-semibold"
                       >
                         {t("instructor name")}
                       </label>
-                      <div className="mt-2 flex items-center flex-col sm:flex-row justify-between gap-x-12 gap-y-6">
+                      <div className="flex flex-col items-center justify-between mt-2 sm:flex-row gap-x-12 gap-y-6">
                         <div className="w-full sm:w-3/4">
                           <Select
                             id="instructors_name"
@@ -498,17 +483,11 @@ const CreateCoursesInputs = ({
                             );
 
                             if (!values.instructors_id) {
-                              console.log(
-                                "🚀 ~ CreateCourses ~ error",
-                                "the instructor must be chosen first"
-                              );
+                              
                               return;
                             }
                             if (findInstructorName) {
-                              console.log(
-                                "🚀 ~ CreateCourses ~ error",
-                                "this instructor has been added"
-                              );
+                              
                               return;
                             }
 
@@ -556,11 +535,11 @@ const CreateCoursesInputs = ({
 
                     <div>
                       {selectedInstructor?.map((instructor: string) => (
-                        <div className="flex justify-between items-center border-t-2 border-mainGray px-6 py-3">
+                        <div className="flex items-center justify-between px-6 py-3 border-t-2 border-mainGray">
                           <p className="font-semibold">{instructor.value}</p>
                           <RiDeleteBin5Line
                             size={30}
-                            className="fill-mainRed cursor-pointer"
+                            className="cursor-pointer fill-mainRed"
                             onClick={() =>
                               handleDeleteInstructorName(instructor.id)
                             }
@@ -570,11 +549,11 @@ const CreateCoursesInputs = ({
                     </div>
                   </div> */}
 
-                  <div className="w-full md:w-3/4 my-12">
+                  <div className="w-full my-12 md:w-3/4">
                     <label htmlFor="instructors_name" className="font-semibold">
                       {t("instructor name")}
                     </label>
-                    <div className="mt-2 flex items-center flex-col sm:flex-row justify-between gap-x-12 gap-y-6">
+                    <div className="flex flex-col items-center justify-between mt-2 sm:flex-row gap-x-12 gap-y-6">
                       <div className="w-full sm:w-3/4">
                         <Select
                           id="course_teachers"
@@ -601,18 +580,18 @@ const CreateCoursesInputs = ({
                 </div>
 
                 <div className="bg-[#EEEDED]">
-                  <h2 className="text-2xl font-medium p-6">
+                  <h2 className="p-6 text-2xl font-medium">
                     {t("suggested references")}
                   </h2>
                   <div className="overflow-auto">
                     <table className="min-w-full text-center">
-                      <thead className="bg-mainColor text-white">
+                      <thead className="text-white bg-mainColor">
                         {table?.getHeaderGroups().map((headerGroup) => (
-                          <tr key={headerGroup.id} className="py-4 px-2 w-full">
+                          <tr key={headerGroup.id} className="w-full px-2 py-4">
                             {headerGroup.headers.map((header) => (
                               <th
                                 key={header.id}
-                                className=" px-6 py-4 text-md font-medium"
+                                className="px-6 py-4 font-medium text-md"
                               >
                                 {header.isPlaceholder
                                   ? null
@@ -626,7 +605,7 @@ const CreateCoursesInputs = ({
                         ))}
                       </thead>
                       <tbody>
-                        <tr className="border-b-2 border-mainColor text-center">
+                        <tr className="text-center border-b-2 border-mainColor">
                           <td className="p-4">
                             <BaseInput
                               name="reference_title"
@@ -673,10 +652,7 @@ const CreateCoursesInputs = ({
                                   !values.date &&
                                   !values.link
                                 ) {
-                                  console.log(
-                                    "🚀 ~ CreateCourses ~ error",
-                                    "data must be entered first"
-                                  );
+                                  
                                   return;
                                 }
                                 setSuggestedReferences((prev: any) => [
@@ -725,7 +701,7 @@ const CreateCoursesInputs = ({
                   </div>
                 </div>
 
-                <div className="mt-8 px-8 flex justify-end">
+                <div className="flex justify-end px-8 mt-8">
                   <Button
                     type="button"
                     className="me-5"

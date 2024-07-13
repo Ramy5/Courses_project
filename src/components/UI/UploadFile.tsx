@@ -10,10 +10,6 @@ interface uploadFile_TP {
 }
 
 const UploadFile = ({ files, setFiles, id }: uploadFile_TP) => {
-  console.log(
-    "🚀 ~ UploadFile ~ files:",
-    files?.type.startsWith("application")
-  );
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     setFiles(file);

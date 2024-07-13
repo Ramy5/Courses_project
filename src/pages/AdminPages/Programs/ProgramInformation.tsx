@@ -33,7 +33,6 @@ const ProgramInformation = () => {
   });
 
   const programData = data?.data.data || {};
-  console.log("🚀 ~ ProgramInformation ~ programData:", programData);
 
   useEffect(() => {
     if (error) {

@@ -78,7 +78,6 @@ const Instructors = () => {
   });
 
   const instructorData = data?.data.data.teachers || {};
-  console.log("🚀 ~ ProgramInformation ~ instructorData:", instructorData);
 
   useEffect(() => {
     if (error) {
@@ -140,7 +139,6 @@ const Instructors = () => {
                 onToggle={() => handleToggleDropDown(instructor.id)}
                 onFirstClick={() => {
                   navigate(`/instructors/edit/${instructor.id}`);
-                  console.log("🚀 ~ Instructors ~ instructor.id:", instructor.id)
                 }}
                 onSecondClick={() => {}}
               />
