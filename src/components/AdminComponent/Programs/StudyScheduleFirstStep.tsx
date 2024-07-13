@@ -108,7 +108,6 @@ const StudyScheduleFirstStep = ({ setSteps }) => {
         <Formik
           initialValues={initialValues}
           onSubmit={(values) => {
-            console.log("🚀 ~ StudyScheduleFirstStep ~ values:", values);
           }}
         >
           <Form>

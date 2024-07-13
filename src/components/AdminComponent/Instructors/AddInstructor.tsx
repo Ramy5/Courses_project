@@ -7,7 +7,6 @@ import InstructorQualificationData from "../../../components/AdminComponent/Inst
 
 const AddInstructor = () => {
   const [activeTab, setActiveTab] = useState<string>("login data");
-  console.log("🚀 ~ AddInstructor ~ activeTab:", activeTab);
   const [instructorID, setInstructorID] = useState<number | null>(null);
 
   const tabs = [
@@ -19,7 +18,7 @@ const AddInstructor = () => {
 
   return (
     <div>
-      <div className="px-8 md:px-16 py-3 bg-mainColor rounded-tr-2xl rounded-tl-2xl">
+      <div className="px-8 py-3 md:px-16 bg-mainColor rounded-tr-2xl rounded-tl-2xl">
         <ul className="flex items-center justify-between py-2">
           {tabs.map((tab) => (
             <li

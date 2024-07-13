@@ -18,19 +18,18 @@ const StudentExamResults = () => {
   };
 
   const percentage = (examResults.your_grade / examResults.total_grade) * 100;
-  console.log("🚀 ~ StudentExamResults ~ percentage:", percentage);
 
   return (
-    <div className="flex justify-center items-center pt-12">
-      <div className="bg-white rounded-xl relative w-3/4 px-12 pb-4">
-        <h2 className="absolute bg-mainColor py-4 px-20 font-medium text-lg text-white rounded-xl -top-6 left-1/2 -translate-x-1/2">
+    <div className="flex items-center justify-center pt-12">
+      <div className="relative w-3/4 px-12 pb-4 bg-white rounded-xl">
+        <h2 className="absolute px-20 py-4 text-lg font-medium text-white -translate-x-1/2 bg-mainColor rounded-xl -top-6 left-1/2">
           {t("results")}
         </h2>
 
-        <div className="flex justify-center flex-col gap-2 text-center">
+        <div className="flex flex-col justify-center gap-2 text-center">
           <div className="mt-24">
             <CircularProgressbar
-              className="grid text-base font-semibold w-32 m-auto"
+              className="grid w-32 m-auto text-base font-semibold"
               value={Number(percentage.toFixed(2))}
               text={`${Number(percentage.toFixed(2))}%`}
               strokeWidth={8}
@@ -42,14 +41,14 @@ const StudentExamResults = () => {
             />
           </div>
           <div>
-            <p className="font-medium text-lg">
+            <p className="text-lg font-medium">
               {t("grade")} : <span>{examResults.your_grade}</span> {t("out of")}{" "}
               <span>{examResults.total_grade}</span>
             </p>
           </div>
         </div>
         <div className="mt-8">
-          <ul className="flex flex-col gap-4 font-medium text-lg">
+          <ul className="flex flex-col gap-4 text-lg font-medium">
             <li>
               {t("number of questions")} :{" "}
               <span>{examResults.resut_number}</span>
@@ -68,7 +67,10 @@ const StudentExamResults = () => {
           </ul>
 
           <div className="flex justify-center my-5">
-            <Button className="bg-[#369252]" action={() => navigate("/student/exams", { replace: true })}>
+            <Button
+              className="bg-[#369252]"
+              action={() => navigate("/student/exams", { replace: true })}
+            >
               {t("finish")}
             </Button>
           </div>

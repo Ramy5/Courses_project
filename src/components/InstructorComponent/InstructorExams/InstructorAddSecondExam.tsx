@@ -169,10 +169,8 @@ const InstructorAddSecondExam = ({ setSteps, setGrades }: any) => {
     currentIndex + 2
   );
   const currentPage = Math.floor(currentIndex / questionsPerPage) + 1;
-  console.log("🚀 ~ InstructorAddSecondExam ~ currentPage:", currentPage);
 
   const { values, setFieldValue } = useFormikContext();
-  console.log("🚀 ~ InstructorAddSecondExam ~ values:", values.grades);
 
   const distributeGradesEvenly = (questions, totalScore) => {
     const numberOfQuestions = questions.length;
@@ -191,13 +189,13 @@ const InstructorAddSecondExam = ({ setSteps, setGrades }: any) => {
   };
 
   return (
-    <div className="flex gap-y-5 flex-col my-16">
+    <div className="flex flex-col my-16 gap-y-5">
       <div className="border border-[#0000001a] rounded-2xl">
         <div className="flex border-b border-b-[#0000001a] font-semibold text-center">
           <h2 className="border-e border-b-[#0000001a] px-6 py-3 w-40">
             {t("number of true and false questions")}
           </h2>
-          <p className="px-5 py-3 flex items-center">
+          <p className="flex items-center px-5 py-3">
             {examInformation.number_boolean_questions}
           </p>
         </div>
@@ -205,7 +203,7 @@ const InstructorAddSecondExam = ({ setSteps, setGrades }: any) => {
           <h2 className="border-e border-b-[#0000001a] px-5 py-3 w-40">
             {t("number of multiple choice questions")}
           </h2>
-          <p className="px-5 py-3 flex items-center">
+          <p className="flex items-center px-5 py-3">
             {examInformation.number_multiple_choice}
           </p>
         </div>
@@ -213,7 +211,7 @@ const InstructorAddSecondExam = ({ setSteps, setGrades }: any) => {
           <h2 className="border-e border-b-[#0000001a] px-5 py-3 w-40">
             {t("total number of questions")}
           </h2>
-          <p className="px-5 py-3 flex items-center">
+          <p className="flex items-center px-5 py-3">
             {examInformation.total_number_questions}
           </p>
         </div>
@@ -221,13 +219,13 @@ const InstructorAddSecondExam = ({ setSteps, setGrades }: any) => {
           <h2 className="border-e border-b-[#0000001a] px-5 py-3 w-40">
             {t("total score")}
           </h2>
-          <p className="px-5 py-3 flex items-center">
+          <p className="flex items-center px-5 py-3">
             {examInformation.total_score}
           </p>
         </div>
       </div>
 
-      <div className="flex justify-end items-center">
+      <div className="flex items-center justify-end">
         <Button action={handleDistributeGrades}>
           {t("distribute grades evenly")}
         </Button>
@@ -237,7 +235,7 @@ const InstructorAddSecondExam = ({ setSteps, setGrades }: any) => {
         {currentQuestions.map((item, i) => (
           <div
             key={i}
-            className="flex flex-col sm:flex-row gap-x-8 gap-y-8 mb-5"
+            className="flex flex-col mb-5 sm:flex-row gap-x-8 gap-y-8"
           >
             <div className="bg-[#2222220d] p-5 rounded-2xl w-full ">
               <div className={`rounded-2xl mb-4`}>
@@ -253,7 +251,7 @@ const InstructorAddSecondExam = ({ setSteps, setGrades }: any) => {
               {item.answers.map((answer, index) => {
                 return (
                   <ul className="flex flex-col gap-3 mb-5">
-                    <li className="bg-white px-4 py-3 rounded-xl flex gap-1 items-center cursor-pointer">
+                    <li className="flex items-center gap-1 px-4 py-3 bg-white cursor-pointer rounded-xl">
                       <MainRadio
                         id={`answer-${item.id}-${index}`}
                         name={`answer-${item.id}`}
@@ -273,7 +271,7 @@ const InstructorAddSecondExam = ({ setSteps, setGrades }: any) => {
                 );
               })}
             </div>
-            <div className="flex flex-row sm:flex-col items-center justify-between gap-2">
+            <div className="flex flex-row items-center justify-between gap-2 sm:flex-col">
               <div className="flex items-center ">
                 <label htmlFor="grade" className="font-semibold me-3">
                   {t("grade")}
@@ -295,12 +293,12 @@ const InstructorAddSecondExam = ({ setSteps, setGrades }: any) => {
               </div>
               <RiDeleteBin5Line
                 size={34}
-                className="fill-mainRed m-0 sm:m-auto mt-0 sm:mt-4"
+                className="m-0 mt-0 fill-mainRed sm:m-auto sm:mt-4"
               />
             </div>
           </div>
         ))}
-        <div className="flex justify-end gap-x-8 mt-2">
+        <div className="flex justify-end mt-2 gap-x-8">
           <div className="flex items-center gap-3">
             <div>
               <p className="font-medium">
@@ -325,11 +323,11 @@ const InstructorAddSecondExam = ({ setSteps, setGrades }: any) => {
               <MdNavigateNext className="transform rotate-180" />
             </Button>
           </div>
-          <div className="w-full sm:w-52 hidden sm:block"></div>
+          <div className="hidden w-full sm:w-52 sm:block"></div>
         </div>
       </div>
 
-      <div className="flex justify-end items-center gap-5">
+      <div className="flex items-center justify-end gap-5">
         <Button bordered action={() => setSteps(1)}>
           {t("Previous")}
         </Button>

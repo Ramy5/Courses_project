@@ -18,15 +18,9 @@ const EditInstructor = () => {
   const [activeTab, setActiveTab] = useState<string>("login data");
   const [instructorID, setInstructorID] = useState<number | null>(null);
   const [loginEditData, setLoginEditData] = useState(null);
-  console.log("🚀 ~ EditInstructor ~ loginEditData:", loginEditData);
   const [personalEditData, setPersonalEditData] = useState(null);
-  console.log("🚀 ~ EditInstructor ~ personalEditData:", personalEditData);
   const [contactInformationEditData, SetContactInformationEditData] =
     useState(null);
-  console.log(
-    "🚀 ~ EditInstructor ~ contactInformationEditData:",
-    contactInformationEditData
-  );
   const [qualificationEditData, setQualificationEditData] = useState(null);
   const { id: instructorParamID } = useParams();
 
@@ -34,7 +28,6 @@ const EditInstructor = () => {
     queryKey: ["instructor-edit"],
     queryFn: () => getInstructorEdit(instructorParamID),
   });
-  console.log("🚀 ~ EditInstructor ~ data:", data);
 
   const instructorData = data?.data?.teacher;
   const contactInfo =
@@ -100,7 +93,7 @@ const EditInstructor = () => {
 
   return (
     <div>
-      <div className="px-8 md:px-16 py-3 bg-mainColor rounded-tr-2xl rounded-tl-2xl">
+      <div className="px-8 py-3 md:px-16 bg-mainColor rounded-tr-2xl rounded-tl-2xl">
         <ul className="flex items-center justify-between py-2">
           {tabs.map((tab) => (
             <li

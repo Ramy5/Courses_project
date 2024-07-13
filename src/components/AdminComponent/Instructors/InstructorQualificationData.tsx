@@ -49,16 +49,13 @@ const InstructorQualificationData = ({
   editObj,
   instructorID,
 }: InstructorAddQualificationData_TP) => {
-  console.log("🚀 ~ editObj:", editObj);
   const [file, setFile] = useState(null);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
   const [addNewCertificates, setAddNewCertificates] = useState(false);
-  console.log("🚀 ~ addNewCertificates:", addNewCertificates);
 
   const [newCertificates, setNewCertificates] = useState([]);
-  console.log("🚀 ~ newCertificates:", newCertificates);
 
   const initialValues: AddInstructorQualification_TP = {
     general_specialization: editObj?.general_specialization || "",
@@ -118,7 +115,6 @@ const InstructorQualificationData = ({
       navigate("/instructors");
     },
     onError: (error) => {
-      console.log("🚀 ~ error:", error);
       const errorMessage =
         error?.response?.data?.error[0]?.email[0] ||
         error?.response?.data?.error[0]?.password[0];
@@ -170,7 +166,6 @@ const InstructorQualificationData = ({
       newCertificate: newCertificates,
       teacher_id: editObj?.teacher_id,
     };
-    console.log("🚀 ~ editInstructor:", editInstructor);
 
     editObj ? await editMutate(editInstructor) : await mutate(newInstructor);
   };
@@ -189,10 +184,9 @@ const InstructorQualificationData = ({
       onSubmit={(values) => handleAddQualification(values)}
     >
       {({ values }) => {
-        console.log("🚀 ~ InstructorQualificationData ~ values:", values);
         return (
           <Form>
-            <div className="flex flex-col gap-5 w-full md:w-3/4 px-8 md:px-16">
+            <div className="flex flex-col w-full gap-5 px-8 md:w-3/4 md:px-16">
               <div>
                 <BaseInput
                   name="general_specialization"
@@ -251,14 +245,14 @@ const InstructorQualificationData = ({
 
               <div>
                 <h2 className="mb-3 font-semibold">{t("CV file")}</h2>
-                <div className="flex items-center flex-col sm:flex-row gap-8">
+                <div className="flex flex-col items-center gap-8 sm:flex-row">
                   <input
                     type="file"
                     onChange={handleFileChange}
                     className="hidden"
                     id="file-upload"
                   />
-                  <div className="cursor-pointer border-2 py-6 px-12 text-center border-dashed border-mainColor relative">
+                  <div className="relative px-12 py-6 text-center border-2 border-dashed cursor-pointer border-mainColor">
                     <label
                       htmlFor="file-upload"
                       className="absolute top-0 bottom-0 left-0 right-0 w-full h-full cursor-pointer"
@@ -271,16 +265,16 @@ const InstructorQualificationData = ({
                   </div>
                   {file && (
                     <div className="flex items-center gap-5">
-                      <div className="flex flex-col  gap-1 justify-center">
-                        <span className="text-sm font-medium text-gray-700 text-center">
+                      <div className="flex flex-col justify-center gap-1">
+                        <span className="text-sm font-medium text-center text-gray-700">
                           الملفات
                         </span>
-                        <div className="bg-mainBg rounded-md p-1 relative">
+                        <div className="relative p-1 rounded-md bg-mainBg">
                           <div
                             // onClick={() => setManyPdfsOpen(true)}
-                            className="cursor-pointer flex items-center justify-center p-2 "
+                            className="flex items-center justify-center p-2 cursor-pointer "
                           >
-                            <span className="absolute -top-1 -right-3 bg-mainColor w-6 h-6 flex justify-center items-center text-sm font-medium rounded-full text-white">
+                            <span className="absolute flex items-center justify-center w-6 h-6 text-sm font-medium text-white rounded-full -top-1 -right-3 bg-mainColor">
                               1
                             </span>
                             <HiMiniFolderArrowDown
@@ -292,7 +286,7 @@ const InstructorQualificationData = ({
                       </div>
                       <RiDeleteBin5Line
                         size={35}
-                        className="fill-mainRed cursor-pointer"
+                        className="cursor-pointer fill-mainRed"
                         onClick={handleFileDelete}
                       />
                     </div>
@@ -302,7 +296,7 @@ const InstructorQualificationData = ({
             </div>
 
             <div className="mt-8">
-              <div className="flex justify-between items-center mx-8 mb-5">
+              <div className="flex items-center justify-between mx-8 mb-5">
                 <h2 className="text-2xl font-semibold">
                   {t("scientific certificates")}
                 </h2>
@@ -321,7 +315,7 @@ const InstructorQualificationData = ({
               </div>
             </div>
 
-            <div className="mt-12 px-8 flex justify-end">
+            <div className="flex justify-end px-8 mt-12">
               <Button type="submit" className="me-5" loading={isPending}>
                 {t("confirm")}
               </Button>

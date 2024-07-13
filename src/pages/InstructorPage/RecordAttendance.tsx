@@ -165,7 +165,6 @@ const RecordAttendance = () => {
         <Formik
           initialValues={initialValues}
           onSubmit={(values) => {
-            console.log("🚀 ~ RecordAttendance ~ values:", values);
           }}
         >
           {({ setFieldValue }) => {

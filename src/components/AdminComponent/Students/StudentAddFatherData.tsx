@@ -5,7 +5,7 @@ import { Form, Formik, useFormikContext } from "formik";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import customFetch from "../../../utils/axios";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 interface AddStudentParent_TP {
   address_father: string;
@@ -38,6 +38,7 @@ const StudentAddFatherData = ({
 }: StudentAddParentData_TP) => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const { id: studentIDParam } = useParams();
 
   const initialValues: AddStudentParent_TP = {
     address_father: editObj?.address_father || "",
@@ -102,10 +103,8 @@ const StudentAddFatherData = ({
       phone: values?.phone_father,
       country_residence: values?.country_father,
       address: values?.address_father,
-      student_id: studentID,
+      student_id: editObj ? studentIDParam : studentID,
     };
-
-    if (editObj) newStudent = { ...newStudent, student_id: editObj?.id };
 
     editObj ? await updateMutate(newStudent) : await mutate(newStudent);
   };

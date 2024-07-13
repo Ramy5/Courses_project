@@ -33,11 +33,8 @@ const AddNewCertificatesInput = ({
   setNewCertificates,
   newCertificates,
 }: AddNewCertificatesInput_TP) => {
-  console.log("🚀 ~ editObj:", editObj)
-  console.log("🚀 ~ newCertificates:", newCertificates);
 
   const editCertificate = editObj?.newCertificate && editObj?.newCertificate[0]
-  console.log("🚀 ~ editCertificate:", editCertificate)
 
   const initialValues: Certificate = {
     type_certificate: editCertificate?.type_certificate || "",

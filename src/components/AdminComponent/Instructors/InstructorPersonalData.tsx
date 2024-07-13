@@ -44,12 +44,9 @@ const InstructorPersonalData = ({
   editObj,
   instructorID,
   setActiveTab,
-  setInstructorID
+  setInstructorID,
 }: InstructorAddPersonalData) => {
-  console.log("🚀 ~ editObj:", editObj);
-  console.log("🚀 ~ instructorID:", instructorID);
   const [selectedImage, setSelectedImage] = useState(); // Initial state is the default image
-  console.log("🚀 ~ selectedImage:", selectedImage);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
@@ -103,7 +100,7 @@ const InstructorPersonalData = ({
       toast.success(
         t("instructor personal information has been added successfully")
       );
-      setInstructorID()
+      setInstructorID();
       setActiveTab("contact information");
     },
     onError: (error) => {
@@ -135,9 +132,7 @@ const InstructorPersonalData = ({
   useEffect(() => setSelectedImage(editObj?.image), []);
 
   const handleImageChange = (event) => {
-    console.log("🚀 ~ handleImageChange ~ event:", event)
     const file = event.target.files[0];
-    console.log("🚀 ~ handleImageChange ~ file:", file)
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -158,7 +153,6 @@ const InstructorPersonalData = ({
         onSubmit={(values) => handleAddInstructor(values)}
       >
         {({ setFieldValue, values }) => {
-          console.log("🚀 ~ values:", values);
           return (
             <Form className="flex flex-col gap-5 px-8 md:px-16 ">
               <div className="flex flex-col-reverse justify-between gap-8 md:flex-row">

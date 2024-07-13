@@ -85,7 +85,6 @@ const LectureManagement = () => {
   ];
 
   const [lecturesData, setLecturesData] = useState(lectures);
-  console.log("🚀 ~ LectureManagement ~ lecturesData:", lecturesData);
 
   // LECTURE DATE
   const [lectureDate, setLectureDate] = useState("");

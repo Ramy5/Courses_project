@@ -8,7 +8,6 @@ import InstructorAddLastExam from "../../../components/InstructorComponent/Instr
 
 const InstructorAddExam = () => {
   const [grades, setGrades] = useState([]);
-  console.log("🚀 ~ InstructorAddExam ~ grades:", grades)
   const [steps, setSteps] = useState<number>(3);
 
   const stepsOption = [
@@ -31,11 +30,11 @@ const InstructorAddExam = () => {
   };
 
   return (
-    <div className="bg-white py-8 px-4 rounded-xl relative">
+    <div className="relative px-4 py-8 bg-white rounded-xl">
       <div className="flex items-center w-4/5 m-auto">
         {stepsOption.map((step, index) => (
           <Fragment key={index}>
-            <div className="flex items-center text-mainborder-mainColor relative">
+            <div className="relative flex items-center text-mainborder-mainColor">
               <div
                 className={`${
                   steps === step.id
@@ -50,7 +49,7 @@ const InstructorAddExam = () => {
                   `${step.id}`
                 )}
               </div>
-              <div className="absolute top-0 -left-3 w-28 -ml-10 mt-12 text-sm font-semibold text-mainColor">
+              <div className="absolute top-0 mt-12 -ml-10 text-sm font-semibold -left-3 w-28 text-mainColor">
                 {t(`${step.label}`)}
               </div>
             </div>
@@ -71,7 +70,6 @@ const InstructorAddExam = () => {
       <Formik
         initialValues={initialValues}
         onSubmit={(values) => {
-          console.log("🚀 ~ InstructorAddExam ~ values:", values);
         }}
       >
         <Form>
