@@ -10,8 +10,9 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { t } from "i18next";
-import { Button } from "../..";
+import { Button, DateInputField } from "../..";
 import { IoIosCheckmarkCircleOutline } from "react-icons/io";
+import DatePicker from "react-datepicker";
 
 interface Certificate {
   type_certificate: string;
@@ -33,11 +34,11 @@ const AddNewCertificatesInput = ({
   setNewCertificates,
   newCertificates,
 }: AddNewCertificatesInput_TP) => {
-  console.log("🚀 ~ editObj:", editObj)
+  console.log("🚀 ~ editObj:", editObj);
   console.log("🚀 ~ newCertificates:", newCertificates);
 
-  const editCertificate = editObj?.newCertificate && editObj?.newCertificate[0]
-  console.log("🚀 ~ editCertificate:", editCertificate)
+  const editCertificate = editObj?.newCertificate && editObj?.newCertificate[0];
+  console.log("🚀 ~ editCertificate:", editCertificate);
 
   const initialValues: Certificate = {
     type_certificate: editCertificate?.type_certificate || "",
@@ -154,7 +155,7 @@ const AddNewCertificatesInput = ({
                     <BaseInput
                       name="date_acquisition"
                       id="date_acquisition"
-                      type="text"
+                      type="date"
                       className="w-full text-lg py-1 !border-2 !border-black rounded-lg text-center"
                       placeholder={t("")}
                     />

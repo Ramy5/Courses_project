@@ -51,8 +51,6 @@ const CreateProgram = ({ editObj }: programAdd_TP) => {
   console.log("🚀 ~ CreateProgram ~ editCoursesData:", editCoursesData);
   console.log("🚀 ~ CreateProgram ~ coursesData:", coursesData);
 
-  const dispatch = useDispatch<AppDispatch>();
-
   const initialValues = {
     program_name: "",
     program_type: false,

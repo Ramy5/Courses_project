@@ -1,30 +1,39 @@
 import { Form, Formik } from "formik";
-import { BaseInput, Button, DotsDropDown, Table } from "../..";
+import { BaseInput, Button, DotsDropDown, MainPopup, Table } from "../..";
 import { t } from "i18next";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { FaRegEdit } from "react-icons/fa";
 import { RiDeleteBin5Line } from "react-icons/ri";
-import { useNavigate } from "react-router-dom";
+import customFetch from "../../../utils/axios";
+import { useQuery } from "@tanstack/react-query";
+import Loading from "../../UI/Loading";
 
-const StudyScheduleFirstStep = ({ setSteps }) => {
-  const [activeButton, setActiveButton] = useState<string>("saturday");
-  const navigate = useNavigate();
+const StudyScheduleFirstStep = ({ setSteps, setScheduleData, addTimeLecture }) => {
+  const [activeButton, setActiveButton] = useState<any>({
+    id: 1,
+    day: "Saturday",
+  });
+  console.log("🚀 ~ StudyScheduleFirstStep ~ activeButton:", activeButton);
 
   const initialValues = {
     start_date: "",
     end_date: "",
+    day: activeButton,
   };
 
-  const days = [
-    "saturday",
-    "sunday",
-    "monday",
-    "tuesday",
-    "wednesday",
-    "thursday",
-    "friday",
-  ];
+  const fetchDatsData = async () => {
+    const response = await customFetch(`/days`);
+    return response;
+  };
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["days_data"],
+    queryFn: fetchDatsData,
+  });
+
+  const dayData = data?.data.data.days;
+  console.log("🚀 ~ StudyScheduleFirstStep ~ dayData:", dayData);
 
   const studyScheduleData = [
     {
@@ -98,6 +107,10 @@ const StudyScheduleFirstStep = ({ setSteps }) => {
     []
   );
 
+  {
+    isLoading && <Loading />;
+  }
+
   return (
     <div className="mt-12">
       <h2 className="text-xl font-semibold">
@@ -109,57 +122,64 @@ const StudyScheduleFirstStep = ({ setSteps }) => {
           initialValues={initialValues}
           onSubmit={(values) => {
             console.log("🚀 ~ StudyScheduleFirstStep ~ values:", values);
+            setScheduleData(values);
           }}
         >
-          <Form>
-            <div className="flex flex-col justify-between my-3 md:flex-row gap-y-4">
-              <p className="text-base font-semibold">
-                {t("current academic period")}
-              </p>
-              <BaseInput
-                name="start_date"
-                id="start_date"
-                type="date"
-                label={t("start date")}
-                className="w-full text-lg py-1 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
-                placeholder={t("")}
-                labelProps="font-semibold text-base"
-              />
-              <BaseInput
-                name="end_date"
-                id="end_date"
-                type="date"
-                label={t("end date")}
-                className="w-full text-lg py-1 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
-                placeholder={t("")}
-                labelProps="font-semibold text-base"
-              />
-            </div>
-          </Form>
+          {({ values }) => {
+            useEffect(() => {
+              setScheduleData(values);
+            }, [values]);
+            return (
+              <Form>
+                <div className="flex flex-col justify-between my-3 md:flex-row gap-y-4">
+                  <p className="text-base font-semibold">
+                    {t("current academic period")}
+                  </p>
+                  <BaseInput
+                    name="start_date"
+                    id="start_date"
+                    type="date"
+                    label={t("start date")}
+                    className="w-full text-lg py-1 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                    placeholder={t("")}
+                    labelProps="font-semibold text-base"
+                  />
+                  <BaseInput
+                    name="end_date"
+                    id="end_date"
+                    type="date"
+                    label={t("end date")}
+                    className="w-full text-lg py-1 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                    placeholder={t("")}
+                    labelProps="font-semibold text-base"
+                  />
+                </div>
+              </Form>
+            );
+          }}
         </Formik>
       </div>
 
       <div className="bg-[#F9F9F9] p-4 my-5 rounded-2xl flex justify-between flex-col sm:flex-row gap-y-5 items-center">
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7">
-          {days.map((day) => (
+          {dayData?.map((day) => (
             <Button
               key={day}
               className={`${
-                activeButton === day
+                activeButton.id === day.id
                   ? "bg-mainColor text-white"
                   : "bg-transparent text-mainGray"
               } px-3`}
-              action={() => setActiveButton(day)}
+              action={() => {
+                setActiveButton({ id: day.id, day: day.day });
+              }}
             >
-              {t(day)}
+              {day.day}
             </Button>
           ))}
         </div>
 
-        <Button
-          className="px-4 py-3"
-          action={() => navigate("/programs/LectureTime")}
-        >
+        <Button className="px-4 py-3" action={() => setSteps(4)}>
           {t("add lecture timing +")}
         </Button>
       </div>
@@ -167,7 +187,10 @@ const StudyScheduleFirstStep = ({ setSteps }) => {
       <Table data={studyScheduleData} columns={studyScheduleColumns} />
 
       <div className="flex items-center justify-end gap-5 mt-12">
-        <Button action={() => setSteps(2)}>{t("Next")}</Button>
+        <Button action={() => {
+          
+          setSteps(2)
+          }}>{t("Next")}</Button>
         <Button className="bg-mainRed">{t("cancel")}</Button>
       </div>
     </div>
