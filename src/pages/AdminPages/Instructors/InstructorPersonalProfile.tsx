@@ -26,7 +26,6 @@ const InstructorPersonalProfile = () => {
   const [openRow, setOpenRow] = useState<number | null>(null);
   const { id } = useParams();
   const navigate = useNavigate();
-  console.log("🚀 ~ InstructorPersonalProfile ~ id:", id);
 
   // const instructorPersonalData = {
   //   id: 1,
@@ -54,10 +53,6 @@ const InstructorPersonalProfile = () => {
   });
 
   const instructorPersonalData = data?.data.data.teacher || {};
-  console.log(
-    "🚀 ~ ProgramInformation ~ instructorData:",
-    instructorPersonalData
-  );
 
   useEffect(() => {
     if (error) {

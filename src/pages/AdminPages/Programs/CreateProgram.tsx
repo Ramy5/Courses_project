@@ -46,10 +46,7 @@ const CreateProgram = ({ editObj }: programAdd_TP) => {
   const [step, setStep] = useState<number>(1);
   const [coursesData, setCoursesData] = useState([]);
   const [editCoursesData, setEditCoursesData] = useState({});
-  console.log("🚀 ~ CreateProgram ~ editCoursesData:", editCoursesData)
   const queryClient = useQueryClient();
-  console.log("🚀 ~ CreateProgram ~ editCoursesData:", editCoursesData);
-  console.log("🚀 ~ CreateProgram ~ coursesData:", coursesData);
 
   const initialValues = {
     program_name: "",
@@ -76,7 +73,6 @@ const CreateProgram = ({ editObj }: programAdd_TP) => {
       );
     },
     onError: (error) => {
-      console.log("🚀 ~ error:", error);
       const errorMessage =
         error?.response?.data?.error[0]?.email[0] ||
         error?.response?.data?.error[0]?.password[0];

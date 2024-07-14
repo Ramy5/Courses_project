@@ -9,12 +9,9 @@ import customFetch from "../../../utils/axios";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "../../UI/Loading";
 
-const StudyScheduleFirstStep = ({ setSteps, setScheduleData, addTimeLecture }) => {
-  const [activeButton, setActiveButton] = useState<any>({
-    id: 1,
-    day: "Saturday",
-  });
-  console.log("🚀 ~ StudyScheduleFirstStep ~ activeButton:", activeButton);
+const StudyScheduleFirstStep = ({ setSteps }) => {
+  const [activeButton, setActiveButton] = useState<string>("saturday");
+  const navigate = useNavigate();
 
   const initialValues = {
     start_date: "",
@@ -187,10 +184,7 @@ const StudyScheduleFirstStep = ({ setSteps, setScheduleData, addTimeLecture }) =
       <Table data={studyScheduleData} columns={studyScheduleColumns} />
 
       <div className="flex items-center justify-end gap-5 mt-12">
-        <Button action={() => {
-          
-          setSteps(2)
-          }}>{t("Next")}</Button>
+        <Button action={() => setSteps(2)}>{t("Next")}</Button>
         <Button className="bg-mainRed">{t("cancel")}</Button>
       </div>
     </div>

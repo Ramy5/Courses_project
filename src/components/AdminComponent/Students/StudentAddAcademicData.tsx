@@ -4,11 +4,12 @@ import { Button, DateInputField } from "../..";
 import Select from "react-select";
 import { Form, Formik, useFormikContext } from "formik";
 import customFetch from "../../../utils/axios";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { formatDate } from "../../../utils/helpers";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import selectStyle from "../../../utils/selectStyle";
 
 interface AddStudentAcademic_TP {
   number_academic: string;
@@ -28,20 +29,32 @@ const postStudentAcademic = async (newStudent: any) => {
   return data;
 };
 
+const editStudentAcademic = async (newStudent: any, id: number) => {
+  const data = customFetch.post(`updateAcademicData/${id}`, newStudent);
+  return data;
+};
+
+const getAllPrograms = async () => {
+  const { data } = await customFetch("programs");
+  return data.data;
+};
+
 const StudentAddAcademicData = ({
   editObj,
   studentID,
 }: StudentAddAcademicData_TP) => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const [programSelect, setProgramSelect] = useState([]);
-  const [levelSelect, setLevelSelect] = useState([]);
+  const { id: studentIDParam } = useParams();
+  const [programSelect, setProgramSelect] = useState(null);
+  const [groupSelect, setGroupSelect] = useState(null);
+  const [levelSelect, setLevelSelect] = useState(null);
 
   const initialValues: AddStudentAcademic_TP = {
     number_academic: editObj?.number_academic || "",
-    program_academic: editObj?.program_academic || "",
-    level_academic: editObj?.level_academic || "",
-    division_number_academic: editObj?.division_number_academic || "",
+    program_academic: editObj?.program_academic?.id || "",
+    level_academic: editObj?.level_academic?.id || "",
+    division_number_academic: editObj?.division_number_academic?.id || "",
     join_date_academic: editObj?.join_date_academic || new Date(),
   };
 
@@ -54,8 +67,27 @@ const StudentAddAcademicData = ({
     "address",
   ];
 
-  const mutation = useMutation({
-    mutationKey: ["add-student"],
+  const {
+    data: programsOptions,
+    isLoading: programIsLoading,
+    isFetching: programIsFetching,
+    isRefetching: programIsRefetching,
+  } = useQuery({
+    queryKey: ["get-all-programs"],
+    queryFn: getAllPrograms,
+    select: (data) => {
+      return data?.programs?.map((program) => {
+        return {
+          id: program?.id,
+          label: program?.program_name,
+          value: program?.id,
+        };
+      });
+    },
+  });
+
+  const { mutate } = useMutation({
+    mutationKey: ["add-student-academic"],
     mutationFn: postStudentAcademic,
     onSuccess: (data: any) => {
       queryClient.invalidateQueries("students");
@@ -74,39 +106,101 @@ const StudentAddAcademicData = ({
     },
   });
 
+  const { mutate: updateAcademicData } = useMutation({
+    mutationKey: ["update-academic-student"],
+    mutationFn: (editAcademic: any) =>
+      editStudentAcademic(editAcademic, Number(editObj.id)),
+    onSuccess: (data: any) => {
+      queryClient.invalidateQueries("students");
+      toast.success(
+        t("student academic information has been edited successfully")
+      );
+
+      navigate("/students");
+    },
+    onError: (error) => {
+      const errorMessage = errorFields
+        .map((field) => error?.response?.data?.error[0]?.[field]?.[0])
+        .find((message) => message);
+
+      toast.error(errorMessage || error.message);
+    },
+  });
+
   const handleAddStudent = async (values: AddStudentAcademic_TP) => {
-    const newStudent = {
+    let newStudent = {
       Academic_code: values?.number_academic || "",
-      // program_id: values?.program_academic || "",
-      program_id: 9,
-      // level: values?.level_academic || "",
-      level: 1,
-      // group: values?.division_number_academic || "",
-      group: 1,
+      program_id: values?.program_academic || "",
+      level: values?.level_academic || "",
+      group: values?.division_number_academic || "",
       joined_date: formatDate(values?.join_date_academic) || "",
-      student_id: studentID,
+      student_id: editObj ? studentIDParam : studentID,
     };
 
-    await mutation.mutate(newStudent);
+    editObj ? await updateAcademicData(newStudent) : await mutate(newStudent);
   };
 
-  const option = [
+  const levelsOption = [
     {
-      label: "test 1",
-      value: "test 1",
+      label: `${t("level")} 1`,
+      value: "level 1",
       id: 1,
     },
     {
-      label: "test 2",
-      value: "test 2",
+      label: `${t("level")} 2`,
+      value: "level 2",
+      id: 2,
+    },
+    {
+      label: `${t("level")} 3`,
+      value: "level 3",
+      id: 3,
+    },
+    {
+      label: `${t("level")} 4`,
+      value: "level 4",
+      id: 4,
+    },
+  ];
+
+  const groupNumberOption = [
+    {
+      label: `1`,
+      value: "1",
+      id: 1,
+    },
+    {
+      label: `2`,
+      value: "2",
       id: 2,
     },
   ];
 
   useEffect(() => {
-    // setProgramSelect(editObj?.program_academic);
-    setLevelSelect(editObj?.level_academic);
-  }, []);
+    if (editObj) {
+      const editLevel = {
+        id: editObj?.level_academic?.id,
+        label: `${t("level")} ${editObj?.level_academic?.label}`,
+        value: editObj?.level_academic?.value,
+      };
+
+      const editProgram = {
+        id: editObj?.program_academic?.id,
+        label: editObj?.program_academic?.label,
+        value: editObj?.program_academic?.value,
+      };
+
+      const editGroup = {
+        id: editObj?.division_number_academic?.id,
+        label: editObj?.division_number_academic?.label,
+        value: editObj?.division_number_academic?.value,
+      };
+
+      setLevelSelect(editLevel);
+      setGroupSelect(editGroup);
+      setProgramSelect(editProgram);
+    }
+  }, [editObj]);
 
   return (
     <Formik
@@ -134,10 +228,16 @@ const StudentAddAcademicData = ({
                 className="lg:w-[35vw] mt-2"
                 id="program_academic"
                 name="program_academic"
-                options={option}
-                // value={programSelect}
+                placeholder={t("select a program")}
+                options={programsOptions}
+                styles={selectStyle}
+                isLoading={
+                  programIsLoading || programIsFetching || programIsRefetching
+                }
+                value={programSelect}
                 onChange={(e) => {
-                  setFieldValue("program_academic", e.value);
+                  setProgramSelect(e);
+                  setFieldValue("program_academic", e.id);
                 }}
               />
             </div>
@@ -150,12 +250,13 @@ const StudentAddAcademicData = ({
                 className="lg:w-[35vw] mt-2"
                 id="level_academic"
                 name="level_academic"
-                options={option}
-                value={option?.find(
-                  (option) => option.value === values?.level_academic
-                )}
+                placeholder={t("select the level")}
+                options={levelsOption}
+                styles={selectStyle}
+                value={levelSelect}
                 onChange={(e) => {
-                  setFieldValue("level_academic", e.value);
+                  setLevelSelect(e);
+                  setFieldValue("level_academic", e.id);
                 }}
               />
             </div>
@@ -168,9 +269,13 @@ const StudentAddAcademicData = ({
                 className="lg:w-[35vw] mt-2"
                 id="division_number_academic"
                 name="division_number_academic"
-                options={option}
+                placeholder={t("select group number")}
+                options={groupNumberOption}
+                styles={selectStyle}
+                value={groupSelect}
                 onChange={(e) => {
-                  setFieldValue("division_number_academic", e.value);
+                  setGroupSelect(e);
+                  setFieldValue("division_number_academic", e.id);
                 }}
               />
             </div>

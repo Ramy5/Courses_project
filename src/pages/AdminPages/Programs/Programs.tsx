@@ -14,7 +14,6 @@ import Loading from "../../../components/UI/Loading";
 
 const Programs = () => {
   const [openRow, setOpenRow] = useState<number | null>(null);
-  console.log("🚀 ~ Programs ~ openRow:", openRow);
 
   const navigate = useNavigate();
 
@@ -67,7 +66,6 @@ const Programs = () => {
   });
 
   const programData = data ? data?.data.data.programs : {};
-  console.log("🚀 ~ ProgramInformation ~ programData:", programData);
 
   useEffect(() => {
     if (error) {
@@ -129,22 +127,22 @@ const Programs = () => {
                 />
               </div>
               <div className="my-4">
-                <div className="flex gap-2 items-center">
+                <div className="flex items-center gap-2">
                   <CgNotes size={25} className=" text-mainColor" />
-                  <p className="font-medium text-xl">
+                  <p className="text-xl font-medium">
                     {program.courses_count} <span>{t("Course")}</span>
                   </p>
                 </div>
-                <div className="flex gap-2 items-center my-3">
+                <div className="flex items-center gap-2 my-3">
                   <FaUserAlt size={25} className="fill-mainColor" />
-                  <p className="font-medium text-xl">
+                  <p className="text-xl font-medium">
                     {program.course_teachers_count}{" "}
                     <span>{t("instructor")}</span>
                   </p>
                 </div>
-                <div className="flex gap-2 items-center">
+                <div className="flex items-center gap-2">
                   <PiStudentBold size={25} className="fill-mainColor" />
-                  <p className="font-medium text-xl">
+                  <p className="text-xl font-medium">
                     {program.students_count} <span>{t("student")}</span>
                   </p>
                 </div>

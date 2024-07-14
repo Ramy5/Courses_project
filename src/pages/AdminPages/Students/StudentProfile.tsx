@@ -21,7 +21,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Form, Formik } from "formik";
 import { FaRegEdit } from "react-icons/fa";
 import { RiDeleteBin5Line } from "react-icons/ri";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import customFetch from "../../../utils/axios";
 import { toast } from "react-toastify";
@@ -49,6 +49,7 @@ const StudentProfile = () => {
   const [openRow, setOpenRow] = useState<number | null>(null);
   const { id: studentProfileId } = useParams();
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const { data, isLoading, isFetching, isRefetching } = useQuery({
     queryKey: ["show-student"],
@@ -84,7 +85,6 @@ const StudentProfile = () => {
     parent = {},
     receipts = [],
   } = data?.data?.student || {};
-  console.log("🚀 ~ StudentPxrofile ~ receipts:", receipts);
 
   const studentProfileData = {
     id: 1,
@@ -214,9 +214,12 @@ const StudentProfile = () => {
                       />
                       <div className="translate-y-2">
                         <DotsDropDown
-                          instructorId={studentProfileId}
-                          instructorRoute="/students"
+                          // instructorId={studentProfileId}
+                          // instructorRoute="/students"
                           firstName="edit"
+                          onFirstClick={() => {
+                            navigate(`/students/${studentProfileId}`);
+                          }}
                           firstIcon={
                             <FaRegEdit size={22} className="fill-mainColor" />
                           }

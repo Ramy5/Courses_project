@@ -27,15 +27,13 @@ const StudentSetting = () => {
   };
   return (
     <div>
-      <h2 className="text-xl font-semibold mt-4 mb-12">
-        {t("settings")}
-      </h2>
+      <h2 className="mt-4 mb-12 text-xl font-semibold">{t("settings")}</h2>
       <div>
         <div
-          className="bg-mainColor flex items-center justify-between p-5 rounded-t-xl"
+          className="flex items-center justify-between p-5 bg-mainColor rounded-t-xl"
           onClick={toggleAccordion}
         >
-          <h1 className="text-white font-semibold text-lg opacity-100">
+          <h1 className="text-lg font-semibold text-white opacity-100">
             {t("change password")}
           </h1>
           {isOpen ? (
@@ -55,13 +53,8 @@ const StudentSetting = () => {
             isOpen ? "max-h-screen" : "max-h-0"
           }`}
         >
-          <Formik
-            initialValues={initialValues}
-            onSubmit={(values) => {
-              console.log("🚀 ~ StudentSetting ~ values:", values);
-            }}
-          >
-            <Form className="pt-8 px-5">
+          <Formik initialValues={initialValues} onSubmit={(values) => {}}>
+            <Form className="px-5 pt-8">
               <div className="relative">
                 <BaseInput
                   name="current_password"
@@ -75,13 +68,13 @@ const StudentSetting = () => {
                 {isRTL && showPassword ? (
                   <IoMdEyeOff
                     size={28}
-                    className="cursor-pointer text-mainColor absolute top-1/2 end-5"
+                    className="absolute cursor-pointer text-mainColor top-1/2 end-5"
                     onClick={handleShowPassword}
                   />
                 ) : (
                   <IoEye
                     size={28}
-                    className="cursor-pointer text-mainColor absolute top-1/2 end-5"
+                    className="absolute cursor-pointer text-mainColor top-1/2 end-5"
                     onClick={handleShowPassword}
                   />
                 )}
@@ -99,13 +92,13 @@ const StudentSetting = () => {
                 {isRTL && showPassword ? (
                   <IoMdEyeOff
                     size={28}
-                    className="cursor-pointer text-mainColor absolute top-1/2 end-5"
+                    className="absolute cursor-pointer text-mainColor top-1/2 end-5"
                     onClick={handleShowPassword}
                   />
                 ) : (
                   <IoEye
                     size={28}
-                    className="cursor-pointer text-mainColor absolute top-1/2 end-5"
+                    className="absolute cursor-pointer text-mainColor top-1/2 end-5"
                     onClick={handleShowPassword}
                   />
                 )}
@@ -123,19 +116,19 @@ const StudentSetting = () => {
                 {isRTL && showPassword ? (
                   <IoMdEyeOff
                     size={28}
-                    className="cursor-pointer text-mainColor absolute top-1/2 end-5"
+                    className="absolute cursor-pointer text-mainColor top-1/2 end-5"
                     onClick={handleShowPassword}
                   />
                 ) : (
                   <IoEye
                     size={28}
-                    className="cursor-pointer text-mainColor absolute top-1/2 end-5"
+                    className="absolute cursor-pointer text-mainColor top-1/2 end-5"
                     onClick={handleShowPassword}
                   />
                 )}
               </div>
 
-              <div className="flex justify-end items-center my-8">
+              <div className="flex items-center justify-end my-8">
                 <Button type="submit">{t("submit")}</Button>
               </div>
             </Form>
