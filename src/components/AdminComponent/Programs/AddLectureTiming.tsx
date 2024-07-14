@@ -1,13 +1,17 @@
 import { Form, Formik } from "formik";
-import { BaseInput, Button } from "../../../components";
+import BaseInput from "../../UI/BaseInput";
 import { t } from "i18next";
-import Select from "react-select";
 import selectStyle from "../../../utils/selectStyle";
+import { Button } from "../..";
+import Select from "react-select";
 
-const AddLectureTiming = () => {
+const AddLectureTiming = ({ setSteps, scheduleData, setScheduleData, setAddTimeLecture, addTimeLecture }) => {
   const initialValues = {
     day: "",
-    course: "",
+    course_id: 0,
+    start_time: "",
+    end_time: "",
+    group: "",
   };
 
   const courseOption = [
@@ -45,10 +49,13 @@ const AddLectureTiming = () => {
       label: "شعبة - 3",
     },
   ];
+
   return (
     <div className="bg-white rounded-xl p-6">
       <Formik initialValues={initialValues} onSubmit={() => {}}>
-        {({ setFieldValue }) => {
+        {({ values, setFieldValue }) => {
+          console.log("🚀 ~ AddLectureTiming ~ values:", values);
+
           return (
             <Form>
               <div className="w-full md:w-4/5">
@@ -58,6 +65,7 @@ const AddLectureTiming = () => {
                 <BaseInput
                   name="day"
                   id="day"
+                  value={scheduleData.day.day}
                   type="text"
                   label={t("day")}
                   className="w-full text-lg py-1 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
@@ -70,13 +78,13 @@ const AddLectureTiming = () => {
                   </label>
                   <Select
                     styles={selectStyle}
-                    id="course"
-                    name="course"
+                    id="course_id"
+                    name="course_id"
                     placeholder={t("course")}
                     options={courseOption}
-                    // value={values?.course}
                     onChange={(e) => {
-                      setFieldValue("course", e.value);
+                      console.log("🚀 ~ AddLectureTiming ~ e:", e);
+                      setFieldValue("course_id", e.id);
                     }}
                   />
                 </div>
@@ -87,12 +95,12 @@ const AddLectureTiming = () => {
                   </label>
                   <Select
                     styles={selectStyle}
-                    id="section"
-                    name="section"
+                    id="group"
+                    name="group"
                     placeholder={t("branch")}
                     options={sectionOption}
                     onChange={(e) => {
-                      setFieldValue("section", e.value);
+                      setFieldValue("group", e.id);
                     }}
                   />
                 </div>
@@ -103,8 +111,8 @@ const AddLectureTiming = () => {
                   </p>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-4 gap-x-8">
                     <BaseInput
-                      name="start_date"
-                      id="start_date"
+                      name="start_time"
+                      id="start_time"
                       type="time"
                       label={t("start")}
                       className="w-full text-lg py-1 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
@@ -112,8 +120,8 @@ const AddLectureTiming = () => {
                       labelProps="font-semibold text-base"
                     />
                     <BaseInput
-                      name="end_date"
-                      id="end_date"
+                      name="end_time"
+                      id="end_time"
                       type="time"
                       label={t("end")}
                       className="w-full text-lg py-1 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
@@ -125,7 +133,19 @@ const AddLectureTiming = () => {
               </div>
 
               <div className="mt-12 flex items-center justify-end gap-5">
-                <Button>{t("submit")}</Button>
+                <Button
+                type="button"
+                  action={() => {
+                    setAddTimeLecture((prev) => [...prev, values]);
+                    setScheduleData(prevState => ({
+                      ...prevState,
+                      lecture_time: [{...prevState.lecture_time, values}] // Add any initial values if needed
+                  }));
+                    setSteps(1);
+                  }}
+                >
+                  {t("submit")}
+                </Button>
                 <Button className="bg-mainBg text-mainColor">
                   {t("cancel")}
                 </Button>

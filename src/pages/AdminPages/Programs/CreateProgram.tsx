@@ -48,8 +48,6 @@ const CreateProgram = ({ editObj }: programAdd_TP) => {
   const [editCoursesData, setEditCoursesData] = useState({});
   const queryClient = useQueryClient();
 
-  const dispatch = useDispatch<AppDispatch>();
-
   const initialValues = {
     program_name: "",
     program_type: false,
