@@ -7,8 +7,9 @@ import {
   SideBarMenuColor,
 } from "../../../components";
 import customFetch from "../../../utils/axios";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+import Loading from "../../../components/UI/Loading";
 
 interface organizationData_TP {
   organization_name: string;
@@ -23,8 +24,13 @@ interface organizationData_TP {
 const postOrganizationSetting = async (
   organizationData: organizationData_TP
 ) => {
-  const response = await customFetch.post("setting", organizationData);
+  const response = await customFetch.post("setting/1", organizationData);
   return response;
+};
+
+const getOrganizationSetting = async () => {
+  const { data } = await customFetch.get("setting/1");
+  return data.data.setting;
 };
 
 const Settings = () => {
@@ -32,12 +38,17 @@ const Settings = () => {
   const [organizationFile, setOrganizationFile] = useState(null);
   const [organizationCoverFile, setOrganizationCoverFile] = useState(null);
 
+  const { data, isLoading, isRefetching, isFetching } = useQuery({
+    queryKey: ["get-setting-data"],
+    queryFn: getOrganizationSetting,
+  });
+
   const initialValues = {
-    organization_name: "",
-    organization_email: "",
-    organization_vision: "",
-    organization_mission: "",
-    color: "#393D94",
+    organization_name: data?.organization_name || "",
+    organization_email: data?.organization_email || "",
+    organization_vision: data?.organization_vision || "",
+    organization_mission: data?.organization_mission || "",
+    color: data?.color || "#393D94",
   };
 
   const tabs = [
@@ -71,6 +82,8 @@ const Settings = () => {
 
     mutate(organizationData);
   };
+
+  if (isFetching || isRefetching || isLoading) return <Loading />;
 
   return (
     <Formik

@@ -2,6 +2,14 @@ import { ColumnDef } from "@tanstack/react-table";
 import { t } from "i18next";
 import { useMemo } from "react";
 import { Table } from "../../../components";
+import customFetch from "../../../utils/axios";
+import { useQuery } from "@tanstack/react-query";
+import Loading from "../../../components/UI/Loading";
+
+const getVirtualClassesData = async () => {
+  const { data } = await customFetch("todayLectures");
+  return data.data;
+};
 
 const VirtualClasses = () => {
   const virtualClassesData = [
@@ -78,6 +86,11 @@ const VirtualClasses = () => {
       status: "red",
     },
   ];
+
+  const { data, isLoading, isFetching, isRefetching } = useQuery({
+    queryKey: ["get-virtual-classes"],
+    queryFn: getVirtualClassesData,
+  });
 
   const virtualClassesColumns = useMemo<ColumnDef<[]>[]>(
     () => [
@@ -156,12 +169,14 @@ const VirtualClasses = () => {
     []
   );
 
+  if (isLoading || isFetching || isRefetching) return <Loading />;
+
   return (
     <div className="py-6 bg-white rounded-2xl">
       <h2 className="mb-6 text-lg font-bold lg:text-2xl ms-4">
         {t("virtual classes (today's lecture)")}
       </h2>
-      <Table data={virtualClassesData} columns={virtualClassesColumns} />
+      <Table data={virtualClassesData || []} columns={virtualClassesColumns} />
     </div>
   );
 };

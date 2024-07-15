@@ -73,18 +73,19 @@ const StudentAddPersonalData = ({
   ];
 
   const [selectedImage, setSelectedImage] = useState(null);
+  console.log("🚀 ~ selectedImage:", selectedImage);
 
   const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event?.target?.files[0];
-    // setSelectedImage(file);
+    setSelectedImage(file);
 
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setSelectedImage(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
+    // if (file) {
+    //   const reader = new FileReader();
+    //   reader.onloadend = () => {
+    //     setSelectedImage(reader.result);
+    //   };
+    //   reader.readAsDataURL(file);
+    // }
   };
 
   const handleDeleteImage = () => {
@@ -139,7 +140,7 @@ const StudentAddPersonalData = ({
       address: values?.address_personal,
       date_birth: formatDate(values?.date_birth_personal),
       type: values?.type_personal,
-      personal_image: selectedImage?.name,
+      personal_image: selectedImage,
       student_id: studentID,
     };
 

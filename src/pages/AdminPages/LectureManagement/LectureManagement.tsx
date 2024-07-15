@@ -1,12 +1,27 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Form, Formik } from "formik";
 import { t } from "i18next";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Select from "react-select";
 import { Table } from "../../../components";
 import { FaRegCheckCircle, FaRegEdit } from "react-icons/fa";
+import customFetch from "../../../utils/axios";
+import { useQuery } from "@tanstack/react-query";
+import { customStyles } from "../../../utils/selectStyles";
+
+const getLectureManagement = async (instructorSelectId?: number) => {
+  const { data } = customFetch(`manage?teacher_id=${instructorSelectId}`);
+  return data.data;
+};
+
+const getInstructorOption = async () => {
+  const { data } = await customFetch("allTeachers");
+  return data.data.teachers;
+};
 
 const LectureManagement = () => {
+  const [instructorSelectId, setInstructorSelectId] = useState(null);
+
   const initialValues = {};
 
   const lectures = [
@@ -83,6 +98,35 @@ const LectureManagement = () => {
       lectureStatus: "completed",
     },
   ];
+
+  const { data, isLoading, isFetching, isRefetching, refetch } = useQuery({
+    queryKey: ["get-lecture-management"],
+    queryFn: () => getLectureManagement(instructorSelectId),
+  });
+  console.log(data);
+
+  useEffect(() => {
+    refetch();
+  }, [instructorSelectId]);
+
+  const {
+    data: instructorsOption,
+    isLoading: instructorsIsLoading,
+    isFetching: instructorsIsFetching,
+    isRefetching: instructorsIsRefetching,
+  } = useQuery({
+    queryKey: ["get-instructor-option"],
+    queryFn: getInstructorOption,
+    select: (data: any) => {
+      return data?.map((teacher) => {
+        return {
+          id: teacher?.id,
+          label: teacher?.full_name,
+          value: teacher?.id,
+        };
+      });
+    },
+  });
 
   const [lecturesData, setLecturesData] = useState(lectures);
 
@@ -403,7 +447,11 @@ const LectureManagement = () => {
                     className="lg:w-[25vw] mt-2"
                     id="instructor"
                     name="instructor"
+                    options={instructorsOption}
+                    styles={customStyles}
+                    placeholder={t("filter by instructor...")}
                     onChange={(e) => {
+                      setInstructorSelectId(e.value);
                       setFieldValue("instructor", e.value);
                     }}
                   />
