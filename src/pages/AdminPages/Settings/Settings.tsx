@@ -7,24 +7,39 @@ import {
   SideBarMenuColor,
 } from "../../../components";
 import customFetch from "../../../utils/axios";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+import Loading from "../../../components/UI/Loading";
+import axios from "axios";
+import Cookies from "js-cookie";
+import { BASE_URL } from "../../../utils/constants";
 
 interface organizationData_TP {
   organization_name: string;
   organization_email: string;
   organization_vision: string;
   organization_mission: string;
-  organization_logo: string;
-  organization_cover: string;
+  organization_logo: object;
+  organization_cover: object;
   color: string;
 }
 
 const postOrganizationSetting = async (
   organizationData: organizationData_TP
 ) => {
-  const response = await customFetch.post("setting", organizationData);
+  const token = Cookies.get("token");
+  const response = await axios.post(`${BASE_URL}setting/1`, organizationData, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "multipart/form-data",
+    },
+  });
   return response;
+};
+
+const getOrganizationSetting = async () => {
+  const { data } = await customFetch.get("setting/1");
+  return data.data.setting;
 };
 
 const Settings = () => {
@@ -32,12 +47,17 @@ const Settings = () => {
   const [organizationFile, setOrganizationFile] = useState(null);
   const [organizationCoverFile, setOrganizationCoverFile] = useState(null);
 
+  const { data, isLoading, isRefetching, isFetching } = useQuery({
+    queryKey: ["get-setting-data"],
+    queryFn: getOrganizationSetting,
+  });
+
   const initialValues = {
-    organization_name: "",
-    organization_email: "",
-    organization_vision: "",
-    organization_mission: "",
-    color: "#393D94",
+    organization_name: data?.organization_name || "",
+    organization_email: data?.organization_email || "",
+    organization_vision: data?.organization_vision || "",
+    organization_mission: data?.organization_mission || "",
+    color: data?.color || "#393D94",
   };
 
   const tabs = [
@@ -46,7 +66,7 @@ const Settings = () => {
     { id: 2, title: "side menu color" },
   ];
 
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationKey: ["add-organization-data"],
     mutationFn: postOrganizationSetting,
     onSuccess: () => {
@@ -64,13 +84,15 @@ const Settings = () => {
       organization_email: values?.organization_email,
       organization_vision: values?.organization_vision,
       organization_mission: values?.organization_mission,
-      organization_logo: organizationFile?.name,
-      organization_cover: organizationCoverFile?.name,
+      organization_logo: organizationFile,
+      organization_cover: organizationCoverFile,
       color: values?.color,
     };
 
     mutate(organizationData);
   };
+
+  if (isFetching || isRefetching || isLoading) return <Loading />;
 
   return (
     <Formik
@@ -109,7 +131,9 @@ const Settings = () => {
               setActiveTab={setActiveTab}
             />
           )}
-          {activeTab === "side menu color" && <SideBarMenuColor />}
+          {activeTab === "side menu color" && (
+            <SideBarMenuColor isPending={isPending} />
+          )}
         </div>
       </Form>
     </Formik>

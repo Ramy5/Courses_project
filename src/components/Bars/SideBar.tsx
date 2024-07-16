@@ -1,4 +1,4 @@
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { CiGrid41 } from "react-icons/ci";
 import { FaFolder } from "react-icons/fa6";
 import { FaRegEdit, FaUserAlt } from "react-icons/fa";
@@ -13,13 +13,16 @@ import { RxCross2 } from "react-icons/rx";
 import { t } from "i18next";
 import { useLocation, useNavigate } from "react-router-dom";
 import SearchInput from "../UI/SearchInput";
-import { useAppSelector } from "../../hooks/reduxHooks";
+import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import { FiCalendar } from "react-icons/fi";
 import { IoBulbOutline } from "react-icons/io5";
 import { TbFileText } from "react-icons/tb";
 import { MdInsertChartOutlined } from "react-icons/md";
 import { LiaBookReaderSolid } from "react-icons/lia";
 import { SlBookOpen } from "react-icons/sl";
+import customFetch from "../../utils/axios";
+import { useQuery } from "@tanstack/react-query";
+import { changeSidebarColor } from "../../features/global/globalSlice";
 
 export type SideBarProps = {
   setToggleSideBar: (value: boolean) => void;
@@ -33,6 +36,21 @@ const SideBar: React.FC<SideBarProps> = ({
   const navigate = useNavigate();
   const location = useLocation();
   const { sidebarColor } = useAppSelector((state) => state.global);
+  const dispatch = useAppDispatch();
+
+  const getOrganizationSetting = async () => {
+    const { data } = await customFetch.get("setting/1");
+    return data.data.setting;
+  };
+
+  const { data, isLoading, isRefetching, isFetching } = useQuery({
+    queryKey: ["get-setting-data"],
+    queryFn: getOrganizationSetting,
+  });
+
+  useEffect(() => {
+    dispatch(changeSidebarColor(data?.color));
+  }, [data?.color, dispatch]);
 
   const { role: userData } = useAppSelector((state) => state.user);
 
@@ -248,7 +266,6 @@ const SideBar: React.FC<SideBarProps> = ({
       userData !== "admin" && segments.length > 0
         ? `/${segments[0]}/${segments[1]}`
         : `/${segments[0]}`;
-
 
     return segmentsType;
   };
