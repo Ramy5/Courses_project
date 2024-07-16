@@ -5,7 +5,9 @@ import selectStyle from "../../../utils/selectStyle";
 import Schedule from "./Schedule";
 import { Button } from "../..";
 
-const StudyScheduleSecondStep = ({ setSteps }: any) => {
+const StudyScheduleSecondStep = ({ setSteps, scheduleData }: any) => {
+console.log("🚀 ~ StudyScheduleSecondStep ~ scheduleData:", scheduleData)
+
   const levelsOption = [
     { id: "1", value: 1, label: 1 },
     { id: "2", value: 2, label: 2 },
@@ -46,13 +48,13 @@ const StudyScheduleSecondStep = ({ setSteps }: any) => {
         </div>
       </div>
 
-      <Schedule />
+      <Schedule scheduleData={scheduleData}/>
 
       <div className="mt-4 flex items-center justify-end gap-5">
         <Button bordered action={() => setSteps(1)}>
-          {t("Previous")}
+          {t("previous")}
         </Button>
-        <Button action={() => setSteps(3)}>{t("Next")}</Button>
+        <Button action={() => setSteps(3)}>{t("next")}</Button>
         <Button className="bg-mainRed">{t("cancel")}</Button>
       </div>
     </div>

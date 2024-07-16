@@ -36,10 +36,14 @@ const postSchedule = async (newProgram: any) => {
 
 const StudySchedule = () => {
   const [steps, setSteps] = useState<number>(1);
-  const [scheduleData, setScheduleData] = useState({ lecture_time: []})
-  const [addTimeLecture, setAddTimeLecture] = useState([])
-  console.log("🚀 ~ StudySchedule ~ addTimeLecture:", addTimeLecture)
-  console.log("🚀 ~ StudySchedule ~ scheduleData:", scheduleData)
+  const [scheduleData, setScheduleData] = useState({
+    day: {},
+    start_date: "",
+    end_date: "",
+    lecture_time: [],
+  });
+  console.log("🚀 ~ StudySchedule ~ scheduleData:", scheduleData);
+
   const queryClient = useQueryClient();
 
   const stepsOption = [
@@ -124,9 +128,15 @@ const StudySchedule = () => {
             ))}
           </div>
 
-          {steps === 1 && <StudyScheduleFirstStep setSteps={setSteps} setScheduleData={setScheduleData} addTimeLecture={addTimeLecture} />}
+          {steps === 1 && (
+            <StudyScheduleFirstStep
+              setSteps={setSteps}
+              scheduleData={scheduleData}
+              setScheduleData={setScheduleData}
+            />
+          )}
 
-          {steps === 2 && <StudyScheduleSecondStep setSteps={setSteps} />}
+          {steps === 2 && <StudyScheduleSecondStep setSteps={setSteps} scheduleData={scheduleData} />}
 
           {steps === 3 && (
             <div className="w-full h-[480px] flex">
@@ -148,7 +158,13 @@ const StudySchedule = () => {
         </div>
       )}
 
-      {steps === 4 && <AddLectureTiming setSteps={setSteps} addTimeLecture={addTimeLecture} setScheduleData={setScheduleData} scheduleData={scheduleData} setAddTimeLecture={setAddTimeLecture} />}
+      {steps === 4 && (
+        <AddLectureTiming
+          setSteps={setSteps}
+          setScheduleData={setScheduleData}
+          scheduleData={scheduleData}
+        />
+      )}
     </div>
   );
 };

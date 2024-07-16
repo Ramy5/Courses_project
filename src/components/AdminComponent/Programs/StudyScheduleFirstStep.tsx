@@ -8,10 +8,21 @@ import { RiDeleteBin5Line } from "react-icons/ri";
 import customFetch from "../../../utils/axios";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "../../UI/Loading";
+import { useNavigate } from "react-router-dom";
 
-const StudyScheduleFirstStep = ({ setSteps }) => {
-  const [activeButton, setActiveButton] = useState<string>("saturday");
+const StudyScheduleFirstStep = ({
+  setSteps,
+  setScheduleData,
+  scheduleData,
+}) => {
+  const [activeButton, setActiveButton] = useState<any>(
+    JSON.parse(localStorage.getItem("day")) || {
+      id: 1,
+      day: "Saturday",
+    }
+  );
   const navigate = useNavigate();
+  console.log("🚀 ~ activeButton:", activeButton);
 
   const initialValues = {
     start_date: "",
@@ -19,15 +30,18 @@ const StudyScheduleFirstStep = ({ setSteps }) => {
     day: activeButton,
   };
 
-  const fetchDatsData = async () => {
+  const fetchDaysData = async () => {
     const response = await customFetch(`/days`);
     return response;
   };
 
-  const { data, isLoading, error } = useQuery({
+  const { data, isLoading, isRefetching } = useQuery({
     queryKey: ["days_data"],
-    queryFn: fetchDatsData,
+    queryFn: fetchDaysData,
   });
+
+  console.log("🚀 ~ isRefetching:", isRefetching);
+  console.log("🚀 ~ isLoading:", isLoading);
 
   const dayData = data?.data.data.days;
   console.log("🚀 ~ StudyScheduleFirstStep ~ dayData:", dayData);
@@ -57,7 +71,7 @@ const StudyScheduleFirstStep = ({ setSteps }) => {
     () => [
       {
         header: () => <span>{t("course")}</span>,
-        accessorKey: "course",
+        accessorKey: "course_name",
         cell: (info) => info.getValue(),
       },
       {
@@ -67,22 +81,22 @@ const StudyScheduleFirstStep = ({ setSteps }) => {
       },
       {
         header: () => <span>{t("section")}</span>,
-        accessorKey: "section",
+        accessorKey: "group_name",
         cell: (info) => info.getValue(),
       },
       {
         header: () => <span>{t("instructor")}</span>,
-        accessorKey: "instructor",
+        accessorKey: "teacher_name",
         cell: (info) => info.getValue(),
       },
       {
-        header: () => <span>{t("start date")}</span>,
-        accessorKey: "start_date",
+        header: () => <span>{t("start time")}</span>,
+        accessorKey: "start_time",
         cell: (info) => info.getValue(),
       },
       {
-        header: () => <span>{t("end date")}</span>,
-        accessorKey: "end_date",
+        header: () => <span>{t("end time")}</span>,
+        accessorKey: "end_time",
         cell: (info) => info.getValue(),
       },
       {
@@ -104,8 +118,18 @@ const StudyScheduleFirstStep = ({ setSteps }) => {
     []
   );
 
+  useEffect(() => {
+    setScheduleData((prevState) => ({
+      ...prevState,
+      day: activeButton,
+    }));
+  }, [activeButton]);
+
+  const filterScheduleTable = scheduleData?.lecture_time?.filter((item) => item.day_id === activeButton.id)
+  console.log("🚀 ~ filterScheduleTable:", filterScheduleTable)
+
   {
-    isLoading && <Loading />;
+    isLoading || (isRefetching && <Loading />);
   }
 
   return (
@@ -122,10 +146,10 @@ const StudyScheduleFirstStep = ({ setSteps }) => {
             setScheduleData(values);
           }}
         >
-          {({ values }) => {
-            useEffect(() => {
-              setScheduleData(values);
-            }, [values]);
+          {({ values, setFieldValue }) => {
+            // useEffect(() => {
+            //   setScheduleData(values);
+            // }, [values.start_date || values.end_date]);
             return (
               <Form>
                 <div className="flex flex-col justify-between my-3 md:flex-row gap-y-4">
@@ -139,7 +163,14 @@ const StudyScheduleFirstStep = ({ setSteps }) => {
                     label={t("start date")}
                     className="w-full text-lg py-1 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
                     placeholder={t("")}
+                    value={scheduleData?.start_date}
                     labelProps="font-semibold text-base"
+                    onChange={(e) => {
+                      setScheduleData((prevState) => ({
+                        ...prevState,
+                        start_date: e.target.value,
+                      }));
+                    }}
                   />
                   <BaseInput
                     name="end_date"
@@ -148,7 +179,14 @@ const StudyScheduleFirstStep = ({ setSteps }) => {
                     label={t("end date")}
                     className="w-full text-lg py-1 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
                     placeholder={t("")}
+                    value={scheduleData?.end_date}
                     labelProps="font-semibold text-base"
+                    onChange={(e) => {
+                      setScheduleData((prevState) => ({
+                        ...prevState,
+                        end_date: e.target.value,
+                      }));
+                    }}
                   />
                 </div>
               </Form>
@@ -159,19 +197,27 @@ const StudyScheduleFirstStep = ({ setSteps }) => {
 
       <div className="bg-[#F9F9F9] p-4 my-5 rounded-2xl flex justify-between flex-col sm:flex-row gap-y-5 items-center">
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7">
-          {dayData?.map((day) => (
+          {dayData?.map((item) => (
             <Button
-              key={day}
+              key={item}
               className={`${
-                activeButton.id === day.id
+                activeButton.id === item.id
                   ? "bg-mainColor text-white"
                   : "bg-transparent text-mainGray"
               } px-3`}
               action={() => {
-                setActiveButton({ id: day.id, day: day.day });
+                setActiveButton({ id: item.id, day: item.day });
+                setScheduleData((prevState) => ({
+                  ...prevState,
+                  day: { id: item.id, day: item.day },
+                }));
+                localStorage.setItem(
+                  "day",
+                  JSON.stringify({ id: item.id, day: item.day })
+                );
               }}
             >
-              {day.day}
+              {item.day}
             </Button>
           ))}
         </div>
@@ -181,11 +227,20 @@ const StudyScheduleFirstStep = ({ setSteps }) => {
         </Button>
       </div>
 
-      <Table data={studyScheduleData} columns={studyScheduleColumns} />
+      {filterScheduleTable?.length ? (
+        <Table
+          data={filterScheduleTable}
+          columns={studyScheduleColumns}
+        />
+      ) : (
+        ""
+      )}
 
       <div className="flex items-center justify-end gap-5 mt-12">
-        <Button action={() => setSteps(2)}>{t("Next")}</Button>
-        <Button className="bg-mainRed">{t("cancel")}</Button>
+        <Button action={() => setSteps(2)}>{t("next")}</Button>
+        <Button className="bg-mainRed" action={() => navigate(-1)}>
+          {t("cancel")}
+        </Button>
       </div>
     </div>
   );

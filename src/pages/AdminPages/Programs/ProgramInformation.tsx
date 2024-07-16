@@ -8,7 +8,7 @@ import { useEffect, useMemo, useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { GrView } from "react-icons/gr";
 import { FaRegEdit } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import customFetch from "../../../utils/axios";
 import { toast } from "react-toastify";
@@ -17,13 +17,15 @@ import Loading from "../../../components/UI/Loading";
 const ProgramInformation = () => {
   const [openRow, setOpenRow] = useState<number | null>(null);
   const navigate = useNavigate();
+  const { id: programParamID } = useParams();
+
 
   const handleToggleDropDown = (id: number) => {
     setOpenRow((prevOpenRow) => (prevOpenRow == id ? null : id));
   };
 
   const fetchProgramData = async () => {
-    const response = await customFetch(`/program/${10}`);
+    const response = await customFetch(`/program/${programParamID}`);
     return response;
   };
 
@@ -82,6 +84,7 @@ const ProgramInformation = () => {
         accessorKey: "action",
         cell: (info) => {
           const rowIndex = info.row.index;
+          console.log("🚀 ~ ProgramInformation ~ info.row:", info.row.original)
           const totalRows = info.table.getCoreRowModel().rows.length;
           return (
             <DotsDropDown
