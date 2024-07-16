@@ -11,15 +11,40 @@ import customFetch from "../../../utils/axios";
 import { toast } from "react-toastify";
 import { formatDate } from "../../../utils/helpers";
 import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "../../../utils/constants";
+import axios from "axios";
+import Cookies from "js-cookie";
 
 const postStudentPersonal = async (newStudent: any) => {
-  const data = customFetch.post("studentPersonalData", newStudent);
-  return data;
+  const token = Cookies.get("token");
+  const response = await axios.post(
+    `${BASE_URL}studentPersonalData`,
+    newStudent,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
+
+  return response;
 };
 
 const editStudentPersonal = async (editStudent: any) => {
-  const data = customFetch.post(`studentPersonalData`, editStudent);
-  return data;
+  const token = Cookies.get("token");
+  const response = await axios.post(
+    `${BASE_URL}studentPersonalData`,
+    editStudent,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
+
+  return response;
 };
 
 interface AddStudentPersonal_TP {
@@ -271,7 +296,7 @@ const StudentAddPersonalData = ({
 
               <div className="w-full md:w-1/2">
                 <img
-                  src={selectedImage || User}
+                  src={selectedImage?.name || User}
                   alt="user"
                   className="m-auto w-[180px] h-[180px] rounded-full"
                 />

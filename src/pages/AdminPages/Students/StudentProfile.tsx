@@ -198,13 +198,15 @@ const StudentProfile = () => {
 
                 <div className="px-4 lg:px-8">
                   <div className="flex flex-wrap items-center justify-between -translate-y-8 lg:-translate-y-12">
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3 w-44 h-44">
                       <img
                         src={personal_image || studentProfileImg}
                         alt="student profile image"
-                        className="w-24 h-24 rounded-full lg:h-auto lg:w-auto -translate-y-0 lg:-translate-y-8"
+                        className="rounded-full w-44 h-44 lg:h-auto lg:w-auto -translate-y-0 lg:-translate-y-8"
                       />
-                      <p className="text-3xl font-bold">{full_name}</p>
+                      <p className="text-3xl font-bold text-nowrap">
+                        {full_name}
+                      </p>
                     </div>
                     <div className="flex items-center gap-24">
                       <MainCheckBox

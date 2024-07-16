@@ -7,7 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import Loading from "../../../components/UI/Loading";
 
 const getVirtualClassesData = async () => {
-  const { data } = await customFetch("todayLectures");
+  const data = await customFetch("todayLectures");
   return data.data;
 };
 
@@ -91,6 +91,7 @@ const VirtualClasses = () => {
     queryKey: ["get-virtual-classes"],
     queryFn: getVirtualClassesData,
   });
+  console.log("🚀 ~ VirtualClasses ~ data:", data);
 
   const virtualClassesColumns = useMemo<ColumnDef<[]>[]>(
     () => [
@@ -100,17 +101,14 @@ const VirtualClasses = () => {
         cell: (info) => {
           let statusColor;
           switch (info.getValue()) {
-            case "green":
+            case "inProgress":
               statusColor = "bg-green-700";
               break;
-            case "red":
+            case "setup":
               statusColor = "bg-[#D42828]";
               break;
             case "orange":
               statusColor = "bg-[#F2B385]";
-              break;
-            default:
-              statusColor = "bg-[#369252]";
               break;
           }
 
@@ -176,7 +174,7 @@ const VirtualClasses = () => {
       <h2 className="mb-6 text-lg font-bold lg:text-2xl ms-4">
         {t("virtual classes (today's lecture)")}
       </h2>
-      <Table data={virtualClassesData || []} columns={virtualClassesColumns} />
+      <Table data={data || []} columns={virtualClassesColumns} />
     </div>
   );
 };
