@@ -8,10 +8,12 @@ import { RiDeleteBin5Line } from "react-icons/ri";
 import customFetch from "../../../utils/axios";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "../../UI/Loading";
+import { useNavigate } from "react-router-dom";
 
 const StudyScheduleFirstStep = ({ setSteps }) => {
   const [activeButton, setActiveButton] = useState<string>("saturday");
   const navigate = useNavigate();
+  const [scheduleData, setScheduleData] = useState(null);
 
   const initialValues = {
     start_date: "",
