@@ -5,7 +5,13 @@ import selectStyle from "../../../utils/selectStyle";
 import { Button } from "../..";
 import Select from "react-select";
 
-const AddLectureTiming = ({ setSteps, scheduleData, setScheduleData, setAddTimeLecture, addTimeLecture }) => {
+const AddLectureTiming = ({
+  setSteps,
+  scheduleData,
+  setScheduleData,
+  setAddTimeLecture,
+  addTimeLecture,
+}) => {
   const initialValues = {
     day: "",
     course_id: 0,
@@ -51,7 +57,7 @@ const AddLectureTiming = ({ setSteps, scheduleData, setScheduleData, setAddTimeL
   ];
 
   return (
-    <div className="bg-white rounded-xl p-6">
+    <div className="p-6 bg-white rounded-xl">
       <Formik initialValues={initialValues} onSubmit={() => {}}>
         {({ values, setFieldValue }) => {
           console.log("🚀 ~ AddLectureTiming ~ values:", values);
@@ -59,13 +65,13 @@ const AddLectureTiming = ({ setSteps, scheduleData, setScheduleData, setAddTimeL
           return (
             <Form>
               <div className="w-full md:w-4/5">
-                <h2 className="font-semibold text-xl mb-4">
+                <h2 className="mb-4 text-xl font-semibold">
                   {t("add lecture timing")}
                 </h2>
                 <BaseInput
                   name="day"
                   id="day"
-                  value={scheduleData.day.day}
+                  value={scheduleData?.day?.day}
                   type="text"
                   label={t("day")}
                   className="w-full text-lg py-1 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
@@ -105,8 +111,8 @@ const AddLectureTiming = ({ setSteps, scheduleData, setScheduleData, setAddTimeL
                   />
                 </div>
 
-                <div className=" my-8 ">
-                  <p className="font-semibold text-base mb-4">
+                <div className="my-8 ">
+                  <p className="mb-4 text-base font-semibold">
                     {t("lecture timing")}
                   </p>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-4 gap-x-8">
@@ -132,15 +138,15 @@ const AddLectureTiming = ({ setSteps, scheduleData, setScheduleData, setAddTimeL
                 </div>
               </div>
 
-              <div className="mt-12 flex items-center justify-end gap-5">
+              <div className="flex items-center justify-end gap-5 mt-12">
                 <Button
-                type="button"
+                  type="button"
                   action={() => {
                     setAddTimeLecture((prev) => [...prev, values]);
-                    setScheduleData(prevState => ({
+                    setScheduleData((prevState) => ({
                       ...prevState,
-                      lecture_time: [{...prevState.lecture_time, values}] // Add any initial values if needed
-                  }));
+                      lecture_time: [{ ...prevState.lecture_time, values }], // Add any initial values if needed
+                    }));
                     setSteps(1);
                   }}
                 >
