@@ -4,7 +4,7 @@ import { useFormikContext } from "formik";
 import { useAppDispatch } from "../../../hooks/reduxHooks";
 import { changeSidebarColor } from "../../../features/global/globalSlice";
 
-const SideBarMenuColor = () => {
+const SideBarMenuColor = ({ isPending }: { isPending: boolean }) => {
   const { values, setFieldValue } = useFormikContext();
   const dispatch = useAppDispatch();
 
@@ -82,7 +82,7 @@ const SideBarMenuColor = () => {
       </div>
 
       <div className="flex justify-end">
-        <Button type="submit" className="mt-8">
+        <Button type="submit" loading={isPending} className="mt-8">
           {t("confirm")}
         </Button>
       </div>
