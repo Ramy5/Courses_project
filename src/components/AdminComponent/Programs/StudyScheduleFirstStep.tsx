@@ -9,6 +9,7 @@ import customFetch from "../../../utils/axios";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "../../UI/Loading";
 import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const StudyScheduleFirstStep = ({
   setSteps,

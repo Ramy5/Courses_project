@@ -57,7 +57,7 @@ const StudentAddFatherData = ({
     "address",
   ];
 
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationKey: ["add-student-father"],
     mutationFn: postStudentParent,
     onSuccess: (data: any) => {
@@ -76,7 +76,7 @@ const StudentAddFatherData = ({
     },
   });
 
-  const { mutate: updateMutate } = useMutation({
+  const { mutate: updateMutate, isPending: editIsPending } = useMutation({
     mutationKey: ["update-student-father"],
     mutationFn: (updateStudet: any) =>
       updateStudentParent(updateStudet, Number(editObj?.id)),
@@ -174,7 +174,11 @@ const StudentAddFatherData = ({
             </div>
 
             <div className="mt-8">
-              <Button type="submit" className="me-5">
+              <Button
+                loading={isPending || editIsPending}
+                type="submit"
+                className="me-5"
+              >
                 {t("confirm")}
               </Button>
               <Button

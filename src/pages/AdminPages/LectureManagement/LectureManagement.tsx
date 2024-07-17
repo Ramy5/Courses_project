@@ -8,9 +8,11 @@ import { FaRegCheckCircle, FaRegEdit } from "react-icons/fa";
 import customFetch from "../../../utils/axios";
 import { useQuery } from "@tanstack/react-query";
 import { customStyles } from "../../../utils/selectStyles";
+import Loading from "../../../components/UI/Loading";
+import Pagination from "../../../components/UI/Pagination";
 
 const getLectureManagement = async (instructorSelectId?: number) => {
-  const { data } = customFetch(`manage?teacher_id=${instructorSelectId}`);
+  const data = customFetch(`manage?teacher_id=${instructorSelectId}`);
   return data.data;
 };
 
@@ -20,7 +22,8 @@ const getInstructorOption = async () => {
 };
 
 const LectureManagement = () => {
-  const [instructorSelectId, setInstructorSelectId] = useState(null);
+  const [instructorSelectId, setInstructorSelectId] = useState("");
+  const [lecturesData, setLecturesData] = useState([]);
 
   const initialValues = {};
 
@@ -103,11 +106,11 @@ const LectureManagement = () => {
     queryKey: ["get-lecture-management"],
     queryFn: () => getLectureManagement(instructorSelectId),
   });
-  console.log(data);
+  console.log("🚀 ~ LectureManagement ~ data:", data);
 
   useEffect(() => {
     refetch();
-  }, [instructorSelectId]);
+  }, [instructorSelectId, refetch]);
 
   const {
     data: instructorsOption,
@@ -128,7 +131,11 @@ const LectureManagement = () => {
     },
   });
 
-  const [lecturesData, setLecturesData] = useState(lectures);
+  useEffect(() => {
+    if (data) {
+      setLectureDate(data);
+    }
+  }, [data]);
 
   // LECTURE DATE
   const [lectureDate, setLectureDate] = useState("");
@@ -196,19 +203,19 @@ const LectureManagement = () => {
   const lecturesColumns = useMemo<ColumnDef<[]>[]>(
     () => [
       {
-        header: () => <span>{t("lecture number")}</span>,
+        header: () => <span className="w-8">{t("lecture number")}</span>,
         accessorKey: "lectureNumber",
-        cell: (info) => info.getValue(),
+        cell: (info) => info.row.index + 1,
       },
       {
         header: () => <span>{t("date")}</span>,
         accessorKey: "date",
         cell: (info) => {
-          if (info.row.original.lectureStatus === "completed") {
+          if (info.row.original.status === "completed") {
             return info.getValue();
           } else {
             return (
-              <div className="flex items-center justify-center gap-2 w-44">
+              <div className="flex items-center justify-center gap-1 w-44">
                 {lecturesDateEditId === info.row.original.index ? (
                   <>
                     <input
@@ -241,12 +248,12 @@ const LectureManagement = () => {
       {
         header: () => <span>{t("subject")}</span>,
         accessorKey: "subject",
-        cell: (info) => info.getValue(),
+        cell: (info) => info.row.original?.course?.course_name,
       },
       {
         header: () => <span>{t("program")}</span>,
         accessorKey: "program",
-        cell: (info) => info.getValue(),
+        cell: (info) => info.row.original?.program?.program_name,
       },
       {
         header: () => <span>{t("level")}</span>,
@@ -254,23 +261,23 @@ const LectureManagement = () => {
         cell: (info) => info.getValue(),
       },
       {
-        header: () => <span>{t("section")}</span>,
-        accessorKey: "section",
+        header: () => <span>{t("group")}</span>,
+        accessorKey: "group",
         cell: (info) => info.getValue(),
       },
       {
         header: () => <span>{t("zoom link")}</span>,
-        accessorKey: "zoomLink",
+        accessorKey: "zoom_link",
         cell: (info) => {
-          if (info.row.original.lectureStatus === "completed") {
+          if (info.row.original.status === "completed") {
             return (
               <a href={info.getValue()} target="_blank" className="truncate">
                 {info.getValue()}
               </a>
             );
-          } else if (info.row.original.lectureStatus === "in progress") {
+          } else if (info.row.original.status === "in progress") {
             return (
-              <div className="flex items-center justify-center gap-2 w-60">
+              <div className="flex items-center justify-center gap-1 w-44">
                 {lecturesZoomEditId === info.row.original.index ? (
                   <>
                     <input
@@ -303,9 +310,9 @@ const LectureManagement = () => {
                 )}
               </div>
             );
-          } else if (info.row.original.lectureStatus === "under preparation") {
+          } else if (info.row.original.status === "setup") {
             return (
-              <div className="flex items-center justify-center gap-2 w-60">
+              <div className="flex items-center justify-center gap-1 w-44">
                 {lecturesZoomEditId === info.row.original.index ? (
                   <>
                     <input
@@ -343,11 +350,11 @@ const LectureManagement = () => {
       },
       {
         header: () => <span>{t("youtube link")}</span>,
-        accessorKey: "youtubeLink",
+        accessorKey: "youtube_link",
         cell: (info) => {
-          if (info.row.original.lectureStatus === "completed") {
+          if (info.row.original.status === "completed") {
             return (
-              <div className="flex items-center justify-center gap-2 w-60">
+              <div className="flex items-center justify-center gap-1 w-44">
                 {lecturesYoutubeEditId === info.row.original.index ? (
                   <>
                     <input
@@ -391,11 +398,11 @@ const LectureManagement = () => {
       },
       {
         header: () => <span>{t("lecture status")}</span>,
-        accessorKey: "lectureStatus",
+        accessorKey: "status",
         cell: (info) => {
           const status = info.getValue();
           let statusClass = "";
-          if (status === "under preparation") {
+          if (status === "setup") {
             statusClass = "bg-[#FF4E4E]";
           } else if (status === "in progress") {
             statusClass = "bg-[#FCC779] !text-black";
@@ -428,6 +435,8 @@ const LectureManagement = () => {
     ]
   );
 
+  if (isLoading || isFetching || isRefetching) return <Loading />;
+
   return (
     <Formik initialValues={initialValues} onSubmit={(values) => {}}>
       {({ setFieldValue, values }) => {
@@ -459,6 +468,11 @@ const LectureManagement = () => {
               </div>
               {/* TABLE */}
               <Table data={lecturesData} columns={lecturesColumns} />
+
+              {/* PAGINATION */}
+              <div>
+                <Pagination totalPages={30} showNavigation currentPage={"1"} />
+              </div>
             </div>
           </Form>
         );

@@ -14,7 +14,7 @@ const AddLectureTiming = ({
   setScheduleData,
   scheduleId,
   editStudySchedule,
-  setEditStudySchedule
+  setEditStudySchedule,
 }) => {
   const [coursesSelect, setCoursesSelect] = useState(null);
   const [groupSelect, setGroupSelect] = useState(null);
@@ -145,7 +145,7 @@ const AddLectureTiming = ({
   }, [editStudySchedule]);
 
   return (
-    <div className="bg-white rounded-xl p-6">
+    <div className="p-6 bg-white rounded-xl">
       <Formik initialValues={initialValues} onSubmit={() => {}}>
         {({ values, setFieldValue }) => {
           console.log("🚀 ~ AddLectureTiming ~ values:", values);
@@ -153,12 +153,13 @@ const AddLectureTiming = ({
           return (
             <Form>
               <div className="w-full md:w-4/5">
-                <h2 className="font-semibold text-xl mb-4">
+                <h2 className="mb-4 text-xl font-semibold">
                   {t("add lecture timing")}
                 </h2>
                 <BaseInput
                   name="day"
                   id="day"
+                  value={scheduleData?.day?.day}
                   value={scheduleData?.day?.day}
                   type="text"
                   label={t("day")}
@@ -287,8 +288,9 @@ const AddLectureTiming = ({
                 </div>
               </div>
 
-              <div className="mt-12 flex items-center justify-end gap-5">
+              <div className="flex items-center justify-end gap-5 mt-12">
                 <Button
+                  type="button"
                   type="button"
                   action={() => {
                     // setScheduleData((prevState) => ({
@@ -297,13 +299,15 @@ const AddLectureTiming = ({
                     // }));
                     setScheduleData((prevState) => {
                       // Find the index of the item to be edited
-                      const index = prevState.lecture_time.findIndex(item => item.id === values.id);
-                    
+                      const index = prevState.lecture_time.findIndex(
+                        (item) => item.id === values.id
+                      );
+
                       if (index !== -1) {
                         // Replace the old item with the new one
                         const updatedLectureTime = [...prevState.lecture_time];
                         updatedLectureTime[index] = values;
-                    
+
                         return {
                           ...prevState,
                           lecture_time: updatedLectureTime,
@@ -316,7 +320,7 @@ const AddLectureTiming = ({
                         };
                       }
                     });
-                    setEditStudySchedule({})
+                    setEditStudySchedule({});
                     setSteps(1);
                   }}
                 >

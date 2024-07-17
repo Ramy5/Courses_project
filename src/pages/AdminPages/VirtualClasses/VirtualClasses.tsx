@@ -12,86 +12,10 @@ const getVirtualClassesData = async () => {
 };
 
 const VirtualClasses = () => {
-  const virtualClassesData = [
-    {
-      index: 1,
-      subject: "Physics",
-      academicProgram: "Artificial Intelligence",
-      level: "Level Three",
-      branch: "Computer Science",
-      lectureDate: "21/5/2025",
-      startTime: "8 AM",
-      endTime: "10 AM",
-      zoomLink: "https://zoom.us/j",
-      status: "green",
-    },
-    {
-      index: 2,
-      subject: "Physics",
-      academicProgram: "Artificial Intelligence",
-      level: "Level Three",
-      branch: "Computer Science",
-      lectureDate: "21/5/2025",
-      startTime: "8 AM",
-      endTime: "10 AM",
-      zoomLink: "https://zoom.us/j",
-      status: "red",
-    },
-    {
-      index: 3,
-      subject: "Physics",
-      academicProgram: "Artificial Intelligence",
-      level: "Level Three",
-      branch: "Computer Science",
-      lectureDate: "21/5/2025",
-      startTime: "8 AM",
-      endTime: "10 AM",
-      zoomLink: "https://zoom.us/j",
-      status: "orange",
-    },
-    {
-      index: 4,
-      subject: "Physics",
-      academicProgram: "Artificial Intelligence",
-      level: "Level Three",
-      branch: "Computer Science",
-      lectureDate: "21/5/2025",
-      startTime: "8 AM",
-      endTime: "10 AM",
-      zoomLink: "https://zoom.us/j",
-      status: "green",
-    },
-    {
-      index: 5,
-      subject: "Physics",
-      academicProgram: "Artificial Intelligence",
-      level: "Level Three",
-      branch: "Computer Science",
-      lectureDate: "21/5/2025",
-      startTime: "8 AM",
-      endTime: "10 AM",
-      zoomLink: "https://zoom.us/j",
-      status: "green",
-    },
-    {
-      index: 6,
-      subject: "Physics",
-      academicProgram: "Artificial Intelligence",
-      level: "Level Three",
-      branch: "Computer Science",
-      lectureDate: "21/5/2025",
-      startTime: "8 AM",
-      endTime: "10 AM",
-      zoomLink: "-",
-      status: "red",
-    },
-  ];
-
   const { data, isLoading, isFetching, isRefetching } = useQuery({
     queryKey: ["get-virtual-classes"],
     queryFn: getVirtualClassesData,
   });
-  console.log("🚀 ~ VirtualClasses ~ data:", data);
 
   const virtualClassesColumns = useMemo<ColumnDef<[]>[]>(
     () => [
@@ -101,13 +25,13 @@ const VirtualClasses = () => {
         cell: (info) => {
           let statusColor;
           switch (info.getValue()) {
-            case "inProgress":
+            case "completed":
               statusColor = "bg-green-700";
               break;
-            case "setup":
+            case "inProgress":
               statusColor = "bg-[#D42828]";
               break;
-            case "orange":
+            case "setup":
               statusColor = "bg-[#F2B385]";
               break;
           }
@@ -122,46 +46,49 @@ const VirtualClasses = () => {
       {
         header: () => <span>{t("subject")}</span>,
         accessorKey: "subject",
-        cell: (info) => info.getValue(),
+        cell: (info) => info.row.original?.course?.course_name,
       },
       {
         header: () => <span>{t("academic program")}</span>,
         accessorKey: "academicProgram",
-        cell: (info) => info.getValue(),
+        cell: (info) => info.row.original?.program?.program_name,
       },
       {
         header: () => <span>{t("level")}</span>,
         accessorKey: "level",
-        cell: (info) => info.getValue(),
+        cell: (info) => info.row.original?.level,
       },
       {
         header: () => <span>{t("branch")}</span>,
         accessorKey: "branch",
-        cell: (info) => info.getValue(),
+        cell: (info) => info.row.original?.group,
       },
       {
         header: () => <span>{t("lecture date")}</span>,
         accessorKey: "lectureDate",
-        cell: (info) => info.getValue(),
+        cell: (info) => info.row.original?.date,
       },
       {
         header: () => <span>{t("start time")}</span>,
         accessorKey: "startTime",
-        cell: (info) => info.getValue(),
+        cell: (info) => info.row.original?.start_time,
       },
       {
         header: () => <span>{t("end time")}</span>,
         accessorKey: "endTime",
-        cell: (info) => info.getValue(),
+        cell: (info) => info.row.original?.end_time,
       },
       {
         header: () => <span>{t("zoom link")}</span>,
-        accessorKey: "zoomLink",
-        cell: (info: any) => (
-          <a href={info.getValue()} target="_blank" rel="noopener noreferrer">
-            {info.getValue()}
-          </a>
-        ),
+        accessorKey: "zoom_link",
+        cell: (info: any) =>
+          info.row.original?.status === "completed" ? (
+            "---"
+          ) : (
+            <a href={info.getValue()} target="_blank" rel="noopener noreferrer">
+              {info.getValue()}
+            </a>
+          ),
       },
     ],
     []
@@ -174,7 +101,7 @@ const VirtualClasses = () => {
       <h2 className="mb-6 text-lg font-bold lg:text-2xl ms-4">
         {t("virtual classes (today's lecture)")}
       </h2>
-      <Table data={data || []} columns={virtualClassesColumns} />
+      <Table data={data?.data || []} columns={virtualClassesColumns} />
     </div>
   );
 };

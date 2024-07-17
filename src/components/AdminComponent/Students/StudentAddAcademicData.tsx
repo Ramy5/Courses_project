@@ -86,7 +86,7 @@ const StudentAddAcademicData = ({
     },
   });
 
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationKey: ["add-student-academic"],
     mutationFn: postStudentAcademic,
     onSuccess: (data: any) => {
@@ -106,7 +106,7 @@ const StudentAddAcademicData = ({
     },
   });
 
-  const { mutate: updateAcademicData } = useMutation({
+  const { mutate: updateAcademicData, isPending: editIsPending } = useMutation({
     mutationKey: ["update-academic-student"],
     mutationFn: (editAcademic: any) =>
       editStudentAcademic(editAcademic, Number(editObj.id)),
@@ -291,7 +291,11 @@ const StudentAddAcademicData = ({
             </div>
 
             <div className="mt-8">
-              <Button type="submit" className="me-5">
+              <Button
+                loading={isPending || editIsPending}
+                type="submit"
+                className="me-5"
+              >
                 {t("confirm")}
               </Button>
               <Button
