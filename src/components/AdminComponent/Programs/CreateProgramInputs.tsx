@@ -11,6 +11,7 @@ import { useMemo, useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { FaRegEdit } from "react-icons/fa";
 import { RiDeleteBin5Line } from "react-icons/ri";
+import { useNavigate } from "react-router-dom";
 
 const CreateProgramInputs = ({
   setStep,
@@ -20,6 +21,7 @@ const CreateProgramInputs = ({
   isPending,
 }: any) => {
   const [openRow, setOpenRow] = useState<number | null>(null);
+  const navigate = useNavigate()
 
   const { values, setFieldValue } = useFormikContext();
 
@@ -312,7 +314,7 @@ const CreateProgramInputs = ({
           <Button type="submit" className="me-5" loading={isPending}>
             {t("create program")}
           </Button>
-          <Button type="button" className="bg-[#E6EAEE] text-mainColor">
+          <Button type="button" className="bg-[#E6EAEE] text-mainColor" action={() => navigate(-1)}>
             {t("cancel")}
           </Button>
         </div>
