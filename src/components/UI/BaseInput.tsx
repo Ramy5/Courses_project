@@ -25,6 +25,7 @@ const BaseInput = ({
   type = "text",
   placeholder,
   ref,
+  disabled,
   ...props
 }: BaseInput_TP) => {
   const { setFieldValue, setFieldTouched, errors, touched, values } =
@@ -96,6 +97,7 @@ const BaseInput = ({
             type: props.type || "text",
           })}
           ref={ref}
+          disabled={disabled}
         />
       </div>
       {/* <FormikError name={props.name} className="absolute whitespace-nowrap" /> */}

@@ -10,9 +10,11 @@ import InstructorSocialInformation from "../../../components/AdminComponent/Inst
 import { FaRegEdit } from "react-icons/fa";
 import InstructorSpecialization from "../../../components/AdminComponent/Instructors/InstructorSpecialization";
 import customFetch from "../../../utils/axios";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Loading from "../../../components/UI/Loading";
 import { useNavigate, useParams } from "react-router-dom";
+import { RiDeleteBin5Line } from "react-icons/ri";
+import { toast } from "react-toastify";
 
 export type InstructorPersonalData_TP = {
   profileCover?: string;
@@ -21,38 +23,28 @@ export type InstructorPersonalData_TP = {
 };
 
 const InstructorPersonalProfile = () => {
-  const [selectAll, setSelectAll] = useState<Boolean>(false);
-  const [selectedRows, setSelectedRows] = useState<any>([]);
+  // const [selectAll, setSelectAll] = useState<Boolean>(false);
+  // const [selectedRows, setSelectedRows] = useState<any>([]);
   const [openRow, setOpenRow] = useState<number | null>(null);
+  const queryClient = useQueryClient();
   const { id } = useParams();
   const navigate = useNavigate();
-
-  // const instructorPersonalData = {
-  //   id: 1,
-  //   profileCover: ProfileCover,
-  //   personalImage: PersonalImage,
-  //   name: "Dimitres Viga",
-  //   jobTitle: "محاضر شبكات",
-  //   phoneNumber: "+009735625632",
-  //   emial: "Albert Adam@gmail.com",
-  //   address: "123,المنصورة الجديدة",
-  //   linkedIn: "user@example.com",
-  //   facebook: "user@example.com",
-  //   whatsapp: "+009759568548",
-  //   twitter: "user@example.com",
-  // };
 
   const fetchInstructorPersonal = async () => {
     const response = await customFetch(`/teacher/${id}`);
     return response;
   };
 
-  const { data, isLoading, error, isRefetching } = useQuery({
+  const { data, isLoading, error, isRefetching, refetch } = useQuery({
     queryKey: ["instructor_personal"],
     queryFn: fetchInstructorPersonal,
   });
 
   const instructorPersonalData = data?.data.data.teacher || {};
+  console.log(
+    "🚀 ~ InstructorPersonalProfile ~ instructorPersonalData:",
+    instructorPersonalData
+  );
 
   useEffect(() => {
     if (error) {
@@ -60,52 +52,48 @@ const InstructorPersonalProfile = () => {
     }
   }, [error]);
 
-  // const studentsDataFee = [
-  //   {
-  //     index: 1,
-  //     id: 1,
-  //     type_certificate: "بكالروريوس",
-  //     certificate_name: "حاسبات ومعلومات",
-  //     donor: "معد مصر",
-  //     date_acquisition: "25/3/2001",
-  //     specialization: "علوم الحاسب",
-  //     appreciation: "جيد جدا",
-  //   },
-  //   {
-  //     index: 2,
-  //     id: 2,
-  //     type_certificate: "بكالروريوس",
-  //     certificate_name: "حاسبات ومعلومات",
-  //     donor: "معد مصر",
-  //     date_acquisition: "25/3/2001",
-  //     specialization: "علوم الحاسب",
-  //     appreciation: "جيد جدا",
-  //   },
-  // ];
-
-  const handleHeaderCheckboxClick = () => {
-    const allCheckBoxes = document.querySelectorAll(
-      'input[name="selectedItem"]'
-    );
-    allCheckBoxes.forEach((checkbox) => {
-      checkbox.checked = !selectAll;
-    });
-    setSelectAll(!selectAll);
+  const deleteInstructor = async (instructorId) => {
+    const response = await customFetch.delete(`/teacher/${instructorId}`);
+    return response;
   };
 
-  const handleCheckboxChange = (event: any, selectedRow: any) => {
-    const checkboxId = event.target.id;
-    if (event.target.checked) {
-      setSelectedRows((prevSelectedItems: any) => [
-        ...prevSelectedItems,
-        selectedRow.row.original,
-      ]);
-    } else {
-      setSelectedRows((prevSelectedItems: any) =>
-        prevSelectedItems.filter((item: any) => item.id !== +checkboxId)
-      );
-    }
-  };
+  const { mutate } = useMutation({
+    mutationKey: ["add-instructor-contact"],
+    mutationFn: deleteInstructor,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries("delete_instructor");
+      toast.success(`${t("the instructor has been successfully deleted")}`);
+      refetch();
+    },
+    onError: (error) => {
+      const errorMessage = error?.response?.data?.error[0];
+      toast.error(errorMessage);
+    },
+  });
+
+  // const handleHeaderCheckboxClick = () => {
+  //   const allCheckBoxes = document.querySelectorAll(
+  //     'input[name="selectedItem"]'
+  //   );
+  //   allCheckBoxes.forEach((checkbox) => {
+  //     checkbox.checked = !selectAll;
+  //   });
+  //   setSelectAll(!selectAll);
+  // };
+
+  // const handleCheckboxChange = (event: any, selectedRow: any) => {
+  //   const checkboxId = event.target.id;
+  //   if (event.target.checked) {
+  //     setSelectedRows((prevSelectedItems: any) => [
+  //       ...prevSelectedItems,
+  //       selectedRow.row.original,
+  //     ]);
+  //   } else {
+  //     setSelectedRows((prevSelectedItems: any) =>
+  //       prevSelectedItems.filter((item: any) => item.id !== +checkboxId)
+  //     );
+  //   }
+  // };
 
   const handleToggleDropDown = (id: number) => {
     setOpenRow((prevOpenRow) => (prevOpenRow == id ? null : id));
@@ -113,32 +101,37 @@ const InstructorPersonalProfile = () => {
 
   const instructorPersonalColumns = useMemo<ColumnDef<any>[]>(
     () => [
+      // {
+      //   header: () => {
+      //     return (
+      //       <input
+      //         type="checkbox"
+      //         className="w-5 h-5 cursor-pointer"
+      //         id={crypto.randomUUID()}
+      //         name="selectedItem"
+      //         onClick={handleHeaderCheckboxClick}
+      //       />
+      //     );
+      //   },
+      //   accessorKey: "checkbox",
+      //   cell: (info: any) => {
+      //     return (
+      //       <div className="flex items-center justify-center gap-4">
+      //         <input
+      //           type="checkbox"
+      //           className="w-5 h-5 cursor-pointer"
+      //           id={info.row.original.id}
+      //           name="selectedItem"
+      //           onClick={(event) => handleCheckboxChange(event, info)}
+      //         />
+      //       </div>
+      //     );
+      //   },
+      // },
       {
-        header: () => {
-          return (
-            <input
-              type="checkbox"
-              className="w-5 h-5 cursor-pointer"
-              id={crypto.randomUUID()}
-              name="selectedItem"
-              onClick={handleHeaderCheckboxClick}
-            />
-          );
-        },
-        accessorKey: "checkbox",
-        cell: (info: any) => {
-          return (
-            <div className="flex items-center justify-center gap-4">
-              <input
-                type="checkbox"
-                className="w-5 h-5 cursor-pointer"
-                id={info.row.original.id}
-                name="selectedItem"
-                onClick={(event) => handleCheckboxChange(event, info)}
-              />
-            </div>
-          );
-        },
+        header: () => <span>{t("#")}</span>,
+        accessorKey: "#",
+        cell: (info) => info.row.index + 1,
       },
       {
         header: () => <span>{t("type of certificate")}</span>,
@@ -178,16 +171,20 @@ const InstructorPersonalProfile = () => {
           const totalRows = info.table.getCoreRowModel().rows.length;
           return (
             <DotsDropDown
-              firstName="view course description"
-              firstIcon={<GrView size={22} className="fill-mainColor" />}
-              secondName="edit course description"
-              secondIcon={<FaRegEdit size={22} className="fill-mainColor" />}
+              firstName="edit"
+              firstIcon={<FaRegEdit size={22} className="fill-mainColor" />}
+              secondName="delete"
+              secondIcon={
+                <RiDeleteBin5Line size={22} className="fill-mainRed" />
+              }
               isOpen={openRow == info.row.index}
               onToggle={() => handleToggleDropDown(info.row.index)}
-              onFirstClick={() => {}}
-              onSecondClick={() => {
-                navigate(`/instructors/edit/${id}`);
+              onFirstClick={() => {
+                navigate(`/instructors/edit/${id}`, {
+                  state: info.row.original,
+                });
               }}
+              onSecondClick={() => {}}
               isLastRow={rowIndex === totalRows - 1}
             />
           );
@@ -212,7 +209,9 @@ const InstructorPersonalProfile = () => {
       <div className="pb-2 bg-white rounded-2xl">
         <ProfileIntroduction
           personalData={instructorPersonalData}
+          navigation="/instructors/edit/"
           blocking={true}
+          deleteInstructor={() => mutate(instructorPersonalData.id)}
         />
 
         <InstructorSocialInformation personalData={instructorPersonalData} />

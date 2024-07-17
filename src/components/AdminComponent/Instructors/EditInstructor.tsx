@@ -7,9 +7,9 @@ import InstructorQualificationData from "../../../components/AdminComponent/Inst
 import customFetch from "../../../utils/axios";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "../../UI/Loading";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 
-const getInstructorEdit = async (id: number) => {
+const getInstructorEdit = async (id: any) => {
   const response = await customFetch(`teacher/${id}`);
   return response?.data;
 };
@@ -23,12 +23,16 @@ const EditInstructor = () => {
     useState(null);
   const [qualificationEditData, setQualificationEditData] = useState(null);
   const { id: instructorParamID } = useParams();
+  const location = useLocation();
+  const dataReceived = location.state;
 
-  const { data, isSuccess, isRefetching, isLoading, isFetching } = useQuery({
-    queryKey: ["instructor-edit"],
-    queryFn: () => getInstructorEdit(instructorParamID),
-  });
+  const { data, isSuccess, isRefetching, isLoading, isFetching, refetch } =
+    useQuery({
+      queryKey: ["instructor-edit", instructorParamID],
+      queryFn: () => getInstructorEdit(instructorParamID),
+    });
 
+  console.log("🚀 ~ EditInstructor ~ data:", data);
   const instructorData = data?.data?.teacher;
   const contactInfo =
     data?.data?.teacher?.contactInfo && data?.data?.teacher?.contactInfo[0];
@@ -79,8 +83,14 @@ const EditInstructor = () => {
         newCertificate: instructorData?.certificates,
         teacher_id: instructorParamID,
       });
+
+      if (dataReceived) {
+        setActiveTab(`qualification data`);
+      } else {
+        setActiveTab("login data");
+      }
     }
-  }, [data, isSuccess]);
+  }, [data, isSuccess, instructorParamID, instructorID]);
 
   const tabs = [
     { id: 0, title: "login data" },
@@ -89,7 +99,11 @@ const EditInstructor = () => {
     { id: 3, title: "qualification data" },
   ];
 
-  if (isRefetching || isLoading || isFetching) return <Loading />;
+  useEffect(() => {
+    refetch();
+  }, [instructorParamID]);
+
+  if (isLoading || isFetching || isRefetching) return <Loading />;
 
   return (
     <div>

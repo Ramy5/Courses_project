@@ -1,21 +1,11 @@
 import { Form, Formik } from "formik";
 import BaseInput from "../../UI/BaseInput";
 import { t } from "i18next";
-import { Button, Table } from "../..";
+import { Button } from "../..";
 import { AiOutlineCloudUpload } from "react-icons/ai";
 import { RiDeleteBin5Line } from "react-icons/ri";
-import { useEffect, useMemo, useState } from "react";
+import { useState } from "react";
 import { HiMiniFolderArrowDown } from "react-icons/hi2";
-import { IoIosCheckmarkCircleOutline } from "react-icons/io";
-
-import {
-  ColumnDef,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
 import customFetch from "../../../utils/axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
@@ -319,7 +309,7 @@ const InstructorQualificationData = ({
               <Button type="submit" className="me-5" loading={isPending}>
                 {t("confirm")}
               </Button>
-              <Button type="button" className="bg-[#E6EAEE] text-mainColor">
+              <Button type="button" className="bg-[#E6EAEE] text-mainColor" action={() => navigate(-1)}>
                 {t("cancel")}
               </Button>
             </div>

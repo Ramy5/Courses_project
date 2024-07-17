@@ -36,6 +36,7 @@ const InstructorContactInformation = ({
   instructorID,
   setActiveTab,
 }: instructorAddParentData_TP) => {
+  console.log("🚀 ~ editObj:", editObj)
   const queryClient = useQueryClient();
 
   const initialValues: AddInstructorParent_TP = {

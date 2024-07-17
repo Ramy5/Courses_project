@@ -3,22 +3,31 @@ import DotsDropDown from "../../UI/DotsDropDown";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import { FaRegEdit } from "react-icons/fa";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface PersonlyProfile {
   personalData: any;
   blocking?: boolean;
+  navigation?: string;
+  deleteInstructor?: () => void;
 }
 
-const ProfileIntroduction = ({ personalData, blocking }: PersonlyProfile) => {
+const ProfileIntroduction = ({
+  personalData,
+  blocking,
+  navigation,
+  deleteInstructor,
+}: PersonlyProfile) => {
   const [openRow, setOpenRow] = useState<number | null>(null);
+  const navigate = useNavigate();
 
   const handleToggleDropDown = (id: number) => {
     setOpenRow((prevOpenRow) => (prevOpenRow == id ? null : id));
   };
 
   const jobTitle =
-    personalData?.qualifications?.[0] &&
-    personalData?.qualifications?.[0]?.job_title;
+    personalData?.qualifications[0] &&
+    personalData?.qualifications[0]?.job_title;
 
   return (
     <div className="relative">
@@ -34,7 +43,7 @@ const ProfileIntroduction = ({ personalData, blocking }: PersonlyProfile) => {
             <h2 className="text-lg font-semibold md:text-xl">
               {personalData.full_name}
             </h2>
-            <p className="text-sm font-medium md:text-base">{jobTitle}</p>
+            <p className="md:text-base font-medium text-sm">{jobTitle}</p>
           </div>
         </div>
 
@@ -60,6 +69,13 @@ const ProfileIntroduction = ({ personalData, blocking }: PersonlyProfile) => {
                 }
                 isOpen={openRow == personalData.id}
                 onToggle={() => handleToggleDropDown(personalData.id)}
+                onFirstClick={() => {
+                  navigate(`${navigation}${personalData.id}`);
+                }}
+                onSecondClick={() => {
+                  deleteInstructor();
+                  navigate(-1)
+                }}
               />
             </div>
           </>

@@ -13,6 +13,8 @@ import { t } from "i18next";
 import { Button, DateInputField } from "../..";
 import { IoIosCheckmarkCircleOutline } from "react-icons/io";
 import DatePicker from "react-datepicker";
+import { toast } from "react-toastify";
+import { RiDeleteBin5Line } from "react-icons/ri";
 
 interface Certificate {
   type_certificate: string;
@@ -34,8 +36,8 @@ const AddNewCertificatesInput = ({
   setNewCertificates,
   newCertificates,
 }: AddNewCertificatesInput_TP) => {
-
-  const editCertificate = editObj?.newCertificate && editObj?.newCertificate[0]
+  console.log("🚀 ~ newCertificates:", newCertificates)
+  const editCertificate = editObj?.newCertificate && editObj?.newCertificate[0];
 
   const initialValues: Certificate = {
     type_certificate: editCertificate?.type_certificate || "",
@@ -81,10 +83,29 @@ const AddNewCertificatesInput = ({
       {
         header: () => <span>{t("")}</span>,
         accessorKey: "action",
-        cell: () => null,
+        cell: (info) => {
+          console.log("🚀 ~ info.row.original.day_id:", info.row.original);
+
+          return (
+            <div className="flex items-center gap-5">
+              <RiDeleteBin5Line
+                onClick={() => {
+                  const suggestedReferencesFilter = newCertificates?.filter(
+                    (data: any) => {
+                      return data.id !== info.row.original.id;
+                    }
+                  );
+                  setNewCertificates(suggestedReferencesFilter);
+                }}
+                size={22}
+                className="m-auto cursor-pointer fill-mainRed"
+              />
+            </div>
+          );
+        },
       },
     ],
-    []
+    [newCertificates]
   );
 
   const table = useReactTable({
@@ -97,6 +118,8 @@ const AddNewCertificatesInput = ({
   return (
     <Formik initialValues={initialValues} onSubmit={() => {}}>
       {({ values, resetForm }) => {
+        console.log("🚀 ~ values:", values);
+
         return (
           <Form>
             <table className="min-w-full text-center">
@@ -177,10 +200,14 @@ const AddNewCertificatesInput = ({
                   </td>
                   <td>
                     <Button
-                      className="bg-transparent"
+                      className="bg-transparent hover:scale-[0.9]"
                       type="button"
                       action={() => {
-                        setNewCertificates((prev) => [values, ...prev]);
+                        if (values?.type_certificate) {
+                          setNewCertificates((prev) => [{ ...values, id: prev.length + 1 }, ...prev]);
+                        } else {
+                          toast.info("add data first");
+                        }
                         resetForm();
                       }}
                     >
