@@ -45,7 +45,7 @@ const LoginStep = (props: LoginStepProps_TP) => {
 
     setTimeout(() => {
       if (role === "admin") navigate("/informationPanel");
-      else if (role === "instructor") navigate("/instructor/informationPanel");
+      else if (role === "teacher") navigate("/instructor/informationPanel");
       else navigate("/student/informationPanel");
     }, 200);
   }, [user, role, navigate]);
@@ -127,11 +127,11 @@ const LoginStep = (props: LoginStepProps_TP) => {
             }}
           />
           <MainRadio
-            id={"instructor"}
+            id={"teacher"}
             label={t("instructor")}
             name="loginType"
-            value={"instructor"}
-            checked={values.loginType === "instructor"}
+            value={"teacher"}
+            checked={values.loginType === "teacher"}
             onChange={(e) => {
               setFieldValue("loginType", e.target.value);
             }}

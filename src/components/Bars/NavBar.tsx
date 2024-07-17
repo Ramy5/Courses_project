@@ -73,7 +73,7 @@ const NavBar: React.FC<SideBarProps> = ({
               alt="User Image"
               className="rounded-full w-7 h-7"
             />
-            <span className="m-0">{user.name}</span>
+            <span className="m-0">{user?.name}</span>
           </div>
           <Button
             loading={isLoading}

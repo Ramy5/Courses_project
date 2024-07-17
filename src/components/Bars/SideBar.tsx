@@ -280,7 +280,7 @@ const SideBar: React.FC<SideBarProps> = ({
     >
       <nav
         className="flex flex-col h-full border-r shadow-sm "
-        style={{ backgroundColor: sidebarColor }}
+        style={{ backgroundColor: sidebarColor || "#393D94" }}
       >
         <div className="flex items-center justify-between p-4 pb-2">
           <button

@@ -16,8 +16,9 @@ const ProfileIntroduction = ({ personalData, blocking }: PersonlyProfile) => {
     setOpenRow((prevOpenRow) => (prevOpenRow == id ? null : id));
   };
 
-  const jobTitle = personalData?.qualifications[0] && personalData?.qualifications[0]?.job_title
-
+  const jobTitle =
+    personalData?.qualifications?.[0] &&
+    personalData?.qualifications?.[0]?.job_title;
 
   return (
     <div className="relative">
@@ -30,12 +31,10 @@ const ProfileIntroduction = ({ personalData, blocking }: PersonlyProfile) => {
             className="border-[3px] border-[#393D94] rounded-full md:w-[134px] w-24"
           />
           <div className="text-black">
-            <h2 className="md:text-xl font-semibold text-lg">
+            <h2 className="text-lg font-semibold md:text-xl">
               {personalData.full_name}
             </h2>
-            <p className="md:text-base font-medium text-sm">
-              {jobTitle}
-            </p>
+            <p className="text-sm font-medium md:text-base">{jobTitle}</p>
           </div>
         </div>
 
