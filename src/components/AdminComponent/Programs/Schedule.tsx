@@ -263,7 +263,15 @@ const Schedule = ({ scheduleData }) => {
   console.log("🚀 ~ events ~ events:", events)
 
   function getResourceIdByDayId(day_id) {
-``
+    const dayMapping = {
+      1: 1,
+      2: 2,
+      3: 3,
+      4: 4,
+      5: 5,
+      6: 6,
+      7: 7,
+    };
     return dayMapping[day_id] || 'unknown';
   }
   
@@ -299,14 +307,14 @@ const Schedule = ({ scheduleData }) => {
       //   { id: "wednesday", title: "friday" },
       // ];
 
-      const resources = [
-        { id: 7, title: "saturday" },
-        { id: 3, title: "sunday" },
-        { id: 1, title: "monday" },
-        { id: 2, title: "tuesday" },
-        { id: 6, title: "wednesday" },
-        { id: 4, title: "thursday" },
-        { id: 5, title: "friday" },
+      const resources = [ 
+        { id: 1, title: "saturday" },
+        { id: 2, title: "sunday" },
+        { id: 3, title: "monday" },
+        { id: 4, title: "tuesday" },
+        { id: 5, title: "wednesday" },
+        { id: 6, title: "thursday" },
+        { id: 7, title: "friday" },
       ];
 
       calendar.setOption("resources", resources);

@@ -10,15 +10,42 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { formatDate } from "../../../utils/helpers";
+import { BASE_URL } from "../../../utils/constants";
+import axios from "axios";
+import Cookies from "js-cookie";
+
+// const postInstructorPersonal = async (newStudent: any) => {
+//   const data = customFetch.post("addPersonalData", newStudent);
+//   return data;
+// };
+
+// const editInstructorPersonal = async (editInstructor: any) => {
+//   const data = customFetch.post(`addPersonalData`, editInstructor);
+//   return data;
+// };
 
 const postInstructorPersonal = async (newStudent: any) => {
-  const data = customFetch.post("addPersonalData", newStudent);
-  return data;
+  const token = Cookies.get("token");
+  const response = await axios.post(`${BASE_URL}addPersonalData`, newStudent, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "multipart/form-data",
+    },
+  });
+
+  return response;
 };
 
-const editInstructorPersonal = async (editInstructor: any) => {
-  const data = customFetch.post(`addPersonalData`, editInstructor);
-  return data;
+const editInstructorPersonal = async (editStudent: any) => {
+  const token = Cookies.get("token");
+  const response = await axios.post(`${BASE_URL}addPersonalData`, editStudent, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "multipart/form-data",
+    },
+  });
+
+  return response;
 };
 
 interface AddInstructorPersonal_TP {
@@ -47,8 +74,11 @@ const InstructorPersonalData = ({
   setInstructorID,
 }: InstructorAddPersonalData) => {
   const [selectedImage, setSelectedImage] = useState(); // Initial state is the default image
+  const [imagePreview, setImagePreview] = useState(null);
+  console.log("🚀 ~ selectedImage:", selectedImage);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const formData = new FormData();
 
   const initialValues = {
     // PERSONAL DATA
@@ -120,7 +150,7 @@ const InstructorPersonalData = ({
       address: values?.address,
       date_birth: formatDate(values?.date_birth),
       type: values?.type || "male",
-      personal_image: selectedImage.name,
+      personal_image: selectedImage,
       teacher_id: instructorID,
     };
 
@@ -132,14 +162,14 @@ const InstructorPersonalData = ({
   useEffect(() => setSelectedImage(editObj?.image), []);
 
   const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setSelectedImage(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
+    const file = event?.target?.files[0];
+    setSelectedImage(file);
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setImagePreview(reader.result);
+    };
+    reader.readAsDataURL(file);
   };
 
   const handleDeleteImage = () => {
@@ -244,9 +274,9 @@ const InstructorPersonalData = ({
                 </div>
 
                 <div className="w-full md:w-1/2">
-                  {selectedImage ? (
+                  {imagePreview ? (
                     <img
-                      src={selectedImage}
+                      src={imagePreview}
                       alt="user"
                       className="m-auto w-[180px] h-[180px] rounded-full"
                     />

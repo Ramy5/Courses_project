@@ -13,13 +13,17 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import selectStyle from "../../../utils/selectStyle";
+import { useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import customFetch from "../../../utils/axios";
 
 const CreateCoursesInputs = ({
   setCoursesData,
   setStep,
   editCoursesData,
-  coursesData,
   setEditCoursesData,
+  editFinishedCoursesData,
+  setEditFinishedCoursesData,
 }) => {
   //   const [selectedInstructor, setSelectedInstructor] = useState<any>([]);
   const [suggestedReferences, setSuggestedReferences] = useState(
@@ -27,39 +31,99 @@ const CreateCoursesInputs = ({
   );
 
   const [level, setLevel] = useState();
+  const navigate = useNavigate();
 
   const initialValues = {
-    id: editCoursesData?.id || 0,
-    course_name: editCoursesData?.course_name || "",
-    course_teachers: editCoursesData?.course_teachers || [],
-    course_code: editCoursesData?.course_code || 0,
-    level: editCoursesData?.level || "",
-    course_objectives: editCoursesData?.course_objectives || "",
-    information_concepts: editCoursesData?.information_concepts || "",
-    mental_skills: editCoursesData?.mental_skills || "",
-    general_skills: editCoursesData?.general_skills || "",
-    professional_skills: editCoursesData?.professional_skills || "",
+    id: editCoursesData?.id || editFinishedCoursesData?.id || 0,
+    course_name:
+      editCoursesData?.course_name ||
+      editFinishedCoursesData?.course_name ||
+      "",
+    course_teachers:
+      editCoursesData?.course_teachers ||
+      editFinishedCoursesData?.course_teachers ||
+      [],
+    course_code:
+      editCoursesData?.course_code || editFinishedCoursesData?.course_code || 0,
+    level: editCoursesData?.level || editFinishedCoursesData?.level || "",
+    course_objectives:
+      editCoursesData?.course_objectives ||
+      editFinishedCoursesData?.course_objectives ||
+      "",
+    information_concepts:
+      editCoursesData?.information_concepts ||
+      editFinishedCoursesData?.information_concepts ||
+      "",
+    mental_skills:
+      editCoursesData?.mental_skills ||
+      editFinishedCoursesData?.mental_skills ||
+      "",
+    general_skills:
+      editCoursesData?.general_skills ||
+      editFinishedCoursesData?.general_skills ||
+      "",
+    professional_skills:
+      editCoursesData?.professional_skills ||
+      editFinishedCoursesData?.professional_skills ||
+      "",
     teaching_learning_methods:
-      editCoursesData?.teaching_learning_methods || "Lectures",
-    lectures: editCoursesData?.lectures || 0,
-    practical_training: editCoursesData?.practical_training || 0,
-    applications: editCoursesData?.applications || 0,
-    research: editCoursesData?.research || 0,
-    case_studies: editCoursesData?.case_studies || 0,
-    project: editCoursesData?.project || 0,
-    instructors_name: editCoursesData?.instructors_name || 0,
-    instructors_id: editCoursesData?.instructors_id || 0,
+      editCoursesData?.teaching_learning_methods ||
+      editFinishedCoursesData?.teaching_learning_methods ||
+      "Lectures",
+    lectures:
+      editCoursesData?.lectures || editFinishedCoursesData?.lectures || 0,
+    practical_training:
+      editCoursesData?.practical_training ||
+      editFinishedCoursesData?.practical_training ||
+      0,
+    applications:
+      editCoursesData?.applications ||
+      editFinishedCoursesData?.applications ||
+      0,
+    research:
+      editCoursesData?.research || editFinishedCoursesData?.research || 0,
+    case_studies:
+      editCoursesData?.case_studies ||
+      editFinishedCoursesData?.case_studies ||
+      0,
+    project: editCoursesData?.project || editFinishedCoursesData?.project || 0,
+    instructors_name:
+      editCoursesData?.instructors_name ||
+      editFinishedCoursesData?.instructors_name ||
+      0,
+    instructors_id:
+      editCoursesData?.instructors_id ||
+      editFinishedCoursesData?.instructors_id ||
+      0,
   };
 
-  const instructorsName = [
-    { id: 1, value: "محمد احمد", label: "محمد احمد" },
-    { id: 2, value: "محمود سالم", label: "محمود سالم" },
-    { id: 3, value: "احمد محمد", label: "احمد محمد" },
-    { id: 4, value: "احمد محمود", label: "احمد محمود" },
-    { id: 5, value: "سالم احمد", label: "سالم احمد" },
-    { id: 6, value: "سالم محمد", label: "سالم محمد" },
-    { id: 7, value: "محمد محمود", label: "محمد محمود" },
-  ];
+  // const instructorsName = [
+  //   { id: 1, value: "محمد احمد", label: "محمد احمد" },
+  //   { id: 2, value: "محمود سالم", label: "محمود سالم" },
+  //   { id: 3, value: "احمد محمد", label: "احمد محمد" },
+  //   { id: 4, value: "احمد محمود", label: "احمد محمود" },
+  //   { id: 5, value: "سالم احمد", label: "سالم احمد" },
+  //   { id: 6, value: "سالم محمد", label: "سالم محمد" },
+  //   { id: 7, value: "محمد محمود", label: "محمد محمود" },
+  // ];
+
+  const fetchTeacherData = async () => {
+    const response = await customFetch(`/allTeachers`);
+    return response;
+  };
+
+  const { data } = useQuery({
+    queryKey: ["teacher_data"],
+    queryFn: fetchTeacherData,
+  });
+
+  const teachersData = data && data?.data?.data.teachers;
+
+  const teachersOption = teachersData?.map((teacher) => ({
+    id: teacher.id,
+    value: teacher.full_name,
+    label: teacher.full_name,
+  }));
 
   //   const courseTeachers = editCoursesData?.course_teachers?.map(
   //     (teacher) => teacher
@@ -237,6 +301,7 @@ const CreateCoursesInputs = ({
                         placeholder={t("course name")}
                         label={t("course name")}
                         labelProps="!font-semibold"
+                        disabled={editFinishedCoursesData}
                       />
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
                         <BaseInput
@@ -247,6 +312,7 @@ const CreateCoursesInputs = ({
                           placeholder={t("course code")}
                           label={t("course code")}
                           labelProps="!font-semibold"
+                          disabled={editFinishedCoursesData}
                         />
                         <div>
                           <label htmlFor="level" className="font-semibold">
@@ -264,6 +330,7 @@ const CreateCoursesInputs = ({
                               }}
                               placeholder={t("level")}
                               styles={selectStyle}
+                              isDisabled={editFinishedCoursesData}
                             />
                           </div>
                         </div>
@@ -561,7 +628,7 @@ const CreateCoursesInputs = ({
                           isMulti
                           className="basic-multi-select"
                           classNamePrefix="select"
-                          value={instructorsName.filter((option) =>
+                          value={teachersOption.filter((option) =>
                             values.course_teachers.includes(option.id)
                           )}
                           onChange={(option) => {
@@ -570,7 +637,7 @@ const CreateCoursesInputs = ({
                               option?.map((option) => option.id)
                             );
                           }}
-                          options={instructorsName}
+                          options={teachersOption}
                           placeholder={t("instructor name")}
                           styles={customStyles}
                         />
@@ -652,7 +719,6 @@ const CreateCoursesInputs = ({
                                   !values.date &&
                                   !values.link
                                 ) {
-                                  
                                   return;
                                 }
                                 setSuggestedReferences((prev: any) => [
@@ -745,7 +811,15 @@ const CreateCoursesInputs = ({
                   <Button
                     type="button"
                     className="bg-[#E6EAEE] text-mainColor"
-                    action={() => setStep(1)}
+                    action={() => {
+                      if (editFinishedCoursesData) {
+                        navigate(
+                          `/programs/programInfo/${editFinishedCoursesData?.id}`
+                        );
+                      } else {
+                        setStep(1);
+                      }
+                    }}
                   >
                     {t("cancel")}
                   </Button>

@@ -6,19 +6,37 @@ import { Button } from "../..";
 import Select from "react-select";
 import customFetch from "../../../utils/axios";
 import { useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 
-const AddLectureTiming = ({ setSteps, scheduleData, setScheduleData }) => {
+const AddLectureTiming = ({
+  setSteps,
+  scheduleData,
+  setScheduleData,
+  scheduleId,
+  editStudySchedule,
+  setEditStudySchedule
+}) => {
+  const [coursesSelect, setCoursesSelect] = useState(null);
+  const [groupSelect, setGroupSelect] = useState(null);
+  const [teacherSelect, setTeacherSelect] = useState(null);
+  const [levelSelect, setLevelSelect] = useState(null);
+
   const initialValues = {
-    day_id: JSON.parse(localStorage.getItem("day"))?.id || 0,
-    course_id: 0,
-    course_name: "",
-    start_time: "",
-    end_time: "",
-    group: "",
-    group_name: "",
-    teacher_id: 0,
-    teacher_name: "",
-    level: "",
+    day_id:
+      editStudySchedule?.day_id ||
+      JSON.parse(localStorage.getItem("day"))?.id ||
+      0,
+    program_id: editStudySchedule?.program_id || scheduleId,
+    id: editStudySchedule?.id || crypto.randomUUID(),
+    course_id: editStudySchedule?.course_id || 0,
+    course_name: editStudySchedule?.course_name || "",
+    start_time: editStudySchedule?.start_time || "",
+    end_time: editStudySchedule?.end_time || "",
+    group: editStudySchedule?.group || "",
+    group_name: editStudySchedule?.group_name || "",
+    teacher_id: editStudySchedule?.teacher_id || 0,
+    teacher_name: editStudySchedule?.teacher_name || "",
+    level: editStudySchedule?.level || "",
   };
 
   const fetchTeacherData = async () => {
@@ -38,50 +56,93 @@ const AddLectureTiming = ({ setSteps, scheduleData, setScheduleData }) => {
     value: teacher.full_name,
     label: teacher.full_name,
   }));
-  console.log("🚀 ~ teachersOption:", teachersOption);
+
+  const fetchCoursesData = async () => {
+    const response = await customFetch(`/courses`);
+    return response;
+  };
+
+  const { data: courses } = useQuery({
+    queryKey: ["coueses_data"],
+    queryFn: fetchCoursesData,
+  });
+
+  const coursesData = courses && courses?.data?.data.courses;
+
+  const courseOption = coursesData?.map((teacher) => ({
+    id: teacher.id,
+    value: teacher.course_name,
+    label: teacher.course_name,
+  }));
 
   const levelsOption = [
-    { id: 1, value: 1, label: 1 },
-    { id: 2, value: 2, label: 2 },
-    { id: 3, value: 3, label: 3 },
-    { id: 4, value: 4, label: 4 },
-  ];
-
-  const courseOption = [
     {
+      label: `${t("level")} 1`,
+      value: "level 1",
       id: 1,
-      value: "ذكاء اصطناعي",
-      label: "ذكاء اصطناعي",
     },
     {
+      label: `${t("level")} 2`,
+      value: "level 2",
       id: 2,
-      value: "حاسبات ومعلومات",
-      label: "حاسبات ومعلومات",
     },
     {
+      label: `${t("level")} 3`,
+      value: "level 3",
       id: 3,
-      value: "نظم ومعلومات",
-      label: "نظم ومعلومات",
+    },
+    {
+      label: `${t("level")} 4`,
+      value: "level 4",
+      id: 4,
     },
   ];
 
-  const sectionOption = [
+  const groupNumberOption = [
     {
+      label: `1`,
+      value: "1",
       id: 1,
-      value: "شعبة - 1",
-      label: "شعبة - 1",
     },
     {
+      label: `2`,
+      value: "2",
       id: 2,
-      value: "شعبة - 2",
-      label: "شعبة - 2",
-    },
-    {
-      id: 3,
-      value: "شعبة - 3",
-      label: "شعبة - 3",
     },
   ];
+
+  useEffect(() => {
+    if (editStudySchedule) {
+      const editLevel = {
+        id: editStudySchedule?.level || "",
+        label: editStudySchedule?.level || t("level"),
+        value: editStudySchedule?.level || "",
+      };
+
+      const editGroup = {
+        id: editStudySchedule?.group || "",
+        label: editStudySchedule?.group_name || t("branch"),
+        value: editStudySchedule?.group_name || "",
+      };
+
+      const editTeacher = {
+        id: editStudySchedule?.teacher_id || "",
+        label: editStudySchedule?.teacher_name || t("lecturer"),
+        value: editStudySchedule?.teacher_name || "",
+      };
+
+      const editCourses = {
+        id: editStudySchedule?.course_id || "",
+        label: editStudySchedule?.course_name || t("course"),
+        value: editStudySchedule?.course_name || "",
+      };
+
+      setLevelSelect(editLevel);
+      setGroupSelect(editGroup);
+      setTeacherSelect(editTeacher);
+      setCoursesSelect(editCourses);
+    }
+  }, [editStudySchedule]);
 
   return (
     <div className="bg-white rounded-xl p-6">
@@ -98,7 +159,7 @@ const AddLectureTiming = ({ setSteps, scheduleData, setScheduleData }) => {
                 <BaseInput
                   name="day"
                   id="day"
-                  value={scheduleData.day.day}
+                  value={scheduleData?.day?.day}
                   type="text"
                   label={t("day")}
                   className="w-full text-lg py-1 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
@@ -116,10 +177,16 @@ const AddLectureTiming = ({ setSteps, scheduleData, setScheduleData }) => {
                     name="course_id"
                     placeholder={t("course")}
                     options={courseOption}
+                    value={coursesSelect}
                     onChange={(e) => {
                       console.log("🚀 ~ AddLectureTiming ~ e:", e);
                       setFieldValue("course_id", e.id);
                       setFieldValue("course_name", e.value);
+                      setCoursesSelect({
+                        id: e.id,
+                        label: e.value,
+                        value: e.value,
+                      });
                     }}
                   />
                 </div>
@@ -133,10 +200,16 @@ const AddLectureTiming = ({ setSteps, scheduleData, setScheduleData }) => {
                     id="group"
                     name="group"
                     placeholder={t("branch")}
-                    options={sectionOption}
+                    options={groupNumberOption}
+                    value={groupSelect}
                     onChange={(e) => {
                       setFieldValue("group", e.id);
                       setFieldValue("group_name", e.value);
+                      setGroupSelect({
+                        id: e.id,
+                        label: e.value,
+                        value: e.value,
+                      });
                     }}
                   />
                 </div>
@@ -152,9 +225,15 @@ const AddLectureTiming = ({ setSteps, scheduleData, setScheduleData }) => {
                       name="teacher_id"
                       placeholder={t("lecturer")}
                       options={teachersOption}
+                      value={teacherSelect}
                       onChange={(e) => {
                         setFieldValue("teacher_id", e.id);
                         setFieldValue("teacher_name", e.value);
+                        setTeacherSelect({
+                          id: e.id,
+                          label: e.value,
+                          value: e.value,
+                        });
                       }}
                     />
                   </div>
@@ -168,8 +247,14 @@ const AddLectureTiming = ({ setSteps, scheduleData, setScheduleData }) => {
                       name="level"
                       placeholder={t("level")}
                       options={levelsOption}
+                      value={levelSelect}
                       onChange={(e) => {
                         setFieldValue("level", e.id);
+                        setLevelSelect({
+                          id: e.id,
+                          label: e.value,
+                          value: e.value,
+                        });
                       }}
                     />
                   </div>
@@ -206,10 +291,32 @@ const AddLectureTiming = ({ setSteps, scheduleData, setScheduleData }) => {
                 <Button
                   type="button"
                   action={() => {
-                    setScheduleData((prevState) => ({
-                      ...prevState,
-                      lecture_time: [...prevState.lecture_time, values],
-                    }));
+                    // setScheduleData((prevState) => ({
+                    //   ...prevState,
+                    //   lecture_time: [...prevState.lecture_time, values],
+                    // }));
+                    setScheduleData((prevState) => {
+                      // Find the index of the item to be edited
+                      const index = prevState.lecture_time.findIndex(item => item.id === values.id);
+                    
+                      if (index !== -1) {
+                        // Replace the old item with the new one
+                        const updatedLectureTime = [...prevState.lecture_time];
+                        updatedLectureTime[index] = values;
+                    
+                        return {
+                          ...prevState,
+                          lecture_time: updatedLectureTime,
+                        };
+                      } else {
+                        // If the item is not found, add it as a new item
+                        return {
+                          ...prevState,
+                          lecture_time: [...prevState.lecture_time, values],
+                        };
+                      }
+                    });
+                    setEditStudySchedule({})
                     setSteps(1);
                   }}
                 >

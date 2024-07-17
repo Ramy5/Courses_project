@@ -7,20 +7,18 @@ import { useNavigate } from "react-router-dom";
 type DotsDropDown_TP = {
   instructorId?: number;
   instructorRoute?: string;
-  firstName: string;
-  firstIcon: any;
+  firstName?: string;
+  firstIcon?: any;
   secondName?: string;
   secondIcon?: any;
   isOpen: boolean;
   isLastRow?: boolean;
-  onToggle: () => void;
-  onFirstClick: () => void;
-  onSecondClick: () => void;
+  onToggle?: () => void;
+  onFirstClick?: () => void;
+  onSecondClick?: () => void;
 };
 
 const DotsDropDown = ({
-  instructorId,
-  instructorRoute,
   firstName,
   firstIcon,
   secondName,
@@ -32,17 +30,6 @@ const DotsDropDown = ({
   onSecondClick
 }: DotsDropDown_TP) => {
   const isRTL = useRTL();
-  // const navigate = useNavigate();
-
-  // const handleClickEdit = () => {
-  //   if (instructorRoute) {
-  //     navigate(`${instructorRoute}/${instructorId}`);
-  //   } else {
-  //     setData()
-  //   }
-  // };
-
-  const handleClickDelete = () => {};
 
   return (
     <div className="relative">

@@ -14,6 +14,7 @@ const StudyScheduleFirstStep = ({
   setSteps,
   setScheduleData,
   scheduleData,
+  setEditStudySchedule,
 }) => {
   const [activeButton, setActiveButton] = useState<any>(
     JSON.parse(localStorage.getItem("day")) || {
@@ -40,32 +41,28 @@ const StudyScheduleFirstStep = ({
     queryFn: fetchDaysData,
   });
 
-  console.log("🚀 ~ isRefetching:", isRefetching);
-  console.log("🚀 ~ isLoading:", isLoading);
-
   const dayData = data?.data.data.days;
-  console.log("🚀 ~ StudyScheduleFirstStep ~ dayData:", dayData);
 
-  const studyScheduleData = [
-    {
-      id: 1,
-      course: "ذكاء اصطناعي",
-      level: "3",
-      section: "شعبة - 2",
-      instructor: "محمد احمد خضر",
-      start_date: "8م",
-      end_date: "10م",
-    },
-    {
-      id: 2,
-      course: "ذكاء اصطناعي",
-      level: "3",
-      section: "شعبة - 2",
-      instructor: "محمد احمد خضر",
-      start_date: "8م",
-      end_date: "10م",
-    },
-  ];
+  // const studyScheduleData = [
+  //   {
+  //     id: 1,
+  //     course: "ذكاء اصطناعي",
+  //     level: "3",
+  //     section: "شعبة - 2",
+  //     instructor: "محمد احمد خضر",
+  //     start_date: "8م",
+  //     end_date: "10م",
+  //   },
+  //   {
+  //     id: 2,
+  //     course: "ذكاء اصطناعي",
+  //     level: "3",
+  //     section: "شعبة - 2",
+  //     instructor: "محمد احمد خضر",
+  //     start_date: "8م",
+  //     end_date: "10م",
+  //   },
+  // ];
 
   const studyScheduleColumns = useMemo<ColumnDef<any>[]>(
     () => [
@@ -80,7 +77,7 @@ const StudyScheduleFirstStep = ({
         cell: (info) => <span>{t(`${info.getValue()}`)}</span>,
       },
       {
-        header: () => <span>{t("section")}</span>,
+        header: () => <span>{t("branch")}</span>,
         accessorKey: "group_name",
         cell: (info) => info.getValue(),
       },
@@ -103,19 +100,38 @@ const StudyScheduleFirstStep = ({
         header: () => <span>{t("")}</span>,
         accessorKey: "action",
         cell: (info) => {
+          console.log("🚀 ~ info.row.original.day_id:", info.row.original);
+
           return (
             <div className="flex items-center gap-5">
-              <FaRegEdit size={24} className="cursor-pointer fill-mainColor" />
+              <FaRegEdit
+                size={24}
+                className="cursor-pointer fill-mainColor"
+                onClick={() => {
+                  setEditStudySchedule(info.row.original);
+                  setSteps(4);
+                }}
+              />
               <RiDeleteBin5Line
                 size={24}
                 className="cursor-pointer fill-mainRed"
+                onClick={() => {
+                  const scheduleTableFilter =
+                    scheduleData?.lecture_time?.filter((data: any) => {
+                      return data.id != info.row.original.id;
+                    });
+                  setScheduleData({
+                    ...scheduleData,
+                    lecture_time: scheduleTableFilter,
+                  });
+                }}
               />
             </div>
           );
         },
       },
     ],
-    []
+    [scheduleData]
   );
 
   useEffect(() => {
@@ -125,8 +141,9 @@ const StudyScheduleFirstStep = ({
     }));
   }, [activeButton]);
 
-  const filterScheduleTable = scheduleData?.lecture_time?.filter((item) => item.day_id === activeButton.id)
-  console.log("🚀 ~ filterScheduleTable:", filterScheduleTable)
+  const filterScheduleTable = scheduleData?.lecture_time?.filter(
+    (item) => item.day_id === activeButton.id
+  );
 
   {
     isLoading || (isRefetching && <Loading />);
@@ -228,10 +245,7 @@ const StudyScheduleFirstStep = ({
       </div>
 
       {filterScheduleTable?.length ? (
-        <Table
-          data={filterScheduleTable}
-          columns={studyScheduleColumns}
-        />
+        <Table data={filterScheduleTable} columns={studyScheduleColumns} />
       ) : (
         ""
       )}

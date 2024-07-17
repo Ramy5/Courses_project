@@ -11,49 +11,12 @@ import { useEffect, useState } from "react";
 import customFetch from "../../../utils/axios";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "../../../components/UI/Loading";
+import { toast } from "react-toastify";
 
 const Programs = () => {
   const [openRow, setOpenRow] = useState<number | null>(null);
 
   const navigate = useNavigate();
-
-  // const programsData = [
-  //   {
-  //     id: 1,
-  //     title: "ذكاء اصطناعي",
-  //     courses: "20 مقرر",
-  //     Instructors: "15 محاضر",
-  //     students: "+5000 طالب",
-  //   },
-  //   {
-  //     id: 2,
-  //     title: "ذكاء اصطناعي",
-  //     courses: "20 مقرر",
-  //     Instructors: "15 محاضر",
-  //     students: "+5000 طالب",
-  //   },
-  //   {
-  //     id: 3,
-  //     title: "ذكاء اصطناعي",
-  //     courses: "20 مقرر",
-  //     Instructors: "15 محاضر",
-  //     students: "+5000 طالب",
-  //   },
-  //   {
-  //     id: 4,
-  //     title: "ذكاء اصطناعي",
-  //     courses: "20 مقرر",
-  //     Instructors: "15 محاضر",
-  //     students: "+5000 طالب",
-  //   },
-  //   {
-  //     id: 5,
-  //     title: "ذكاء اصطناعي",
-  //     courses: "20 مقرر",
-  //     Instructors: "15 محاضر",
-  //     students: "+5000 طالب",
-  //   },
-  // ];
 
   const fetchProgramData = async () => {
     const response = await customFetch(`/programs`);

@@ -54,7 +54,9 @@ console.log("🚀 ~ StudyScheduleSecondStep ~ scheduleData:", scheduleData)
         <Button bordered action={() => setSteps(1)}>
           {t("previous")}
         </Button>
-        <Button action={() => setSteps(3)}>{t("next")}</Button>
+        <Button action={() => {
+          setSteps(3)
+          }}>{t("next")}</Button>
         <Button className="bg-mainRed">{t("cancel")}</Button>
       </div>
     </div>

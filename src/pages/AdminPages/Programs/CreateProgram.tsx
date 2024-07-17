@@ -1,5 +1,5 @@
 import { Form, Formik } from "formik";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../store";
 import CreateProgramInputs from "../../../components/AdminComponent/Programs/CreateProgramInputs";
@@ -9,6 +9,7 @@ import customFetch from "../../../utils/axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { t } from "i18next";
+import { useLocation } from "react-router-dom";
 interface AddProgram_TP {
   program_name: string;
   program_type: boolean;
@@ -46,7 +47,17 @@ const CreateProgram = ({ editObj }: programAdd_TP) => {
   const [step, setStep] = useState<number>(1);
   const [coursesData, setCoursesData] = useState([]);
   const [editCoursesData, setEditCoursesData] = useState({});
+  const [editFinishedCoursesData, setEditFinishedCoursesData] = useState({});
+  console.log("🚀 ~ CreateProgram ~ editFinishedCoursesData:", editFinishedCoursesData)
   const queryClient = useQueryClient();
+  const location = useLocation();
+  const dataReceived = location.state;
+  useEffect(() => {
+    if (dataReceived) {
+      setEditFinishedCoursesData(dataReceived)
+      setStep(2)
+    }
+  }, [dataReceived]);
 
   const initialValues = {
     program_name: "",
@@ -142,6 +153,8 @@ const CreateProgram = ({ editObj }: programAdd_TP) => {
               coursesData={coursesData}
               editCoursesData={editCoursesData}
               setEditCoursesData={setEditCoursesData}
+              editFinishedCoursesData={editFinishedCoursesData}
+              setEditFinishedCoursesData={setEditFinishedCoursesData}
             />
           )}
         </Form>
