@@ -7,7 +7,6 @@ import { Button } from "../..";
 import { ChangeEvent, useEffect, useState } from "react";
 import User from "../../../assets/instructors/user 1.svg";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import customFetch from "../../../utils/axios";
 import { toast } from "react-toastify";
 import { formatDate } from "../../../utils/helpers";
 import { useNavigate } from "react-router-dom";
@@ -97,11 +96,12 @@ const StudentAddPersonalData = ({
     "personal_image",
   ];
 
+  const [selectedViewImage, setSelectedViewImage] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
-  console.log("🚀 ~ selectedImage:", selectedImage);
 
   const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event?.target?.files[0];
+    setSelectedViewImage(URL.createObjectURL(file));
     setSelectedImage(file);
 
     // if (file) {
@@ -117,7 +117,7 @@ const StudentAddPersonalData = ({
     setSelectedImage(User);
   };
 
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationKey: ["add-student-personal"],
     mutationFn: postStudentPersonal,
     onSuccess: () => {
@@ -136,7 +136,7 @@ const StudentAddPersonalData = ({
     },
   });
 
-  const { mutate: editStudentMutate } = useMutation({
+  const { mutate: editStudentMutate, isPending: editIsPending } = useMutation({
     mutationKey: ["edit-student-personal"],
     mutationFn: editStudentPersonal,
     onSuccess: () => {
@@ -296,7 +296,7 @@ const StudentAddPersonalData = ({
 
               <div className="w-full md:w-1/2">
                 <img
-                  src={selectedImage?.name || User}
+                  src={selectedViewImage || User}
                   alt="user"
                   className="m-auto w-[180px] h-[180px] rounded-full"
                 />
@@ -336,7 +336,11 @@ const StudentAddPersonalData = ({
             </div>
 
             <div className="mt-8">
-              <Button type="submit" className="me-5">
+              <Button
+                loading={isPending || editIsPending}
+                type="submit"
+                className="me-5"
+              >
                 {t("confirm")}
               </Button>
               <Button

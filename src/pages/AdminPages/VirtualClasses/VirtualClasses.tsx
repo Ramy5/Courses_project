@@ -12,81 +12,6 @@ const getVirtualClassesData = async () => {
 };
 
 const VirtualClasses = () => {
-  const virtualClassesData = [
-    {
-      index: 1,
-      subject: "Physics",
-      academicProgram: "Artificial Intelligence",
-      level: "Level Three",
-      branch: "Computer Science",
-      lectureDate: "21/5/2025",
-      startTime: "8 AM",
-      endTime: "10 AM",
-      zoomLink: "https://zoom.us/j",
-      status: "green",
-    },
-    {
-      index: 2,
-      subject: "Physics",
-      academicProgram: "Artificial Intelligence",
-      level: "Level Three",
-      branch: "Computer Science",
-      lectureDate: "21/5/2025",
-      startTime: "8 AM",
-      endTime: "10 AM",
-      zoomLink: "https://zoom.us/j",
-      status: "red",
-    },
-    {
-      index: 3,
-      subject: "Physics",
-      academicProgram: "Artificial Intelligence",
-      level: "Level Three",
-      branch: "Computer Science",
-      lectureDate: "21/5/2025",
-      startTime: "8 AM",
-      endTime: "10 AM",
-      zoomLink: "https://zoom.us/j",
-      status: "orange",
-    },
-    {
-      index: 4,
-      subject: "Physics",
-      academicProgram: "Artificial Intelligence",
-      level: "Level Three",
-      branch: "Computer Science",
-      lectureDate: "21/5/2025",
-      startTime: "8 AM",
-      endTime: "10 AM",
-      zoomLink: "https://zoom.us/j",
-      status: "green",
-    },
-    {
-      index: 5,
-      subject: "Physics",
-      academicProgram: "Artificial Intelligence",
-      level: "Level Three",
-      branch: "Computer Science",
-      lectureDate: "21/5/2025",
-      startTime: "8 AM",
-      endTime: "10 AM",
-      zoomLink: "https://zoom.us/j",
-      status: "green",
-    },
-    {
-      index: 6,
-      subject: "Physics",
-      academicProgram: "Artificial Intelligence",
-      level: "Level Three",
-      branch: "Computer Science",
-      lectureDate: "21/5/2025",
-      startTime: "8 AM",
-      endTime: "10 AM",
-      zoomLink: "-",
-      status: "red",
-    },
-  ];
-
   const { data, isLoading, isFetching, isRefetching } = useQuery({
     queryKey: ["get-virtual-classes"],
     queryFn: getVirtualClassesData,
@@ -103,10 +28,10 @@ const VirtualClasses = () => {
             case "completed":
               statusColor = "bg-green-700";
               break;
-            case "setup":
+            case "inProgress":
               statusColor = "bg-[#D42828]";
               break;
-            case "inProgress":
+            case "setup":
               statusColor = "bg-[#F2B385]";
               break;
           }
@@ -126,7 +51,7 @@ const VirtualClasses = () => {
       {
         header: () => <span>{t("academic program")}</span>,
         accessorKey: "academicProgram",
-        cell: (info) => info.row.original?.program?.specialization,
+        cell: (info) => info.row.original?.program?.program_name,
       },
       {
         header: () => <span>{t("level")}</span>,

@@ -47,7 +47,7 @@ const StudentAddLoginData = ({
     confirm_password_login: editObj?.confirm_password_login || "",
   };
 
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationKey: ["add-student-login"],
     mutationFn: postStudentLogin,
     onSuccess: (data) => {
@@ -64,7 +64,7 @@ const StudentAddLoginData = ({
     },
   });
 
-  const { mutate: editMutate } = useMutation({
+  const { mutate: editMutate, isPending: editIsPending } = useMutation({
     mutationKey: ["edit-student-login"],
     mutationFn: (editStudent: any) =>
       editStudentLogin(editStudent, Number(editObj?.id)),
@@ -155,7 +155,11 @@ const StudentAddLoginData = ({
             </div>
 
             <div className="mt-8">
-              <Button className="me-5" type="submit">
+              <Button
+                loading={isPending || editIsPending}
+                className="me-5"
+                type="submit"
+              >
                 {t("confirm")}
               </Button>
               <Button
