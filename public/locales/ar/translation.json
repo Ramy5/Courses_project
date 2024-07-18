@@ -146,10 +146,10 @@
   "course name": "إسم المقرر",
   "view course description": "عرض توصيف المقرر",
   "edit course description": "تعديل توصيف المقرر",
-  "add data first":"اضف البيانات أولا",
+  "add data first": "اضف البيانات أولا",
   "systems analysis course description": "توصيف مقرر تحليل نظم",
   "course objectives": "اهداف المقرر",
-  "the instructor has been successfully deleted":"تم حذف المحاضر بنجاح",
+  "the instructor has been successfully deleted": "تم حذف المحاضر بنجاح",
   "information and concepts": "المعلومات والمفاهيم",
   "mental skills": "المهارات الذهنية",
   "professional skills": "المهارات المهنية",
@@ -435,9 +435,11 @@
   "select the level": "اختار المستوي",
   "select group number": "اختار رقم الشعبة",
   "select a program": "اختار برنامج",
-  "save table":"حفظ الجدول",
+  "save table": "حفظ الجدول",
+  "study schedule has been added successfully": "تمت إضافة الجدول الدراسي بنجاح",
+  "organization data has successfully added": "تم تعديل بيانات المنظمة بنجاح",
+  "filter by instructor...": "بحث عن طريق المحاضر",
+  "group": "الشعبة",
   "confirm deletion":"تأكيد الحذف ",
-  "the program will be deleted as well as all academic data associated with the program":"سيتم حذف البرنامج وكذلك جميع البيانات الدراسية المرتبطة بالبرنامج",
-  "study schedule has been added successfully":"تمت إضافة الجدول الدراسي بنجاح",
-  "organization data has successfully added": "تم تعديل بيانات المنظمة بنجاح"
+  "the program will be deleted as well as all academic data associated with the program":"سيتم حذف البرنامج وكذلك جميع البيانات الدراسية المرتبطة بالبرنامج"
 }

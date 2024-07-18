@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Button, SearchInput, Table, TitlePage } from "../../../components";
 import { t } from "i18next";
 import { PiStudent } from "react-icons/pi";
@@ -11,9 +11,9 @@ import customFetch from "../../../utils/axios";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "../../../components/UI/Loading";
 
-const fetchStudent = async () => {
-  const response = await customFetch("students");
-  return response;
+const fetchStudent = async (page: number) => {
+  const { data } = await customFetch(`students?page=${page}`);
+  return data.data;
 };
 
 const Students = () => {
@@ -26,77 +26,12 @@ const Students = () => {
     isLoading,
     isRefetching,
     isFetching,
+    refetch
   } = useQuery({
     queryKey: ["students"],
-    queryFn: fetchStudent,
+    queryFn: () => fetchStudent(page),
   });
-
-  // const studentsData = [
-  //   {
-  //     id: 1,
-  //     studentName: "محمد يس احمد يس",
-  //     program: "علوم حاسب",
-  //     level: "الثالث",
-  //     email: "jacob@yahoo.com",
-  //     paymentStatus: "منتظم",
-  //   },
-  //   {
-  //     id: 2,
-  //     studentName: "محمد يس احمد يس",
-  //     program: "علوم حاسب",
-  //     level: "الثالث",
-  //     email: "jacob@yahoo.com",
-  //     paymentStatus: "محروم",
-  //   },
-  //   {
-  //     id: 3,
-  //     studentName: "محمد يس احمد يس",
-  //     program: "علوم حاسب",
-  //     level: "الثالث",
-  //     email: "jacob@yahoo.com",
-  //     paymentStatus: "منتظم",
-  //   },
-  //   {
-  //     id: 4,
-  //     studentName: "محمد يس احمد يس",
-  //     program: "علوم حاسب",
-  //     level: "الثالث",
-  //     email: "jacob@yahoo.com",
-  //     paymentStatus: "منتظم",
-  //   },
-  //   {
-  //     id: 5,
-  //     studentName: "محمد يس احمد يس",
-  //     program: "علوم حاسب",
-  //     level: "الثالث",
-  //     email: "jacob@yahoo.com",
-  //     paymentStatus: "منتظم",
-  //   },
-  //   {
-  //     id: 6,
-  //     studentName: "محمد يس احمد يس",
-  //     program: "علوم حاسب",
-  //     level: "الثالث",
-  //     email: "jacob@yahoo.com",
-  //     paymentStatus: "منتظم",
-  //   },
-  //   {
-  //     id: 7,
-  //     studentName: "محمد يس احمد يس",
-  //     program: "علوم حاسب",
-  //     level: "الثالث",
-  //     email: "jacob@yahoo.com",
-  //     paymentStatus: "منتظم",
-  //   },
-  //   {
-  //     id: 8,
-  //     studentName: "محمد يس احمد يس",
-  //     program: "علوم حاسب",
-  //     level: "الثالث",
-  //     email: "jacob@yahoo.com",
-  //     paymentStatus: "منتظم",
-  //   },
-  // ];
+  console.log("🚀 ~ Students ~ studentsData:", studentsData);
 
   const studentsColumns = useMemo<ColumnDef<any>[]>(
     () => [
@@ -183,6 +118,10 @@ const Students = () => {
     []
   );
 
+  useEffect(() => {
+    refetch()
+  }, [page])
+
   if (isLoading || isRefetching || isFetching) return <Loading />;
 
   if (error)
@@ -228,11 +167,12 @@ const Students = () => {
         {/* TABLE */}
         <div className="mt-6">
           <Table
-            data={studentsData?.data?.data?.students || []}
+            data={studentsData?.students || []}
             columns={studentsColumns}
             showNavigation={true}
-            totalPages={40}
-            currentPage={page}
+            totalPages={studentsData?.totalPages}
+            currentPage={studentsData?.currentPage}
+            setPage={setPage}
           />
         </div>
       </div>

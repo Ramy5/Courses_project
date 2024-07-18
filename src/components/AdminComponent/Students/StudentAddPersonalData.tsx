@@ -97,7 +97,9 @@ const StudentAddPersonalData = ({
   ];
 
   const [selectedViewImage, setSelectedViewImage] = useState(null);
+  console.log("🚀 ~ selectedViewImage:", selectedViewImage);
   const [selectedImage, setSelectedImage] = useState(null);
+  console.log("🚀 ~ selectedImage:", selectedImage);
 
   const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event?.target?.files[0];
@@ -115,6 +117,7 @@ const StudentAddPersonalData = ({
 
   const handleDeleteImage = () => {
     setSelectedImage(User);
+    setSelectedViewImage(User);
   };
 
   const { mutate, isPending } = useMutation({

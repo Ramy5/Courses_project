@@ -6,14 +6,23 @@ import Select from "react-select";
 import { Table } from "../../../components";
 import { FaRegCheckCircle, FaRegEdit } from "react-icons/fa";
 import customFetch from "../../../utils/axios";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { customStyles } from "../../../utils/selectStyles";
 import Loading from "../../../components/UI/Loading";
 import Pagination from "../../../components/UI/Pagination";
+import { toast } from "react-toastify";
 
-const getLectureManagement = async (instructorSelectId?: number) => {
-  const data = customFetch(`manage?teacher_id=${instructorSelectId}`);
+const getLectureManagement = async (instructorSelectId?: string | number) => {
+  const { data } = await customFetch(`manage?teacher_id=${instructorSelectId}`);
   return data.data;
+};
+
+const postLectureDateAndLinks = async (lectureDateOrLink: string | Date) => {
+  const response = await customFetch.post(
+    "updateZoomYoutube/1",
+    lectureDateOrLink
+  );
+  return response;
 };
 
 const getInstructorOption = async () => {
@@ -24,83 +33,9 @@ const getInstructorOption = async () => {
 const LectureManagement = () => {
   const [instructorSelectId, setInstructorSelectId] = useState("");
   const [lecturesData, setLecturesData] = useState([]);
+  const queryClient = useQueryClient();
 
   const initialValues = {};
-
-  const lectures = [
-    {
-      index: 1,
-      lectureNumber: 3,
-      date: "5/1/2024",
-      subject: "Physics",
-      program: "Computer Science",
-      level: "3",
-      section: "Group 2",
-      zoomLink: "",
-      youtubeLink: "not available yet",
-      lectureStatus: "under preparation",
-    },
-    {
-      index: 2,
-      lectureNumber: 3,
-      date: "5/1/2024",
-      subject: "Physics",
-      program: "Computer Science",
-      level: "3",
-      section: "Group 1",
-      zoomLink: "",
-      youtubeLink: "not available yet",
-      lectureStatus: "under preparation",
-    },
-    {
-      index: 3,
-      lectureNumber: 2,
-      date: "5/1/2024",
-      subject: "Physics",
-      program: "Computer Science",
-      level: "3",
-      section: "Group 2",
-      zoomLink: "https://zoom.us/j",
-      youtubeLink: "not available yet",
-      lectureStatus: "in progress",
-    },
-    {
-      index: 4,
-      lectureNumber: 2,
-      date: "5/1/2024",
-      subject: "Physics",
-      program: "Computer Science",
-      level: "3",
-      section: "Group 1",
-      zoomLink: "https://zoom.us/j",
-      youtubeLink: "not available yet",
-      lectureStatus: "in progress",
-    },
-    {
-      index: 5,
-      lectureNumber: 1,
-      date: "5/1/2024",
-      subject: "Physics",
-      program: "Computer Science",
-      level: "3",
-      section: "Group 2",
-      zoomLink: "https://zoom.us/j",
-      youtubeLink: "https://youtube.us/j",
-      lectureStatus: "completed",
-    },
-    {
-      index: 6,
-      lectureNumber: 1,
-      date: "5/1/2024",
-      subject: "Physics",
-      program: "Computer Science",
-      level: "3",
-      section: "Group 2",
-      zoomLink: "https://zoom.us/j",
-      youtubeLink: "https://youtube.us/j",
-      lectureStatus: "completed",
-    },
-  ];
 
   const { data, isLoading, isFetching, isRefetching, refetch } = useQuery({
     queryKey: ["get-lecture-management"],
@@ -133,26 +68,47 @@ const LectureManagement = () => {
 
   useEffect(() => {
     if (data) {
-      setLectureDate(data);
+      setLecturesData(data);
     }
   }, [data]);
+
+  const { mutate: mutateDate } = useMutation({
+    mutationKey: ["update-date-links-lecture"],
+    mutationFn: postLectureDateAndLinks,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries("get-lecture-management");
+      toast.success(t("lecture date has updated successfully"));
+    },
+    onError: (error) => {
+      const errorMessage = error?.response?.data?.error;
+      toast.error(errorMessage);
+    },
+  });
 
   // LECTURE DATE
   const [lectureDate, setLectureDate] = useState("");
   const [lecturesDateEditId, setLecturesDataEditId] = useState(null);
 
   const handleLectureDateEdit = (id: number) => {
-    const updateDate = lecturesData.find((lecture) => lecture.index === id);
+    const updateDate = lecturesData.find((lecture) => lecture.id === id);
     setLectureDate(updateDate?.date);
     setLecturesDataEditId(id);
   };
 
-  const handleLectureDateAdd = () => {
+  const handleLectureDateAdd = async () => {
     const updateDate = lecturesData.map((lecture) => {
-      return lecture.index === lecturesDateEditId
+      return lecture.id === lecturesDateEditId
         ? { ...lecture, date: lectureDate }
         : lecture;
     });
+
+    const lectureDateOrLink = {
+      date: lectureDate,
+      zoom_link: "",
+      youtube_link: "",
+    };
+
+    await mutateDate(lectureDateOrLink);
 
     setLecturesData(updateDate);
     setLecturesDataEditId(null);
@@ -163,38 +119,54 @@ const LectureManagement = () => {
   const [lecturesZoomEditId, setLecturesZoomEditId] = useState(null);
 
   const handleLectureZoomEdit = (id: number) => {
-    const updateZoom = lecturesData.find((lecture) => lecture.index === id);
+    const updateZoom = lecturesData.find((lecture) => lecture.id === id);
     setLectureZoom(updateZoom?.zoomLink);
     setLecturesZoomEditId(id);
   };
 
-  const handleLectureZoomAdd = () => {
+  const handleLectureZoomAdd = async () => {
     const updateZoom = lecturesData.map((lecture) => {
-      return lecture.index === lecturesZoomEditId
+      return lecture.id === lecturesZoomEditId
         ? { ...lecture, zoomLink: lectureZoom }
         : lecture;
     });
+
+    const lectureDateOrLink = {
+      date: "",
+      zoom_link: lectureZoom,
+      youtube_link: "",
+    };
+
+    await mutateDate(lectureDateOrLink);
 
     setLecturesData(updateZoom);
     setLecturesZoomEditId(null);
   };
 
-  // LECTURE ZOOM
+  // LECTURE YOUTUBE
   const [lectureYoutube, setLectureYoutube] = useState("");
   const [lecturesYoutubeEditId, setLecturesYoutubeEditId] = useState(null);
 
   const handleLectureYoutubeEdit = (id: number) => {
-    const updateYoutube = lecturesData.find((lecture) => lecture.index === id);
+    const updateYoutube = lecturesData.find((lecture) => lecture.id === id);
     setLectureYoutube(updateYoutube?.youtubeLink);
     setLecturesYoutubeEditId(id);
   };
 
-  const handleLectureYoutubeAdd = () => {
+  const handleLectureYoutubeAdd = async () => {
     const updateYoutube = lecturesData.map((lecture) => {
-      return lecture.index === lecturesYoutubeEditId
+      return lecture.id === lecturesYoutubeEditId
         ? { ...lecture, youtubeLink: lectureYoutube }
         : lecture;
     });
+
+    const lectureDateOrLink = {
+      date: "",
+      zoom_link: "",
+      youtube_link: lectureYoutube,
+    };
+
+    await mutateDate(lectureDateOrLink);
 
     setLecturesData(updateYoutube);
     setLecturesYoutubeEditId(null);
@@ -215,8 +187,8 @@ const LectureManagement = () => {
             return info.getValue();
           } else {
             return (
-              <div className="flex items-center justify-center gap-1 w-44">
-                {lecturesDateEditId === info.row.original.index ? (
+              <div className="flex items-center justify-center gap-1 w-34">
+                {lecturesDateEditId === info.row.original.id ? (
                   <>
                     <input
                       type="date"
@@ -234,7 +206,7 @@ const LectureManagement = () => {
                     <span>{info.getValue()}</span>
                     <FaRegEdit
                       onClick={() =>
-                        handleLectureDateEdit(info.row.original.index)
+                        handleLectureDateEdit(info.row.original.id)
                       }
                       className="text-xl cursor-pointer text-mainColor"
                     />
@@ -248,22 +220,34 @@ const LectureManagement = () => {
       {
         header: () => <span>{t("subject")}</span>,
         accessorKey: "subject",
-        cell: (info) => info.row.original?.course?.course_name,
+        cell: (info) => (
+          <span className="inline-block text-wrap">
+            {info.row.original?.course?.course_name}
+          </span>
+        ),
       },
       {
         header: () => <span>{t("program")}</span>,
         accessorKey: "program",
-        cell: (info) => info.row.original?.program?.program_name,
+        cell: (info) => (
+          <span className="inline-block text-wrap">
+            {info.row.original?.program?.program_name}
+          </span>
+        ),
       },
       {
         header: () => <span>{t("level")}</span>,
         accessorKey: "level",
-        cell: (info) => info.getValue(),
+        cell: (info) => (
+          <span className="inline-block w-2 text-wrap">{info.getValue()}</span>
+        ),
       },
       {
         header: () => <span>{t("group")}</span>,
         accessorKey: "group",
-        cell: (info) => info.getValue(),
+        cell: (info) => (
+          <span className="inline-block w-2 text-wrap">{info.getValue()}</span>
+        ),
       },
       {
         header: () => <span>{t("zoom link")}</span>,
@@ -277,8 +261,8 @@ const LectureManagement = () => {
             );
           } else if (info.row.original.status === "in progress") {
             return (
-              <div className="flex items-center justify-center gap-1 w-44">
-                {lecturesZoomEditId === info.row.original.index ? (
+              <div className="flex items-center justify-center w-56 gap-1">
+                {lecturesZoomEditId === info.row.original.id ? (
                   <>
                     <input
                       type="url"
@@ -302,7 +286,7 @@ const LectureManagement = () => {
                     </a>
                     <FaRegEdit
                       onClick={() =>
-                        handleLectureZoomEdit(info.row.original.index)
+                        handleLectureZoomEdit(info.row.original.id)
                       }
                       className="w-16 text-xl cursor-pointer text-mainColor"
                     />
@@ -312,8 +296,8 @@ const LectureManagement = () => {
             );
           } else if (info.row.original.status === "setup") {
             return (
-              <div className="flex items-center justify-center gap-1 w-44">
-                {lecturesZoomEditId === info.row.original.index ? (
+              <div className="flex items-center justify-center w-56 gap-1">
+                {lecturesZoomEditId === info.row.original.id ? (
                   <>
                     <input
                       type="url"
@@ -337,7 +321,7 @@ const LectureManagement = () => {
                     </a>
                     <FaRegEdit
                       onClick={() =>
-                        handleLectureZoomEdit(info.row.original.index)
+                        handleLectureZoomEdit(info.row.original.id)
                       }
                       className="w-16 text-xl cursor-pointer text-mainColor"
                     />
@@ -354,8 +338,8 @@ const LectureManagement = () => {
         cell: (info) => {
           if (info.row.original.status === "completed") {
             return (
-              <div className="flex items-center justify-center gap-1 w-44">
-                {lecturesYoutubeEditId === info.row.original.index ? (
+              <div className="flex items-center justify-center w-56 gap-1">
+                {lecturesYoutubeEditId === info.row.original.id ? (
                   <>
                     <input
                       type="url"
@@ -379,7 +363,7 @@ const LectureManagement = () => {
                     </a>
                     <FaRegEdit
                       onClick={() =>
-                        handleLectureYoutubeEdit(info.row.original.index)
+                        handleLectureYoutubeEdit(info.row.original.id)
                       }
                       className="w-16 text-xl cursor-pointer text-mainColor"
                     />
