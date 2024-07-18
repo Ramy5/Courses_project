@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { CiGrid41 } from "react-icons/ci";
 import { FaFolder } from "react-icons/fa6";
 import { FaRegEdit, FaUserAlt } from "react-icons/fa";
@@ -37,13 +37,31 @@ const SideBar: React.FC<SideBarProps> = ({
   const location = useLocation();
   const { sidebarColor } = useAppSelector((state) => state.global);
   const dispatch = useAppDispatch();
+  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 640);
+
+  const handleResize = () => {
+    setIsSmallScreen(window.innerWidth < 640);
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(() => {
+    if (isSmallScreen) {
+      setToggleSideBar(false);
+    } else {
+      setToggleSideBar(true);
+    }
+  }, [isSmallScreen]);
 
   const getOrganizationSetting = async () => {
     const { data } = await customFetch.get("setting/1");
     return data.data.setting;
   };
 
-  const { data, isLoading, isRefetching, isFetching } = useQuery({
+  const { data } = useQuery({
     queryKey: ["get-setting-data"],
     queryFn: getOrganizationSetting,
   });
@@ -53,7 +71,7 @@ const SideBar: React.FC<SideBarProps> = ({
   }, [data?.color, dispatch]);
 
   const { role: userData } = useAppSelector((state) => state.user);
-  console.log("🚀 ~ userData:", userData)
+  console.log("🚀 ~ userData:", userData);
 
   const sideBarItemsOfAdmin = [
     {
@@ -247,21 +265,13 @@ const SideBar: React.FC<SideBarProps> = ({
 
   const handleNavigate = (link: String) => {
     navigate(link);
+    if (isSmallScreen) {
+      setToggleSideBar(false);
+    }
   };
 
   const getCurrentPathName = (path: string) => {
     const segments = path.split("/").filter(Boolean);
-
-    // const segmentsType =
-    //   userData === "admin"
-    //     ? segments.length > 0
-    //       ? `/${segments[0]}`
-    //       : ""
-    //     : userData === "student"
-    //     ? segments.length > 0
-    //       ? `/${segments[0]}/${segments[1]}`
-    //       : ""
-    //     : "";
 
     const segmentsType =
       userData !== "admin" && segments.length > 0

@@ -28,12 +28,13 @@ const ProgramInformation = () => {
     return response;
   };
 
-  const { data, isLoading, error } = useQuery({
+  const { data, isLoading, error, isFetching } = useQuery({
     queryKey: ["program_data"],
     queryFn: fetchProgramData,
   });
 
   const programData = data?.data.data || {};
+  console.log("🚀 ~ ProgramInformation ~ programData:", programData)
 
   useEffect(() => {
     if (error) {
@@ -41,20 +42,20 @@ const ProgramInformation = () => {
     }
   }, [error]);
 
-  const ProgramColumnsFee = useMemo<ColumnDef<any>[]>(
+  const coursesColumnsFee = useMemo<ColumnDef<any>[]>(
     () => [
       {
-        header: () => <span>{t("type of certificate")}</span>,
+        header: () => <span>{t("course code")}</span>,
         accessorKey: "course_code",
         cell: (info) => info.getValue(),
       },
       {
-        header: () => <span>{t("certificate name")}</span>,
+        header: () => <span>{t("course name")}</span>,
         accessorKey: "course_name",
         cell: (info) => <span>{t(`${info.getValue()}`)}</span>,
       },
       {
-        header: () => <span>{t("donor")}</span>,
+        header: () => <span>{t("level")}</span>,
         accessorKey: "level",
         cell: (info) => info.getValue(),
       },
@@ -90,7 +91,7 @@ const ProgramInformation = () => {
     [openRow]
   );
 
-  if (isLoading) return <Loading />;
+  if (isLoading || isFetching) return <Loading />;
 
   return (
     <div>
@@ -215,8 +216,8 @@ const ProgramInformation = () => {
           {t("Courses")}
         </h2>
         <Table
-          data={programData.courses}
-          columns={ProgramColumnsFee}
+          data={programData?.courses}
+          columns={coursesColumnsFee}
           className="bg-mainColor"
         />
       </div>

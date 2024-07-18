@@ -14,27 +14,32 @@ import { GrView } from "react-icons/gr";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import { useEffect, useState } from "react";
 import customFetch from "../../../utils/axios";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Loading from "../../../components/UI/Loading";
 import { toast } from "react-toastify";
 
 const Programs = () => {
   const [openRow, setOpenRow] = useState<number | null>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [programID, setProgramID] = useState();
+  const [page, setPage] = useState<number>();
+  const queryClient = useQueryClient();
 
   const navigate = useNavigate();
 
   const fetchProgramData = async () => {
-    const response = await customFetch(`/programs`);
+    const response = await customFetch(`/programs?page=${page}`);
     return response;
   };
 
-  const { data, isLoading, error } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["programs_data"],
     queryFn: fetchProgramData,
   });
 
   const programData = data ? data?.data.data.programs : {};
+  const programPagination = data ? data?.data?.data.pagination : {};
+  console.log("🚀 ~ Programs ~ programPagination:", programPagination);
 
   useEffect(() => {
     if (error) {
@@ -50,7 +55,27 @@ const Programs = () => {
     setOpenRow((prevOpenRow) => (prevOpenRow == id ? null : id));
   };
 
-  if (isLoading) return <Loading />;
+  const deleteInstructor = async (programId) => {
+    const response = await customFetch.delete(`/deleteProgram/${programId}`);
+    return response;
+  };
+
+  const { mutate, isPending } = useMutation({
+    mutationKey: ["delete-program-contact"],
+    mutationFn: deleteInstructor,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries("delete_program");
+      toast.success(`${t("the program has been successfully deleted")}`);
+      refetch();
+    },
+    onError: (error) => {
+      const errorMessage = error?.response?.data?.error[0];
+      toast.error(errorMessage);
+      refetch();
+    },
+  });
+
+  if (isLoading || isPending) return <Loading />;
 
   return (
     <div>
@@ -91,7 +116,10 @@ const Programs = () => {
                     onFirstClick={() => {
                       navigate(`/programs/programInfo/${program.id}`);
                     }}
-                    onSecondClick={() => {setShowDeleteModal(true)}}
+                    onSecondClick={() => {
+                      setShowDeleteModal(true);
+                      setProgramID(program.id);
+                    }}
                   />
                 </div>
                 <div className="my-4">
@@ -136,8 +164,18 @@ const Programs = () => {
                 )}
               </h2>
               <div className="flex justify-center gap-3 mb-4">
-                <Button bordered>{t("confirm deletion")}</Button>
-                <Button bordered className="px-[50px]">{t("cancel")}</Button>
+                <Button
+                  bordered
+                  action={() => {
+                    mutate(programID);
+                    setShowDeleteModal(false);
+                  }}
+                >
+                  {t("confirm deletion")}
+                </Button>
+                <Button bordered className="px-[50px]">
+                  {t("cancel")}
+                </Button>
               </div>
             </div>
           </MainPopup>
@@ -146,9 +184,9 @@ const Programs = () => {
         <div>
           <Pagination
             showNavigation={true}
-            //   table={table}
-            currentPage="1"
-            totalPages={40}
+            currentPage={programPagination?.currentPage}
+            totalPages={programPagination?.totalPages}
+            setPage={setPage}
           />
         </div>
       </div>

@@ -1,15 +1,12 @@
 import { Form, Formik } from "formik";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../../store";
 import CreateProgramInputs from "../../../components/AdminComponent/Programs/CreateProgramInputs";
-import { postProgramData } from "../../../features/programs/programSlice";
 import CreateCoursesInputs from "../../../components/AdminComponent/Programs/CreateCoursesInputs";
 import customFetch from "../../../utils/axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { t } from "i18next";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 interface AddProgram_TP {
   program_name: string;
   program_type: boolean;
@@ -24,38 +21,26 @@ interface AddProgram_TP {
   good: string;
   acceptable: string;
 }
-interface programAdd_TP {
-  editObj?: AddProgram_TP;
-  setActiveTab: (activeTab: string) => void;
-  setInstructorID: (id: number) => void;
-}
 
 const postInstructorLogin = async (newProgram: any) => {
   const data = await customFetch.post("programs", newProgram);
   return data;
 };
 
-const editInstructorLogin = async (editInstructor: any, id: number) => {
-  const data = await customFetch.post(
-    `updateStudentLoginData/${id}`,
-    editInstructor
-  );
-  return data;
-};
-
-const CreateProgram = ({ editObj }: programAdd_TP) => {
+const CreateProgram = () => {
   const [step, setStep] = useState<number>(1);
   const [coursesData, setCoursesData] = useState([]);
   const [editCoursesData, setEditCoursesData] = useState({});
   const [editFinishedCoursesData, setEditFinishedCoursesData] = useState({});
-  console.log("🚀 ~ CreateProgram ~ editFinishedCoursesData:", editFinishedCoursesData)
   const queryClient = useQueryClient();
+  const nanigate = useNavigate();
   const location = useLocation();
   const dataReceived = location.state;
+
   useEffect(() => {
     if (dataReceived) {
-      setEditFinishedCoursesData(dataReceived)
-      setStep(2)
+      setEditFinishedCoursesData(dataReceived);
+      setStep(2);
     }
   }, [dataReceived]);
 
@@ -79,38 +64,17 @@ const CreateProgram = ({ editObj }: programAdd_TP) => {
     mutationFn: postInstructorLogin,
     onSuccess: (data) => {
       queryClient.invalidateQueries("program");
-      toast.success(
-        t("instructor login information has been added successfully")
-      );
+      toast.success(t("program has been added successfully"));
+      nanigate("/programs");
     },
     onError: (error) => {
-      const errorMessage =
-        error?.response?.data?.error[0]?.email[0] ||
-        error?.response?.data?.error[0]?.password[0];
-      toast.error(errorMessage);
-    },
-  });
-
-  const { mutate: editMutate } = useMutation({
-    mutationKey: ["edit_program"],
-    mutationFn: (editInstructor: any) =>
-      editInstructorLogin(editInstructor, Number(editObj?.id)),
-    onSuccess: (data) => {
-      queryClient.invalidateQueries("program");
-      toast.success(
-        t("instructor login information has been added successfully")
-      );
-    },
-    onError: (error) => {
-      const errorMessage =
-        error?.response?.data?.error[0]?.email[0] ||
-        error?.response?.data?.error[0]?.password[0];
+      const errorMessage = error?.response?.data?.error[0];
       toast.error(errorMessage);
     },
   });
 
   const handleAddProgram = async (values: AddProgram_TP) => {
-    const newInstructor = {
+    const newProgram = {
       program_name: values.program_name,
       program_type: values.program_type,
       program_code: values.program_code,
@@ -126,7 +90,7 @@ const CreateProgram = ({ editObj }: programAdd_TP) => {
       courses: coursesData,
     };
 
-    editObj ? await editMutate(newInstructor) : await mutate(newInstructor);
+    await mutate(newProgram);
   };
 
   return (

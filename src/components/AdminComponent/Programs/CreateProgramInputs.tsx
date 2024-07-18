@@ -21,24 +21,9 @@ const CreateProgramInputs = ({
   isPending,
 }: any) => {
   const [openRow, setOpenRow] = useState<number | null>(null);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const { values, setFieldValue } = useFormikContext();
-
-  // const initialValues = {
-  //   program_name: "",
-  //   program_type: "",
-  //   program_code: 0,
-  //   specialization: "",
-  //   academic_levels: "",
-  //   number_classes: "",
-  //   vision: "",
-  //   message: "",
-  //   excellence: "",
-  //   very_good: "",
-  //   good: "",
-  //   acceptable: "",
-  // };
 
   // const validationSchema = Yup.object({
   //   program_name: Yup.string().required(t("Required")),
@@ -54,21 +39,6 @@ const CreateProgramInputs = ({
   //   good: Yup.number().required(t("Required")),
   //   acceptable: Yup.number().required(t("Required")),
   // });
-
-  // const CoursesData = [
-  //   {
-  //     id: 1,
-  //     course_code: "#65654SD",
-  //     course_name: "تحليل نظم",
-  //     level: "الثالث",
-  //   },
-  //   {
-  //     id: 2,
-  //     course_code: "#65654SD",
-  //     course_name: "تحليل نظم",
-  //     level: "الثالث",
-  //   },
-  // ];
 
   const CoursesColumns = useMemo<ColumnDef<any>[]>(
     () => [
@@ -103,9 +73,9 @@ const CreateProgramInputs = ({
               secondIcon={
                 <RiDeleteBin5Line size={22} className="fill-mainRed" />
               }
-              isOpen={openRow == info.row.original.id}
+              isOpen={openRow == info.row.index}
               onToggle={() => {
-                handleToggleDropDown(info.row.original.id);
+                handleToggleDropDown(info.row.index);
               }}
               onFirstClick={() => {
                 setEditCoursesData(coursesData[info.row.index]);
@@ -113,7 +83,8 @@ const CreateProgramInputs = ({
               }}
               onSecondClick={() => {
                 const fliterCoursesData = coursesData?.filter(
-                  (course) => course.id !== info.row.original.id
+                  (course) =>
+                    course.course_code !== info.row.original.course_code
                 );
                 setCoursesData(fliterCoursesData);
               }}
@@ -123,7 +94,7 @@ const CreateProgramInputs = ({
         },
       },
     ],
-    [openRow]
+    [openRow, coursesData]
   );
 
   const handleToggleDropDown = (index: number) => {
@@ -314,7 +285,11 @@ const CreateProgramInputs = ({
           <Button type="submit" className="me-5" loading={isPending}>
             {t("create program")}
           </Button>
-          <Button type="button" className="bg-[#E6EAEE] text-mainColor" action={() => navigate(-1)}>
+          <Button
+            type="button"
+            className="bg-[#E6EAEE] text-mainColor"
+            action={() => navigate("/programs")}
+          >
             {t("cancel")}
           </Button>
         </div>

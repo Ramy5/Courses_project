@@ -66,187 +66,10 @@ import { useRTL } from "../../../hooks/useRTL";
 
 const Schedule = ({ scheduleData }) => {
   const isRTL = useRTL();
-  console.log("🚀 ~ Schedule ~ isRTL:", isRTL);
-  const arrangeScheduleData = scheduleData?.lecture_time?.sort(
-    (a, b) => a.day_id - b.day_id
-  );
-  console.log("🚀 ~ Schedule ~ arrangeScheduleData:", arrangeScheduleData);
+  const arrangeScheduleData = scheduleData?.sort((a, b) => a.day_id - b.day_id);
   const calendarRef = useRef(null);
 
-  // const events = [
-  //   {
-  //     id: "1",
-  //     customContent: (
-  //       <div className="text-center">
-  //         <p className="text-base font-medium">فيزياء</p>
-  //         <p className="py-2 text-base font-medium">محمد يس</p>
-  //         <div className="flex items-center justify-center gap-1">
-  //           <IoTimeOutline />
-  //           <p>09:00 - 10:00</p>
-  //         </div>
-  //       </div>
-  //     ),
-  //     resourceId: "friday",
-  //     start: "2024-06-25T09:00:00",
-  //     end: "2024-06-25T10:00:00",
-  //     backgroundColor: "#369252",
-  //   },
-  //   {
-  //     id: "2",
-  //     customContent: (
-  //       <div className="text-center">
-  //         <p className="text-base font-medium">كمياء</p>
-  //         <p className="py-2 text-base font-medium">محمد يس</p>
-  //         <div className="flex items-center justify-center gap-1">
-  //           <IoTimeOutline />
-  //           <p>12:00 - 13:00</p>
-  //         </div>
-  //       </div>
-  //     ),
-  //     resourceId: "friday",
-  //     start: "2024-06-25T12:00:00",
-  //     end: "2024-06-25T13:00:00",
-  //     backgroundColor: "#393D94",
-  //   },
-  //   {
-  //     id: "3",
-  //     customContent: (
-  //       <div className="text-center">
-  //         <p className="text-base font-medium">حاسب الي</p>
-  //         <p className="py-2 text-base font-medium">محمد يس</p>
-  //         <div className="flex items-center justify-center gap-1">
-  //           <IoTimeOutline />
-  //           <p>09:30 - 11:20</p>
-  //         </div>
-  //       </div>
-  //     ),
-  //     resourceId: "monday",
-  //     start: "2024-06-25T10:00:00",
-  //     end: "2024-06-25T11:00:00",
-  //     backgroundColor: "#393D94",
-  //   },
-  //   {
-  //     id: "9",
-  //     customContent: (
-  //       <div className="text-center">
-  //         <p className="text-base font-medium">فيزياء</p>
-  //         <p className="py-2 text-base font-medium">محمد يس</p>
-  //         <div className="flex items-center justify-center gap-1">
-  //           <IoTimeOutline />
-  //           <p>09:30 - 11:20</p>
-  //         </div>
-  //       </div>
-  //     ),
-  //     resourceId: "monday",
-  //     start: "2024-06-25T15:00:00",
-  //     end: "2024-06-25T16:00:00",
-  //     backgroundColor: "#025464",
-  //   },
-  //   {
-  //     id: "4",
-  //     customContent: (
-  //       <div className="text-center">
-  //         <p className="text-base font-medium">كمياء</p>
-  //         <p className="py-2 text-base font-medium">محمد يس</p>
-  //         <div className="flex items-center justify-center gap-1">
-  //           <IoTimeOutline />
-  //           <p>09:30 - 11:20</p>
-  //         </div>
-  //       </div>
-  //     ),
-  //     resourceId: "saturday",
-  //     start: "2024-06-25T12:00:00",
-  //     end: "2024-06-25T13:00:00",
-  //     backgroundColor: "#9C48AB",
-  //   },
-  //   {
-  //     id: "10",
-  //     customContent: (
-  //       <div className="text-center">
-  //         <p className="text-base font-medium">فيزياء</p>
-  //         <p className="py-2 text-base font-medium">محمد يس</p>
-  //         <div className="flex items-center justify-center gap-1">
-  //           <IoTimeOutline />
-  //           <p>09:30 - 11:20</p>
-  //         </div>
-  //       </div>
-  //     ),
-  //     resourceId: "saturday",
-  //     start: "2024-06-25T17:00:00",
-  //     end: "2024-06-25T18:00:00",
-  //     backgroundColor: "#025464",
-  //   },
-  //   {
-  //     id: "5",
-  //     customContent: (
-  //       <div className="text-center">
-  //         <p className="text-base font-medium">فيزياء</p>
-  //         <p className="py-2 text-base font-medium">محمد يس</p>
-  //         <div className="flex items-center justify-center gap-1">
-  //           <IoTimeOutline />
-  //           <p>09:30 - 11:20</p>
-  //         </div>
-  //       </div>
-  //     ),
-  //     resourceId: "sunday",
-  //     start: "2024-06-25T13:00:00",
-  //     end: "2024-06-25T14:00:00",
-  //     backgroundColor: "#025464",
-  //   },
-  //   {
-  //     id: "6",
-  //     customContent: (
-  //       <div className="text-center">
-  //         <p className="text-base font-medium">فيزياء</p>
-  //         <p className="py-2 text-base font-medium">محمد يس</p>
-  //         <div className="flex items-center justify-center gap-1">
-  //           <IoTimeOutline />
-  //           <p>09:30 - 11:20</p>
-  //         </div>
-  //       </div>
-  //     ),
-  //     resourceId: "thursday",
-  //     start: "2024-06-25T09:00:00",
-  //     end: "2024-06-25T10:00:00",
-  //     backgroundColor: "#025464",
-  //   },
-  //   {
-  //     id: "7",
-  //     customContent: (
-  //       <div className="text-center">
-  //         <p className="text-base font-medium">فيزياء</p>
-  //         <p className="py-2 text-base font-medium">محمد يس</p>
-  //         <div className="flex items-center justify-center gap-1">
-  //           <IoTimeOutline />
-  //           <p>09:30 - 11:20</p>
-  //         </div>
-  //       </div>
-  //     ),
-  //     resourceId: "tuesday",
-  //     start: "2024-06-25T14:00:00",
-  //     end: "2024-06-25T15:00:00",
-  //     backgroundColor: "#393D94",
-  //   },
-  //   // {
-  //   //   id: "8",
-  //   //   customContent: (
-  //   //     <div className="text-center">
-  //   //       <p>فيزياء</p>
-  //   //       <p className="py-2 text-base font-medium">محمد يس</p>
-  //   //       <div className="flex items-center justify-center gap-1">
-  //   //         <IoTimeOutline />
-  //   //         <p>09:30 - 11:20</p>
-  //   //       </div>
-  //   //     </div>
-  //   //   ),
-  //   //   resourceId: "wednesday",
-  //   //   start: "2024-06-25T15:00:00",
-  //   //   end: "2024-06-25T16:00:00",
-  //   //   backgroundColor: "#393D94",
-  //   // },
-  // ];
-
-  const events = scheduleData.lecture_time.map((lecture, index) => ({
+  const events = arrangeScheduleData?.map((lecture, index) => ({
     id: String(index + 1),
     customContent: (
       <div className="text-center">
@@ -300,16 +123,6 @@ const Schedule = ({ scheduleData }) => {
       calendar.setOption("editable", false);
       calendar.setOption("resourceAreaHeaderContent", "");
 
-      // const resources = [
-      //   { id: "friday", title: "saturday" },
-      //   { id: "monday", title: "sunday" },
-      //   { id: "saturday", title: "monday" },
-      //   { id: "sunday", title: "tuesday" },
-      //   { id: "thursday", title: "wednesday" },
-      //   { id: "tuesday", title: "thursday" },
-      //   { id: "wednesday", title: "friday" },
-      // ];
-
       const resources = [
         { id: 1, title: isRTL ? "السبت" : "saturday" },
         { id: 2, title: isRTL ? "الأحد" : "sunday" },
@@ -320,7 +133,6 @@ const Schedule = ({ scheduleData }) => {
         { id: 7, title: isRTL ? "الجمعه" : "friday" },
       ];
 
-      // fc fc-media-screen fc-direction-ltr fc-theme-standard
       calendar.setOption("resources", resources);
 
       calendar.setOption("events", events);
@@ -334,7 +146,7 @@ const Schedule = ({ scheduleData }) => {
         calendar.destroy();
       };
     }
-  }, []);
+  }, [events, isRTL]);
 
   const renderEventContent = (eventInfo) => {
     const event = events.find((e) => e.id === eventInfo.event.id);
@@ -374,3 +186,186 @@ const Schedule = ({ scheduleData }) => {
   );
 };
 export default Schedule;
+
+// const resources = [
+//   { id: "friday", title: "saturday" },
+//   { id: "monday", title: "sunday" },
+//   { id: "saturday", title: "monday" },
+//   { id: "sunday", title: "tuesday" },
+//   { id: "thursday", title: "wednesday" },
+//   { id: "tuesday", title: "thursday" },
+//   { id: "wednesday", title: "friday" },
+// ];
+
+// const events = [
+//   {
+//     id: "1",
+//     customContent: (
+//       <div className="text-center">
+//         <p className="text-base font-medium">فيزياء</p>
+//         <p className="py-2 text-base font-medium">محمد يس</p>
+//         <div className="flex items-center justify-center gap-1">
+//           <IoTimeOutline />
+//           <p>09:00 - 10:00</p>
+//         </div>
+//       </div>
+//     ),
+//     resourceId: "friday",
+//     start: "2024-06-25T09:00:00",
+//     end: "2024-06-25T10:00:00",
+//     backgroundColor: "#369252",
+//   },
+//   {
+//     id: "2",
+//     customContent: (
+//       <div className="text-center">
+//         <p className="text-base font-medium">كمياء</p>
+//         <p className="py-2 text-base font-medium">محمد يس</p>
+//         <div className="flex items-center justify-center gap-1">
+//           <IoTimeOutline />
+//           <p>12:00 - 13:00</p>
+//         </div>
+//       </div>
+//     ),
+//     resourceId: "friday",
+//     start: "2024-06-25T12:00:00",
+//     end: "2024-06-25T13:00:00",
+//     backgroundColor: "#393D94",
+//   },
+//   {
+//     id: "3",
+//     customContent: (
+//       <div className="text-center">
+//         <p className="text-base font-medium">حاسب الي</p>
+//         <p className="py-2 text-base font-medium">محمد يس</p>
+//         <div className="flex items-center justify-center gap-1">
+//           <IoTimeOutline />
+//           <p>09:30 - 11:20</p>
+//         </div>
+//       </div>
+//     ),
+//     resourceId: "monday",
+//     start: "2024-06-25T10:00:00",
+//     end: "2024-06-25T11:00:00",
+//     backgroundColor: "#393D94",
+//   },
+//   {
+//     id: "9",
+//     customContent: (
+//       <div className="text-center">
+//         <p className="text-base font-medium">فيزياء</p>
+//         <p className="py-2 text-base font-medium">محمد يس</p>
+//         <div className="flex items-center justify-center gap-1">
+//           <IoTimeOutline />
+//           <p>09:30 - 11:20</p>
+//         </div>
+//       </div>
+//     ),
+//     resourceId: "monday",
+//     start: "2024-06-25T15:00:00",
+//     end: "2024-06-25T16:00:00",
+//     backgroundColor: "#025464",
+//   },
+//   {
+//     id: "4",
+//     customContent: (
+//       <div className="text-center">
+//         <p className="text-base font-medium">كمياء</p>
+//         <p className="py-2 text-base font-medium">محمد يس</p>
+//         <div className="flex items-center justify-center gap-1">
+//           <IoTimeOutline />
+//           <p>09:30 - 11:20</p>
+//         </div>
+//       </div>
+//     ),
+//     resourceId: "saturday",
+//     start: "2024-06-25T12:00:00",
+//     end: "2024-06-25T13:00:00",
+//     backgroundColor: "#9C48AB",
+//   },
+//   {
+//     id: "10",
+//     customContent: (
+//       <div className="text-center">
+//         <p className="text-base font-medium">فيزياء</p>
+//         <p className="py-2 text-base font-medium">محمد يس</p>
+//         <div className="flex items-center justify-center gap-1">
+//           <IoTimeOutline />
+//           <p>09:30 - 11:20</p>
+//         </div>
+//       </div>
+//     ),
+//     resourceId: "saturday",
+//     start: "2024-06-25T17:00:00",
+//     end: "2024-06-25T18:00:00",
+//     backgroundColor: "#025464",
+//   },
+//   {
+//     id: "5",
+//     customContent: (
+//       <div className="text-center">
+//         <p className="text-base font-medium">فيزياء</p>
+//         <p className="py-2 text-base font-medium">محمد يس</p>
+//         <div className="flex items-center justify-center gap-1">
+//           <IoTimeOutline />
+//           <p>09:30 - 11:20</p>
+//         </div>
+//       </div>
+//     ),
+//     resourceId: "sunday",
+//     start: "2024-06-25T13:00:00",
+//     end: "2024-06-25T14:00:00",
+//     backgroundColor: "#025464",
+//   },
+//   {
+//     id: "6",
+//     customContent: (
+//       <div className="text-center">
+//         <p className="text-base font-medium">فيزياء</p>
+//         <p className="py-2 text-base font-medium">محمد يس</p>
+//         <div className="flex items-center justify-center gap-1">
+//           <IoTimeOutline />
+//           <p>09:30 - 11:20</p>
+//         </div>
+//       </div>
+//     ),
+//     resourceId: "thursday",
+//     start: "2024-06-25T09:00:00",
+//     end: "2024-06-25T10:00:00",
+//     backgroundColor: "#025464",
+//   },
+//   {
+//     id: "7",
+//     customContent: (
+//       <div className="text-center">
+//         <p className="text-base font-medium">فيزياء</p>
+//         <p className="py-2 text-base font-medium">محمد يس</p>
+//         <div className="flex items-center justify-center gap-1">
+//           <IoTimeOutline />
+//           <p>09:30 - 11:20</p>
+//         </div>
+//       </div>
+//     ),
+//     resourceId: "tuesday",
+//     start: "2024-06-25T14:00:00",
+//     end: "2024-06-25T15:00:00",
+//     backgroundColor: "#393D94",
+//   },
+//   // {
+//   //   id: "8",
+//   //   customContent: (
+//   //     <div className="text-center">
+//   //       <p>فيزياء</p>
+//   //       <p className="py-2 text-base font-medium">محمد يس</p>
+//   //       <div className="flex items-center justify-center gap-1">
+//   //         <IoTimeOutline />
+//   //         <p>09:30 - 11:20</p>
+//   //       </div>
+//   //     </div>
+//   //   ),
+//   //   resourceId: "wednesday",
+//   //   start: "2024-06-25T15:00:00",
+//   //   end: "2024-06-25T16:00:00",
+//   //   backgroundColor: "#393D94",
+//   // },
+// ];

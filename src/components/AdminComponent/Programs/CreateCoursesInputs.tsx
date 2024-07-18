@@ -14,8 +14,14 @@ import {
 } from "@tanstack/react-table";
 import selectStyle from "../../../utils/selectStyle";
 import { useNavigate } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import customFetch from "../../../utils/axios";
+import { toast } from "react-toastify";
+
+const editProgramCourse = async (editCourses: any, id: number) => {
+  const data = await customFetch.post(`updateCourse/${id}`, editCourses);
+  return data;
+};
 
 const CreateCoursesInputs = ({
   setCoursesData,
@@ -23,26 +29,25 @@ const CreateCoursesInputs = ({
   editCoursesData,
   setEditCoursesData,
   editFinishedCoursesData,
-  setEditFinishedCoursesData,
-}) => {
-  //   const [selectedInstructor, setSelectedInstructor] = useState<any>([]);
+}: any) => {
   const [suggestedReferences, setSuggestedReferences] = useState(
-    editCoursesData?.references || []
+    editCoursesData?.references || editFinishedCoursesData?.references || []
   );
 
   const [level, setLevel] = useState();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
+  const courseTeacherID = editFinishedCoursesData?.teachers?.map(
+    (teacher) => teacher.id
+  );
 
   const initialValues = {
-    id: editCoursesData?.id || editFinishedCoursesData?.id || 0,
     course_name:
       editCoursesData?.course_name ||
       editFinishedCoursesData?.course_name ||
       "",
-    course_teachers:
-      editCoursesData?.course_teachers ||
-      editFinishedCoursesData?.course_teachers ||
-      [],
+    course_teachers: editCoursesData?.course_teachers || courseTeacherID || [],
     course_code:
       editCoursesData?.course_code || editFinishedCoursesData?.course_code || 0,
     level: editCoursesData?.level || editFinishedCoursesData?.level || "",
@@ -97,16 +102,6 @@ const CreateCoursesInputs = ({
       0,
   };
 
-  // const instructorsName = [
-  //   { id: 1, value: "محمد احمد", label: "محمد احمد" },
-  //   { id: 2, value: "محمود سالم", label: "محمود سالم" },
-  //   { id: 3, value: "احمد محمد", label: "احمد محمد" },
-  //   { id: 4, value: "احمد محمود", label: "احمد محمود" },
-  //   { id: 5, value: "سالم احمد", label: "سالم احمد" },
-  //   { id: 6, value: "سالم محمد", label: "سالم محمد" },
-  //   { id: 7, value: "محمد محمود", label: "محمد محمود" },
-  // ];
-
   const fetchTeacherData = async () => {
     const response = await customFetch(`/allTeachers`);
     return response;
@@ -125,25 +120,26 @@ const CreateCoursesInputs = ({
     label: teacher.full_name,
   }));
 
-  //   const courseTeachers = editCoursesData?.course_teachers?.map(
-  //     (teacher) => teacher
-  //   );
-
-  //   const instructorsNameInclude = instructorsName?.filter((instructor) =>
-  //     courseTeachers?.includes(instructor.id)
-  //   );
-
-  //   const editInstructors =
-  //     editCoursesData && editCoursesData
-  //       ? instructorsNameInclude
-  //       : selectedInstructor;
-
   const levelsOption = [
     { id: 1, value: 1, label: 1 },
     { id: 2, value: 2, label: 2 },
     { id: 3, value: 3, label: 3 },
     { id: 4, value: 4, label: 4 },
   ];
+
+  const { mutate, isPending } = useMutation({
+    mutationKey: ["edit_courses"],
+    mutationFn: (editCourses: any) =>
+      editProgramCourse(editCourses, Number(editFinishedCoursesData?.id)),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries("courses");
+      toast.success(t("the course description has been successfully modified"));
+    },
+    onError: (error) => {
+      const errorMessage = error?.response?.data?.error[0];
+      toast.error(errorMessage);
+    },
+  });
 
   // const handleDeleteInstructorName = (instructorId: string) => {
   //   const instructorNameFilter = editInstructors?.filter(
@@ -182,8 +178,8 @@ const CreateCoursesInputs = ({
             <RiDeleteBin5Line
               onClick={() => {
                 const suggestedReferencesFilter = suggestedReferences?.filter(
-                  (data: any) => {
-                    return data.id !== info.row.original.id;
+                  (data: any, index) => {
+                    return index !== info.row.index;
                   }
                 );
                 setSuggestedReferences(suggestedReferencesFilter);
@@ -208,9 +204,12 @@ const CreateCoursesInputs = ({
 
   useEffect(() => {
     const editLevel = {
-      id: editCoursesData?.level || "",
-      value: editCoursesData?.level || "",
-      label: editCoursesData?.level || `${t("level")}`,
+      id: editCoursesData?.level || editFinishedCoursesData?.level || "",
+      value: editCoursesData?.level || editFinishedCoursesData?.level || "",
+      label:
+        editCoursesData?.level ||
+        editFinishedCoursesData?.level ||
+        `${t("level")}`,
     };
     setLevel(editLevel);
   }, []);
@@ -283,6 +282,7 @@ const CreateCoursesInputs = ({
         }}
       >
         {({ setFieldValue, values, resetForm }) => {
+          console.log("🚀 ~ values:", values);
           return (
             <Form>
               <div className="pb-8 bg-white rounded-3xl">
@@ -301,7 +301,9 @@ const CreateCoursesInputs = ({
                         placeholder={t("course name")}
                         label={t("course name")}
                         labelProps="!font-semibold"
-                        disabled={Object.keys(editFinishedCoursesData).length !== 0}
+                        disabled={
+                          Object.keys(editFinishedCoursesData).length !== 0
+                        }
                       />
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
                         <BaseInput
@@ -312,7 +314,9 @@ const CreateCoursesInputs = ({
                           placeholder={t("course code")}
                           label={t("course code")}
                           labelProps="!font-semibold"
-                          disabled={Object.keys(editFinishedCoursesData).length !== 0}
+                          disabled={
+                            Object.keys(editFinishedCoursesData).length !== 0
+                          }
                         />
                         <div>
                           <label htmlFor="level" className="font-semibold">
@@ -330,7 +334,10 @@ const CreateCoursesInputs = ({
                               }}
                               placeholder={t("level")}
                               styles={selectStyle}
-                              isDisabled={Object.keys(editFinishedCoursesData).length !== 0}
+                              isDisabled={
+                                Object.keys(editFinishedCoursesData).length !==
+                                0
+                              }
                             />
                           </div>
                         </div>
@@ -723,7 +730,6 @@ const CreateCoursesInputs = ({
                                 }
                                 setSuggestedReferences((prev: any) => [
                                   {
-                                    id: suggestedReferences.length + 1,
                                     reference_title: values.reference_title,
                                     author: values.author,
                                     date: values.date,
@@ -771,39 +777,42 @@ const CreateCoursesInputs = ({
                   <Button
                     type="button"
                     className="me-5"
+                    loading={isPending}
                     action={() => {
-                      setCoursesData((prev) => {
-                        const existingIndex = prev.findIndex(
-                          (course) => course.id === values.id
-                        );
+                      if (Object.keys(editFinishedCoursesData).length === 0) {
+                        setCoursesData((prev) => {
+                          const existingIndex = prev.findIndex(
+                            (course) =>
+                              course.course_code === values.course_code
+                          );
 
-                        if (existingIndex !== -1) {
-                          // Update existing data
-                          const updatedCourses = [...prev];
-                          updatedCourses[existingIndex] = {
-                            ...values,
-                            references: suggestedReferences,
-                            id: values.id,
-                          };
-                          return updatedCourses;
-                        } else {
-                          // Add new data
-                          return [
-                            ...prev,
-                            {
+                          if (existingIndex !== -1) {
+                            const updatedCourses = [...prev];
+                            updatedCourses[existingIndex] = {
                               ...values,
                               references: suggestedReferences,
-                              id: prev.length + 1,
-                            },
-                          ];
-                        }
-                      });
+                            };
+                            return updatedCourses;
+                          } else {
+                            return [
+                              ...prev,
+                              {
+                                ...values,
+                                references: suggestedReferences,
+                              },
+                            ];
+                          }
+                        });
 
-                      setEditCoursesData([]);
+                        setEditCoursesData([]);
 
-                      resetForm();
+                        resetForm();
 
-                      setStep(1);
+                        setStep(1);
+                      } else {
+                        mutate({ ...values, references: suggestedReferences });
+                        navigate(`/programs/programInfo/${editFinishedCoursesData?.id}`);
+                      }
                     }}
                   >
                     {t("submit")}
@@ -817,6 +826,7 @@ const CreateCoursesInputs = ({
                           `/programs/programInfo/${editFinishedCoursesData?.id}`
                         );
                       } else {
+                        setEditCoursesData([]);
                         setStep(1);
                       }
                     }}

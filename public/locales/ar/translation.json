@@ -150,9 +150,11 @@
   "systems analysis course description": "توصيف مقرر تحليل نظم",
   "course objectives": "اهداف المقرر",
   "the instructor has been successfully deleted": "تم حذف المحاضر بنجاح",
+  "the program has been successfully deleted": "تم حذف البرنامج بنجاح",
   "information and concepts": "المعلومات والمفاهيم",
   "mental skills": "المهارات الذهنية",
   "professional skills": "المهارات المهنية",
+  "program has been added successfully": "تمت إضافة البرنامج بنجاح",
   "general skills": "المهارات العامة",
   "teaching and learning methods": "اساليب التعليم والتعلم",
   "number students": "عدد الطلاب",
@@ -440,6 +442,7 @@
   "organization data has successfully added": "تم تعديل بيانات المنظمة بنجاح",
   "filter by instructor...": "بحث عن طريق المحاضر",
   "group": "الشعبة",
-  "confirm deletion":"تأكيد الحذف ",
-  "the program will be deleted as well as all academic data associated with the program":"سيتم حذف البرنامج وكذلك جميع البيانات الدراسية المرتبطة بالبرنامج"
+  "confirm deletion": "تأكيد الحذف ",
+  "the course description has been successfully modified":"تم تعديل توصيف المقرر بنجاح",
+  "the program will be deleted as well as all academic data associated with the program": "سيتم حذف البرنامج وكذلك جميع البيانات الدراسية المرتبطة بالبرنامج"
 }

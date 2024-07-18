@@ -26,7 +26,7 @@ const SearchInput = () => {
           alt="Search"
           className={`${
             isRTL ? "right-2" : "left-2"
-          } absolute z-50 w-5 h-5 -translate-y-1/2 top-1/2`}
+          } absolute z-10 w-5 h-5 -translate-y-1/2 top-1/2`}
         />
         <BaseInput
           type="text"

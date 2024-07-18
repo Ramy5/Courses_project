@@ -4,14 +4,16 @@ import { t } from "i18next";
 import { Button } from "../..";
 import { AiOutlineCloudUpload } from "react-icons/ai";
 import { RiDeleteBin5Line } from "react-icons/ri";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { HiMiniFolderArrowDown } from "react-icons/hi2";
 import customFetch from "../../../utils/axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import AddNewCertificatesInput from "./AddNewCertificatesInput";
-
+import axios from "axios";
+import Cookies from "js-cookie";
+import { BASE_URL } from "../../../utils/constants";
 interface AddInstructorQualification_TP {
   general_specialization: string;
   specialization: string;
@@ -26,13 +28,35 @@ interface InstructorAddQualificationData_TP {
 }
 
 const postInstructorQualification = async (newInstructor: any) => {
-  const data = customFetch.post("/qualification", newInstructor);
-  return data;
+  const token = Cookies.get("token");
+  const response = await axios.post(
+    `${BASE_URL}qualification`,
+    newInstructor,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
+
+  return response;
 };
 
 const editInstructorQualification = async (editInstructor: any, id: number) => {
-  const data = customFetch.post(`/updateCertificate/${id}`, editInstructor);
-  return data;
+  const token = Cookies.get("token");
+  const response = await axios.post(
+    `${BASE_URL}updateCertificate/${id}`,
+    editInstructor,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
+
+  return response;
 };
 
 const InstructorQualificationData = ({
@@ -40,6 +64,7 @@ const InstructorQualificationData = ({
   instructorID,
 }: InstructorAddQualificationData_TP) => {
   const [file, setFile] = useState(null);
+  console.log("🚀 ~ file:", file);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
@@ -54,45 +79,7 @@ const InstructorQualificationData = ({
     year_acquisition: editObj?.year_acquisition || "",
     cv_file: editObj?.cv_file || "",
     job_title: editObj?.job_title || "",
-    // newCertificate: {
-    //   type_certificate: editObj?.type_certificate || "",
-    //   certificate_name: editObj?.certificate_name || "",
-    //   donor: editObj?.donor || "",
-    //   date_acquisition: editObj?.date_acquisition || "",
-    //   specialization: editObj?.specialization || "",
-    //   appreciation: editObj?.appreciation || "",
-    // },
   };
-
-  // const errorFields = [
-  //   "general_specialization",
-  //   "specialization",
-  //   "degree",
-  //   "year_acquisition",
-  //   "cv_file",
-  //   "job_title",
-  //   "newCertificate",
-  // ];
-
-  // const mutation = useMutation({
-  //   mutationKey: ["add-qualification"],
-  //   mutationFn: postInstructorQualification,
-  //   onSuccess: (data: any) => {
-  //     queryClient.invalidateQueries("instructor");
-  //     toast.success(
-  //       t("instructor qualification data has been added successfully")
-  //     );
-
-  //     navigate("/instructors");
-  //   },
-  //   onError: (error) => {
-  //     const errorMessage = errorFields
-  //       .map((field) => error?.response?.data?.error[0]?.[field]?.[0])
-  //       .find((message) => message);
-
-  //     toast.error(errorMessage || error.message);
-  //   },
-  // });
 
   const { mutate, isPending } = useMutation({
     mutationKey: ["add-instructor-contact"],
@@ -139,7 +126,7 @@ const InstructorQualificationData = ({
       specialization: values?.specialization,
       degree: values?.degree,
       year_acquisition: values?.year_acquisition,
-      cv_file: values?.cv_file,
+      cv_file: file,
       job_title: values?.job_title,
       newCertificate: newCertificates,
       teacher_id: instructorID,
@@ -151,7 +138,7 @@ const InstructorQualificationData = ({
       specialization: editObj?.specialization,
       degree: editObj?.degree,
       year_acquisition: editObj?.year_acquisition,
-      cv_file: editObj?.cv_file,
+      cv_file: file,
       job_title: editObj?.job_title,
       newCertificate: newCertificates,
       teacher_id: editObj?.teacher_id,
@@ -159,6 +146,8 @@ const InstructorQualificationData = ({
 
     editObj ? await editMutate(editInstructor) : await mutate(newInstructor);
   };
+
+  useEffect(() => setFile(editObj?.cv_file), []);
 
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
@@ -309,7 +298,11 @@ const InstructorQualificationData = ({
               <Button type="submit" className="me-5" loading={isPending}>
                 {t("confirm")}
               </Button>
-              <Button type="button" className="bg-[#E6EAEE] text-mainColor" action={() => navigate(-1)}>
+              <Button
+                type="button"
+                className="bg-[#E6EAEE] text-mainColor"
+                action={() => navigate(-1)}
+              >
                 {t("cancel")}
               </Button>
             </div>
