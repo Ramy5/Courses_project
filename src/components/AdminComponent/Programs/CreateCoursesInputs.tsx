@@ -301,7 +301,7 @@ const CreateCoursesInputs = ({
                         placeholder={t("course name")}
                         label={t("course name")}
                         labelProps="!font-semibold"
-                        disabled={editFinishedCoursesData}
+                        disabled={Object.keys(editFinishedCoursesData).length !== 0}
                       />
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
                         <BaseInput
@@ -312,7 +312,7 @@ const CreateCoursesInputs = ({
                           placeholder={t("course code")}
                           label={t("course code")}
                           labelProps="!font-semibold"
-                          disabled={editFinishedCoursesData}
+                          disabled={Object.keys(editFinishedCoursesData).length !== 0}
                         />
                         <div>
                           <label htmlFor="level" className="font-semibold">
@@ -330,7 +330,7 @@ const CreateCoursesInputs = ({
                               }}
                               placeholder={t("level")}
                               styles={selectStyle}
-                              isDisabled={editFinishedCoursesData}
+                              isDisabled={Object.keys(editFinishedCoursesData).length !== 0}
                             />
                           </div>
                         </div>
@@ -628,7 +628,7 @@ const CreateCoursesInputs = ({
                           isMulti
                           className="basic-multi-select"
                           classNamePrefix="select"
-                          value={teachersOption.filter((option) =>
+                          value={teachersOption?.filter((option) =>
                             values.course_teachers.includes(option.id)
                           )}
                           onChange={(option) => {
@@ -812,7 +812,7 @@ const CreateCoursesInputs = ({
                     type="button"
                     className="bg-[#E6EAEE] text-mainColor"
                     action={() => {
-                      if (editFinishedCoursesData) {
+                      if (Object.keys(editFinishedCoursesData).length !== 0) {
                         navigate(
                           `/programs/programInfo/${editFinishedCoursesData?.id}`
                         );
