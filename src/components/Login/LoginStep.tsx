@@ -117,21 +117,11 @@ const LoginStep = (props: LoginStepProps_TP) => {
         {/* LOGIN TYPE CHECKBOX */}
         <div className="grid items-center justify-center grid-cols-2 gap-4 lg:grid-cols-4">
           <MainRadio
-            id={"student"}
-            label={t("student")}
+            id={"admin"}
+            label={t("admin")}
             name="loginType"
-            value={"student"}
-            checked={values.loginType === "student"}
-            onChange={(e) => {
-              setFieldValue("loginType", e.target.value);
-            }}
-          />
-          <MainRadio
-            id={"teacher"}
-            label={t("instructor")}
-            name="loginType"
-            value={"teacher"}
-            checked={values.loginType === "teacher"}
+            value={"admin"}
+            checked={values.loginType === "admin"}
             onChange={(e) => {
               setFieldValue("loginType", e.target.value);
             }}
@@ -147,11 +137,21 @@ const LoginStep = (props: LoginStepProps_TP) => {
             }}
           />
           <MainRadio
-            id={"admin"}
-            label={t("admin")}
+            id={"teacher"}
+            label={t("instructor")}
             name="loginType"
-            value={"admin"}
-            checked={values.loginType === "admin"}
+            value={"teacher"}
+            checked={values.loginType === "teacher"}
+            onChange={(e) => {
+              setFieldValue("loginType", e.target.value);
+            }}
+          />
+          <MainRadio
+            id={"student"}
+            label={t("student")}
+            name="loginType"
+            value={"student"}
+            checked={values.loginType === "student"}
             onChange={(e) => {
               setFieldValue("loginType", e.target.value);
             }}
