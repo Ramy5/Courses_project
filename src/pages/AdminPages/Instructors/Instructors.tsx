@@ -20,6 +20,8 @@ import Loading from "../../../components/UI/Loading";
 const Instructors = () => {
   const [openRow, setOpenRow] = useState<number | null>(null);
   const queryClient = useQueryClient();
+  const [page, setPage] = useState<number>()
+  console.log("🚀 ~ Instructors ~ page:", page)
 
   const navigate = useNavigate();
 
@@ -30,7 +32,7 @@ const Instructors = () => {
   ];
 
   const fetchInstructorData = async () => {
-    const response = await customFetch(`/allTeachers`);
+    const response = await customFetch(`/allTeachers?page=${page}`);
     return response;
   };
 
@@ -50,16 +52,17 @@ const Instructors = () => {
     onSuccess: (data) => {
       queryClient.invalidateQueries("delete_instructor");
       toast.success(`${t("the instructor has been successfully deleted")}`);
-      refetch()
+      refetch();
     },
     onError: (error) => {
-      const errorMessage =
-        error?.response?.data?.error[0]
+      const errorMessage = error?.response?.data?.error[0];
       toast.error(errorMessage);
     },
   });
 
   const instructorData = data?.data.data.teachers || {};
+  const instructorPagination = data?.data.data || {};
+  console.log("🚀 ~ Instructors ~ instructorPagination:", instructorPagination);
   console.log("🚀 ~ Instructors ~ instructorData:", instructorData);
 
   useEffect(() => {
@@ -67,6 +70,10 @@ const Instructors = () => {
       toast.error(`${error.message}`);
     }
   }, [error]);
+
+  useEffect(() => {
+    refetch()
+  }, [page]);
 
   const handleProfileClick = (instructorId: number) => {
     navigate(`/instructors/instructorProfile/${instructorId}`);
@@ -123,7 +130,7 @@ const Instructors = () => {
                 }}
                 onSecondClick={() => {
                   // setInstructorId(instructor.id);
-                  mutate(instructor.id)
+                  mutate(instructor.id);
                 }}
               />
             </div>
@@ -149,14 +156,16 @@ const Instructors = () => {
         ))}
       </div>
 
-      <div>
-        <Pagination
-          showNavigation={true}
-          //   table={table}
-          currentPage="1"
-          totalPages={40}
-        />
-      </div>
+      {instructorPagination?.totalPages > 1 && (
+        <div>
+          <Pagination
+            showNavigation={true}
+            currentPage={instructorPagination?.currentPage}
+            totalPages={instructorPagination?.totalPages}
+            setPage={setPage}
+          />
+        </div>
+      )}
     </div>
   );
 };

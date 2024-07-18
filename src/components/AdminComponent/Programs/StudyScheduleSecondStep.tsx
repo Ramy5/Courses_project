@@ -30,7 +30,7 @@ console.log("🚀 ~ StudyScheduleSecondStep ~ scheduleData:", scheduleData)
                     {t("educational level")}
                   </label>
                   <Select
-                    className="lg:w-[15vw] mt-2"
+                    className="lg:w-[15vw] mt-2 z-50"
                     id="program_academic"
                     name="program_academic"
                     options={levelsOption}

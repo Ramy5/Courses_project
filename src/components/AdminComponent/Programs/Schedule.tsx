@@ -62,8 +62,11 @@ import interactionPlugin from "@fullcalendar/interaction";
 import resourceTimelinePlugin from "@fullcalendar/resource-timeline";
 import { useEffect, useRef } from "react";
 import { IoTimeOutline } from "react-icons/io5";
+import { useRTL } from "../../../hooks/useRTL";
 
 const Schedule = ({ scheduleData }) => {
+  const isRTL = useRTL();
+  console.log("🚀 ~ Schedule ~ isRTL:", isRTL);
   const arrangeScheduleData = scheduleData?.lecture_time?.sort(
     (a, b) => a.day_id - b.day_id
   );
@@ -260,7 +263,7 @@ const Schedule = ({ scheduleData }) => {
     end: `2024-06-25T${lecture.end_time}:00`,
     backgroundColor: getRandomColor(), // Function to assign random colors or based on some logic
   }));
-  console.log("🚀 ~ events ~ events:", events)
+  console.log("🚀 ~ events ~ events:", events);
 
   function getResourceIdByDayId(day_id) {
     const dayMapping = {
@@ -272,14 +275,14 @@ const Schedule = ({ scheduleData }) => {
       6: 6,
       7: 7,
     };
-    return dayMapping[day_id] || 'unknown';
+    return dayMapping[day_id] || "unknown";
   }
-  
+
   function getRandomColor() {
-    const colors = ['#369252', '#393D94', '#025464', '#9C48AB'];
+    const colors = ["#369252", "#393D94", "#025464", "#9C48AB"];
     return colors[Math.floor(Math.random() * colors.length)];
   }
-  
+
   useEffect(() => {
     if (calendarRef.current) {
       const calendar = calendarRef.current.getApi();
@@ -307,19 +310,25 @@ const Schedule = ({ scheduleData }) => {
       //   { id: "wednesday", title: "friday" },
       // ];
 
-      const resources = [ 
-        { id: 1, title: "saturday" },
-        { id: 2, title: "sunday" },
-        { id: 3, title: "monday" },
-        { id: 4, title: "tuesday" },
-        { id: 5, title: "wednesday" },
-        { id: 6, title: "thursday" },
-        { id: 7, title: "friday" },
+      const resources = [
+        { id: 1, title: isRTL ? "السبت" : "saturday" },
+        { id: 2, title: isRTL ? "الأحد" : "sunday" },
+        { id: 3, title: isRTL ? "الاثنين" : "monday" },
+        { id: 4, title: isRTL ? "الثلاثاء" : "tuesday" },
+        { id: 5, title: isRTL ? "الاربعاء" : "wednesday" },
+        { id: 6, title: isRTL ? "الخميس" : "thursday" },
+        { id: 7, title: isRTL ? "الجمعه" : "friday" },
       ];
 
+      // fc fc-media-screen fc-direction-ltr fc-theme-standard
       calendar.setOption("resources", resources);
 
       calendar.setOption("events", events);
+
+      const calendarEl = document.querySelector(".fc-media-screen");
+      if (calendarEl) {
+        calendarEl.style.direction = isRTL ? "rtl" : "ltr";
+      }
 
       return () => {
         calendar.destroy();
@@ -332,9 +341,14 @@ const Schedule = ({ scheduleData }) => {
     return <div>{event ? event.customContent : eventInfo.event.title}</div>;
   };
 
+  const scheduleElement = document.getElementsByClassName(
+    "fc fc-media-screen fc-theme-standard"
+  );
+  console.log("🚀 ~ Schedule ~ scheduleElement:", scheduleElement);
+
   return (
     <div>
-      <div className="my-8">
+      <div className="my-10 pe-6">
         <FullCalendar
           ref={calendarRef}
           plugins={[

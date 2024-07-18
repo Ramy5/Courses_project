@@ -319,7 +319,7 @@ h1 {
 }
 
 .fc-view-harness-active {
-  height: 710px !important;
+  height: 670px !important;
 }
 
 .fc-timeline-header-row th,
@@ -329,10 +329,14 @@ h1 {
   color: #393d94 !important;
 }
 
+.fc-scroller {
+  overflow: hidden !important;
+}
+
 .fc-datagrid-cell-frame {
   display: flex;
-  justify-content: start;
   align-items: center;
+  justify-content: center;
 }
 
 .fc-scroller-harness table,

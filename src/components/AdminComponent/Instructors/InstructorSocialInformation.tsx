@@ -8,7 +8,7 @@ import { RiWhatsappFill } from "react-icons/ri";
 const InstructorSocialInformation = ({ personalData }: any) => {
 
   const contactInfo =
-  personalData?.contactInfo.length && personalData?.contactInfo[0];
+  personalData?.contactInfo?.length && personalData?.contactInfo[0];
 
   return (
     <div className="px-8 py-6 mx-5 bg-mainBg rounded-2xl mt-28">
@@ -89,7 +89,7 @@ const InstructorSocialInformation = ({ personalData }: any) => {
             className="font-medium"
             target="_blank"
           >
-            {contactInfo.twitter}
+            {contactInfo?.twitter}
           </a>
         </div>
       </div>
