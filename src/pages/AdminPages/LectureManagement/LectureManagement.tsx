@@ -11,7 +11,7 @@ import { customStyles } from "../../../utils/selectStyles";
 import Loading from "../../../components/UI/Loading";
 import Pagination from "../../../components/UI/Pagination";
 
-const getLectureManagement = async (instructorSelectId?: number) => {
+const getLectureManagement = async (instructorSelectId?: string | number) => {
   const data = customFetch(`manage?teacher_id=${instructorSelectId}`);
   return data.data;
 };

@@ -433,5 +433,7 @@
   "select the level": "اختار المستوي",
   "select group number": "اختار رقم الشعبة",
   "select a program": "اختار برنامج",
-  "organization data has successfully added": "تم تعديل بيانات المنظمة بنجاح"
+  "organization data has successfully added": "تم تعديل بيانات المنظمة بنجاح",
+  "filter by instructor...": "بحث عن طريق المحاضر",
+  "group": "الشعبة"
 }
