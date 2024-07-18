@@ -4,15 +4,50 @@ import Select from "react-select";
 import selectStyle from "../../../utils/selectStyle";
 import Schedule from "./Schedule";
 import { Button } from "../..";
+import { useState, useEffect } from "react";
+import Loading from "../../UI/Loading";
 
 const StudyScheduleSecondStep = ({ setSteps, scheduleData }: any) => {
-console.log("🚀 ~ StudyScheduleSecondStep ~ scheduleData:", scheduleData)
+  console.log("🚀 ~ StudyScheduleSecondStep ~ scheduleData:", scheduleData);
+
+  const [levelSelect, setLevelSelect] = useState(1);
+  const [loading, setLoading] = useState(false);
+
+  const filterScheduleData = scheduleData?.lecture_time?.filter(
+    (schedule) => schedule.level === levelSelect
+  );
+
+  useEffect(() => {
+    setLoading(true);
+
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [levelSelect]);
 
   const levelsOption = [
-    { id: "1", value: 1, label: 1 },
-    { id: "2", value: 2, label: 2 },
-    { id: "3", value: 3, label: 3 },
-    { id: "4", value: 4, label: 4 },
+    {
+      label: `${t("level")} 1`,
+      value: "level 1",
+      id: 1,
+    },
+    {
+      label: `${t("level")} 2`,
+      value: "level 2",
+      id: 2,
+    },
+    {
+      label: `${t("level")} 3`,
+      value: "level 3",
+      id: 3,
+    },
+    {
+      label: `${t("level")} 4`,
+      value: "level 4",
+      id: 4,
+    },
   ];
 
   return (
@@ -35,9 +70,9 @@ console.log("🚀 ~ StudyScheduleSecondStep ~ scheduleData:", scheduleData)
                     name="program_academic"
                     options={levelsOption}
                     placeholder="1"
-                    // value={values?.level_academic}
                     onChange={(e) => {
                       setFieldValue("educational_level", e.value);
+                      setLevelSelect(e.id);
                     }}
                     styles={selectStyle}
                   />
@@ -48,15 +83,28 @@ console.log("🚀 ~ StudyScheduleSecondStep ~ scheduleData:", scheduleData)
         </div>
       </div>
 
-      <Schedule scheduleData={scheduleData}/>
+      {loading ? (
+        <Loading />
+      ) : (
+        <>
+          {levelSelect === 1 && <Schedule scheduleData={filterScheduleData} />}
+          {levelSelect === 2 && <Schedule scheduleData={filterScheduleData} />}
+          {levelSelect === 3 && <Schedule scheduleData={filterScheduleData} />}
+          {levelSelect === 4 && <Schedule scheduleData={filterScheduleData} />}
+        </>
+      )}
 
       <div className="mt-4 flex items-center justify-end gap-5">
         <Button bordered action={() => setSteps(1)}>
           {t("previous")}
         </Button>
-        <Button action={() => {
-          setSteps(3)
-          }}>{t("next")}</Button>
+        <Button
+          action={() => {
+            setSteps(3);
+          }}
+        >
+          {t("next")}
+        </Button>
         <Button className="bg-mainRed">{t("cancel")}</Button>
       </div>
     </div>

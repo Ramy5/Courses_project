@@ -21,7 +21,6 @@ const Instructors = () => {
   const [openRow, setOpenRow] = useState<number | null>(null);
   const queryClient = useQueryClient();
   const [page, setPage] = useState<number>()
-  console.log("🚀 ~ Instructors ~ page:", page)
 
   const navigate = useNavigate();
 

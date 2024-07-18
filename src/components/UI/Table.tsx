@@ -12,7 +12,7 @@ import Pagination from "./Pagination";
 
 interface ReactTableProps<T extends object> {
   data: T[];
-  columns: ColumnDef<[]>[];
+  columns: any;
   showNavigation?: boolean;
   showGlobalFilter?: boolean;
   filterFn?: FilterFn<T>;
@@ -53,7 +53,7 @@ const Table = <T extends object>({
                     key={header.id}
                     className={`${
                       className ? "text-white" : "text-mainColor"
-                    } px-6 py-4 text-md font-medium`}
+                    } px-6 py-6 text-md font-medium`}
                   >
                     {header.isPlaceholder
                       ? null
