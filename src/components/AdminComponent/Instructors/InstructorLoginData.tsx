@@ -30,7 +30,7 @@ const postInstructorLogin = async (newInstructor: any) => {
 
 const editInstructorLogin = async (editInstructor: any, id: number) => {
   const data = await customFetch.post(
-    `updateStudentLoginData/${id}`,
+    `updateLoginData/${id}`,
     editInstructor
   );
   return data;
@@ -41,6 +41,7 @@ const InstructorLoginData = ({
   setActiveTab,
   setInstructorID,
 }: instructorAddLoginData_TP) => {
+  console.log("🚀 ~ editObj:", editObj)
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] =
     useState<boolean>(false);
@@ -58,6 +59,7 @@ const InstructorLoginData = ({
     password: editObj?.password || "",
     password_confirmation: editObj?.password_confirmation || "",
   };
+  console.log("🚀 ~ initialValues:", initialValues);
 
   const { mutate, isPending } = useMutation({
     mutationKey: ["add-instructor-login"],
@@ -176,7 +178,7 @@ const InstructorLoginData = ({
               className="w-full text-lg py-2 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
               placeholder={t("confirm password")}
               label={t("confirm password")}
-              type={showPassword ? "text" : "password"}
+              type={showConfirmPassword ? "text" : "password"}
               labelProps="!font-semibold"
             />
             {isRTL && showConfirmPassword ? (

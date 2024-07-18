@@ -16,6 +16,8 @@ const AddInstructor = () => {
     { id: 3, title: "qualification data" },
   ];
 
+  
+
   return (
     <div>
       <div className="px-8 py-3 md:px-16 bg-mainColor rounded-tr-2xl rounded-tl-2xl">

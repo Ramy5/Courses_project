@@ -8,6 +8,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import customFetch from "../../../utils/axios";
 import AddLectureTiming from "../../../components/AdminComponent/Programs/AddLectureTiming";
+import { useNavigate, useParams } from "react-router-dom";
 
 interface AddSchedule_TP {
   program_name: string;
@@ -29,17 +30,28 @@ interface scheduleAdd_TP {
   setInstructorID: (id: number) => void;
 }
 
-const postSchedule = async (newProgram: any) => {
-  const data = await customFetch.post("schedule", newProgram);
+const postSchedule = async (newSchedule: any) => {
+  const data = await customFetch.post("/lectureTime", newSchedule);
   return data;
 };
 
 const StudySchedule = () => {
   const [steps, setSteps] = useState<number>(1);
-  const [scheduleData, setScheduleData] = useState({ lecture_time: []})
-  const [addTimeLecture, setAddTimeLecture] = useState([])
-  console.log("🚀 ~ StudySchedule ~ addTimeLecture:", addTimeLecture)
-  console.log("🚀 ~ StudySchedule ~ scheduleData:", scheduleData)
+  const [scheduleData, setScheduleData] = useState({
+    day: {},
+    start_date: "",
+    end_date: "",
+    lecture_time: [],
+  });
+  console.log("🚀 ~ StudySchedule ~ scheduleData:", scheduleData);
+  const [editStudySchedule, setEditStudySchedule] = useState({})
+  console.log("🚀 ~ StudySchedule ~ editStudySchedule:", editStudySchedule)
+  const navigate = useNavigate()
+
+
+  const {id: scheduleId} = useParams()
+  console.log("🚀 ~ StudySchedule ~ scheduleId:", scheduleId)
+
   const queryClient = useQueryClient();
 
   const stepsOption = [
@@ -54,7 +66,7 @@ const StudySchedule = () => {
     onSuccess: (data) => {
       queryClient.invalidateQueries("schedule");
       toast.success(
-        t("instructor login information has been added successfully")
+        t("study schedule has been added successfully")
       );
     },
     onError: (error) => {
@@ -65,6 +77,16 @@ const StudySchedule = () => {
       toast.error(errorMessage);
     },
   });
+
+  const handleAddSchedule = async (values: AddSchedule_TP) => {
+    const newSchedule = {
+      end_date: values.end_date,
+      lecture_times: values.lecture_time,
+      start_date: values.start_date,
+    };
+
+    await mutate(newSchedule);
+  };
 
   // const { mutate: editMutate } = useMutation({
   //   mutationKey: ["edit_program"],
@@ -124,9 +146,22 @@ const StudySchedule = () => {
             ))}
           </div>
 
-          {steps === 1 && <StudyScheduleFirstStep setSteps={setSteps} setScheduleData={setScheduleData} addTimeLecture={addTimeLecture} />}
+          {steps === 1 && (
+            <StudyScheduleFirstStep
+              setSteps={setSteps}
+              scheduleData={scheduleData}
+              setScheduleData={setScheduleData}
+              setEditStudySchedule={setEditStudySchedule}
+            />
+          )}
 
-          {steps === 2 && <StudyScheduleSecondStep setSteps={setSteps} />}
+          {steps === 2 && (
+            <StudyScheduleSecondStep
+              setSteps={setSteps}
+              scheduleData={scheduleData}
+              handleAddSchedule={handleAddSchedule}
+            />
+          )}
 
           {steps === 3 && (
             <div className="w-full h-[480px] flex">
@@ -138,7 +173,11 @@ const StudySchedule = () => {
                 </h1>
                 <Button
                   className="font-semibold text-xl py-3 rounded-2xl mt-20"
-                  action={() => {}}
+                  action={() => {
+                    handleAddSchedule(scheduleData);
+                    navigate("/programs")
+                  }}
+                  loading={isPending}
                 >
                   {t("save table")}
                 </Button>
@@ -148,7 +187,16 @@ const StudySchedule = () => {
         </div>
       )}
 
-      {steps === 4 && <AddLectureTiming setSteps={setSteps} addTimeLecture={addTimeLecture} setScheduleData={setScheduleData} scheduleData={scheduleData} setAddTimeLecture={setAddTimeLecture} />}
+      {steps === 4 && (
+        <AddLectureTiming
+          setSteps={setSteps}
+          setScheduleData={setScheduleData}
+          scheduleData={scheduleData}
+          scheduleId={scheduleId}
+          editStudySchedule={editStudySchedule}
+          setEditStudySchedule={setEditStudySchedule}
+        />
+      )}
     </div>
   );
 };

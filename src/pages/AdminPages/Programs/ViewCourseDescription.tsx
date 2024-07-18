@@ -9,8 +9,11 @@ import customFetch from "../../../utils/axios";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "../../../components/UI/Loading";
 import { toast } from "react-toastify";
+import { useParams } from "react-router-dom";
 
 const ViewCourseDescription = () => {
+  const { id: descriptionParamID } = useParams();
+
   const courseDescriptionData = {
     courceCode: "#archaive",
     level: "الثالث",
@@ -69,7 +72,7 @@ const ViewCourseDescription = () => {
   };
 
   const fetchCourseData = async () => {
-    const response = await customFetch(`/course/${3}`);
+    const response = await customFetch(`/course/${descriptionParamID}`);
     return response;
   };
 
@@ -167,7 +170,9 @@ const ViewCourseDescription = () => {
     <div>
       <TitlePage
         mainTitle="Programs"
+        mainLink="/programs"
         supTitle="computer science program"
+        supLink={`/programs/programInfo/${descriptionParamID}`}
         ThirdTitle="systems analysis course description"
         icon={<FaFolder size={28} className="fill-mainColor" />}
       />

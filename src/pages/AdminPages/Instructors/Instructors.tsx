@@ -8,23 +8,18 @@ import {
 } from "../../../components";
 import { useNavigate } from "react-router-dom";
 import Pagination from "../../../components/UI/Pagination";
-import Instructor from "../../../assets/instructors/instructor.svg";
-import Instructor_2 from "../../../assets/instructors/instructor_2.svg";
-import Instructor_3 from "../../../assets/instructors/instructor_3.svg";
-import Instructor_4 from "../../../assets/instructors/instructor_4.svg";
 import { FaUserAlt } from "react-icons/fa";
 import { GrView } from "react-icons/gr";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import { useEffect, useState } from "react";
 import customFetch from "../../../utils/axios";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import Loading from "../../../components/UI/Loading";
-import { useSelector } from "react-redux";
-import { RootState } from "@reduxjs/toolkit/query";
 
 const Instructors = () => {
   const [openRow, setOpenRow] = useState<number | null>(null);
+  const queryClient = useQueryClient();
 
   const navigate = useNavigate();
 
@@ -34,50 +29,38 @@ const Instructors = () => {
     { value: "vanilla", label: "Vanilla" },
   ];
 
-  // const instructorsData = [
-  //   {
-  //     id: 1,
-  //     image: Instructor,
-  //     name: "Dimitres Viga",
-  //     jobTitle: "مصمم مواقع",
-  //   },
-  //   {
-  //     id: 2,
-  //     image: Instructor_2,
-  //     name: "Viga Dimitres",
-  //     jobTitle: "مصمم مواقع",
-  //   },
-  //   {
-  //     id: 3,
-  //     image: Instructor_3,
-  //     name: "Dimitres Viga",
-  //     jobTitle: "مصمم مواقع",
-  //   },
-  //   {
-  //     id: 4,
-  //     image: Instructor_4,
-  //     name: "Viga Dimitres",
-  //     jobTitle: "مصمم مواقع",
-  //   },
-  //   {
-  //     id: 5,
-  //     image: Instructor,
-  //     name: "Dimitres Viga",
-  //     jobTitle: "مصمم مواقع",
-  //   },
-  // ];
-
   const fetchInstructorData = async () => {
     const response = await customFetch(`/allTeachers`);
     return response;
   };
 
-  const { data, isLoading, error } = useQuery({
+  const { data, isLoading, error, refetch, isRefetching } = useQuery({
     queryKey: ["allTeacher_data"],
     queryFn: fetchInstructorData,
   });
 
+  const deleteInstructor = async (instructorId) => {
+    const response = await customFetch.delete(`/teacher/${instructorId}`);
+    return response;
+  };
+
+  const { mutate } = useMutation({
+    mutationKey: ["add-instructor-contact"],
+    mutationFn: deleteInstructor,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries("delete_instructor");
+      toast.success(`${t("the instructor has been successfully deleted")}`);
+      refetch()
+    },
+    onError: (error) => {
+      const errorMessage =
+        error?.response?.data?.error[0]
+      toast.error(errorMessage);
+    },
+  });
+
   const instructorData = data?.data.data.teachers || {};
+  console.log("🚀 ~ Instructors ~ instructorData:", instructorData);
 
   useEffect(() => {
     if (error) {
@@ -93,7 +76,7 @@ const Instructors = () => {
     setOpenRow((prevOpenRow) => (prevOpenRow == id ? null : id));
   };
 
-  if (isLoading) return <Loading />
+  if (isLoading || isRefetching) return <Loading />;
 
   return (
     <div>
@@ -127,8 +110,6 @@ const Instructors = () => {
           >
             <div className="flex items-center justify-end w-full">
               <DotsDropDown
-                // instructorId={instructor.id}
-                // instructorRoute="/instructors/instructorEdit"
                 firstName="edit"
                 firstIcon={<GrView size={22} className="fill-mainColor" />}
                 secondName="delete"
@@ -140,7 +121,10 @@ const Instructors = () => {
                 onFirstClick={() => {
                   navigate(`/instructors/edit/${instructor.id}`);
                 }}
-                onSecondClick={() => {}}
+                onSecondClick={() => {
+                  // setInstructorId(instructor.id);
+                  mutate(instructor.id)
+                }}
               />
             </div>
             <div className="w-full my-2">

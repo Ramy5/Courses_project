@@ -8,7 +8,7 @@ import { useEffect, useMemo, useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { GrView } from "react-icons/gr";
 import { FaRegEdit } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import customFetch from "../../../utils/axios";
 import { toast } from "react-toastify";
@@ -17,13 +17,14 @@ import Loading from "../../../components/UI/Loading";
 const ProgramInformation = () => {
   const [openRow, setOpenRow] = useState<number | null>(null);
   const navigate = useNavigate();
+  const { id: programParamID } = useParams();
 
   const handleToggleDropDown = (id: number) => {
     setOpenRow((prevOpenRow) => (prevOpenRow == id ? null : id));
   };
 
   const fetchProgramData = async () => {
-    const response = await customFetch(`/program/${10}`);
+    const response = await customFetch(`/program/${programParamID}`);
     return response;
   };
 
@@ -39,26 +40,6 @@ const ProgramInformation = () => {
       toast.error(`${error.message}`);
     }
   }, [error]);
-
-  // const ProgramInf = {
-  //   program_name: "علوم حاسب",
-  //   program_code: "#1545456",
-  //   strat_Period: "24/5/2024",
-  //   end_Period: "24/5/2024",
-  //   vision:
-  //     "Acsapienmor bigravidaplace ratvariusvit aemorbi lobortis bibe ndum.lobortis bibendum.lobortis bibendum.",
-  //   message:
-  //     " Acsapienmor bigravidaplace ratvariusvit aemorbi lobortis bibe ndum.lobortis bibendum.lobortis bibendum. Acsapienm orbigravi daplacerat variusv itaem orbi  lobor tis biben  dum.lobortis bibend um.lobortis bibendum.",
-  //   rating_excellent: "85%",
-  //   rating_veryGood: "75%",
-  //   rating_good: "65%",
-  //   rating_acceptable: "50%",
-  //   statistics_courses: "20 مقرر",
-  //   statistics_Instructors: "15 محاضر",
-  //   statistics_students: "+5000 طالب",
-  //   academic_levels: 4,
-  //   number_classes: 4,
-  // };
 
   const ProgramColumnsFee = useMemo<ColumnDef<any>[]>(
     () => [
@@ -82,6 +63,7 @@ const ProgramInformation = () => {
         accessorKey: "action",
         cell: (info) => {
           const rowIndex = info.row.index;
+          console.log("🚀 ~ ProgramInformation ~ info.row:", info.row.original);
           const totalRows = info.table.getCoreRowModel().rows.length;
           return (
             <DotsDropDown
@@ -96,7 +78,9 @@ const ProgramInformation = () => {
               onFirstClick={() => {
                 navigate(`/programs/courseDescription/${info.row.original.id}`);
               }}
-              onSecondClick={() => {}}
+              onSecondClick={() => {
+                navigate("/programs/create", { state: info.row.original });
+              }}
               isLastRow={rowIndex === totalRows - 1}
             />
           );
