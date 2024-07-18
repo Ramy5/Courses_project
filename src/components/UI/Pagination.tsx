@@ -108,7 +108,7 @@ Pagination_TP) => {
                 {t("to")}
                 <span className="font-medium"> 10 </span>
                 {t("of")}
-                <span className="font-medium"> 40 </span>
+                <span className="font-medium"> {totalPages} </span>
                 {t("entries")}
               </p>
             </div>

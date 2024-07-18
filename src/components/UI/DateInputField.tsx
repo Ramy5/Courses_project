@@ -1,10 +1,7 @@
 import { useFormikContext } from "formik";
-import { ReactNode, forwardRef, useState } from "react";
+import { ReactNode } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { tv } from "tailwind-variants";
-import BaseInput from "./BaseInput";
-import { format, isValid, parse } from "date-fns";
 
 export const DateInputField = ({
   label,
@@ -31,11 +28,9 @@ export const DateInputField = ({
     [key: string]: any;
   };
 }) => {
-  const { setFieldValue, errors, touched, handleBlur, values } =
-    useFormikContext<{
-      [key: string]: any;
-    }>();
-  //   const [dateActive, setDateActive] = useState(false);
+  const { setFieldValue, handleBlur, values } = useFormikContext<{
+    [key: string]: any;
+  }>();
 
   return (
     <div className="relative col-span-1">
@@ -50,25 +45,23 @@ export const DateInputField = ({
         </label>
         <DatePicker
           selected={values[name]}
-          icon={icon}
-          placeholderText={placeholder}
           onChange={(date: Date) => {
             setFieldValue(name, date);
           }}
+          isClearable
+          placeholderText={placeholder || "I have been cleared!"}
           onBlur={handleBlur(name)}
-          className={`${className} w-full text-lg py-2 px-4 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none`}
-          maxDate={maxDate}
+          className={`${className} w-full text-lg text-center py-2 px-4 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none`}
           dateFormat="dd/MM/yyyy"
-          minDate={minDate}
-          //   isClearable={true}
           name={name}
           autoComplete="off"
-          value={
-            // date to string
-            values[name]
-              ? values[name]?.toLocaleDateString()
-              : value?.toLocaleDateString()
-          }
+          maxDate={maxDate}
+          minDate={minDate}
+          // value={
+          //   values[name]
+          //     ? values[name]?.toLocaleDateString()
+          //     : value?.toLocaleDateString()
+          // }
         />
       </div>
       {/* <FormikError name={name} className="absolute whitespace-nowrap" /> */}
