@@ -439,5 +439,7 @@
   "study schedule has been added successfully": "تمت إضافة الجدول الدراسي بنجاح",
   "organization data has successfully added": "تم تعديل بيانات المنظمة بنجاح",
   "filter by instructor...": "بحث عن طريق المحاضر",
-  "group": "الشعبة"
+  "group": "الشعبة",
+  "confirm deletion":"تأكيد الحذف ",
+  "the program will be deleted as well as all academic data associated with the program":"سيتم حذف البرنامج وكذلك جميع البيانات الدراسية المرتبطة بالبرنامج"
 }

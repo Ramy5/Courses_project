@@ -1,5 +1,5 @@
 import { Form, Formik } from "formik";
-import { BaseInput, Button, DotsDropDown, MainPopup, Table } from "../..";
+import { BaseInput, Button, Table } from "../..";
 import { t } from "i18next";
 import { useEffect, useMemo, useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
@@ -42,27 +42,6 @@ const StudyScheduleFirstStep = ({
   });
 
   const dayData = data?.data.data.days;
-
-  // const studyScheduleData = [
-  //   {
-  //     id: 1,
-  //     course: "ذكاء اصطناعي",
-  //     level: "3",
-  //     section: "شعبة - 2",
-  //     instructor: "محمد احمد خضر",
-  //     start_date: "8م",
-  //     end_date: "10م",
-  //   },
-  //   {
-  //     id: 2,
-  //     course: "ذكاء اصطناعي",
-  //     level: "3",
-  //     section: "شعبة - 2",
-  //     instructor: "محمد احمد خضر",
-  //     start_date: "8م",
-  //     end_date: "10م",
-  //   },
-  // ];
 
   const studyScheduleColumns = useMemo<ColumnDef<any>[]>(
     () => [

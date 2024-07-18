@@ -9,6 +9,7 @@ type Pagination_TP = {
   currentPage?: number;
   totalPages?: number;
   children?: any;
+  setPage?: any;
 };
 
 const Pagination = ({
@@ -16,8 +17,8 @@ const Pagination = ({
   table,
   currentPage,
   totalPages,
-}: //   children,
-Pagination_TP) => {
+  setPage,
+}: Pagination_TP) => {
   const renderPageNumbers = () => {
     const pageNumbers = [];
     const maxDisplayPages = 5;
@@ -31,6 +32,7 @@ Pagination_TP) => {
             ? "bg-mainColor text-white"
             : "text-[#404B52] bg-[#F5F5F5]"
         } focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600`}
+        action={() => setPage(pageNumber)}
       >
         {pageNumber}
       </Button>
@@ -71,7 +73,7 @@ Pagination_TP) => {
             <Button
               className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-[#404B52] hover:bg-gray-50"
               action={() => table.previousPage()}
-              disabled={currentPage == "1"}
+              disabled={currentPage == 1}
             >
               {t("Previous")}
             </Button>
@@ -84,8 +86,8 @@ Pagination_TP) => {
               >
                 <Button
                   className="relative h-7 w-7 justify-center inline-flex items-center rounded-md border-none p-0 text-[#404B52] bg-[#F5F5F5]"
-                  action={() => table.previousPage()}
-                  disabled={currentPage == "1"}
+                  action={() => setPage(Number(currentPage) - 1)}
+                  disabled={currentPage == 1}
                 >
                   <MdNavigateNext />
                 </Button>
@@ -94,7 +96,7 @@ Pagination_TP) => {
 
                 <Button
                   className="relative h-7 w-7 justify-center inline-flex items-center rounded-md p-0 text-[#404B52] bg-[#F5F5F5]"
-                  action={() => table.nextPage()}
+                  action={() => setPage(Number(currentPage) + 1)}
                   disabled={currentPage == totalPages}
                 >
                   <MdNavigateNext className="transform rotate-180" />

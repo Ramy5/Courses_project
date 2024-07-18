@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Button, SearchInput, Table, TitlePage } from "../../../components";
 import { t } from "i18next";
 import { PiStudent } from "react-icons/pi";
@@ -26,6 +26,7 @@ const Students = () => {
     isLoading,
     isRefetching,
     isFetching,
+    refetch
   } = useQuery({
     queryKey: ["students"],
     queryFn: () => fetchStudent(page),
@@ -117,6 +118,10 @@ const Students = () => {
     []
   );
 
+  useEffect(() => {
+    refetch()
+  }, [page])
+
   if (isLoading || isRefetching || isFetching) return <Loading />;
 
   if (error)
@@ -167,6 +172,7 @@ const Students = () => {
             showNavigation={true}
             totalPages={studentsData?.totalPages}
             currentPage={studentsData?.currentPage}
+            setPage={setPage}
           />
         </div>
       </div>

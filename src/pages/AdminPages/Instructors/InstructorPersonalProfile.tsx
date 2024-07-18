@@ -41,10 +41,6 @@ const InstructorPersonalProfile = () => {
   });
 
   const instructorPersonalData = data?.data.data.teacher || {};
-  console.log(
-    "🚀 ~ InstructorPersonalProfile ~ instructorPersonalData:",
-    instructorPersonalData
-  );
 
   useEffect(() => {
     if (error) {

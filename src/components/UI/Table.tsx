@@ -21,6 +21,7 @@ interface ReactTableProps<T extends object> {
   totalPages?: number;
   currentPage?: number;
   className?: any;
+  setPage?: any;
 }
 
 const Table = <T extends object>({
@@ -30,6 +31,7 @@ const Table = <T extends object>({
   totalPages,
   currentPage,
   className,
+  setPage
 }: ReactTableProps<T>) => {
   const table = useReactTable({
     data,
@@ -91,6 +93,7 @@ const Table = <T extends object>({
         table={table}
         currentPage={currentPage}
         totalPages={totalPages}
+        setPage={setPage}
       />
     </div>
   );

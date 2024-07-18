@@ -26,7 +26,7 @@ const ProfileIntroduction = ({
   };
 
   const jobTitle =
-    personalData?.qualifications[0] &&
+    personalData?.qualifications &&
     personalData?.qualifications[0]?.job_title;
 
   return (

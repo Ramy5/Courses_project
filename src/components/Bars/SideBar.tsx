@@ -53,6 +53,7 @@ const SideBar: React.FC<SideBarProps> = ({
   }, [data?.color, dispatch]);
 
   const { role: userData } = useAppSelector((state) => state.user);
+  console.log("🚀 ~ userData:", userData)
 
   const sideBarItemsOfAdmin = [
     {
@@ -240,7 +241,7 @@ const SideBar: React.FC<SideBarProps> = ({
   const sideBarAdmin =
     userData === "admin"
       ? sideBarItemsOfAdmin
-      : userData === "instructor"
+      : userData === "teacher"
       ? sideBarItemsOfInstructor
       : sideBarItemsOfStudents;
 
