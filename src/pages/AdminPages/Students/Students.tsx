@@ -31,7 +31,6 @@ const Students = () => {
     queryKey: ["students"],
     queryFn: () => fetchStudent(page),
   });
-  console.log("🚀 ~ Students ~ studentsData:", studentsData);
 
   const studentsColumns = useMemo<ColumnDef<any>[]>(
     () => [

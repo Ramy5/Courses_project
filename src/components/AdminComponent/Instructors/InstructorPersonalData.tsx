@@ -73,9 +73,8 @@ const InstructorPersonalData = ({
   setActiveTab,
   setInstructorID,
 }: InstructorAddPersonalData) => {
-  const [selectedImage, setSelectedImage] = useState(); // Initial state is the default image
+  const [selectedImage, setSelectedImage] = useState();
   const [imagePreview, setImagePreview] = useState(null);
-  console.log("🚀 ~ selectedImage:", selectedImage);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const formData = new FormData();

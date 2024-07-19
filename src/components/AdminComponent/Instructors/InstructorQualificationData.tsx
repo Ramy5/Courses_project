@@ -29,16 +29,12 @@ interface InstructorAddQualificationData_TP {
 
 const postInstructorQualification = async (newInstructor: any) => {
   const token = Cookies.get("token");
-  const response = await axios.post(
-    `${BASE_URL}qualification`,
-    newInstructor,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "multipart/form-data",
-      },
-    }
-  );
+  const response = await axios.post(`${BASE_URL}qualification`, newInstructor, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "multipart/form-data",
+    },
+  });
 
   return response;
 };
@@ -64,7 +60,6 @@ const InstructorQualificationData = ({
   instructorID,
 }: InstructorAddQualificationData_TP) => {
   const [file, setFile] = useState(null);
-  console.log("🚀 ~ file:", file);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 

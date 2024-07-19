@@ -148,7 +148,6 @@ const AddLectureTiming = ({
     <div className="p-6 bg-white rounded-xl">
       <Formik initialValues={initialValues} onSubmit={() => {}}>
         {({ values, setFieldValue }) => {
-          console.log("🚀 ~ AddLectureTiming ~ values:", values);
 
           return (
             <Form>
@@ -180,7 +179,6 @@ const AddLectureTiming = ({
                     options={courseOption}
                     value={coursesSelect}
                     onChange={(e) => {
-                      console.log("🚀 ~ AddLectureTiming ~ e:", e);
                       setFieldValue("course_id", e.id);
                       setFieldValue("course_name", e.value);
                       setCoursesSelect({
@@ -215,7 +213,7 @@ const AddLectureTiming = ({
                   />
                 </div>
 
-                <div className="flex justify-between flex-col sm:flex-row mt-5 gap-y-4">
+                <div className="flex flex-col justify-between mt-5 sm:flex-row gap-y-4">
                   <div className="w-full sm:w-3/5">
                     <label htmlFor="section" className="font-bold">
                       {t("lecturer")}
@@ -261,8 +259,8 @@ const AddLectureTiming = ({
                   </div>
                 </div>
 
-                <div className=" my-8 ">
-                  <p className="font-semibold text-base mb-4">
+                <div className="my-8 ">
+                  <p className="mb-4 text-base font-semibold">
                     {t("lecture timing")}
                   </p>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-4 gap-x-8">
