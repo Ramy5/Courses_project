@@ -282,7 +282,6 @@ const CreateCoursesInputs = ({
         }}
       >
         {({ setFieldValue, values, resetForm }) => {
-          console.log("🚀 ~ values:", values);
           return (
             <Form>
               <div className="pb-8 bg-white rounded-3xl">
@@ -811,7 +810,9 @@ const CreateCoursesInputs = ({
                         setStep(1);
                       } else {
                         mutate({ ...values, references: suggestedReferences });
-                        navigate(`/programs/programInfo/${editFinishedCoursesData?.id}`);
+                        navigate(
+                          `/programs/programInfo/${editFinishedCoursesData?.id}`
+                        );
                       }
                     }}
                   >

@@ -23,7 +23,6 @@ const StudyScheduleFirstStep = ({
     }
   );
   const navigate = useNavigate();
-  console.log("🚀 ~ activeButton:", activeButton);
 
   const initialValues = {
     start_date: "",
@@ -79,7 +78,6 @@ const StudyScheduleFirstStep = ({
         header: () => <span>{t("")}</span>,
         accessorKey: "action",
         cell: (info) => {
-          console.log("🚀 ~ info.row.original.day_id:", info.row.original);
 
           return (
             <div className="flex items-center gap-5">
@@ -138,7 +136,6 @@ const StudyScheduleFirstStep = ({
         <Formik
           initialValues={initialValues}
           onSubmit={(values) => {
-            console.log("🚀 ~ StudyScheduleFirstStep ~ values:", values);
             setScheduleData(values);
           }}
         >

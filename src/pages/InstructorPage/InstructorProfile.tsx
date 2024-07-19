@@ -29,7 +29,6 @@ const InstructorProfile = () => {
     queryKey: ["instructor_profile"],
     queryFn: fetchInstructorProfile,
   });
-  console.log("🚀 ~ InstructorProfile ~ data:", data);
 
   const instructorPersonalData = data?.data.data.teacher || {};
 
@@ -160,7 +159,7 @@ const InstructorProfile = () => {
           supTitle={instructorPersonalData?.full_name}
           mainLink="/instructors"
         /> */}
-        <h2 className="text-2xl font-semibold text-mainGray opacity-90 mb-4">
+        <h2 className="mb-4 text-2xl font-semibold text-mainGray opacity-90">
           {t("instructors")}
         </h2>
       </div>

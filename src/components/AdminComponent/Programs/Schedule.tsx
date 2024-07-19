@@ -86,7 +86,6 @@ const Schedule = ({ scheduleData }) => {
     end: `2024-06-25T${lecture.end_time}:00`,
     backgroundColor: getRandomColor(), // Function to assign random colors or based on some logic
   }));
-  console.log("🚀 ~ events ~ events:", events);
 
   function getResourceIdByDayId(day_id) {
     const dayMapping = {
@@ -156,7 +155,6 @@ const Schedule = ({ scheduleData }) => {
   const scheduleElement = document.getElementsByClassName(
     "fc fc-media-screen fc-theme-standard"
   );
-  console.log("🚀 ~ Schedule ~ scheduleElement:", scheduleElement);
 
   return (
     <div>

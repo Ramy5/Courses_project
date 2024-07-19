@@ -8,8 +8,6 @@ import { useState, useEffect } from "react";
 import Loading from "../../UI/Loading";
 
 const StudyScheduleSecondStep = ({ setSteps, scheduleData }: any) => {
-  console.log("🚀 ~ StudyScheduleSecondStep ~ scheduleData:", scheduleData);
-
   const [levelSelect, setLevelSelect] = useState(1);
   const [loading, setLoading] = useState(false);
 

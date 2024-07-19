@@ -29,10 +29,7 @@ const postInstructorLogin = async (newInstructor: any) => {
 };
 
 const editInstructorLogin = async (editInstructor: any, id: number) => {
-  const data = await customFetch.post(
-    `updateLoginData/${id}`,
-    editInstructor
-  );
+  const data = await customFetch.post(`updateLoginData/${id}`, editInstructor);
   return data;
 };
 
@@ -41,7 +38,6 @@ const InstructorLoginData = ({
   setActiveTab,
   setInstructorID,
 }: instructorAddLoginData_TP) => {
-  console.log("🚀 ~ editObj:", editObj)
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] =
     useState<boolean>(false);
@@ -59,7 +55,6 @@ const InstructorLoginData = ({
     password: editObj?.password || "",
     password_confirmation: editObj?.password_confirmation || "",
   };
-  console.log("🚀 ~ initialValues:", initialValues);
 
   const { mutate, isPending } = useMutation({
     mutationKey: ["add-instructor-login"],

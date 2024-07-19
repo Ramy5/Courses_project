@@ -36,7 +36,6 @@ const AddNewCertificatesInput = ({
   setNewCertificates,
   newCertificates,
 }: AddNewCertificatesInput_TP) => {
-  console.log("🚀 ~ newCertificates:", newCertificates)
   const editCertificate = editObj?.newCertificate && editObj?.newCertificate[0];
 
   const initialValues: Certificate = {
@@ -84,8 +83,6 @@ const AddNewCertificatesInput = ({
         header: () => <span>{t("")}</span>,
         accessorKey: "action",
         cell: (info) => {
-          console.log("🚀 ~ info.row.original.day_id:", info.row.original);
-
           return (
             <div className="flex items-center gap-5">
               <RiDeleteBin5Line
@@ -118,18 +115,17 @@ const AddNewCertificatesInput = ({
   return (
     <Formik initialValues={initialValues} onSubmit={() => {}}>
       {({ values, resetForm }) => {
-        console.log("🚀 ~ values:", values);
 
         return (
           <Form>
             <table className="min-w-full text-center">
-              <thead className="bg-mainColor text-white">
+              <thead className="text-white bg-mainColor">
                 {table.getHeaderGroups().map((headerGroup) => (
-                  <tr key={headerGroup.id} className="py-4 px-2 w-full">
+                  <tr key={headerGroup.id} className="w-full px-2 py-4">
                     {headerGroup.headers.map((header) => (
                       <th
                         key={header.id}
-                        className=" px-6 py-4 text-md font-medium"
+                        className="px-6 py-4 font-medium text-md"
                       >
                         {header.isPlaceholder
                           ? null
@@ -143,7 +139,7 @@ const AddNewCertificatesInput = ({
                 ))}
               </thead>
               <tbody>
-                <tr className="border-b-2 border-mainColor text-center">
+                <tr className="text-center border-b-2 border-mainColor">
                   <td className="p-4">
                     <BaseInput
                       name="type_certificate"
@@ -204,7 +200,10 @@ const AddNewCertificatesInput = ({
                       type="button"
                       action={() => {
                         if (values?.type_certificate) {
-                          setNewCertificates((prev) => [{ ...values, id: prev.length + 1 }, ...prev]);
+                          setNewCertificates((prev) => [
+                            { ...values, id: prev.length + 1 },
+                            ...prev,
+                          ]);
                         } else {
                           toast.info("add data first");
                         }

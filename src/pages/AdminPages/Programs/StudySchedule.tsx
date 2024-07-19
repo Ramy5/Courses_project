@@ -43,14 +43,10 @@ const StudySchedule = () => {
     end_date: "",
     lecture_time: [],
   });
-  console.log("🚀 ~ StudySchedule ~ scheduleData:", scheduleData);
-  const [editStudySchedule, setEditStudySchedule] = useState({})
-  console.log("🚀 ~ StudySchedule ~ editStudySchedule:", editStudySchedule)
-  const navigate = useNavigate()
+  const [editStudySchedule, setEditStudySchedule] = useState({});
+  const navigate = useNavigate();
 
-
-  const {id: scheduleId} = useParams()
-  console.log("🚀 ~ StudySchedule ~ scheduleId:", scheduleId)
+  const { id: scheduleId } = useParams();
 
   const queryClient = useQueryClient();
 
@@ -65,12 +61,9 @@ const StudySchedule = () => {
     mutationFn: postSchedule,
     onSuccess: (data) => {
       queryClient.invalidateQueries("schedule");
-      toast.success(
-        t("study schedule has been added successfully")
-      );
+      toast.success(t("study schedule has been added successfully"));
     },
     onError: (error) => {
-      console.log("🚀 ~ error:", error);
       const errorMessage =
         error?.response?.data?.error[0]?.email[0] ||
         error?.response?.data?.error[0]?.password[0];
@@ -109,11 +102,11 @@ const StudySchedule = () => {
   return (
     <div>
       {steps !== 4 && (
-        <div className="bg-white py-8 px-4 rounded-xl relative">
+        <div className="relative px-4 py-8 bg-white rounded-xl">
           <div className="flex items-center w-4/5 m-auto">
             {stepsOption.map((step, index) => (
               <Fragment key={index}>
-                <div className="flex items-center text-mainborder-mainColor relative">
+                <div className="relative flex items-center text-mainborder-mainColor">
                   <div
                     className={`${
                       steps === step.id
@@ -128,7 +121,7 @@ const StudySchedule = () => {
                       `${step.id}`
                     )}
                   </div>
-                  <div className="absolute top-0 -left-3 w-28 -ml-10 mt-12 text-sm font-semibold text-mainColor">
+                  <div className="absolute top-0 mt-12 -ml-10 text-sm font-semibold -left-3 w-28 text-mainColor">
                     {t(`${step.label}`)}
                   </div>
                 </div>
@@ -172,10 +165,10 @@ const StudySchedule = () => {
                   )}
                 </h1>
                 <Button
-                  className="font-semibold text-xl py-3 rounded-2xl mt-20"
+                  className="py-3 mt-20 text-xl font-semibold rounded-2xl"
                   action={() => {
                     handleAddSchedule(scheduleData);
-                    navigate("/programs")
+                    navigate("/programs");
                   }}
                   loading={isPending}
                 >

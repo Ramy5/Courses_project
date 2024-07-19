@@ -12,14 +12,22 @@ import Loading from "../../../components/UI/Loading";
 import Pagination from "../../../components/UI/Pagination";
 import { toast } from "react-toastify";
 
-const getLectureManagement = async (instructorSelectId?: string | number) => {
-  const { data } = await customFetch(`manage?teacher_id=${instructorSelectId}`);
+const getLectureManagement = async (
+  page: number,
+  instructorSelectId?: string | number
+) => {
+  const { data } = await customFetch(
+    `manage?page=${page}&teacher_id=${instructorSelectId}`
+  );
   return data.data;
 };
 
-const postLectureDateAndLinks = async (lectureDateOrLink: string | Date) => {
+const postLectureDateAndLinks = async (
+  lectureId: number | string,
+  lectureDateOrLink: string | Date
+) => {
   const response = await customFetch.post(
-    "updateZoomYoutube/1",
+    `updateZoomYoutube/${lectureId}`,
     lectureDateOrLink
   );
   return response;
@@ -33,15 +41,24 @@ const getInstructorOption = async () => {
 const LectureManagement = () => {
   const [instructorSelectId, setInstructorSelectId] = useState("");
   const [lecturesData, setLecturesData] = useState([]);
+  const [page, setPage] = useState(1);
   const queryClient = useQueryClient();
+  // LECTURE DATE
+  const [lectureDate, setLectureDate] = useState("");
+  const [lecturesDateEditId, setLecturesDataEditId] = useState(null);
+  // LECTURE ZOOM
+  const [lectureZoom, setLectureZoom] = useState("");
+  const [lecturesZoomEditId, setLecturesZoomEditId] = useState(null);
+  // LECTURE YOUTUBE
+  const [lectureYoutube, setLectureYoutube] = useState("");
+  const [lecturesYoutubeEditId, setLecturesYoutubeEditId] = useState(null);
 
   const initialValues = {};
 
   const { data, isLoading, isFetching, isRefetching, refetch } = useQuery({
     queryKey: ["get-lecture-management"],
-    queryFn: () => getLectureManagement(instructorSelectId),
+    queryFn: () => getLectureManagement(page, instructorSelectId),
   });
-  console.log("🚀 ~ LectureManagement ~ data:", data);
 
   useEffect(() => {
     refetch();
@@ -68,13 +85,14 @@ const LectureManagement = () => {
 
   useEffect(() => {
     if (data) {
-      setLecturesData(data);
+      setLecturesData(data?.lectures);
     }
   }, [data]);
 
   const { mutate: mutateDate } = useMutation({
     mutationKey: ["update-date-links-lecture"],
-    mutationFn: postLectureDateAndLinks,
+    mutationFn: (lectureDateOrLink) =>
+      postLectureDateAndLinks(lecturesDateEditId, lectureDateOrLink),
     onSuccess: (data) => {
       queryClient.invalidateQueries("get-lecture-management");
       toast.success(t("lecture date has updated successfully"));
@@ -85,12 +103,8 @@ const LectureManagement = () => {
     },
   });
 
-  // LECTURE DATE
-  const [lectureDate, setLectureDate] = useState("");
-  const [lecturesDateEditId, setLecturesDataEditId] = useState(null);
-
   const handleLectureDateEdit = (id: number) => {
-    const updateDate = lecturesData.find((lecture) => lecture.id === id);
+    const updateDate = lecturesData?.find((lecture) => lecture.id === id);
     setLectureDate(updateDate?.date);
     setLecturesDataEditId(id);
   };
@@ -104,8 +118,6 @@ const LectureManagement = () => {
 
     const lectureDateOrLink = {
       date: lectureDate,
-      zoom_link: "",
-      youtube_link: "",
     };
 
     await mutateDate(lectureDateOrLink);
@@ -114,9 +126,19 @@ const LectureManagement = () => {
     setLecturesDataEditId(null);
   };
 
-  // LECTURE ZOOM
-  const [lectureZoom, setLectureZoom] = useState("");
-  const [lecturesZoomEditId, setLecturesZoomEditId] = useState(null);
+  const { mutate: mutateZoomLink } = useMutation({
+    mutationKey: ["update-date-links-lecture"],
+    mutationFn: (lectureDateOrLink) =>
+      postLectureDateAndLinks(lecturesZoomEditId, lectureDateOrLink),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries("get-lecture-management");
+      toast.success(t("lecture zoom link has updated successfully"));
+    },
+    onError: (error) => {
+      const errorMessage = error?.response?.data?.error;
+      toast.error(errorMessage);
+    },
+  });
 
   const handleLectureZoomEdit = (id: number) => {
     const updateZoom = lecturesData.find((lecture) => lecture.id === id);
@@ -132,20 +154,28 @@ const LectureManagement = () => {
     });
 
     const lectureDateOrLink = {
-      date: "",
       zoom_link: lectureZoom,
-      youtube_link: "",
     };
 
-    await mutateDate(lectureDateOrLink);
+    await mutateZoomLink(lectureDateOrLink);
 
     setLecturesData(updateZoom);
     setLecturesZoomEditId(null);
   };
 
-  // LECTURE YOUTUBE
-  const [lectureYoutube, setLectureYoutube] = useState("");
-  const [lecturesYoutubeEditId, setLecturesYoutubeEditId] = useState(null);
+  const { mutate: mutateYoutubeLink } = useMutation({
+    mutationKey: ["update-date-links-lecture"],
+    mutationFn: (lectureDateOrLink) =>
+      postLectureDateAndLinks(lecturesYoutubeEditId, lectureDateOrLink),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries("get-lecture-management");
+      toast.success(t("lecture youtube link has updated successfully"));
+    },
+    onError: (error) => {
+      const errorMessage = error?.response?.data?.error;
+      toast.error(errorMessage);
+    },
+  });
 
   const handleLectureYoutubeEdit = (id: number) => {
     const updateYoutube = lecturesData.find((lecture) => lecture.id === id);
@@ -161,12 +191,10 @@ const LectureManagement = () => {
     });
 
     const lectureDateOrLink = {
-      date: "",
-      zoom_link: "",
       youtube_link: lectureYoutube,
     };
 
-    await mutateDate(lectureDateOrLink);
+    await mutateYoutubeLink(lectureDateOrLink);
 
     setLecturesData(updateYoutube);
     setLecturesYoutubeEditId(null);
@@ -451,11 +479,16 @@ const LectureManagement = () => {
                 </div>
               </div>
               {/* TABLE */}
-              <Table data={lecturesData} columns={lecturesColumns} />
+              <Table data={lecturesData || []} columns={lecturesColumns} />
 
               {/* PAGINATION */}
               <div>
-                <Pagination totalPages={30} showNavigation currentPage={"1"} />
+                <Pagination
+                  totalPages={data?.totalPages}
+                  showNavigation
+                  setPage={setPage}
+                  currentPage={data?.currentPage}
+                />
               </div>
             </div>
           </Form>
