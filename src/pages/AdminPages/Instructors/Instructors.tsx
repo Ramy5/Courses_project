@@ -46,7 +46,7 @@ const Instructors = () => {
   };
 
   const { mutate } = useMutation({
-    mutationKey: ["add-instructor-contact"],
+    mutationKey: ["delete-instructor-contact"],
     mutationFn: deleteInstructor,
     onSuccess: (data) => {
       queryClient.invalidateQueries("delete_instructor");
