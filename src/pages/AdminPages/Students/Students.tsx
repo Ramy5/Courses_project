@@ -26,7 +26,7 @@ const Students = () => {
     isLoading,
     isRefetching,
     isFetching,
-    refetch
+    refetch,
   } = useQuery({
     queryKey: ["students"],
     queryFn: () => fetchStudent(page),
@@ -50,64 +50,49 @@ const Students = () => {
         },
       },
       {
+        header: () => <span>{t("academic number")}</span>,
+        accessorKey: "academicData",
+        cell: (info) => info.getValue()?.Academic_code || "---",
+      },
+      {
         header: () => <span>{t("Student Name")}</span>,
         accessorKey: "full_name",
-        cell: (info) => info.getValue(),
+        cell: (info) => info.getValue() || "---",
       },
       {
-        header: () => <span>{t("country")}</span>,
-        accessorKey: "country_residence",
-        cell: (info) => info.getValue(),
+        header: () => <span>{t("program")}</span>,
+        accessorKey: "academicData",
+        cell: (info) => info.getValue()?.program?.program_name || "---",
       },
       {
-        header: () => <span>{t("date birth")}</span>,
-        accessorKey: "date_birth",
-        cell: (info) => info.getValue(),
+        header: () => <span>{t("level")}</span>,
+        accessorKey: "academicData",
+        cell: (info) => info.getValue()?.level || "---",
       },
       {
-        header: () => <span>{t("qualification")}</span>,
-        accessorKey: "qualification",
-        cell: (info) => info.getValue(),
-      },
-      {
-        header: () => <span>{t("type")}</span>,
-        accessorKey: "type",
-        cell: (info) => info.getValue(),
-      },
-      // {
-      //   header: () => <span>{t("Program")}</span>,
-      //   accessorKey: "program",
-      //   cell: (info) => info.getValue(),
-      // },
-      // {
-      //   header: () => <span>{t("Level")}</span>,
-      //   accessorKey: "level",
-      //   cell: (info) => <span>{t(`${info.getValue()}`)}</span>,
-      // },
-      {
-        header: () => <span>{t("nationality")}</span>,
-        accessorKey: "nationality",
-        cell: (info) => <span>{t(`${info.getValue()}`)}</span>,
+        header: () => <span>{t("joined date")}</span>,
+        accessorKey: "academicData",
+        cell: (info) => info.getValue()?.joined_date || "---",
       },
       {
         header: () => <span>{t("Email Address")}</span>,
         accessorKey: "email",
-        cell: (info) => info.getValue(),
+        cell: (info) => info.getValue() || "---",
       },
       {
         header: () => <span>{t("Payment Status")}</span>,
-        accessorKey: "paymentStatus",
+        accessorKey: "academicData",
         cell: (info) => {
-          if (info.row.original.paymentStatus === "محروم") {
+          if (info.getValue()?.status === "محروم") {
             return (
               <span className="inline-block w-full px-2 text-red-800 bg-red-200 border rounded-md w-30 border-red-950">
-                {t(`${info.getValue()}`)}
+                {t(`${info.getValue()?.status || "---"}`)}
               </span>
             );
           } else {
             return (
               <span className="inline-block w-full px-2 border rounded-md text-cyan-800 bg-cyan-200 w-30 border-cyan-950">
-                {t(`${info.getValue()}`)}
+                {t(`${info.getValue()?.status || "---"}`)}
               </span>
             );
           }
@@ -118,8 +103,8 @@ const Students = () => {
   );
 
   useEffect(() => {
-    refetch()
-  }, [page])
+    refetch();
+  }, [page]);
 
   if (isLoading || isRefetching || isFetching) return <Loading />;
 
