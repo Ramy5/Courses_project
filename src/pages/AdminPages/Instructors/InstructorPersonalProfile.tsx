@@ -41,6 +41,10 @@ const InstructorPersonalProfile = () => {
   });
 
   const instructorPersonalData = data?.data.data.teacher || {};
+  console.log(
+    "🚀 ~ InstructorPersonalProfile ~ instructorPersonalData:",
+    instructorPersonalData
+  );
 
   useEffect(() => {
     if (error) {
@@ -54,10 +58,31 @@ const InstructorPersonalProfile = () => {
   };
 
   const { mutate } = useMutation({
-    mutationKey: ["add-instructor-contact"],
+    mutationKey: ["del-instructor-contact"],
     mutationFn: deleteInstructor,
     onSuccess: (data) => {
       queryClient.invalidateQueries("delete_instructor");
+      toast.success(`${t("the instructor has been successfully deleted")}`);
+      refetch();
+    },
+    onError: (error) => {
+      const errorMessage = error?.response?.data?.error[0];
+      toast.error(errorMessage);
+    },
+  });
+
+  const deleteCertificate = async (certificateId) => {
+    const response = await customFetch.delete(
+      `deleteCertificate/${certificateId}`
+    );
+    return response;
+  };
+
+  const { mutate: deleteCertificateData } = useMutation({
+    mutationKey: ["del-certificate-contact"],
+    mutationFn: deleteCertificate,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries("delete_certificate");
       toast.success(`${t("the instructor has been successfully deleted")}`);
       refetch();
     },
@@ -163,6 +188,10 @@ const InstructorPersonalProfile = () => {
         header: () => <span>{t("")}</span>,
         accessorKey: "action",
         cell: (info) => {
+          console.log(
+            "🚀 ~ InstructorPersonalProfile ~ info.row.original.id:",
+            info.row.original
+          );
           const rowIndex = info.row.index;
           const totalRows = info.table.getCoreRowModel().rows.length;
           return (
@@ -180,7 +209,9 @@ const InstructorPersonalProfile = () => {
                   state: info.row.original,
                 });
               }}
-              onSecondClick={() => {}}
+              onSecondClick={() => {
+                deleteCertificateData(info.row.original.id);
+              }}
               isLastRow={rowIndex === totalRows - 1}
             />
           );
@@ -216,11 +247,15 @@ const InstructorPersonalProfile = () => {
           <h2 className="mb-5 text-2xl font-semibold text-center ms-5 sm:text-start">
             {t("scientific certificates")}
           </h2>
-          <Table
-            data={instructorPersonalData?.certificates}
-            columns={instructorPersonalColumns}
-            className="bg-mainColor"
-          />
+          {instructorPersonalData?.certificates?.length ? (
+            <Table
+              data={instructorPersonalData?.certificates}
+              columns={instructorPersonalColumns}
+              className="bg-mainColor"
+            />
+          ) : (
+            ""
+          )}
         </div>
 
         <InstructorSpecialization
