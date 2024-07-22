@@ -51,7 +51,9 @@ const InstructorContactInformation = ({
     mutationFn: postInstructorContact,
     onSuccess: (data) => {
       queryClient.invalidateQueries("instructors");
-      toast.success(t("instructor login information has been added successfully"));
+      toast.success(
+        t("instructor login information has been added successfully")
+      );
       setActiveTab("qualification data");
     },
     onError: (error) => {
@@ -80,7 +82,6 @@ const InstructorContactInformation = ({
       toast.error(errorMessage);
     },
   });
-
 
   const handleAddInstructorContact = async (values: AddInstructorParent_TP) => {
     const newInstructor = {
@@ -168,7 +169,7 @@ const InstructorContactInformation = ({
 
         <div className="flex justify-end mt-5">
           <Button type="submit" className="me-5" loading={isPending}>
-            {t("confirm")}
+            {editObj ? t("edit") : t("confirm")}
           </Button>
           <Button type="button" className="bg-[#E6EAEE] text-mainColor">
             {t("cancel")}

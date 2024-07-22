@@ -298,7 +298,7 @@ const InformationPanel = () => {
           className="mySwiper"
         >
           {programsData.map((program, index) => (
-            <SwiperSlide>
+            <SwiperSlide key={index}>
               <ProgramBox
                 key={index}
                 programTitle={program.programTitle}

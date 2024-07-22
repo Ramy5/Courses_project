@@ -13,63 +13,7 @@ import { useParams } from "react-router-dom";
 
 const ViewCourseDescription = () => {
   const { id: descriptionParamID } = useParams();
-
-  const courseDescriptionData = {
-    courceCode: "#archaive",
-    level: "الثالث",
-    instructors: [
-      "أ.د محمد عامر",
-      "أ.د محمد عامر",
-      "أ.د محمد عامر",
-      "أ.د محمد عامر",
-      "أ.د محمد عامر",
-      "أ.د محمد عامر",
-    ],
-    student_number: "+2000 طالب",
-    course_objectives: [
-      "bibendum.lobortis bibendum.lobortis bibendum",
-      "bibendum.lobortis bibendum.lobortis bibendum",
-      "bibendum.lobortis bibendum.lobortis bibendum",
-      "bibendum.lobortis bibendum.lobortis bibendum",
-      "bibendum.lobortis bibendum.lobortis bibendum",
-    ],
-    information_concepts: [
-      "bibendum.lobortis bibendum.lobortis bibendum",
-      "bibendum.lobortis bibendum.lobortis bibendum",
-      "bibendum.lobortis bibendum.lobortis bibendum  bibendum.lobortis bibendum.lobortis bibendum",
-      "bibendum.lobortis bibendum.lobortis bibendum  bibendum.lobortis bibendum.lobortis bibendum",
-      "bibendum.lobortis bibendum.lobortis bibendum  bibendum.lobortis bibendum.lobortis bibendum",
-    ],
-    mental_skills: [
-      "bibendum.lobortis bibendum.lobortis bibendum",
-      "bibendum.lobortis bibendum.lobortis bibendum",
-      "bibendum.lobortis bibendum.lobortis bibendum",
-      "bibendum.lobortis bibendum.lobortis bibendum",
-      "bibendum.lobortis bibendum.lobortis bibendum",
-    ],
-    professional_skills: [
-      "bibendum.lobortis bibendum.lobortis bibendum",
-      "bibendum.lobortis bibendum.lobortis bibendum",
-      "bibendum.lobortis bibendum.lobortis bibendum",
-      "bibendum.lobortis bibendum.lobortis bibendum",
-      "bibendum.lobortis bibendum.lobortis bibendum",
-    ],
-    general_skills: [
-      "bibendum.lobortis bibendum.lobortis bibendum",
-      "bibendum.lobortis bibendum.lobortis bibendum",
-      "bibendum.lobortis bibendum.lobortis bibendum  bibendum.lobortis bibendum.lobortis bibendum",
-      "bibendum.lobortis bibendum.lobortis bibendum  bibendum.lobortis bibendum.lobortis bibendum",
-      "bibendum.lobortis bibendum.lobortis bibendum  bibendum.lobortis bibendum.lobortis bibendum",
-    ],
-    teaching_learning_methods: [
-      "محاضرات",
-      "تدريب عملي",
-      "تطبيقات",
-      "ابحاث",
-      "دراسة حالة",
-      "مشروع",
-    ],
-  };
+  console.log("🚀 ~ ViewCourseDescription ~ descriptionParamID:", descriptionParamID)
 
   const fetchCourseData = async () => {
     const response = await customFetch(`/course/${descriptionParamID}`);
@@ -82,6 +26,7 @@ const ViewCourseDescription = () => {
   });
 
   const courseData = data?.data.data.course || {};
+  console.log("🚀 ~ ViewCourseDescription ~ courseData:", courseData);
 
   useEffect(() => {
     if (error) {
@@ -89,7 +34,10 @@ const ViewCourseDescription = () => {
     }
   }, [error]);
 
-  const Section = ({ title, items }: any) => {
+  const Section = ({ title, items, returnData }: any) => {
+    const itemData = returnData
+      ?.split(/(?:\d+- )/)
+      .filter((item) => item.trim() !== "");
     return (
       <div
         className={`${
@@ -103,7 +51,7 @@ const ViewCourseDescription = () => {
           <p className="font-semibold">{t(`${title}`)}</p>
         </div>
         <div className="grid grid-cols-1 gap-2 ms-5">
-          {courseDescriptionData?.[items]?.map((instructor) => (
+          {itemData?.map((instructor) => (
             <div className="flex gap-2">
               <GoDotFill size={20} className="fill-mainColor" />
               <p>{instructor}</p>
@@ -172,7 +120,7 @@ const ViewCourseDescription = () => {
         mainTitle="Programs"
         mainLink="/programs"
         supTitle="computer science program"
-        supLink={`/programs/programInfo/${descriptionParamID}`}
+        supLink={-1}
         ThirdTitle="systems analysis course description"
         icon={<FaFolder size={28} className="fill-mainColor" />}
       />
@@ -211,27 +159,44 @@ const ViewCourseDescription = () => {
               <p className="font-semibold">{t("instructors")}</p>
             </div>
             <div className="grid grid-cols-1 gap-2 sm:grid-cols-3 ms-6">
-              {/* {courseData?.course_teachers?.map((instructor) => (
-                <div className="flex gap-2">
+              {courseData?.teachers?.map((instructor, index) => (
+                <div className="flex gap-2" key={index}>
                   <FaUserAlt size={20} className="fill-mainColor" />
-                  <p>{instructor}</p>
+                  <p>{instructor?.full_name}</p>
                 </div>
-              ))} */}
+              ))}
             </div>
           </div>
 
-          <Section title="course objectives" items="course_objectives" />
+          <Section
+            title="course objectives"
+            items="course_objectives"
+            returnData={courseData?.course_objectives}
+          />
 
           <Section
             title="information and concepts"
             items="information_concepts"
+            returnData={courseData?.information_concepts}
           />
 
-          <Section title="mental skills" items="mental_skills" />
+          <Section
+            title="mental skills"
+            items="mental_skills"
+            returnData={courseData?.mental_skills}
+          />
 
-          <Section title="professional skills" items="professional_skills" />
+          <Section
+            title="professional skills"
+            items="professional_skills"
+            returnData={courseData?.professional_skills}
+          />
 
-          <Section title="general skills" items="general_skills" />
+          <Section
+            title="general skills"
+            items="general_skills"
+            returnData={courseData?.general_skills}
+          />
 
           <div className="grid w-full grid-cols-1 gap-4 mt-5 text-lg font-medium lg:w-1/2">
             <div className="flex items-center gap-2">

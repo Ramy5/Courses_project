@@ -69,23 +69,28 @@ const Schedule = ({ scheduleData }) => {
   const arrangeScheduleData = scheduleData?.sort((a, b) => a.day_id - b.day_id);
   const calendarRef = useRef(null);
 
-  const events = arrangeScheduleData?.map((lecture, index) => ({
-    id: String(index + 1),
-    customContent: (
-      <div className="text-center">
-        <p className="text-base font-medium">{lecture.course_name}</p>
-        <p className="py-2 text-base font-medium">{lecture.teacher_name}</p>
-        <div className="flex items-center justify-center gap-1">
-          <IoTimeOutline />
-          <p>{`${lecture.start_time} - ${lecture.end_time}`}</p>
+  const events = arrangeScheduleData?.map((lecture, index) => {
+    const start = lecture.start_time?.replace(/(AM|PM)/i, "").trim();
+    const end = lecture.end_time?.replace(/(AM|PM)/i, "").trim();
+    return {
+      id: String(index + 1),
+      customContent: (
+        <div className="text-center py-0.5">
+          <p className="text-base font-medium">{lecture.course_name}</p>
+          <p className="py-0.5 text-base font-medium">{lecture.teacher_name}</p>
+          <div className="flex items-center justify-center gap-1">
+            <IoTimeOutline />
+            <p>{`${start} - ${end}`}</p>
+          </div>
         </div>
-      </div>
-    ),
-    resourceId: getResourceIdByDayId(lecture.day_id), // Function to map day_id to resourceId
-    start: `2024-06-25T${lecture.start_time}:00`,
-    end: `2024-06-25T${lecture.end_time}:00`,
-    backgroundColor: getRandomColor(), // Function to assign random colors or based on some logic
-  }));
+      ),
+      resourceId: getResourceIdByDayId(lecture.day_id),
+      start: `2024-06-25T${start}:00`,
+      end: `2024-06-25T${end}:00`,
+      backgroundColor: getRandomColor(),
+    };
+  });
+  console.log("🚀 ~ events ~ events:", events);
 
   function getResourceIdByDayId(day_id) {
     const dayMapping = {
@@ -145,16 +150,12 @@ const Schedule = ({ scheduleData }) => {
         calendar.destroy();
       };
     }
-  }, [events, isRTL]);
+  }, [events]);
 
   const renderEventContent = (eventInfo) => {
-    const event = events.find((e) => e.id === eventInfo.event.id);
-    return <div>{event ? event.customContent : eventInfo.event.title}</div>;
+    const event = events.find((e) => e.id == eventInfo?.event.id);
+    return <div>{event ? event?.customContent : eventInfo?.event.title}</div>;
   };
-
-  const scheduleElement = document.getElementsByClassName(
-    "fc fc-media-screen fc-theme-standard"
-  );
 
   return (
     <div>

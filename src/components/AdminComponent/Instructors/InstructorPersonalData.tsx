@@ -319,7 +319,7 @@ const InstructorPersonalData = ({
 
               <div className="flex justify-end mt-5">
                 <Button type="submit" className="me-5" loading={isPending}>
-                  {t("confirm")}
+                  {editObj ? t("edit") : t("confirm")}
                 </Button>
                 <Button type="button" className="bg-[#E6EAEE] text-mainColor">
                   {t("cancel")}

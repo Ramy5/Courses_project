@@ -2,11 +2,13 @@ import { Form, Formik } from "formik";
 import BaseInput from "../../UI/BaseInput";
 import { t } from "i18next";
 import selectStyle from "../../../utils/selectStyle";
-import { Button } from "../..";
+import { Button, Spinner } from "../..";
 import Select from "react-select";
 import customFetch from "../../../utils/axios";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
+import { CgEditFade } from "react-icons/cg";
+import LoadingIndicator from '../../UI/LoadingIndicator';
 
 const AddLectureTiming = ({
   setSteps,
@@ -17,6 +19,7 @@ const AddLectureTiming = ({
   setEditStudySchedule,
 }) => {
   const [coursesSelect, setCoursesSelect] = useState(null);
+  console.log("🚀 ~ coursesSelect:", coursesSelect)
   const [groupSelect, setGroupSelect] = useState(null);
   const [teacherSelect, setTeacherSelect] = useState(null);
   const [levelSelect, setLevelSelect] = useState(null);
@@ -39,26 +42,8 @@ const AddLectureTiming = ({
     level: editStudySchedule?.level || "",
   };
 
-  const fetchTeacherData = async () => {
-    const response = await customFetch(`/allTeachers`);
-    return response;
-  };
-
-  const { data } = useQuery({
-    queryKey: ["teacher_data"],
-    queryFn: fetchTeacherData,
-  });
-
-  const teachersData = data && data?.data?.data.teachers;
-
-  const teachersOption = teachersData?.map((teacher) => ({
-    id: teacher.id,
-    value: teacher.full_name,
-    label: teacher.full_name,
-  }));
-
   const fetchCoursesData = async () => {
-    const response = await customFetch(`/courses`);
+    const response = await customFetch(`/courses?per_page=10000`);
     return response;
   };
 
@@ -68,11 +53,31 @@ const AddLectureTiming = ({
   });
 
   const coursesData = courses && courses?.data?.data.courses;
+  console.log("🚀 ~ coursesData:", coursesData)
 
   const courseOption = coursesData?.map((teacher) => ({
     id: teacher.id,
     value: teacher.course_name,
     label: teacher.course_name,
+  }));
+
+  const fetchTeacherData = async () => {
+    const response = await customFetch(`/allTeachers?course_id=${coursesSelect?.id}?per_page=10000`);
+    return response; 
+  };
+
+  const { data, refetch, isLoading, isFetching } = useQuery({
+    queryKey: ["teacher_data"], 
+    queryFn: fetchTeacherData,
+  });
+
+  const teachersData = data && data?.data?.data.teachers;
+  console.log("🚀 ~ teachersData:", teachersData)
+
+  const teachersOption = teachersData?.map((teacher) => ({
+    id: teacher.id, 
+    value: teacher.full_name,
+    label: teacher.full_name,
   }));
 
   const levelsOption = [
@@ -144,6 +149,10 @@ const AddLectureTiming = ({
     }
   }, [editStudySchedule]);
 
+  useEffect(() => {
+    refetch()
+  }, [coursesSelect])
+
   return (
     <div className="p-6 bg-white rounded-xl">
       <Formik initialValues={initialValues} onSubmit={() => {}}>
@@ -187,6 +196,8 @@ const AddLectureTiming = ({
                         value: e.value,
                       });
                     }}
+                    isLoading={isLoading || isFetching}   
+                    components={{ LoadingIndicator }}  
                   />
                 </div>
 
@@ -210,6 +221,8 @@ const AddLectureTiming = ({
                         value: e.value,
                       });
                     }}
+                    isLoading={isLoading || isFetching}   
+                    components={{ LoadingIndicator }}  
                   />
                 </div>
 
@@ -234,6 +247,8 @@ const AddLectureTiming = ({
                           value: e.value,
                         });
                       }}
+                      isLoading={isLoading || isFetching}   
+                      components={{ LoadingIndicator }}  
                     />
                   </div>
                   <div className="w-full sm:w-[30%]">
@@ -255,6 +270,8 @@ const AddLectureTiming = ({
                           value: e.value,
                         });
                       }}
+                      isLoading={isLoading || isFetching}   
+                      components={{ LoadingIndicator }}  
                     />
                   </div>
                 </div>

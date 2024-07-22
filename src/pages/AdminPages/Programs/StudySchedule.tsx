@@ -43,10 +43,14 @@ const StudySchedule = () => {
     end_date: "",
     lecture_time: [],
   });
+  
+  console.log("🚀 ~ StudySchedule ~ scheduleData:", scheduleData);
   const [editStudySchedule, setEditStudySchedule] = useState({});
+  console.log("🚀 ~ StudySchedule ~ editStudySchedule:", editStudySchedule);
   const navigate = useNavigate();
 
   const { id: scheduleId } = useParams();
+  console.log("🚀 ~ StudySchedule ~ scheduleId:", scheduleId);
 
   const queryClient = useQueryClient();
 
@@ -62,6 +66,7 @@ const StudySchedule = () => {
     onSuccess: (data) => {
       queryClient.invalidateQueries("schedule");
       toast.success(t("study schedule has been added successfully"));
+      navigate("/programs");
     },
     onError: (error) => {
       const errorMessage =

@@ -69,6 +69,7 @@ import InstructorAddExam from "./pages/InstructorPage/InstructorExams/Instructor
 import InstructorSetting from "./pages/InstructorPage/InstructorSetting";
 import AddInstructor from "./components/AdminComponent/Instructors/AddInstructor";
 import EditInstructor from "./components/AdminComponent/Instructors/EditInstructor";
+import ViewInstructorSchedule from "./pages/AdminPages/Instructors/ViewInstructorSchedule";
 
 function App() {
   const isRTL = useRTL();
@@ -107,6 +108,10 @@ function App() {
           <Route
             path="/instructors/instructorProfile/:id"
             element={<InstructorPersonalProfile />}
+          />
+          <Route
+            path="/instructors/schedule/:id"
+            element={<ViewInstructorSchedule />}
           />
           <Route path="/instructors/add" element={<AddInstructor />} />
           <Route path="/instructors/edit/:id" element={<EditInstructor />} />
