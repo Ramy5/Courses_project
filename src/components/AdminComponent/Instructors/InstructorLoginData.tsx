@@ -39,7 +39,6 @@ const InstructorLoginData = ({
   setActiveTab,
   setInstructorID,
 }: instructorAddLoginData_TP) => {
-  console.log("🚀 ~ editObj:", editObj);
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] =
     useState<boolean>(false);

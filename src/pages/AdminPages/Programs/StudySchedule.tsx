@@ -43,6 +43,7 @@ const StudySchedule = () => {
     end_date: "",
     lecture_time: [],
   });
+  
   console.log("🚀 ~ StudySchedule ~ scheduleData:", scheduleData);
   const [editStudySchedule, setEditStudySchedule] = useState({});
   console.log("🚀 ~ StudySchedule ~ editStudySchedule:", editStudySchedule);
@@ -172,6 +173,7 @@ const StudySchedule = () => {
                   className="py-3 mt-20 text-xl font-semibold rounded-2xl"
                   action={() => {
                     handleAddSchedule(scheduleData);
+                    navigate("/programs");
                   }}
                   loading={isPending}
                 >
