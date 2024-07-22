@@ -353,7 +353,6 @@ const CreateCoursesInputs = ({
         }}
       >
         {({ setFieldValue, values, resetForm }) => {
-          console.log("🚀 ~ values:", values);
           return (
             <Form>
               <div className="pb-8 bg-white rounded-3xl">

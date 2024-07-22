@@ -55,7 +55,7 @@ interface AddStudentPersonal_TP {
   address_personal: string;
   date_birth_personal: string | Date;
   type_personal: "male" | "female";
-  image_upload_personal: [];
+  image: [];
 }
 
 interface StudentAddPersonalData {
@@ -97,9 +97,7 @@ const StudentAddPersonalData = ({
   ];
 
   const [selectedViewImage, setSelectedViewImage] = useState(null);
-  console.log("🚀 ~ selectedViewImage:", selectedViewImage);
   const [selectedImage, setSelectedImage] = useState(null);
-  console.log("🚀 ~ selectedImage:", selectedImage);
 
   const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event?.target?.files[0];
@@ -298,11 +296,19 @@ const StudentAddPersonalData = ({
               </div>
 
               <div className="w-full md:w-1/2">
-                <img
-                  src={selectedViewImage || User}
-                  alt="user"
-                  className="m-auto w-[180px] h-[180px] rounded-full"
-                />
+                {selectedViewImage ? (
+                  <img
+                    src={selectedViewImage}
+                    alt="user"
+                    className="m-auto w-[180px] h-[180px] rounded-full"
+                  />
+                ) : (
+                  <img
+                    src={editObj ? editObj.image : User}
+                    alt="user"
+                    className="m-auto w-[180px] h-[180px] rounded-full"
+                  />
+                )}
                 <div className="flex justify-center gap-5 mt-6">
                   <input
                     type="file"

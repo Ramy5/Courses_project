@@ -158,7 +158,7 @@ const Programs = () => {
         {showDeleteModal && (
           <MainPopup onClose={() => setShowDeleteModal(false)}>
             <div>
-              <h2 className="text-2xl px-16 py-20 text-center">
+              <h2 className="px-16 py-20 text-2xl text-center">
                 {t(
                   "the program will be deleted as well as all academic data associated with the program"
                 )}

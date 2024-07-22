@@ -252,7 +252,7 @@
   "youtube link": "رابط اليوتيوب",
   "lecture status": "حالة المحاضرة",
   "setup": "تحت التجهيز",
-  "in progress": "قيد التنفيذ",
+  "inProgress": "قيد التنفيذ",
   "completed": "تمت",
   "not available yet": "غير متاح حاليًا",
   "lecture management": "ادارة المحاضرات",
@@ -447,6 +447,11 @@
   "filter by instructor...": "بحث عن طريق المحاضر",
   "group": "الشعبة",
   "confirm deletion": "تأكيد الحذف ",
-  "the course description has been successfully modified":"تم تعديل توصيف المقرر بنجاح",
-  "the program will be deleted as well as all academic data associated with the program": "سيتم حذف البرنامج وكذلك جميع البيانات الدراسية المرتبطة بالبرنامج"
+  "the course description has been successfully modified": "تم تعديل توصيف المقرر بنجاح",
+  "the program will be deleted as well as all academic data associated with the program": "سيتم حذف البرنامج وكذلك جميع البيانات الدراسية المرتبطة بالبرنامج",
+  "student has deleted successfully": "تم حذف الطالب بنجاح",
+  "student has blocked successfully": "تم حجب الطالب بنجاح",
+  "student has unblocked successfully": "تم الغاء حجب الطالب بنجاح",
+  "lecture zoom link has updated successfully": "تم تحديث لينك الزوم بنجاح",
+  "lecture date has updated successfully": "تم تحديث تاريخ المحاضرة بنجاح"
 }
