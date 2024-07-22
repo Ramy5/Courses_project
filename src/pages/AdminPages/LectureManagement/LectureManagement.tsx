@@ -287,7 +287,7 @@ const LectureManagement = () => {
                 {info.getValue()}
               </a>
             );
-          } else if (info.row.original.status === "in progress") {
+          } else if (info.row.original.status === "inProgress") {
             return (
               <div className="flex items-center justify-center w-56 gap-1">
                 {lecturesZoomEditId === info.row.original.id ? (
@@ -416,7 +416,7 @@ const LectureManagement = () => {
           let statusClass = "";
           if (status === "setup") {
             statusClass = "bg-[#FF4E4E]";
-          } else if (status === "in progress") {
+          } else if (status === "inProgress") {
             statusClass = "bg-[#FCC779] !text-black";
           } else if (status === "completed") {
             statusClass = "bg-[#619439]";

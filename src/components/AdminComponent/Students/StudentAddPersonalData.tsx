@@ -55,7 +55,7 @@ interface AddStudentPersonal_TP {
   address_personal: string;
   date_birth_personal: string | Date;
   type_personal: "male" | "female";
-  image_upload_personal: [];
+  image: [];
 }
 
 interface StudentAddPersonalData {
