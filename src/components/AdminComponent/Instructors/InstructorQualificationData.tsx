@@ -35,6 +35,12 @@ const postInstructorQualification = async (newInstructor: any) => {
       "Content-Type": "multipart/form-data",
     },
   });
+  const response = await axios.post(`${BASE_URL}qualification`, newInstructor, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "multipart/form-data",
+    },
+  });
 
   return response;
 };

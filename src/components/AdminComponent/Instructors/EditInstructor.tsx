@@ -37,7 +37,6 @@ const EditInstructor = () => {
       queryFn: () => getInstructorEdit(instructorParamID),
     });
 
-  console.log("🚀 ~ EditInstructor ~ data:", data);
   const instructorData = data?.data?.teacher;
   const contactInfo =
     data?.data?.teacher?.contactInfo && data?.data?.teacher?.contactInfo[0];

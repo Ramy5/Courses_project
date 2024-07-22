@@ -20,7 +20,7 @@ import Loading from "../../../components/UI/Loading";
 const Instructors = () => {
   const [openRow, setOpenRow] = useState<number | null>(null);
   const queryClient = useQueryClient();
-  const [page, setPage] = useState<number>()
+  const [page, setPage] = useState<number>();
 
   const navigate = useNavigate();
 
@@ -61,8 +61,6 @@ const Instructors = () => {
 
   const instructorData = data?.data.data.teachers || {};
   const instructorPagination = data?.data.data || {};
-  console.log("🚀 ~ Instructors ~ instructorPagination:", instructorPagination);
-  console.log("🚀 ~ Instructors ~ instructorData:", instructorData);
 
   useEffect(() => {
     if (error) {
@@ -71,7 +69,7 @@ const Instructors = () => {
   }, [error]);
 
   useEffect(() => {
-    refetch()
+    refetch();
   }, [page]);
 
   const handleProfileClick = (instructorId: number) => {
@@ -95,7 +93,7 @@ const Instructors = () => {
       </div>
 
       <div className="flex items-center justify-between p-4 bg-white rounded-2xl">
-        <Select options={options} placeholder="short by" />
+        {/* <Select options={options} placeholder="short by" /> */}
 
         <SearchInput />
 

@@ -38,6 +38,19 @@ const addNewReceipt = async (newReceipt: any) => {
   return data;
 };
 
+const blockStudent = async (
+  studentId: string,
+  blockStatus: { blocked_status: number }
+) => {
+  const data = customFetch.post(`student/${studentId}/status`, blockStatus);
+  return data;
+};
+
+const deleteStudent = async (studentId: string) => {
+  const data = customFetch.delete(`delete/${studentId}`);
+  return data;
+};
+
 const StudentProfile = () => {
   const initialValues = {
     receipt_number: "",
@@ -74,6 +87,29 @@ const StudentProfile = () => {
     },
   });
 
+  const { mutate: blockMutate } = useMutation({
+    mutationKey: ["block-student"],
+    mutationFn: (blockStatus) => blockStudent(studentProfileId, blockStatus),
+    onSuccess: (data: any) => {
+      queryClient.invalidateQueries("show-student");
+    },
+    onError: (error) => {
+      toast.error(error);
+    },
+  });
+
+  const { mutate: deleteMutate } = useMutation({
+    mutationKey: ["delete-student"],
+    mutationFn: () => deleteStudent(studentProfileId),
+    onSuccess: (data: any) => {
+      toast.success(t("student has deleted successfully"));
+      navigate("/students");
+    },
+    onError: (error) => {
+      toast.error(error);
+    },
+  });
+
   const {
     full_name = "",
     id_number = "",
@@ -84,21 +120,14 @@ const StudentProfile = () => {
     academicData = {},
     parent = {},
     receipts = [],
+    blocked_status = 0,
   } = data?.data?.student || {};
 
   const studentProfileData = {
     id: 1,
     profileCover: studentProfileCover,
     personalImage: studentProfileImg,
-    studentName: "moaz",
     phoneNumber: "+009735625632",
-    email: "Albert Adam@gmail.com",
-    address: "123,المنصورة الجديدة",
-    idNumber: "2394894757",
-    educationalQualification: "الثانوية العامه",
-    fatherName: "adam",
-    fatherPhone: "+3435465543",
-    fatherEmail: "albertadam@gmail.com",
   };
 
   const studentAcademicData = [
@@ -169,6 +198,16 @@ const StudentProfile = () => {
     setOpenRow((prevOpenRow) => (prevOpenRow == id ? null : id));
   };
 
+  const handleDeleteStudent = async () => await deleteMutate();
+
+  const handleBlockStudent = async (blockStudent: number) => {
+    const status = {
+      blocked_status: blockStudent,
+    };
+
+    await blockMutate(status);
+  };
+
   if (isRefetching || isLoading || isFetching) return <Loading />;
 
   return (
@@ -213,15 +252,28 @@ const StudentProfile = () => {
                         id="student_block"
                         name="student_block"
                         label="block student"
+                        checked={blocked_status}
+                        onChange={async (e) => {
+                          if (e.target.checked) {
+                            await handleBlockStudent(1);
+                            toast.success(
+                              t("student has blocked successfully")
+                            );
+                          } else {
+                            await handleBlockStudent(0);
+                            toast.success(
+                              t("student has unblocked successfully")
+                            );
+                          }
+                        }}
                       />
                       <div className="translate-y-2">
                         <DotsDropDown
-                          // instructorId={studentProfileId}
-                          // instructorRoute="/students"
                           firstName="edit"
                           onFirstClick={() => {
                             navigate(`/students/${studentProfileId}`);
                           }}
+                          onSecondClick={handleDeleteStudent}
                           firstIcon={
                             <FaRegEdit size={22} className="fill-mainColor" />
                           }

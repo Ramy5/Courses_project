@@ -172,13 +172,13 @@ const AddNewCertificatesInput = ({
         return (
           <Form>
             <table className="min-w-full text-center">
-              <thead className="bg-mainColor text-white">
+              <thead className="text-white bg-mainColor">
                 {table.getHeaderGroups().map((headerGroup) => (
-                  <tr key={headerGroup.id} className="py-4 px-2 w-full">
+                  <tr key={headerGroup.id} className="w-full px-2 py-4">
                     {headerGroup.headers.map((header) => (
                       <th
                         key={header.id}
-                        className=" px-6 py-4 text-md font-medium"
+                        className="px-6 py-4 font-medium text-md"
                       >
                         {header.isPlaceholder
                           ? null
@@ -192,7 +192,7 @@ const AddNewCertificatesInput = ({
                 ))}
               </thead>
               <tbody>
-                <tr className="border-b-2 border-mainColor text-center">
+                <tr className="text-center border-b-2 border-mainColor">
                   <td className="p-4">
                     <BaseInput
                       name="type_certificate"

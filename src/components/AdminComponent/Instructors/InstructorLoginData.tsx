@@ -30,6 +30,7 @@ const postInstructorLogin = async (newInstructor: any) => {
 
 const editInstructorLogin = async (editInstructor: any, id: number) => {
   const data = await customFetch.post(`updateLoginData/${id}`, editInstructor);
+  const data = await customFetch.post(`updateLoginData/${id}`, editInstructor);
   return data;
 };
 
@@ -56,7 +57,6 @@ const InstructorLoginData = ({
     password: editObj?.password || "",
     password_confirmation: editObj?.password_confirmation || "",
   };
-  console.log("🚀 ~ initialValues:", initialValues);
 
   const { mutate, isPending } = useMutation({
     mutationKey: ["add-instructor-login"],
