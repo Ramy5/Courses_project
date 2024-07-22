@@ -44,13 +44,12 @@ const StudySchedule = () => {
     lecture_time: [],
   });
   console.log("🚀 ~ StudySchedule ~ scheduleData:", scheduleData);
-  const [editStudySchedule, setEditStudySchedule] = useState({})
-  console.log("🚀 ~ StudySchedule ~ editStudySchedule:", editStudySchedule)
-  const navigate = useNavigate()
+  const [editStudySchedule, setEditStudySchedule] = useState({});
+  console.log("🚀 ~ StudySchedule ~ editStudySchedule:", editStudySchedule);
+  const navigate = useNavigate();
 
-
-  const {id: scheduleId} = useParams()
-  console.log("🚀 ~ StudySchedule ~ scheduleId:", scheduleId)
+  const { id: scheduleId } = useParams();
+  console.log("🚀 ~ StudySchedule ~ scheduleId:", scheduleId);
 
   const queryClient = useQueryClient();
 
@@ -65,9 +64,8 @@ const StudySchedule = () => {
     mutationFn: postSchedule,
     onSuccess: (data) => {
       queryClient.invalidateQueries("schedule");
-      toast.success(
-        t("study schedule has been added successfully")
-      );
+      toast.success(t("study schedule has been added successfully"));
+      navigate("/programs");
     },
     onError: (error) => {
       console.log("🚀 ~ error:", error);
@@ -175,7 +173,6 @@ const StudySchedule = () => {
                   className="font-semibold text-xl py-3 rounded-2xl mt-20"
                   action={() => {
                     handleAddSchedule(scheduleData);
-                    navigate("/programs")
                   }}
                   loading={isPending}
                 >

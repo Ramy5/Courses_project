@@ -4,6 +4,7 @@ import { RiDeleteBin5Line } from "react-icons/ri";
 import { FaRegEdit } from "react-icons/fa";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { FiCalendar } from "react-icons/fi";
 
 interface PersonlyProfile {
   personalData: any;
@@ -26,8 +27,7 @@ const ProfileIntroduction = ({
   };
 
   const jobTitle =
-    personalData?.qualifications &&
-    personalData?.qualifications[0]?.job_title;
+    personalData?.qualifications && personalData?.qualifications[0]?.job_title;
 
   return (
     <div className="relative">
@@ -59,14 +59,14 @@ const ProfileIntroduction = ({
             </div>
             <div>
               <DotsDropDown
-                instructorId={personalData.id}
-                instructorRoute="/instructors/instructorEdit"
                 firstName="edit"
                 firstIcon={<FaRegEdit size={22} className="fill-mainColor" />}
                 secondName="delete"
                 secondIcon={
                   <RiDeleteBin5Line size={22} className="fill-mainRed" />
                 }
+                anotherName="school schedule"
+                anotherIcon={<FiCalendar size={24} />}
                 isOpen={openRow == personalData.id}
                 onToggle={() => handleToggleDropDown(personalData.id)}
                 onFirstClick={() => {
@@ -74,7 +74,10 @@ const ProfileIntroduction = ({
                 }}
                 onSecondClick={() => {
                   deleteInstructor();
-                  navigate(-1)
+                  navigate(-1);
+                }}
+                onAnotherClick={() => {
+                  navigate(`/instructors/schedule/${personalData.id}`);
                 }}
               />
             </div>

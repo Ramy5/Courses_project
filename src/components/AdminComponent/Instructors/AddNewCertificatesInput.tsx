@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import BaseInput from "../../UI/BaseInput";
 import { Form, Formik } from "formik";
 import {
@@ -15,6 +15,8 @@ import { IoIosCheckmarkCircleOutline } from "react-icons/io";
 import DatePicker from "react-datepicker";
 import { toast } from "react-toastify";
 import { RiDeleteBin5Line } from "react-icons/ri";
+import { FaRegEdit } from "react-icons/fa";
+import { useParams } from "react-router-dom";
 
 interface Certificate {
   type_certificate: string;
@@ -29,23 +31,41 @@ interface AddNewCertificatesInput_TP {
   editObj: Certificate;
   newCertificates: any;
   setNewCertificates: any;
+  dataReceived: any;
+  setEditCertificateData: any;
 }
 
 const AddNewCertificatesInput = ({
   editObj,
   setNewCertificates,
   newCertificates,
+  dataReceived,
+  setEditCertificateData,
 }: AddNewCertificatesInput_TP) => {
-  console.log("🚀 ~ newCertificates:", newCertificates)
-  const editCertificate = editObj?.newCertificate && editObj?.newCertificate[0];
+  console.log("🚀 ~ dataReceived:", dataReceived);
+  console.log("🚀 ~ newCertificates:", newCertificates);
+  // const editCertificate = editObj?.newCertificate && editObj?.newCertificate[0];
+  const [editCertificate, setEditCertificate] = useState({});
+  console.log("🚀 ~ editCertificate:", editCertificate);
+  const { id: instructorParamID } = useParams();
+  console.log("🚀 ~ instructorParamID:", instructorParamID);
+
+  // const initialValues: Certificate = {
+  //   type_certificate: editCertificate?.type_certificate || "",
+  //   certificate_name: editCertificate?.certificate_name || "",
+  //   donor: editCertificate?.donor || "",
+  //   date_acquisition: editCertificate?.date_acquisition || "",
+  //   specialization: editCertificate?.specialization || "",
+  //   appreciation: editCertificate?.appreciation || "",
+  // };
 
   const initialValues: Certificate = {
-    type_certificate: editCertificate?.type_certificate || "",
-    certificate_name: editCertificate?.certificate_name || "",
-    donor: editCertificate?.donor || "",
-    date_acquisition: editCertificate?.date_acquisition || "",
-    specialization: editCertificate?.specialization || "",
-    appreciation: editCertificate?.appreciation || "",
+    type_certificate: "",
+    certificate_name: "",
+    donor: "",
+    date_acquisition: "",
+    specialization: "",
+    appreciation: "",
   };
 
   const certificatesColumnsFee = useMemo<ColumnDef<any>[]>(
@@ -85,12 +105,34 @@ const AddNewCertificatesInput = ({
         accessorKey: "action",
         cell: (info) => {
           console.log("🚀 ~ info.row.original.day_id:", info.row.original);
-
+          const editData = newCertificates?.length
+            ? newCertificates
+            : editObj?.newCertificate;
+          console.log("🚀 ~ editData:", editData);
           return (
             <div className="flex items-center gap-5">
+              <FaRegEdit
+                size={22}
+                className="fill-mainColor cursor-pointer"
+                onClick={() => {
+                  const suggestedReferencesFilter = editData?.filter(
+                    (data: any) => {
+                      return data.id !== info.row.original.id;
+                    }
+                  );
+                  console.log(
+                    "🚀 ~ suggestedReferencesFilter:",
+                    suggestedReferencesFilter
+                  );
+
+                  setNewCertificates(suggestedReferencesFilter);
+
+                  setEditCertificate(info.row.original);
+                }}
+              />
               <RiDeleteBin5Line
                 onClick={() => {
-                  const suggestedReferencesFilter = newCertificates?.filter(
+                  const suggestedReferencesFilter = editData?.filter(
                     (data: any) => {
                       return data.id !== info.row.original.id;
                     }
@@ -105,7 +147,7 @@ const AddNewCertificatesInput = ({
         },
       },
     ],
-    [newCertificates]
+    [newCertificates, editCertificate]
   );
 
   const table = useReactTable({
@@ -115,11 +157,18 @@ const AddNewCertificatesInput = ({
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
   });
+
   return (
     <Formik initialValues={initialValues} onSubmit={() => {}}>
-      {({ values, resetForm }) => {
+      {({ values, resetForm, setFieldValue }) => {
         console.log("🚀 ~ values:", values);
-
+        useEffect(() => {
+          if (editCertificate?.id) {
+            Object.keys(values).map((key) => {
+              return setFieldValue(key, editCertificate[key]);
+            });
+          }
+        }, [editCertificate]);
         return (
           <Form>
             <table className="min-w-full text-center">
@@ -151,6 +200,13 @@ const AddNewCertificatesInput = ({
                       type="text"
                       className="w-full text-lg py-1 !border-2 !border-black rounded-lg text-center"
                       placeholder={t("")}
+                      value={
+                        values.type_certificate ||
+                        editCertificate?.type_certificate
+                      }
+                      onChange={(e) =>
+                        setFieldValue("type_certificate", e.target.value)
+                      }
                     />
                   </td>
                   <td className="p-4">
@@ -160,6 +216,13 @@ const AddNewCertificatesInput = ({
                       type="text"
                       className="w-full text-lg py-1 !border-2 !border-black rounded-lg text-center"
                       placeholder={t("")}
+                      value={
+                        values.certificate_name ||
+                        editCertificate?.certificate_name
+                      }
+                      onChange={(e) =>
+                        setFieldValue("certificate_name", e.target.value)
+                      }
                     />
                   </td>
                   <td className="p-4">
@@ -169,6 +232,8 @@ const AddNewCertificatesInput = ({
                       type="text"
                       className="w-full text-lg py-1 !border-2 !border-black rounded-lg text-center"
                       placeholder={t("")}
+                      value={values.donor || editCertificate?.donor}
+                      onChange={(e) => setFieldValue("donor", e.target.value)}
                     />
                   </td>
                   <td className="p-4">
@@ -178,6 +243,13 @@ const AddNewCertificatesInput = ({
                       type="date"
                       className="w-full text-lg py-1 !border-2 !border-black rounded-lg text-center"
                       placeholder={t("")}
+                      value={
+                        values.date_acquisition ||
+                        editCertificate?.date_acquisition
+                      }
+                      onChange={(e) =>
+                        setFieldValue("date_acquisition", e.target.value)
+                      }
                     />
                   </td>
                   <td className="p-4">
@@ -187,6 +259,12 @@ const AddNewCertificatesInput = ({
                       type="text"
                       className="w-full text-lg py-1 !border-2 !border-black rounded-lg text-center"
                       placeholder={t("")}
+                      value={
+                        values.specialization || editCertificate?.specialization
+                      }
+                      onChange={(e) =>
+                        setFieldValue("specialization", e.target.value)
+                      }
                     />
                   </td>
                   <td className="p-4">
@@ -196,6 +274,12 @@ const AddNewCertificatesInput = ({
                       type="text"
                       className="w-full text-lg py-1 !border-2 !border-black rounded-lg text-center"
                       placeholder={t("")}
+                      value={
+                        values.appreciation || editCertificate?.appreciation
+                      }
+                      onChange={(e) =>
+                        setFieldValue("appreciation", e.target.value)
+                      }
                     />
                   </td>
                   <td>
@@ -204,11 +288,22 @@ const AddNewCertificatesInput = ({
                       type="button"
                       action={() => {
                         if (values?.type_certificate) {
-                          setNewCertificates((prev) => [{ ...values, id: prev.length + 1 }, ...prev]);
+                          if (dataReceived) {
+                            setEditCertificate(values);
+                            setEditCertificateData({
+                              ...values,
+                              id: dataReceived?.id,
+                            });
+                          }
+                          setNewCertificates((prev) => [
+                            { ...values, id: editCertificate?.id },
+                            ...prev,
+                          ]);
                         } else {
                           toast.info("add data first");
                         }
                         resetForm();
+                        setEditCertificate({});
                       }}
                     >
                       <IoIosCheckmarkCircleOutline

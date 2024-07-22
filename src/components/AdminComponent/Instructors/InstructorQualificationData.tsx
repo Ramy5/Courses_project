@@ -6,7 +6,6 @@ import { AiOutlineCloudUpload } from "react-icons/ai";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import { useEffect, useState } from "react";
 import { HiMiniFolderArrowDown } from "react-icons/hi2";
-import customFetch from "../../../utils/axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -25,20 +24,17 @@ interface AddInstructorQualification_TP {
 interface InstructorAddQualificationData_TP {
   editObj?: AddInstructorQualification_TP;
   instructorID: number;
+  dataReceived: any;
 }
 
 const postInstructorQualification = async (newInstructor: any) => {
   const token = Cookies.get("token");
-  const response = await axios.post(
-    `${BASE_URL}qualification`,
-    newInstructor,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "multipart/form-data",
-      },
-    }
-  );
+  const response = await axios.post(`${BASE_URL}qualification`, newInstructor, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "multipart/form-data",
+    },
+  });
 
   return response;
 };
@@ -46,7 +42,7 @@ const postInstructorQualification = async (newInstructor: any) => {
 const editInstructorQualification = async (editInstructor: any, id: number) => {
   const token = Cookies.get("token");
   const response = await axios.post(
-    `${BASE_URL}updateCertificate/${id}`,
+    `${BASE_URL}updateQualificationData/${id}`,
     editInstructor,
     {
       headers: {
@@ -59,18 +55,33 @@ const editInstructorQualification = async (editInstructor: any, id: number) => {
   return response;
 };
 
+const editInstructorCertificate = async (editCertificate: any, id: number) => {
+  const response = await axios.post(`updateCertificate/${id}`, editCertificate);
+
+  return response;
+};
+
 const InstructorQualificationData = ({
   editObj,
   instructorID,
+  dataReceived,
 }: InstructorAddQualificationData_TP) => {
-  const [file, setFile] = useState(null);
-  console.log("🚀 ~ file:", file);
+  console.log("🚀 ~ instructorID:", instructorID);
+  console.log("🚀 ~ editObj:", editObj);
+  const [file, setFile] = useState(editObj?.file || null);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
   const [addNewCertificates, setAddNewCertificates] = useState(false);
+  const [newCertificates, setNewCertificates] = useState(
+    editObj?.newCertificate || []
+  );
 
-  const [newCertificates, setNewCertificates] = useState([]);
+  console.log("🚀 ~ newCertificates:", newCertificates)
+
+
+  const [editCertificateData, setEditCertificateData] = useState({});
+  console.log("🚀 ~ editCertificateData:", editCertificateData);
 
   const initialValues: AddInstructorQualification_TP = {
     general_specialization: editObj?.general_specialization || "",
@@ -92,14 +103,12 @@ const InstructorQualificationData = ({
       navigate("/instructors");
     },
     onError: (error) => {
-      const errorMessage =
-        error?.response?.data?.error[0]?.email[0] ||
-        error?.response?.data?.error[0]?.password[0];
+      const errorMessage = error?.response?.data?.error[0];
       toast.error(errorMessage);
     },
   });
 
-  const { mutate: editMutate } = useMutation({
+  const { mutate: editMutate, isPending: editIsPending } = useMutation({
     mutationKey: ["edit-instructor-login"],
     mutationFn: (editInstructor: any) =>
       editInstructorQualification(editInstructor, Number(editObj?.id)),
@@ -111,12 +120,31 @@ const InstructorQualificationData = ({
       navigate("/instructors");
     },
     onError: (error) => {
-      const errorMessage =
-        error?.response?.data?.error[0]?.email[0] ||
-        error?.response?.data?.error[0]?.password[0];
+      const errorMessage = error?.response?.data?.error[0];
       toast.error(errorMessage);
     },
   });
+
+  const { mutate: editCertificateMutate, isPending: editCertificateIsPending } =
+    useMutation({
+      mutationKey: ["edit-instructor-login"],
+      mutationFn: (editCertificate: any) =>
+        editInstructorCertificate(
+          editCertificate,
+          Number(editCertificateData?.id)
+        ),
+      onSuccess: (data) => {
+        queryClient.invalidateQueries("Certificate");
+        toast.success(
+          t("instructor qualification data has been added successfully")
+        );
+        navigate("/instructors");
+      },
+      onError: (error) => {
+        const errorMessage = error?.response?.data?.error[0];
+        toast.error(errorMessage);
+      },
+    });
 
   const handleAddQualification = async (
     values: AddInstructorQualification_TP
@@ -131,20 +159,35 @@ const InstructorQualificationData = ({
       newCertificate: newCertificates,
       teacher_id: instructorID,
     };
+    console.log("🚀 ~ newInstructor:", newInstructor);
 
     const editInstructor = {
       id: editObj?.id,
-      general_specialization: editObj?.general_specialization,
-      specialization: editObj?.specialization,
-      degree: editObj?.degree,
-      year_acquisition: editObj?.year_acquisition,
-      cv_file: file,
-      job_title: editObj?.job_title,
-      newCertificate: newCertificates,
       teacher_id: editObj?.teacher_id,
+      general_specialization: values?.general_specialization,
+      specialization: values?.specialization,
+      degree: values?.degree,
+      year_acquisition: values?.year_acquisition,
+      cv_file: file,
+      job_title: values?.job_title,
+      newCertificate: newCertificates,
     };
+    console.log("🚀 ~ editInstructor:", editInstructor); 
 
-    editObj ? await editMutate(editInstructor) : await mutate(newInstructor);
+    const editCertificate = {
+      type_certificate: editCertificateData?.type_certificate,
+      certificate_name: editCertificateData?.certificate_name,
+      donor: editCertificateData?.donor,
+      date_acquisition: editCertificateData?.date_acquisition,
+      specialization: editCertificateData?.specialization,
+      appreciation: editCertificateData?.appreciation,
+    }
+
+    editObj
+      ? editCertificateData.type_certificate
+        ? await editCertificateMutate(editCertificate)
+        : await editMutate(editInstructor)
+      : await mutate(newInstructor);
   };
 
   useEffect(() => setFile(editObj?.cv_file), []);
@@ -289,14 +332,20 @@ const InstructorQualificationData = ({
                     setNewCertificates={setNewCertificates}
                     editObj={editObj}
                     newCertificates={newCertificates}
+                    setEditCertificateData={setEditCertificateData}
+                    dataReceived={dataReceived}
                   />
                 )}
               </div>
             </div>
 
             <div className="flex justify-end px-8 mt-12">
-              <Button type="submit" className="me-5" loading={isPending}>
-                {t("confirm")}
+              <Button
+                type="submit"
+                className="me-5"
+                loading={isPending || editCertificateIsPending || editIsPending}
+              >
+                {editObj ? t("edit") : t("confirm")}
               </Button>
               <Button
                 type="button"

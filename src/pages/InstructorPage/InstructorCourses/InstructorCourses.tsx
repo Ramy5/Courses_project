@@ -1,93 +1,37 @@
-import { FiCalendar } from "react-icons/fi";
 import { Button, TitlePage } from "../../../components";
 import { LiaBookReaderSolid } from "react-icons/lia";
-import { FaUserAlt } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
-import { SlBookOpen } from "react-icons/sl";
-import { PiStudentBold } from "react-icons/pi";
 import { t } from "i18next";
 import { useState } from "react";
+import customFetch from "../../../utils/axios";
+import { useQuery } from "@tanstack/react-query";
+import Loading from "../../../components/UI/Loading";
+import InstructorCoursesCard from "../../../components/InstructorComponent/InstructorCourses/InstructorCoursesCard";
 
 const InstructorCourses = () => {
-  const navigate = useNavigate();
   const [tabs, setTabs] = useState<number>(1);
+  
+  const fetchInstructorSchedule = async () => {
+    const response = await customFetch(`getCourses`);
+    return response;
+  };
 
-  const instructorCoursesData = [
-    {
-      id: 1,
-      course_name: "الفيزياء",
-      level: "المستوي الرابع",
-      specialty: "علوم الحاسب",
-      students_number: 500,
-    },
-    {
-      id: 2,
-      course_name: "الفيزياء",
-      level: "المستوي الرابع",
-      specialty: "علوم الحاسب",
-      students_number: 500,
-    },
-    {
-      id: 3,
-      course_name: "الفيزياء",
-      level: "المستوي الرابع",
-      specialty: "علوم الحاسب",
-      students_number: 500,
-    },
-    {
-      id: 4,
-      course_name: "الفيزياء",
-      level: "المستوي الرابع",
-      specialty: "علوم الحاسب",
-      students_number: 500,
-    },
-    {
-      id: 5,
-      course_name: "الفيزياء",
-      level: "المستوي الرابع",
-      specialty: "علوم الحاسب",
-      students_number: 500,
-    },
-    {
-      id: 6,
-      course_name: "الفيزياء",
-      level: "المستوي الرابع",
-      specialty: "علوم الحاسب",
-      students_number: 500,
-    },
-    {
-      id: 7,
-      course_name: "الفيزياء",
-      level: "المستوي الرابع",
-      specialty: "علوم الحاسب",
-      students_number: 500,
-    },
-    {
-      id: 8,
-      course_name: "الفيزياء",
-      level: "المستوي الرابع",
-      specialty: "علوم الحاسب",
-      students_number: 500,
-    },
-    {
-      id: 9,
-      course_name: "الفيزياء",
-      level: "المستوي الرابع",
-      specialty: "علوم الحاسب",
-      students_number: 500,
-    },
-  ];
+  const { data, isFetching, isRefetching } = useQuery({
+    queryKey: ["teacher_courses"],
+    queryFn: fetchInstructorSchedule,
+  });
+
+  const instructorCoursesData = data?.data?.data.courses || [];
+  console.log(
+    "🚀 ~ InstructorCourses ~ instructorCoursesData:",
+    instructorCoursesData
+  );
 
   const buttons = [
-    { id: 1, label: "tests today" },
-    { id: 2, label: "upcoming tests" },
+    { id: 1, label: "first semester" },
+    { id: 2, label: "second semester" },
   ];
 
-  const borderColors = [
-    "border-s-[#369252]",
-    "border-s-mainColor",
-    "border-s-[#025464]",
-  ];
+  if (isFetching || isRefetching) return <Loading />;
 
   return (
     <div>
@@ -116,85 +60,11 @@ const InstructorCourses = () => {
       </div>
 
       {tabs === 1 && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {instructorCoursesData.map((instructor, index) => {
-            const borderColor =
-              borderColors[Math.floor(index / 3) % borderColors.length];
-
-            return (
-              <div
-                key={instructor.id}
-                className={`border-s-[12px] ${borderColor} py-5 px-4 bg-white rounded-lg cursor-pointer`}
-                onClick={() =>
-                  navigate(`/instructor/Courses/lectures/${instructor.id}`)
-                }
-              >
-                <div className="flex items-center gap-2">
-                  <LiaBookReaderSolid size={28} className="text-mainColor" />
-                  <p className="font-semibold text-lg">
-                    {instructor.course_name}
-                  </p>
-                </div>
-                <div className="flex items-center gap-2 my-4">
-                  <FaUserAlt
-                    size={24}
-                    className="text-mainColor rounded-full"
-                  />
-                  <p>{instructor.level}</p>
-                </div>
-                <div className="flex items-center gap-2">
-                  <SlBookOpen size={23} className="text-mainColor" />
-                  <p>{instructor.specialty}</p>
-                </div>
-                <div className="flex items-center gap-2 mt-5">
-                  <PiStudentBold size={26} className="text-mainColor" />
-                  <p>{instructor.students_number}</p>
-                </div>
-              </div>
-            );
-          })}
-        </div>
+        <InstructorCoursesCard instructorCoursesData={instructorCoursesData} />
       )}
 
       {tabs === 2 && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {instructorCoursesData.map((instructor, index) => {
-            const borderColor =
-              borderColors[Math.floor(index / 3) % borderColors.length];
-
-            return (
-              <div
-                key={instructor.id}
-                className={`border-s-[12px] ${borderColor} py-5 px-4 bg-white rounded-lg cursor-pointer`}
-                onClick={() =>
-                  navigate(`/instructor/Courses/lectures/${instructor.id}`)
-                }
-              >
-                <div className="flex items-center gap-2">
-                  <LiaBookReaderSolid size={28} className="text-mainColor" />
-                  <p className="font-semibold text-lg">
-                    {instructor.course_name}
-                  </p>
-                </div>
-                <div className="flex items-center gap-2 my-4">
-                  <FaUserAlt
-                    size={24}
-                    className="text-mainColor rounded-full"
-                  />
-                  <p>{instructor.level}</p>
-                </div>
-                <div className="flex items-center gap-2">
-                  <SlBookOpen size={23} className="text-mainColor" />
-                  <p>{instructor.specialty}</p>
-                </div>
-                <div className="flex items-center gap-2 mt-5">
-                  <PiStudentBold size={26} className="text-mainColor" />
-                  <p>{instructor.students_number}</p>
-                </div>
-              </div>
-            );
-          })}
-        </div>
+        <InstructorCoursesCard instructorCoursesData={instructorCoursesData} />
       )}
     </div>
   );

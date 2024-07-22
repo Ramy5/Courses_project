@@ -21,6 +21,11 @@ const EditInstructor = () => {
   const [personalEditData, setPersonalEditData] = useState(null);
   const [contactInformationEditData, SetContactInformationEditData] =
     useState(null);
+  console.log(
+    "🚀 ~ EditInstructor ~ contactInformationEditData:",
+    contactInformationEditData
+  );
+
   const [qualificationEditData, setQualificationEditData] = useState(null);
   const { id: instructorParamID } = useParams();
   const location = useLocation();
@@ -150,6 +155,7 @@ const EditInstructor = () => {
           <InstructorQualificationData
             instructorID={instructorID}
             editObj={qualificationEditData}
+            dataReceived={dataReceived}
           />
         )}
       </div>

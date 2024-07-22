@@ -30,6 +30,8 @@ const CreateCoursesInputs = ({
   setEditCoursesData,
   editFinishedCoursesData,
 }: any) => {
+  console.log("🚀 ~ editFinishedCoursesData:", editFinishedCoursesData);
+  console.log("🚀 ~ editCoursesData:", editCoursesData);
   const [suggestedReferences, setSuggestedReferences] = useState(
     editCoursesData?.references || editFinishedCoursesData?.references || []
   );
@@ -37,6 +39,23 @@ const CreateCoursesInputs = ({
   const [level, setLevel] = useState();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+
+  const [teachingLearningMethods, setTeachingLearningMethods] = useState(
+    editCoursesData?.teaching_learning_methods
+      ?.split(",")
+      .map((item) => item.trim()) || []
+  );
+  console.log("🚀 ~ teachingLearningMethods:", teachingLearningMethods);
+
+  const [courseObjectives, setCourseObjectivesSteps] = useState(["1- "]);
+  const [informationConceptsSteps, setInformationConceptsSteps] = useState([
+    "1- ",
+  ]);
+  const [mentalSkillsSteps, setMentalSkillsSteps] = useState(["1- "]);
+  const [professionalSkillsSteps, setProfessionalSkillsSteps] = useState([
+    "1- ",
+  ]);
+  const [generalSkillsSteps, setGeneralSkillsSteps] = useState(["1- "]);
 
   const courseTeacherID = editFinishedCoursesData?.teachers?.map(
     (teacher) => teacher.id
@@ -74,7 +93,7 @@ const CreateCoursesInputs = ({
     teaching_learning_methods:
       editCoursesData?.teaching_learning_methods ||
       editFinishedCoursesData?.teaching_learning_methods ||
-      "Lectures",
+      "",
     lectures:
       editCoursesData?.lectures || editFinishedCoursesData?.lectures || 0,
     practical_training:
@@ -272,6 +291,58 @@ const CreateCoursesInputs = ({
     }),
   };
 
+  const parseSteps = (data) => {
+    return data
+      ? data
+          .split(/(?=\d+- )/)
+          .map((step) => step.trim())
+          .filter((step) => step)
+      : [];
+  };
+
+  const courseObjective = parseSteps(
+    editFinishedCoursesData?.course_objectives ||
+      editCoursesData?.course_objectives
+  );
+  const informationConcepts = parseSteps(
+    editFinishedCoursesData?.information_concepts ||
+      editCoursesData?.information_concepts
+  );
+  const mentalSkills = parseSteps(
+    editFinishedCoursesData?.mental_skills || editCoursesData?.mental_skills
+  );
+  const professionalSkills = parseSteps(
+    editFinishedCoursesData?.professional_skills ||
+      editCoursesData?.professional_skills
+  );
+  const generalSkills = parseSteps(
+    editFinishedCoursesData?.general_skills || editCoursesData?.general_skills
+  );
+
+  useEffect(() => {
+    setCourseObjectivesSteps(courseObjective || ["1- "]);
+    setInformationConceptsSteps(informationConcepts || ["1- "]);
+    setMentalSkillsSteps(mentalSkills || ["1- "]);
+    setProfessionalSkillsSteps(professionalSkills || ["1- "]);
+    setGeneralSkillsSteps(generalSkills || ["1- "]);
+  }, [editFinishedCoursesData]);
+
+  const handleKeyDown = (e, setSteps, steps) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      const nextStepNumber = steps.length + 1;
+      setSteps([...steps, `${nextStepNumber}- `]);
+    }
+  };
+
+  const handleCheckboxChange = (method) => {
+    const newSelectedMethods = teachingLearningMethods.includes(method)
+      ? teachingLearningMethods.filter((item) => item !== method) // Remove if already selected
+      : [...teachingLearningMethods, method]; // Add if not selected
+
+    setTeachingLearningMethods(newSelectedMethods);
+  };
+
   return (
     <div>
       <Formik
@@ -287,7 +358,7 @@ const CreateCoursesInputs = ({
             <Form>
               <div className="pb-8 bg-white rounded-3xl">
                 <h2 className="py-4 px-7 !m-0 border-b-4 border-[#E6EAEE] font-semibold text-xl">
-                  {t("create program")} /{" "}
+                  {t("add a course")} /{" "}
                   <span>{t("edit course description")}</span>
                 </h2>
                 <div className="py-5 px-7">
@@ -347,7 +418,7 @@ const CreateCoursesInputs = ({
                       <label htmlFor="vision" className="font-semibold">
                         {t("course objectives")}
                       </label>
-                      <textarea
+                      {/* <textarea
                         name="course_objectives"
                         id="course_objectives"
                         className="w-full h-full mt-1  text-lg py-2 px-4 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
@@ -356,6 +427,34 @@ const CreateCoursesInputs = ({
                         onChange={(e) => {
                           setFieldValue("course_objectives", e.target.value);
                         }}
+                      /> */}
+
+                      <textarea
+                        name="course_objectives"
+                        id="course_objectives"
+                        className="w-full h-full mt-1  text-lg py-2 px-4 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                        placeholder={t("course objectives")}
+                        value={courseObjectives?.join("\n")}
+                        onChange={(e) => {
+                          const stepValues = e.target.value
+                            .split("\n")
+                            .map(
+                              (step, index) =>
+                                `${index + 1}- ${step.split("- ")[1] || ""}`
+                            );
+                          setCourseObjectivesSteps(stepValues);
+                          setFieldValue(
+                            "course_objectives",
+                            stepValues.join(" ")
+                          );
+                        }}
+                        onKeyDown={(e) =>
+                          handleKeyDown(
+                            e,
+                            setCourseObjectivesSteps,
+                            courseObjectives
+                          )
+                        }
                       />
                     </div>
                   </div>
@@ -373,10 +472,27 @@ const CreateCoursesInputs = ({
                         id="information_concepts"
                         className="w-full h-36 text-lg py-2 px-4 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
                         placeholder={t("information and concepts")}
-                        value={values.information_concepts}
+                        value={informationConceptsSteps?.join("\n")}
                         onChange={(e) => {
-                          setFieldValue("information_concepts", e.target.value);
+                          const stepValues = e.target.value
+                            .split("\n")
+                            .map(
+                              (step, index) =>
+                                `${index + 1}- ${step.split("- ")[1] || ""}`
+                            );
+                          setInformationConceptsSteps(stepValues);
+                          setFieldValue(
+                            "information_concepts",
+                            stepValues.join(" ")
+                          );
                         }}
+                        onKeyDown={(e) =>
+                          handleKeyDown(
+                            e,
+                            setInformationConceptsSteps,
+                            informationConceptsSteps
+                          )
+                        }
                       />
                     </div>
                     <div>
@@ -388,10 +504,24 @@ const CreateCoursesInputs = ({
                         id="mental_skills"
                         className="w-full h-36 text-lg py-2 px-4 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
                         placeholder={t("mental skills")}
-                        value={values.mental_skills}
+                        value={mentalSkillsSteps?.join("\n")}
                         onChange={(e) => {
-                          setFieldValue("mental_skills", e.target.value);
+                          const stepValues = e.target.value
+                            .split("\n")
+                            .map(
+                              (step, index) =>
+                                `${index + 1}- ${step.split("- ")[1] || ""}`
+                            );
+                          setMentalSkillsSteps(stepValues);
+                          setFieldValue("mental_skills", stepValues.join(" "));
                         }}
+                        onKeyDown={(e) =>
+                          handleKeyDown(
+                            e,
+                            setMentalSkillsSteps,
+                            mentalSkillsSteps
+                          )
+                        }
                       />
                     </div>
                   </div>
@@ -409,10 +539,27 @@ const CreateCoursesInputs = ({
                         id="professional_skills"
                         className="w-full h-36 text-lg py-2 px-4 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
                         placeholder={t("professional skills")}
-                        value={values.professional_skills}
+                        value={professionalSkillsSteps?.join("\n") || ["1- "]}
                         onChange={(e) => {
-                          setFieldValue("professional_skills", e.target.value);
+                          const stepValues = e.target.value
+                            .split("\n")
+                            .map(
+                              (step, index) =>
+                                `${index + 1}- ${step.split("- ")[1] || ""}`
+                            );
+                          setProfessionalSkillsSteps(stepValues);
+                          setFieldValue(
+                            "professional_skills",
+                            stepValues.join(" ")
+                          );
                         }}
+                        onKeyDown={(e) =>
+                          handleKeyDown(
+                            e,
+                            setProfessionalSkillsSteps,
+                            professionalSkillsSteps
+                          )
+                        }
                       />
                     </div>
                     <div>
@@ -424,10 +571,24 @@ const CreateCoursesInputs = ({
                         id="general_skills"
                         className="w-full h-36 text-lg py-2 px-4 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
                         placeholder={t("general skills")}
-                        value={values.general_skills}
+                        value={generalSkillsSteps?.join("\n")}
                         onChange={(e) => {
-                          setFieldValue("general_skills", e.target.value);
+                          const stepValues = e.target.value
+                            .split("\n")
+                            .map(
+                              (step, index) =>
+                                `${index + 1}- ${step.split("- ")[1] || ""}`
+                            );
+                          setGeneralSkillsSteps(stepValues);
+                          setFieldValue("general_skills", stepValues.join(" "));
                         }}
+                        onKeyDown={(e) =>
+                          handleKeyDown(
+                            e,
+                            setGeneralSkillsSteps,
+                            generalSkillsSteps
+                          )
+                        }
                       />
                     </div>
                   </div>
@@ -449,6 +610,7 @@ const CreateCoursesInputs = ({
                             "lectures",
                             values.lectures === 1 ? 0 : 1
                           );
+                          handleCheckboxChange("lectures");
                         }}
                       />
                       <MainRadio
@@ -463,6 +625,7 @@ const CreateCoursesInputs = ({
                             "practical_training",
                             values.practical_training === 1 ? 0 : 1
                           );
+                          handleCheckboxChange("practical training");
                         }}
                       />
                       <MainRadio
@@ -477,6 +640,7 @@ const CreateCoursesInputs = ({
                             "applications",
                             values.applications === 1 ? 0 : 1
                           );
+                          handleCheckboxChange("applications");
                         }}
                       />
                       <MainRadio
@@ -491,6 +655,7 @@ const CreateCoursesInputs = ({
                             "research",
                             values.research === 1 ? 0 : 1
                           );
+                          handleCheckboxChange("research");
                         }}
                       />
                       <MainRadio
@@ -505,6 +670,7 @@ const CreateCoursesInputs = ({
                             "case_studies",
                             values.case_studies === 1 ? 0 : 1
                           );
+                          handleCheckboxChange("case studies");
                         }}
                       />
                       <MainRadio
@@ -519,6 +685,7 @@ const CreateCoursesInputs = ({
                             "project",
                             values.project === 1 ? 0 : 1
                           );
+                          handleCheckboxChange("project");
                         }}
                       />
                     </div>
@@ -790,6 +957,8 @@ const CreateCoursesInputs = ({
                             const updatedCourses = [...prev];
                             updatedCourses[existingIndex] = {
                               ...values,
+                              teaching_learning_methods:
+                                teachingLearningMethods?.join(","),
                               references: suggestedReferences,
                             };
                             return updatedCourses;
@@ -798,6 +967,8 @@ const CreateCoursesInputs = ({
                               ...prev,
                               {
                                 ...values,
+                                teaching_learning_methods:
+                                  teachingLearningMethods?.join(", "),
                                 references: suggestedReferences,
                               },
                             ];
@@ -811,7 +982,7 @@ const CreateCoursesInputs = ({
                         setStep(1);
                       } else {
                         mutate({ ...values, references: suggestedReferences });
-                        navigate(`/programs/programInfo/${editFinishedCoursesData?.id}`);
+                        navigate(-1);
                       }
                     }}
                   >
@@ -822,9 +993,7 @@ const CreateCoursesInputs = ({
                     className="bg-[#E6EAEE] text-mainColor"
                     action={() => {
                       if (Object.keys(editFinishedCoursesData).length !== 0) {
-                        navigate(
-                          `/programs/programInfo/${editFinishedCoursesData?.id}`
-                        );
+                        navigate(-1);
                       } else {
                         setEditCoursesData([]);
                         setStep(1);

@@ -29,10 +29,7 @@ const postInstructorLogin = async (newInstructor: any) => {
 };
 
 const editInstructorLogin = async (editInstructor: any, id: number) => {
-  const data = await customFetch.post(
-    `updateLoginData/${id}`,
-    editInstructor
-  );
+  const data = await customFetch.post(`updateLoginData/${id}`, editInstructor);
   return data;
 };
 
@@ -41,7 +38,7 @@ const InstructorLoginData = ({
   setActiveTab,
   setInstructorID,
 }: instructorAddLoginData_TP) => {
-  console.log("🚀 ~ editObj:", editObj)
+  console.log("🚀 ~ editObj:", editObj);
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] =
     useState<boolean>(false);
@@ -198,7 +195,7 @@ const InstructorLoginData = ({
 
           <div className="flex justify-end mt-5">
             <Button type="submit" className="me-5" loading={isPending}>
-              {t("confirm")}
+              {editObj ? t("edit") : t("confirm")}
             </Button>
             <Button
               type="button"

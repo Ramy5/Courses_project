@@ -38,8 +38,8 @@ const Programs = () => {
   });
 
   const programData = data ? data?.data.data.programs : {};
+  console.log("🚀 ~ Programs ~ programData:", programData)
   const programPagination = data ? data?.data?.data.pagination : {};
-  console.log("🚀 ~ Programs ~ programPagination:", programPagination);
 
   useEffect(() => {
     if (error) {
