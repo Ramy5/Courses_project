@@ -3,6 +3,7 @@ import { t } from "i18next";
 import { useMemo } from "react";
 import { Button, Table, TitlePage } from "../../../components";
 import { Link } from "react-router-dom";
+import Back from "../../../components/UI/Back";
 
 const InstructorViewAllHomeworks = () => {
   const allHomeworksData = [
@@ -94,8 +95,10 @@ const InstructorViewAllHomeworks = () => {
 
   return (
     <div>
-      <TitlePage mainLink="/instructors/viewHomework" mainTitle="homeworks" />
-
+      <div className="flex items-center justify-between">
+        <TitlePage mainLink="/instructors/viewHomework" mainTitle="homeworks" />
+        <Back className="bg-white border border-mainColor text-mainColor" />
+      </div>
       <div>
         <Table data={allHomeworksData} columns={allHomeworksColumns} />
       </div>

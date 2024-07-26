@@ -19,9 +19,11 @@ import {
 import DatePicker from "react-datepicker";
 import { useState } from "react";
 import { t } from "i18next";
+import { useAppSelector } from "../../hooks/reduxHooks";
 
 const InstructorInformationPanel = () => {
   const [startDate, setStartDate] = useState(new Date());
+  const { user } = useAppSelector((slice) => slice.user);
 
   const dataCounts = [
     {
@@ -108,7 +110,7 @@ const InstructorInformationPanel = () => {
   return (
     <div className="space-y-10">
       {/* INSTRUCTOR BANAR */}
-      <StudentBanar />
+      <StudentBanar userName={user?.name} />
 
       {/* STUDENT LECTURES BOXES */}
       <StudentLecturesBoxes />

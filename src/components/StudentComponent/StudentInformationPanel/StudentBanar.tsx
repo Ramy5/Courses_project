@@ -2,7 +2,11 @@ import { t } from "i18next";
 import studentBanarImg from "../../../assets/studentInformationPanel/studentInformationPanel_banar.svg";
 import instructorPerson from "../../../assets/studentInformationPanel/person.svg";
 
-const StudentBanar = () => {
+interface StudentBanar_TP {
+  userName: string;
+}
+
+const StudentBanar: React.FC<StudentBanar_TP> = ({ userName }) => {
   return (
     <div
       className="flex items-center gap-8 px-6 py-2 bg-no-repeat bg-cover"
@@ -13,7 +17,7 @@ const StudentBanar = () => {
       </div>
       <div>
         <h2 className="mb-3 text-4xl font-bold text-white">
-          {t("hello, mohamed ahmed mahmoud abd elaty")}
+          {t(`hello, ${userName}`)}
         </h2>
         <p className="font-bold text-white">
           {t(

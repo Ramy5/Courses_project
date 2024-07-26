@@ -70,6 +70,7 @@ import InstructorSetting from "./pages/InstructorPage/InstructorSetting";
 import AddInstructor from "./components/AdminComponent/Instructors/AddInstructor";
 import EditInstructor from "./components/AdminComponent/Instructors/EditInstructor";
 import ViewInstructorSchedule from "./pages/AdminPages/Instructors/ViewInstructorSchedule";
+import InstructorEditHomework from "./pages/InstructorPage/InstructorHomework/InstructorEditHomework";
 
 function App() {
   const isRTL = useRTL();
@@ -278,6 +279,10 @@ function App() {
           <Route
             path="/instructors/viewHomework/:id"
             element={<InstructorViewHomework />}
+          />
+          <Route
+            path="/instructors/editHomework/:id"
+            element={<InstructorEditHomework />}
           />
           <Route
             path="/instructors/viewAllHomeworks/:id"
