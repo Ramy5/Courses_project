@@ -8,7 +8,7 @@ import InstructorAddLastExam from "../../../components/InstructorComponent/Instr
 
 const InstructorAddExam = () => {
   const [grades, setGrades] = useState([]);
-  const [steps, setSteps] = useState<number>(3);
+  const [steps, setSteps] = useState<number>(1);
 
   const stepsOption = [
     { id: 1, label: "exam information", border: true },

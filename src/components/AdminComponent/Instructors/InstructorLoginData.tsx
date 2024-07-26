@@ -30,7 +30,6 @@ const postInstructorLogin = async (newInstructor: any) => {
 
 const editInstructorLogin = async (editInstructor: any, id: number) => {
   const data = await customFetch.post(`updateLoginData/${id}`, editInstructor);
-  const data = await customFetch.post(`updateLoginData/${id}`, editInstructor);
   return data;
 };
 

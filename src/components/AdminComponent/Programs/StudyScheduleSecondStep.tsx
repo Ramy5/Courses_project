@@ -12,7 +12,7 @@ const StudyScheduleSecondStep = ({ setSteps, scheduleData }: any) => {
   const [loading, setLoading] = useState(false);
 
   const filterScheduleData = scheduleData?.lecture_time?.filter(
-    (schedule) => schedule.level === levelSelect
+    (schedule) => schedule.level == levelSelect
   );
 
   useEffect(() => {
@@ -20,7 +20,7 @@ const StudyScheduleSecondStep = ({ setSteps, scheduleData }: any) => {
 
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 1000);
+    }, 800);
 
     return () => clearTimeout(timer);
   }, [levelSelect]);
@@ -85,10 +85,26 @@ const StudyScheduleSecondStep = ({ setSteps, scheduleData }: any) => {
         <Loading />
       ) : (
         <>
-          {levelSelect === 1 && <Schedule scheduleData={filterScheduleData} />}
-          {levelSelect === 2 && <Schedule scheduleData={filterScheduleData} />}
-          {levelSelect === 3 && <Schedule scheduleData={filterScheduleData} />}
-          {levelSelect === 4 && <Schedule scheduleData={filterScheduleData} />}
+          {levelSelect === 1 && (
+            <div className="fade-in">
+              <Schedule scheduleData={filterScheduleData} />
+            </div>
+          )}
+          {levelSelect === 2 && (
+            <div className="fade-in">
+              <Schedule scheduleData={filterScheduleData} />
+            </div>
+          )}
+          {levelSelect === 3 && (
+            <div className="fade-in">
+              <Schedule scheduleData={filterScheduleData} />
+            </div>
+          )}
+          {levelSelect === 4 && (
+            <div className="fade-in">
+              <Schedule scheduleData={filterScheduleData} />
+            </div>
+          )}
         </>
       )}
 

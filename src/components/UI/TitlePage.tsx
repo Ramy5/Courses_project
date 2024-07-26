@@ -24,7 +24,11 @@ const TitlePage = ({
   supLink,
   ThirdLink,
 }: TitlePage_TP) => {  // const location = useLocation();
+  console.log("🚀 ~ ThirdLink:", ThirdLink)
+  console.log("🚀 ~ supLink:", supLink)
+  console.log("🚀 ~ mainLink:", mainLink)
   const currentPath = location.pathname;
+  console.log("🚀 ~ currentPath:", currentPath)
 
   return (
     <div>
@@ -33,7 +37,7 @@ const TitlePage = ({
       </h2>
       <div className="flex items-center gap-1 my-5 text-black">
         <span>{icon}</span>
-        {currentPath === mainLink ? (
+        {!mainLink ? (
           <p className="cursor-default text-[15px]">{t(`${mainTitle}`)}</p>
         ) : (
           <Link to={mainLink} className="cursor-pointer text-[15px]">
@@ -44,8 +48,7 @@ const TitlePage = ({
         {supTitle && (
           <>
             <PiLessThan size={16} className="fill-mainColor" />
-
-            {currentPath === mainLink ? (
+            {!supLink ? (
               <p className="text-[15px]">{t(`${supTitle}`)}</p>
             ) : (
               <Link to={supLink} className="cursor-pointer">
@@ -57,7 +60,7 @@ const TitlePage = ({
         {ThirdTitle && (
           <>
             <PiLessThan size={16} className="fill-mainColor" />
-            {currentPath === mainLink ? (
+            {!ThirdLink ? (
               <p className="text-[15px]">{t(`${ThirdTitle}`)}</p>
             ) : (
               <Link to={ThirdLink} className="cursor-pointer">

@@ -26,6 +26,19 @@ body {
   }
 }
 
+/* START ANIMATION */
+.fade-in {
+  opacity: 0;
+  animation: fadeIn 0.5s forwards;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+/* END ANIMATION */
+
 /* RADIO */
 /* input[type="radio"] {
   -webkit-appearance: none;
@@ -352,10 +365,6 @@ h1 {
   height: 100% !important;
 }
 
-/* .fc-timeline-slot-frame {
-  justify-content: center !important;
-} */
-
 .fc-timeline-lane-frame,
 tbody .fc-datagrid-cell-frame {
   height: 80px !important;
@@ -389,8 +398,6 @@ tbody .fc-datagrid-cell-frame {
 
 .fc-event {
   border-radius: 8px !important;
-  /* margin-right: -27px !important;
-  margin-left: 5px !important; */
 }
 
 .fc .fc-timeline-bg {

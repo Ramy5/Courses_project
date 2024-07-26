@@ -27,6 +27,7 @@ const ViewInstructorSchedule = () => {
   console.log("🚀 ~ ViewInstructorSchedule ~ data:", data);
 
   const instructorSchedule = data?.data?.data.lectures || [];
+  console.log("🚀 ~ ViewInstructorSchedule ~ instructorSchedule:", instructorSchedule)
 
   const handlePrint = useReactToPrint({
     content: () => contentRef.current,

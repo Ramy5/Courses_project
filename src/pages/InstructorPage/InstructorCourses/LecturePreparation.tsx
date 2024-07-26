@@ -4,19 +4,49 @@ import { useState } from "react";
 import { BaseInput, Button } from "../../../components";
 import { AiOutlineCloudUpload } from "react-icons/ai";
 import { RiDeleteBin5Line } from "react-icons/ri";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import customFetch from "../../../utils/axios";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "react-toastify";
+import axios from "axios";
+import Cookies from "js-cookie";
+import { BASE_URL } from "../../../utils/constants";
+
+const postInstructorQualification = async (newLecturePreparation: any, id: number) => {
+  const token = Cookies.get("token");
+  const response = await axios.post(
+    `${BASE_URL}storeLectureData/${id}`,
+    newLecturePreparation,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
+
+  return response;
+};
 
 const LecturePreparation = () => {
+  const {id} = useParams()
   const [files, setFiles] = useState([]);
   const [links, setLinks] = useState([]);
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const location = useLocation();
+  const editObj = location.state;
+  console.log("🚀 ~ LecturePreparation ~ editObj:", editObj)
 
   const initialValues = {
-    lecture_title: "",
-    description: "",
-    instructions: "",
-    link: "",
+    title_ar: editObj?.title || "",
+    title_en: editObj?.title_en || "",
+    desc_ar: editObj?.desc_ar || "",
+    desc_en: editObj?.desc_en || "",
+    instructions_ar: editObj?.instructions_ar || "",
+    instructions_en: editObj?.instructions_en || "",
   };
+  console.log("🚀 ~ LecturePreparation ~ initialValues:", initialValues)
 
   const handleFileChange = (event) => {
     setFiles([...files, event.target.files[0]]);
@@ -29,11 +59,42 @@ const LecturePreparation = () => {
     setFiles(instructorFileFilter);
   };
 
-  const handleDeleteLink = (linkID: string) => {
+  const handleDeleteLink = (index: string) => {
     const instructorFileFilter = links.filter(
-      (link: any) => link.id !== linkID
+      (link: any, i: any) => i !== index
     );
     setLinks(instructorFileFilter);
+  };
+
+  const { mutate, isPending } = useMutation({
+    mutationKey: ["lecture_reparation"],
+    mutationFn: (editScheduleData: any) =>
+      postInstructorQualification(editScheduleData, id),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries("preparation");
+      toast.success(t("lecture setting added successfully"));
+      navigate(-1);
+    },
+    onError: (error) => {
+      const errorMessage = error?.response?.data?.error[0];
+      toast.error(errorMessage);
+    },
+  });
+
+  const handleAddLecturePreparation = async (values) => {
+    const newLecturePreparation = {
+      title_ar: values.title_ar,
+      title_en: values.title_en,
+      desc_ar: values.desc_ar,
+      desc_en: values.desc_en,
+      instructions_ar: values.instructions_ar,
+      instructions_en: values.instructions_en,
+      links: links,
+      attachments: files?.map((file) => ({file: file})),
+    };
+    console.log("🚀 ~ handleAddLecturePreparation ~ newLecturePreparation:", newLecturePreparation)
+
+    await mutate(newLecturePreparation);
   };
 
   return (
@@ -41,48 +102,98 @@ const LecturePreparation = () => {
       <h2 className="mb-5 text-xl font-semibold text-mainColor">
         {t("lecture preparation")}
       </h2>
-      <Formik initialValues={initialValues} onSubmit={(values) => {}}>
+      <Formik
+        initialValues={initialValues}
+        onSubmit={(values) => {
+          console.log("🚀 ~ LecturePreparation ~ values:", values)
+          // mutate(values);
+          handleAddLecturePreparation(values)
+        }}
+      >
         {({ setFieldValue, values }) => {
+          console.log("🚀 ~ LecturePreparation ~ values:", values)
           return (
             <Form>
-              <div>
-                <BaseInput
-                  name="lecture_title"
-                  id="lecture_title"
-                  type="text"
-                  className="w-full py-2 text-lg rounded-lg main_shadow text-slate-800 focus-within:outline-none"
-                  placeholder={t("lecture title")}
-                  label={t("lecture title")}
-                  labelProps="!font-semibold"
-                />
+              <div className="flex gap-12">
+                <div className="w-full">
+                  <BaseInput
+                    name="title_ar"
+                    id="title_ar"
+                    type="text"
+                    className="w-full py-2 text-lg rounded-lg main_shadow text-slate-800 focus-within:outline-none"
+                    placeholder={t("lecture title")}
+                    label={`${t("lecture title")} (${t("arabic")})`}
+                    labelProps="!font-semibold"
+                  />
+                </div>
+                <div className="w-full">
+                  <BaseInput
+                    name="title_en"
+                    id="title_en"
+                    type="text"
+                    className="w-full py-2 text-lg rounded-lg main_shadow text-slate-800 focus-within:outline-none"
+                    placeholder={t("lecture title")}
+                    label={`${t("lecture title")} (${t("english")})`}
+                    labelProps="!font-semibold"
+                  />
+                </div>
               </div>
-              <div className="my-5">
-                <BaseInput
-                  name="description"
-                  id="description"
-                  type="text"
-                  className="w-full py-2 text-lg rounded-lg main_shadow text-slate-800 focus-within:outline-none"
-                  placeholder={t("description")}
-                  label={t("description")}
-                  labelProps="!font-semibold"
-                />
+              <div className="my-5 flex gap-12">
+                <div className="w-full">
+                  <BaseInput
+                    name="desc_ar"
+                    id="desc_ar"
+                    type="text"
+                    className="w-full py-2 text-lg rounded-lg main_shadow text-slate-800 focus-within:outline-none"
+                    placeholder={t("description")}
+                    label={`${t("description")} (${t("arabic")})`}
+                    labelProps="!font-semibold"
+                  />
+                </div>
+                <div className="w-full">
+                  <BaseInput
+                    name="desc_en"
+                    id="desc_en"
+                    type="text"
+                    className="w-full py-2 text-lg rounded-lg main_shadow text-slate-800 focus-within:outline-none"
+                    placeholder={t("description")}
+                    label={`${t("description")} (${t("english")})`}
+                    labelProps="!font-semibold"
+                  />
+                </div>
               </div>
-              <div>
-                <label htmlFor="address" className="font-semibold">
-                  {t("instructions")}
-                </label>
-                <textarea
-                  name="instructions"
-                  id="instructions"
-                  className="w-full px-4 py-2 text-lg rounded-lg main_shadow text-slate-800 focus-within:outline-none"
-                  placeholder={t("instructions")}
-                  onChange={(e) => {
-                    setFieldValue("instructions", e.target.value);
-                  }}
-                />
+              <div className="flex gap-12">
+                <div className="w-full">
+                  <label htmlFor="address" className="font-semibold">
+                    {`${t("instructions")} (${t("arabic")})`}
+                  </label>
+                  <textarea
+                    name="instructions_ar"
+                    id="instructions_ar"
+                    className="w-full px-4 py-2 text-lg rounded-lg main_shadow text-slate-800 focus-within:outline-none"
+                    placeholder={t("instructions")}
+                    onChange={(e) => {
+                      setFieldValue("instructions_ar", e.target.value);
+                    }}
+                  />
+                </div>
+                <div className="w-full">
+                  <label htmlFor="address" className="font-semibold">
+                    {`${t("instructions")} (${t("english")})`}
+                  </label>
+                  <textarea
+                    name="instructions_en"
+                    id="instructions_en"
+                    className="w-full px-4 py-2 text-lg rounded-lg main_shadow text-slate-800 focus-within:outline-none"
+                    placeholder={t("instructions")}
+                    onChange={(e) => {
+                      setFieldValue("instructions_en", e.target.value);
+                    }}
+                  />
+                </div>
               </div>
 
-              <div>
+              <div className="mt-8">
                 <h2 className="mb-3 font-semibold">{t("CV file")}</h2>
                 <div className="flex flex-col md:flex-row gap-x-24 lg:gap-x-28 gap-y-5">
                   <input
@@ -112,7 +223,7 @@ const LecturePreparation = () => {
                         </h2>
                         <div className="border-2 border-mainGray rounded-2xl shadow-lg w-full lg:w-[90%]">
                           <div className="py-3 mx-6 font-semibold">
-                            {t("instructor name")}
+                            {t("file name")}
                           </div>
                           <div>
                             {files.map((file: any) => (
@@ -167,7 +278,6 @@ const LecturePreparation = () => {
 
                           setLinks((prev: any) => [
                             {
-                              id: crypto.randomUUID(),
                               value: values.link,
                             },
                             ...prev,
@@ -182,13 +292,13 @@ const LecturePreparation = () => {
                   </div>
 
                   <div>
-                    {links.map((link: any) => (
+                    {links.map((link: any, index) => (
                       <div className="flex items-center justify-between px-6 py-3 border-t-2 border-mainGray">
                         <p className="font-semibold">{link.value}</p>
                         <RiDeleteBin5Line
                           size={30}
                           className="cursor-pointer fill-mainRed"
-                          onClick={() => handleDeleteLink(link.id)}
+                          onClick={() => handleDeleteLink(index)}
                         />
                       </div>
                     ))}
@@ -197,10 +307,12 @@ const LecturePreparation = () => {
               </div>
 
               <div className="flex items-center justify-end gap-6">
+                <Button type="submit" loading={isPending}>
+                  {t("submit")}
+                </Button>
                 <Button bordered action={() => navigate(-1)}>
                   {t("cancel")}
                 </Button>
-                <Button type="submit">{t("submit")}</Button>
               </div>
             </Form>
           );
