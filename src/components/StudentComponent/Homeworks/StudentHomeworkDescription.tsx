@@ -8,30 +8,31 @@ import { GoArrowLeft } from "react-icons/go";
 
 interface StudentHomeworkDescription_TP {
   isProject?: boolean;
-  description: string;
+  desc: string;
   instructions: string;
-  startDate: string;
+  start_date: string;
   startTime: string;
-  endDate: string;
+  end_date: string;
   endTime: string;
-  grade: number;
-  pdf;
-  links: object[];
+  degree: number;
+  attachment: File;
+  links: string;
   isInstructotHomework?: boolean;
   isInstructorProject?: boolean;
 }
 
 const StudentHomeworkDescription = (props: StudentHomeworkDescription_TP) => {
+  console.log("🚀 ~ StudentHomeworkDescription ~ props:", props);
   const {
     isProject,
-    description,
+    desc: description,
     instructions,
-    startDate,
+    start_date: startDate,
     startTime,
-    endDate,
+    end_date: endDate,
     endTime,
-    grade,
-    pdf,
+    degree: grade,
+    attachment: pdf,
     links,
     isInstructotHomework,
     isInstructorProject,
@@ -73,12 +74,14 @@ const StudentHomeworkDescription = (props: StudentHomeworkDescription_TP) => {
               </span>
               <span className="text-gray-700">{startDate}</span>
             </p>
-            <p className="flex items-center gap-2">
-              <span>
-                <IoTimeOutline className="text-2xl text-mainColor" />
-              </span>
-              <span className="text-gray-700">{startTime}</span>
-            </p>
+            {!isInstructotHomework && (
+              <p className="flex items-center gap-2">
+                <span>
+                  <IoTimeOutline className="text-2xl text-mainColor" />
+                </span>
+                <span className="text-gray-700">{startTime}</span>
+              </p>
+            )}
           </div>
         </div>
 
@@ -93,12 +96,14 @@ const StudentHomeworkDescription = (props: StudentHomeworkDescription_TP) => {
               </span>
               <span className="text-gray-700">{endDate}</span>
             </p>
-            <p className="flex items-center gap-2">
-              <span>
-                <IoTimeOutline className="text-2xl text-mainColor" />
-              </span>
-              <span className="text-gray-700">{endTime}</span>
-            </p>
+            {!isInstructotHomework && (
+              <p className="flex items-center gap-2">
+                <span>
+                  <IoTimeOutline className="text-2xl text-mainColor" />
+                </span>
+                <span className="text-gray-700">{endTime}</span>
+              </p>
+            )}
           </div>
         </div>
       </div>
@@ -120,7 +125,9 @@ const StudentHomeworkDescription = (props: StudentHomeworkDescription_TP) => {
           <span>
             <IoDocumentTextOutline className="text-2xl text-green-600" />
           </span>
-          <span>{pdf}</span>
+          <Link to={pdf} target="_blank">
+            {pdf}
+          </Link>
         </p>
       </div>
 
@@ -179,7 +186,7 @@ const StudentHomeworkDescription = (props: StudentHomeworkDescription_TP) => {
           )}
           <GoArrowLeft />
         </Button>
-        <Back />
+        <Back className="border bg-mainColor/5 border-mainColor text-mainColor" />
       </div>
     </div>
   );

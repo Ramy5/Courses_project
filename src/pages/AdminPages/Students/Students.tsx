@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Button, SearchInput, Table, TitlePage } from "../../../components";
 import { t } from "i18next";
 import { PiStudent } from "react-icons/pi";
@@ -10,15 +10,23 @@ import { useNavigate } from "react-router-dom";
 import customFetch from "../../../utils/axios";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "../../../components/UI/Loading";
+import useDebounce from "../../../hooks/useDebounce";
 
 const fetchStudent = async (page: number) => {
   const { data } = await customFetch(`students?page=${page}`);
   return data.data;
 };
 
+// const fetchStudent = async (page: number) => {
+//   const { data } = await customFetch(`students?page=${page}`);
+//   return data.data;
+// };
+
 const Students = () => {
   const navigate = useNavigate();
   const [page, setPage] = useState<number>(1);
+  const [search, setSearch] = useState<string>("");
+  const debounceSearchTerm = useDebounce(search, 200);
 
   const {
     data: studentsData,
@@ -106,6 +114,12 @@ const Students = () => {
     refetch();
   }, [page]);
 
+  useEffect(() => {
+    if (debounceSearchTerm) {
+      console.log(search);
+    }
+  }, [debounceSearchTerm]);
+
   if (isLoading || isRefetching || isFetching) return <Loading />;
 
   if (error)
@@ -134,7 +148,13 @@ const Students = () => {
             <span className="text-xl text-gray-700">{t("filter")}</span>
           </p>
           <div className="flex flex-wrap items-center gap-6 mt-4 lg:gap-12 lg:mt-0">
-            <SearchInput />
+            <SearchInput
+              name="studentSearch"
+              value={search}
+              className="w-64"
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder={t("search about student")}
+            />
             <Button
               type="button"
               className="text-xl font-medium"

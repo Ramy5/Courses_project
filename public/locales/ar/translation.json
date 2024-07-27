@@ -463,5 +463,17 @@
   "lecture setting added successfully":"تم إضافة إعداد المحاضرة بنجاح",
   "the lecture must be prepared first":"يجب إعداد المحاضرة أولا",
   "this appointment has been booked":"تم حجز هذا الموعد",
-  "lecture date has updated successfully": "تم تحديث تاريخ المحاضرة بنجاح"
+  "lecture date has updated successfully": "تم تحديث تاريخ المحاضرة بنجاح",
+  "title homework": "عنوان الواجب",
+  "start delivery": "بداية التسليم",
+  "end delivery": "نهاية التسليم",
+  "title homework in english": "عنوان الواجب بالانجليزي",
+  "instructions in english": "الارشادات بالانجليزي",
+  "description in english": "الوصف بالانجليزي",
+  "file attachment": "ملف مرفق",
+  "homework has added successfully": "تم اضافة الواجب بنجاح",
+  "the homework has deleted successfully": "تم حذف الواجب بنجاح",
+  "homework has updated successfully": "تم تعديل الواجب بنجاح",
+  "joined date": "تاريخ الالتحاق",
+  "search about student": "البحث عن طالب"
 }

@@ -6,38 +6,59 @@ import { t } from "i18next";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import { Button } from "../..";
 import { useNavigate } from "react-router-dom";
+import customFetch from "../../../utils/axios";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "react-toastify";
+
+const deleteHomework = async (id: number) => {
+  const response = await customFetch.delete(`/homework/${id}`);
+  return response;
+};
 
 interface InstructorHomeworkBox_TP {
-  homeworkTitle: string;
-  homeworkMaterial: string;
-  homeworkStartShow: string;
-  homeworkEndShow: string;
+  desc: string;
+  title: string;
+  start_date: string;
+  end_date: string;
   countOfHomeworkDeployed: number;
   countOfRestHomework: number;
   performancePercentage: number;
-  homeworkId: number;
+  id: number;
   homeworkIsFinished: boolean;
 }
 
 const InstructorHomeworkBox = (props: InstructorHomeworkBox_TP) => {
+  console.log("🚀 ~ InstructorHomeworkBox ~ props:", props);
   const {
-    homeworkTitle,
-    homeworkMaterial,
-    homeworkStartShow,
-    homeworkEndShow,
-    countOfHomeworkDeployed,
-    countOfRestHomework,
-    performancePercentage,
-    homeworkId,
-    homeworkIsFinished,
+    desc: homeworkTitle,
+    title: homeworkMaterial,
+    start_date: homeworkStartShow,
+    end_date: homeworkEndShow,
+    countOfHomeworkDeployed = 0, // TODO:
+    countOfRestHomework = 0, // TODO:
+    performancePercentage = 0, // TODO:
+    id: homeworkId,
+    homeworkIsFinished, // TODO:
   } = props;
 
   const [openRow, setOpenRow] = useState<number | null>(null);
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const handleToggleDropDown = (id: number) => {
     setOpenRow((prevOpenRow) => (prevOpenRow == id ? null : id));
   };
+
+  const { mutate: deleteMutate } = useMutation({
+    mutationKey: ["delete-homework"],
+    mutationFn: deleteHomework,
+    onSuccess: (data) => {
+      toast.success(t("the homework has deleted successfully"));
+      queryClient.invalidateQueries(["all-homework"]);
+    },
+  });
+
+  const handleDeleteHomework = async () => deleteMutate(homeworkId);
 
   return (
     <div
@@ -51,8 +72,10 @@ const InstructorHomeworkBox = (props: InstructorHomeworkBox_TP) => {
             {homeworkTitle}
           </h2>
           <DotsDropDown
-            instructorId={homeworkId}
-            instructorRoute="/instructors/addHomework"
+            onFirstClick={() =>
+              navigate(`/instructors/editHomework/${homeworkId}`)
+            }
+            onSecondClick={() => handleDeleteHomework()}
             firstName="edit"
             firstIcon={<FaRegEdit size={22} className="fill-mainColor" />}
             secondName="delete"

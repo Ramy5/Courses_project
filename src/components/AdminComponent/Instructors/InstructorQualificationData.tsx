@@ -77,8 +77,7 @@ const InstructorQualificationData = ({
     editObj?.newCertificate || []
   );
 
-  console.log("🚀 ~ newCertificates:", newCertificates)
-
+  console.log("🚀 ~ newCertificates:", newCertificates);
 
   const [editCertificateData, setEditCertificateData] = useState({});
   console.log("🚀 ~ editCertificateData:", editCertificateData);
@@ -172,7 +171,7 @@ const InstructorQualificationData = ({
       job_title: values?.job_title,
       newCertificate: newCertificates,
     };
-    console.log("🚀 ~ editInstructor:", editInstructor); 
+    console.log("🚀 ~ editInstructor:", editInstructor);
 
     const editCertificate = {
       type_certificate: editCertificateData?.type_certificate,
@@ -181,7 +180,7 @@ const InstructorQualificationData = ({
       date_acquisition: editCertificateData?.date_acquisition,
       specialization: editCertificateData?.specialization,
       appreciation: editCertificateData?.appreciation,
-    }
+    };
 
     editObj
       ? editCertificateData.type_certificate
