@@ -5,76 +5,35 @@ import { Button, TitlePage } from "../../../components";
 import { t } from "i18next";
 import { CgPlayButtonR } from "react-icons/cg";
 import { PiClockCountdownBold } from "react-icons/pi";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import customFetch from "../../../utils/axios";
+import { useQuery } from "@tanstack/react-query";
+import Loading from "../../../components/UI/Loading";
+import { toast } from "react-toastify";
+import { useEffect, useState } from "react";
+import ConvertNumberToWord from "../../../components/UI/ConvertNumberToWord";
 
 const InstructorLectures = () => {
   const navigate = useNavigate();
+  const { id } = useParams();
+  const numbers = ConvertNumberToWord();
+  console.log("🚀 ~ InstructorLectures ~ numbers:", numbers)
 
-  const instructorCoursesData = [
-    {
-      id: 1,
-      instructor_lecture: "المحاضرة الاولي",
-      instructor_name: "بروفيسور. عبدالله فارس ",
-      instructor_day: "21/4/2024",
-      instructor_date: "3:36",
-    },
-    {
-      id: 2,
-      instructor_lecture: "المحاضرة الاولي",
-      instructor_name: "بروفيسور. عبدالله فارس ",
-      instructor_day: "21/4/2024",
-      instructor_date: "3:36",
-    },
-    {
-      id: 3,
-      instructor_lecture: "المحاضرة الاولي",
-      instructor_name: "بروفيسور. عبدالله فارس ",
-      instructor_day: "21/4/2024",
-      instructor_date: "3:36",
-    },
-    {
-      id: 4,
-      instructor_lecture: "المحاضرة الاولي",
-      instructor_name: "بروفيسور. عبدالله فارس ",
-      instructor_day: "21/4/2024",
-      instructor_date: "3:36",
-    },
-    {
-      id: 5,
-      instructor_lecture: "المحاضرة الاولي",
-      instructor_name: "بروفيسور. عبدالله فارس ",
-      instructor_day: "21/4/2024",
-      instructor_date: "3:36",
-    },
-    {
-      id: 6,
-      instructor_lecture: "المحاضرة الاولي",
-      instructor_name: "بروفيسور. عبدالله فارس ",
-      instructor_day: "21/4/2024",
-      instructor_date: "3:36",
-    },
-    {
-      id: 7,
-      instructor_lecture: "المحاضرة الاولي",
-      instructor_name: "بروفيسور. عبدالله فارس ",
-      instructor_day: "21/4/2024",
-      instructor_date: "3:36",
-    },
-    {
-      id: 8,
-      instructor_lecture: "المحاضرة الاولي",
-      instructor_name: "بروفيسور. عبدالله فارس ",
-      instructor_day: "21/4/2024",
-      instructor_date: "3:36",
-    },
-    {
-      id: 9,
-      instructor_lecture: "المحاضرة الاولي",
-      instructor_name: "بروفيسور. عبدالله فارس ",
-      instructor_day: "21/4/2024",
-      instructor_date: "3:36",
-    },
-  ];
+  const fetchInstructorSchedule = async () => {
+    const response = await customFetch(`getCourses?course_id=${id}`);
+    return response;
+  };
+
+  const { data, isFetching, isRefetching } = useQuery({
+    queryKey: ["teacher_course"],
+    queryFn: fetchInstructorSchedule,
+  });
+
+  const instructorCoursesData = data?.data?.data.lectures || [];
+  console.log(
+    "🚀 ~ InstructorLectures ~ instructorCoursesData:",
+    instructorCoursesData
+  );
 
   const borderColors = [
     "border-s-[#369252]",
@@ -82,13 +41,17 @@ const InstructorLectures = () => {
     "border-s-[#025464]",
   ];
 
+  if (isFetching || isRefetching) return <Loading />;
+
   return (
     <div>
       <div>
         <TitlePage
           mainTitle="Courses"
           mainLink="/instructor/Courses"
-          supTitle={`${t("lectures")} الفزياء`}
+          supTitle={`${t("lectures")} ${
+            instructorCoursesData[0]?.course?.course_name
+          }`}
           icon={<LiaBookReaderSolid size={25} className="fill-mainColor" />}
         />
       </div>
@@ -97,38 +60,51 @@ const InstructorLectures = () => {
         {instructorCoursesData.map((instructor, index) => {
           const borderColor =
             borderColors[Math.floor(index / 3) % borderColors.length];
+          const showCourse = {
+            id: instructor?.course?.id,
+            index: index,
+            course_name: instructor?.course?.course_name,
+          };
           return (
             <div
               key={instructor.id}
               className={`border-s-[12px] ${borderColor} py-5 px-4 bg-white rounded-lg  cursor-pointer`}
-              onClick={() =>
-                navigate(`/instructor/Courses/lecture/details/${instructor.id}`)
-              }
+              onClick={() => {
+                if (!!instructor?.lecture_data) {
+                  navigate(
+                    `/instructor/Courses/lecture/details/${instructor?.lecture_data.id}`,
+                    { state: showCourse }
+                  );
+                } else {
+                  toast.info(t("the lecture must be prepared first"));
+                }
+              }}
             >
               <div className="flex items-center gap-2">
                 <CgPlayButtonR size={24} className="text-mainColor" />
-                <p className="font-semibold text-lg">
-                  {instructor.instructor_lecture}
-                </p>
+                <p className="font-semibold text-lg">{`${t("Lecture")} ${numbers[index]}`}</p>
               </div>
               <div className="flex items-center gap-2 my-4">
                 <FaUserAlt size={24} className="text-mainColor rounded-full" />
-                <p>{instructor.instructor_name}</p>
+                <p>{instructor?.teacher.full_name}</p>
               </div>
               <div className="flex items-center gap-2">
                 <FiCalendar size={27} className="text-mainColor" />
-                <p>{instructor.instructor_day}</p>
+                <p>{instructor.date}</p>
               </div>
               <div className="flex items-center gap-2 mt-4">
                 <PiClockCountdownBold size={26} className="text-mainColor" />
-                <p>{instructor.instructor_date}</p>
+                <p>
+                  ({instructor.start_time.split(":").splice(0, 2).join(":")})
+                </p>
               </div>
               <div className="flex justify-center mt-4">
                 <Button
                   action={(e) => {
                     e.stopPropagation();
                     navigate(
-                      `/instructor/Courses/lecture/preparation/${instructor.id}`
+                      `/instructor/Courses/lecture/preparation/${instructor.id}`,
+                      { state: instructor.lecture_data }
                     );
                   }}
                 >

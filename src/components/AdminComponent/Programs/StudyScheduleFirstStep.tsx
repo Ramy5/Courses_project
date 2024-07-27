@@ -1,5 +1,5 @@
 import { Form, Formik } from "formik";
-import { BaseInput, Button, Table } from "../..";
+import { BaseInput, Button, Spinner, Table } from "../..";
 import { t } from "i18next";
 import { useEffect, useMemo, useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
@@ -9,6 +9,7 @@ import customFetch from "../../../utils/axios";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "../../UI/Loading";
 import { useNavigate } from "react-router-dom";
+import { useRTL } from "../../../hooks/useRTL";
 
 const StudyScheduleFirstStep = ({
   setSteps,
@@ -16,13 +17,17 @@ const StudyScheduleFirstStep = ({
   scheduleData,
   setEditStudySchedule,
 }) => {
+  console.log("🚀 ~ scheduleData:", scheduleData);
   const [activeButton, setActiveButton] = useState<any>(
     JSON.parse(localStorage.getItem("day")) || {
       id: 1,
       day: "Saturday",
     }
   );
+  console.log("🚀 ~ activeButton:", activeButton);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const isRTL = useRTL();
 
   const initialValues = {
     start_date: "",
@@ -78,7 +83,6 @@ const StudyScheduleFirstStep = ({
         header: () => <span>{t("")}</span>,
         accessorKey: "action",
         cell: (info) => {
-
           return (
             <div className="flex items-center gap-5">
               <FaRegEdit
@@ -108,7 +112,7 @@ const StudyScheduleFirstStep = ({
         },
       },
     ],
-    [scheduleData]
+    [scheduleData, activeButton]
   );
 
   useEffect(() => {
@@ -121,6 +125,8 @@ const StudyScheduleFirstStep = ({
   const filterScheduleTable = scheduleData?.lecture_time?.filter(
     (item) => item.day_id === activeButton.id
   );
+
+  console.log("🚀 ~ filterScheduleTable:", filterScheduleTable);
 
   {
     isLoading || (isRefetching && <Loading />);
@@ -199,6 +205,7 @@ const StudyScheduleFirstStep = ({
                   : "bg-transparent text-mainGray"
               } px-3`}
               action={() => {
+                setLoading(true);
                 setActiveButton({ id: item.id, day: item.day });
                 setScheduleData((prevState) => ({
                   ...prevState,
@@ -208,6 +215,10 @@ const StudyScheduleFirstStep = ({
                   "day",
                   JSON.stringify({ id: item.id, day: item.day })
                 );
+
+                setTimeout(() => {
+                  setLoading(false);
+                }, 500);
               }}
             >
               {item.day}
@@ -220,10 +231,21 @@ const StudyScheduleFirstStep = ({
         </Button>
       </div>
 
-      {filterScheduleTable?.length ? (
-        <Table data={filterScheduleTable} columns={studyScheduleColumns} />
+      {loading ? (
+        <div>
+          <Spinner />
+          <p className="text-center font-semibold text-xl mt-5">
+            {!isRTL ? t("Loading...") : t("جاري التحميل...")}
+          </p>
+        </div>
+      ) : filterScheduleTable?.length ? (
+        <div className="fade-in">
+          <Table data={filterScheduleTable} columns={studyScheduleColumns} />
+        </div>
       ) : (
-        ""
+        <p className="text-center font-semibold text-xl mt-12">
+          {t("no timing has been added for the lectures yet")}
+        </p>
       )}
 
       <div className="flex items-center justify-end gap-5 mt-12">

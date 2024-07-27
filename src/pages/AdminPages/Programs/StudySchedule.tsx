@@ -1,14 +1,15 @@
 import { t } from "i18next";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { GiCheckMark } from "react-icons/gi";
 import StudyScheduleFirstStep from "../../../components/AdminComponent/Programs/StudyScheduleFirstStep";
 import StudyScheduleSecondStep from "../../../components/AdminComponent/Programs/StudyScheduleSecondStep";
 import { Button } from "../../../components";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import customFetch from "../../../utils/axios";
 import AddLectureTiming from "../../../components/AdminComponent/Programs/AddLectureTiming";
 import { useNavigate, useParams } from "react-router-dom";
+import Loading from "../../../components/UI/Loading";
 
 interface AddSchedule_TP {
   program_name: string;
@@ -24,14 +25,14 @@ interface AddSchedule_TP {
   good: string;
   acceptable: string;
 }
-interface scheduleAdd_TP {
-  editObj?: AddSchedule_TP;
-  setActiveTab: (activeTab: string) => void;
-  setInstructorID: (id: number) => void;
-}
 
 const postSchedule = async (newSchedule: any) => {
   const data = await customFetch.post("/lectureTime", newSchedule);
+  return data;
+};
+
+const editSchedule = async (editSchedule: any, id: number) => {
+  const data = await customFetch.post(`/lectureTime/${id}`, editSchedule);
   return data;
 };
 
@@ -43,14 +44,15 @@ const StudySchedule = () => {
     end_date: "",
     lecture_time: [],
   });
-  
-  console.log("🚀 ~ StudySchedule ~ scheduleData:", scheduleData);
+  console.log("🚀 ~ StudySchedule ~ scheduleData:", scheduleData)
+
   const [editStudySchedule, setEditStudySchedule] = useState({});
-  console.log("🚀 ~ StudySchedule ~ editStudySchedule:", editStudySchedule);
   const navigate = useNavigate();
 
   const { id: scheduleId } = useParams();
-  console.log("🚀 ~ StudySchedule ~ scheduleId:", scheduleId);
+
+  const day = JSON.parse(localStorage.getItem("day"));
+  console.log("🚀 ~ StudySchedule ~ day:", day)
 
   const queryClient = useQueryClient();
 
@@ -60,8 +62,58 @@ const StudySchedule = () => {
     { id: 3, label: "finish settings", border: false },
   ];
 
+  const fetchInstructorSchedule = async () => {
+    const response = await customFetch(`showLecture/${scheduleId}`);
+    return response;
+  };
+
+  const { data, isFetching, isRefetching, isLoading } = useQuery({
+    queryKey: ["show_lecture", scheduleId],
+    queryFn: fetchInstructorSchedule,
+  });
+
+  console.log("🚀 ~ StudySchedule ~ isFetching:", isFetching)
+  console.log("🚀 ~ StudySchedule ~ isRefetching:", isRefetching)
+  console.log("🚀 ~ StudySchedule ~ isLoading:", isLoading)
+
+
+  const instructorScheduleData = data?.data?.data || [];
+  console.log("🚀 ~ StudySchedule ~ instructorScheduleData:", instructorScheduleData)
+
+  const filterScheduleData = instructorScheduleData?.filter(
+    (schedule) => schedule.day.id === day?.id
+  );
+
+  console.log("🚀 ~ StudySchedule ~ filterScheduleData:", filterScheduleData)
+  
+  useEffect(() => {
+    if (data) {
+      setScheduleData({
+        day: day,
+        start_date: filterScheduleData[0]?.program?.start_date,
+        end_date: filterScheduleData[0]?.program?.end_date,
+        lecture_time:
+          filterScheduleData?.map((schedule) => ({
+            id: schedule.id,
+            day_id: day.id,
+            group: schedule.group,
+            level: schedule.level,
+            start_time: schedule.start_time.split(":").slice(0, 2).join(":"),
+            end_time: schedule.end_time.split(":").slice(0, 2).join(":"),
+            program_id: schedule?.program.id,
+            program_name: schedule?.program.program_name,
+            course_name: schedule?.course.course_name,
+            course_id: schedule?.course.id,
+            group_name: schedule.group,
+            teacher_id: schedule.teacher?.id,
+            teacher_name: schedule.teacher?.full_name,
+          })) || [],
+      });
+    }
+  }, [day.id && data]);
+
   const { mutate, isPending } = useMutation({
-    mutationKey: ["add-program"],
+    mutationKey: ["add-schedule"],
     mutationFn: postSchedule,
     onSuccess: (data) => {
       queryClient.invalidateQueries("schedule");
@@ -69,9 +121,22 @@ const StudySchedule = () => {
       navigate("/programs");
     },
     onError: (error) => {
-      const errorMessage =
-        error?.response?.data?.error[0]?.email[0] ||
-        error?.response?.data?.error[0]?.password[0];
+      const errorMessage = error?.response?.data?.error[0]?.email[0];
+      toast.error(errorMessage);
+    },
+  });
+
+  const { mutate: editMutate, isPending: editIsPending } = useMutation({
+    mutationKey: ["edit-schedule"],
+    mutationFn: (editScheduleData: any) =>
+      editSchedule(editScheduleData, Number(filterScheduleData[0]?.id)),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries("schedule");
+      toast.success(t("study schedule has been edited successfully"));
+      navigate("/programs");
+    },
+    onError: (error) => {
+      const errorMessage = error?.response?.data?.error[0];
       toast.error(errorMessage);
     },
   });
@@ -83,26 +148,12 @@ const StudySchedule = () => {
       start_date: values.start_date,
     };
 
-    await mutate(newSchedule);
+    instructorScheduleData?.length
+      ? await editMutate(newSchedule)
+      : await mutate(newSchedule);
   };
 
-  // const { mutate: editMutate } = useMutation({
-  //   mutationKey: ["edit_program"],
-  //   mutationFn: (editInstructor: any) =>
-  //     editInstructorLogin(editInstructor, Number(editObj?.id)),
-  //   onSuccess: (data) => {
-  //     queryClient.invalidateQueries("program");
-  //     toast.success(
-  //       t("instructor login information has been added successfully")
-  //     );
-  //   },
-  //   onError: (error) => {
-  //     const errorMessage =
-  //       error?.response?.data?.error[0]?.email[0] ||
-  //       error?.response?.data?.error[0]?.password[0];
-  //     toast.error(errorMessage);
-  //   },
-  // });
+  if (isFetching || isRefetching || isLoading) return <Loading />;
 
   return (
     <div>
@@ -158,6 +209,8 @@ const StudySchedule = () => {
               setSteps={setSteps}
               scheduleData={scheduleData}
               handleAddSchedule={handleAddSchedule}
+              isFetching={isFetching}
+              isRefetching={isRefetching}
             />
           )}
 
@@ -173,9 +226,8 @@ const StudySchedule = () => {
                   className="py-3 mt-20 text-xl font-semibold rounded-2xl"
                   action={() => {
                     handleAddSchedule(scheduleData);
-                    navigate("/programs");
                   }}
-                  loading={isPending}
+                  loading={isPending || editIsPending}
                 >
                   {t("save table")}
                 </Button>

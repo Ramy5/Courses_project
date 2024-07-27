@@ -2,13 +2,13 @@ import { Form, Formik } from "formik";
 import BaseInput from "../../UI/BaseInput";
 import { t } from "i18next";
 import selectStyle from "../../../utils/selectStyle";
-import { Button, Spinner } from "../..";
+import { Button } from "../..";
 import Select from "react-select";
 import customFetch from "../../../utils/axios";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { CgEditFade } from "react-icons/cg";
-import LoadingIndicator from '../../UI/LoadingIndicator';
+import LoadingIndicator from "../../UI/LoadingIndicator";
+import { toast } from "react-toastify";
 
 const AddLectureTiming = ({
   setSteps,
@@ -18,8 +18,8 @@ const AddLectureTiming = ({
   editStudySchedule,
   setEditStudySchedule,
 }) => {
+  console.log("🚀 ~ scheduleData:", scheduleData);
   const [coursesSelect, setCoursesSelect] = useState(null);
-  console.log("🚀 ~ coursesSelect:", coursesSelect)
   const [groupSelect, setGroupSelect] = useState(null);
   const [teacherSelect, setTeacherSelect] = useState(null);
   const [levelSelect, setLevelSelect] = useState(null);
@@ -53,7 +53,6 @@ const AddLectureTiming = ({
   });
 
   const coursesData = courses && courses?.data?.data.courses;
-  console.log("🚀 ~ coursesData:", coursesData)
 
   const courseOption = coursesData?.map((teacher) => ({
     id: teacher.id,
@@ -62,20 +61,21 @@ const AddLectureTiming = ({
   }));
 
   const fetchTeacherData = async () => {
-    const response = await customFetch(`/allTeachers?course_id=${coursesSelect?.id}?per_page=10000`);
-    return response; 
+    const response = await customFetch(
+      `/allTeachers?course_id=${coursesSelect?.id}?per_page=10000`
+    );
+    return response;
   };
 
   const { data, refetch, isLoading, isFetching } = useQuery({
-    queryKey: ["teacher_data"], 
+    queryKey: ["teacher_data"],
     queryFn: fetchTeacherData,
   });
 
   const teachersData = data && data?.data?.data.teachers;
-  console.log("🚀 ~ teachersData:", teachersData)
 
   const teachersOption = teachersData?.map((teacher) => ({
-    id: teacher.id, 
+    id: teacher.id,
     value: teacher.full_name,
     label: teacher.full_name,
   }));
@@ -150,14 +150,14 @@ const AddLectureTiming = ({
   }, [editStudySchedule]);
 
   useEffect(() => {
-    refetch()
-  }, [coursesSelect])
+    refetch();
+  }, [coursesSelect]);
 
   return (
     <div className="p-6 bg-white rounded-xl">
       <Formik initialValues={initialValues} onSubmit={() => {}}>
         {({ values, setFieldValue }) => {
-
+          console.log("🚀 ~ values:", values);
           return (
             <Form>
               <div className="w-full md:w-4/5">
@@ -167,7 +167,6 @@ const AddLectureTiming = ({
                 <BaseInput
                   name="day"
                   id="day"
-                  value={scheduleData?.day?.day}
                   value={scheduleData?.day?.day}
                   type="text"
                   label={t("day")}
@@ -196,8 +195,8 @@ const AddLectureTiming = ({
                         value: e.value,
                       });
                     }}
-                    isLoading={isLoading || isFetching}   
-                    components={{ LoadingIndicator }}  
+                    isLoading={isLoading || isFetching}
+                    components={{ LoadingIndicator }}
                   />
                 </div>
 
@@ -221,8 +220,8 @@ const AddLectureTiming = ({
                         value: e.value,
                       });
                     }}
-                    isLoading={isLoading || isFetching}   
-                    components={{ LoadingIndicator }}  
+                    isLoading={isLoading || isFetching}
+                    components={{ LoadingIndicator }}
                   />
                 </div>
 
@@ -247,8 +246,8 @@ const AddLectureTiming = ({
                           value: e.value,
                         });
                       }}
-                      isLoading={isLoading || isFetching}   
-                      components={{ LoadingIndicator }}  
+                      isLoading={isLoading || isFetching}
+                      components={{ LoadingIndicator }}
                     />
                   </div>
                   <div className="w-full sm:w-[30%]">
@@ -270,8 +269,8 @@ const AddLectureTiming = ({
                           value: e.value,
                         });
                       }}
-                      isLoading={isLoading || isFetching}   
-                      components={{ LoadingIndicator }}  
+                      isLoading={isLoading || isFetching}
+                      components={{ LoadingIndicator }}
                     />
                   </div>
                 </div>
@@ -306,35 +305,59 @@ const AddLectureTiming = ({
               <div className="flex items-center justify-end gap-5 mt-12">
                 <Button
                   type="button"
-                  type="button"
                   action={() => {
-                    // setScheduleData((prevState) => ({
-                    //   ...prevState,
-                    //   lecture_time: [...prevState.lecture_time, values],
-                    // }));
-                    setScheduleData((prevState) => {
-                      // Find the index of the item to be edited
-                      const index = prevState.lecture_time.findIndex(
-                        (item) => item.id === values.id
+                    const isAppointmentBooked =
+                      scheduleData?.lecture_time?.some((lecture) => {
+                        const { day_id, start_time, end_time } = lecture;
+                        const valueStartTime = values.start_time;
+                        const valueEndTime = values.end_time;
+
+                        return (
+                          valueStartTime < end_time &&
+                          valueEndTime > start_time &&
+                          day_id == values.day_id
+                        );
+                      });
+
+                    const index = scheduleData?.lecture_time?.findIndex(
+                      (item) => item.id === values.id
+                    );
+
+                    if (values?.start_time == values?.end_time) {
+                      toast.info(
+                        "the beginning of the timing cannot coincide with the end"
                       );
+                      return;
+                    }
 
-                      if (index !== -1) {
-                        // Replace the old item with the new one
-                        const updatedLectureTime = [...prevState.lecture_time];
-                        updatedLectureTime[index] = values;
+                    if (values?.start_time > values?.end_time) {
+                      toast.info(
+                        "the end time cannot be earlier than the start time"
+                      );
+                      return;
+                    }
 
-                        return {
-                          ...prevState,
-                          lecture_time: updatedLectureTime,
-                        };
-                      } else {
-                        // If the item is not found, add it as a new item
-                        return {
-                          ...prevState,
-                          lecture_time: [...prevState.lecture_time, values],
-                        };
-                      }
-                    });
+                    if (isAppointmentBooked && index === -1) {
+                      toast.info("this appointment has been booked");
+                      return;
+                    }
+
+                    const updatedLectureTime = [...scheduleData.lecture_time];
+
+                    updatedLectureTime[index] = values;
+
+                    if (index !== -1) {
+                      setScheduleData((prevState) => ({
+                        ...prevState,
+                        lecture_time: updatedLectureTime,
+                      }));
+                    } else {
+                      setScheduleData((prevState) => ({
+                        ...prevState,
+                        lecture_time: [...prevState.lecture_time, values],
+                      }));
+                    }
+
                     setEditStudySchedule({});
                     setSteps(1);
                   }}
@@ -358,3 +381,29 @@ const AddLectureTiming = ({
 };
 
 export default AddLectureTiming;
+
+// setScheduleData((prevState) => {
+//   const index = prevState?.lecture_time?.findIndex(
+//     (item) => item.id === values.id
+//   );
+
+//   if (index !== -1) {
+//     const updatedLectureTime = [...prevState.lecture_time];
+//     updatedLectureTime[index] = values;
+
+//     return {
+//       ...prevState,
+//       lecture_time: updatedLectureTime,
+//     };
+//   } else {
+//     if (appointmentBooked) {
+//       console.log("🚀 ~ setScheduleData ~ error:", "error");
+//       return false;
+//     } else {
+//       return {
+//         ...prevState,
+//         lecture_time: [...prevState.lecture_time, values],
+//       };
+//     }
+//   }
+// });

@@ -8,8 +8,8 @@ import Loading from "../../../components/UI/Loading";
 import InstructorCoursesCard from "../../../components/InstructorComponent/InstructorCourses/InstructorCoursesCard";
 
 const InstructorCourses = () => {
-  const [tabs, setTabs] = useState<number>(1);
-  
+  // const [tabs, setTabs] = useState<number>(1);
+
   const fetchInstructorSchedule = async () => {
     const response = await customFetch(`getCourses`);
     return response;
@@ -26,10 +26,10 @@ const InstructorCourses = () => {
     instructorCoursesData
   );
 
-  const buttons = [
-    { id: 1, label: "first semester" },
-    { id: 2, label: "second semester" },
-  ];
+  // const buttons = [
+  //   { id: 1, label: "first semester" },
+  //   { id: 2, label: "second semester" },
+  // ];
 
   if (isFetching || isRefetching) return <Loading />;
 
@@ -43,7 +43,7 @@ const InstructorCourses = () => {
         />
       </div>
 
-      <div className="flex flex-col sm:flex-row gap-2 md:gap-8 bg-[#F9F9F9] rounded-3xl py-5 px-8 main_shadow mb-8">
+      {/* <div className="flex flex-col sm:flex-row gap-2 md:gap-8 bg-[#F9F9F9] rounded-3xl py-5 px-8 main_shadow mb-8">
         {buttons.map((button) => (
           <Button
             key={button.id}
@@ -57,15 +57,9 @@ const InstructorCourses = () => {
             {t(button.label)}
           </Button>
         ))}
-      </div>
+      </div> */}
 
-      {tabs === 1 && (
-        <InstructorCoursesCard instructorCoursesData={instructorCoursesData} />
-      )}
-
-      {tabs === 2 && (
-        <InstructorCoursesCard instructorCoursesData={instructorCoursesData} />
-      )}
+      <InstructorCoursesCard instructorCoursesData={instructorCoursesData} />
     </div>
   );
 };
