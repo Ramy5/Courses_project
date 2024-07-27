@@ -475,5 +475,12 @@
   "the homework has deleted successfully": "تم حذف الواجب بنجاح",
   "homework has updated successfully": "تم تعديل الواجب بنجاح",
   "joined date": "تاريخ الالتحاق",
-  "search about student": "البحث عن طالب"
+  "search about student": "البحث عن طالب",
+  "title project in english": "عنوان المشروع بالانجليزي",
+  "title project": "عنوان المشروع",
+  "project has added successfully": "تم اضافة المشروع بنجاح",
+  "project has updated successfully": "تم تعديل المشروع بنجاح",
+  "edit project": "تعديل مشروع",
+  "edit homework": "تعديل الواجب",
+  "password has been changed successfully": "تم تغيير كلمة المرور بنجاح"
 }

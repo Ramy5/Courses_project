@@ -32,6 +32,7 @@ const StudentHomeworkDescription = (props: StudentHomeworkDescription_TP) => {
     end_date: endDate,
     endTime,
     degree: grade,
+    score,
     attachment: pdf,
     links,
     isInstructotHomework,
@@ -111,7 +112,9 @@ const StudentHomeworkDescription = (props: StudentHomeworkDescription_TP) => {
       {/* GRADE */}
       <p className="flex items-center gap-4">
         <span className="text-2xl font-bold text-mainColor">{t("grade")}:</span>
-        <span className="text-xl font-bold">{grade}</span>
+        <span className="text-xl font-bold">
+          {isInstructorProject ? score : grade}
+        </span>
       </p>
 
       {/* SAMPLE */}

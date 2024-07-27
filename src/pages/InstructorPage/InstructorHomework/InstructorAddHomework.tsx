@@ -17,7 +17,6 @@ import selectStyle from "../../../utils/selectStyle";
 import { toast } from "react-toastify";
 
 interface initialValues_TP {
-  course_id: number | string;
   titleHomework: string;
   titleHomeworkEn: string;
   description: string;
@@ -66,12 +65,12 @@ const editHomework = async (homeworkData: editObj_TP, id: number | string) => {
 
 const InstructorAddHomework = ({ editObj }: { editObj?: editObj_TP }) => {
   const [files, setFiles] = useState<File[] | null>(null);
+  const [courseSelect, setCourseSelect] = useState(null);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { id: homeworkId } = useParams();
 
   const initialValues: initialValues_TP = {
-    course_id: editObj?.course_id || "",
     titleHomework: editObj?.titleHomework || "",
     titleHomeworkEn: editObj?.titleHomeworkEn || "",
     description: editObj?.description || "",
@@ -132,7 +131,7 @@ const InstructorAddHomework = ({ editObj }: { editObj?: editObj_TP }) => {
       instructions_ar: values.instructions,
       instructions_en: values.instructionsEn,
       attachment: files,
-      course_id: values.course_id,
+      course_id: courseSelect?.id,
       degree: values.grade,
       start_date: formatDate(values.start_delivery),
       end_date: formatDate(values.end_delivery),
@@ -144,6 +143,13 @@ const InstructorAddHomework = ({ editObj }: { editObj?: editObj_TP }) => {
   };
 
   useEffect(() => {
+    const editCourses = {
+      id: editObj?.course_id?.id || "",
+      label: editObj?.course_id?.course_name || t("course"),
+      value: editObj?.course_id?.course_name || "",
+    };
+
+    setCourseSelect(editCourses);
     setFiles(editObj?.file);
   }, []);
 
@@ -159,15 +165,21 @@ const InstructorAddHomework = ({ editObj }: { editObj?: editObj_TP }) => {
         return (
           <Form className="p-6 space-y-8 bg-white rounded-xl">
             <h2 className="mb-6 text-2xl font-bold text-mainColor">
-              {t("add homework")}
+              {editObj ? t("edit homework") : t("add homework")}
             </h2>
             <Select
               onChange={(e) => {
                 setFieldValue("course_id", e!.value);
+                setCourseSelect({
+                  id: e!.id,
+                  label: e!.label,
+                  value: e!.id,
+                });
               }}
               options={coursesOption}
               name="course_id"
               styles={selectStyle}
+              value={courseSelect}
               isDisabled={
                 coursesOptionIsFetching ||
                 coursesOptionIsLoading ||

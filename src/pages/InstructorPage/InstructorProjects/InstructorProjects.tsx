@@ -1,7 +1,15 @@
+import { useQuery } from "@tanstack/react-query";
 import { Button, InstructorProjectBox } from "../../../components";
 import { t } from "i18next";
 import { IoMdAdd } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
+import customFetch from "../../../utils/axios";
+import Loading from "../../../components/UI/Loading";
+
+const getAllProjects = async () => {
+  const { data } = await customFetch("homeWorks");
+  return data.data;
+};
 
 const InstructorProjects = () => {
   const navigate = useNavigate();
@@ -57,6 +65,19 @@ const InstructorProjects = () => {
       color: "#00f",
     },
   ];
+
+  const {
+    data: allProjects,
+    isLoading: allProjectsIsLoading,
+    isFetching: allProjectsIsFetching,
+    isRefetching: allProjectsIsRefetching,
+  } = useQuery({
+    queryKey: ["all-homework"],
+    queryFn: getAllProjects,
+  });
+
+  if (allProjectsIsLoading || allProjectsIsFetching || allProjectsIsRefetching)
+    return <Loading />;
 
   return (
     <div>
