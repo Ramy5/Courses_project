@@ -23,12 +23,9 @@ const TitlePage = ({
   icon,
   supLink,
   ThirdLink,
-}: TitlePage_TP) => {  // const location = useLocation();
-  console.log("🚀 ~ ThirdLink:", ThirdLink)
-  console.log("🚀 ~ supLink:", supLink)
-  console.log("🚀 ~ mainLink:", mainLink)
+}: TitlePage_TP) => {
+  // const location = useLocation();
   const currentPath = location.pathname;
-  console.log("🚀 ~ currentPath:", currentPath)
 
   return (
     <div>

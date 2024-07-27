@@ -30,8 +30,6 @@ const CreateCoursesInputs = ({
   setEditCoursesData,
   editFinishedCoursesData,
 }: any) => {
-  console.log("🚀 ~ editFinishedCoursesData:", editFinishedCoursesData);
-  console.log("🚀 ~ editCoursesData:", editCoursesData);
   const [suggestedReferences, setSuggestedReferences] = useState(
     editCoursesData?.references || editFinishedCoursesData?.references || []
   );
@@ -45,7 +43,6 @@ const CreateCoursesInputs = ({
       ?.split(",")
       .map((item) => item.trim()) || []
   );
-  console.log("🚀 ~ teachingLearningMethods:", teachingLearningMethods);
 
   const [courseObjectives, setCourseObjectivesSteps] = useState(["1- "]);
   const [informationConceptsSteps, setInformationConceptsSteps] = useState([

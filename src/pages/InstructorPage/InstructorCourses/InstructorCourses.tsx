@@ -21,10 +21,6 @@ const InstructorCourses = () => {
   });
 
   const instructorCoursesData = data?.data?.data.courses || [];
-  console.log(
-    "🚀 ~ InstructorCourses ~ instructorCoursesData:",
-    instructorCoursesData
-  );
 
   // const buttons = [
   //   { id: 1, label: "first semester" },

@@ -12,7 +12,10 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { BASE_URL } from "../../../utils/constants";
 
-const postInstructorQualification = async (newLecturePreparation: any, id: number) => {
+const postInstructorQualification = async (
+  newLecturePreparation: any,
+  id: number
+) => {
   const token = Cookies.get("token");
   const response = await axios.post(
     `${BASE_URL}storeLectureData/${id}`,
@@ -29,14 +32,13 @@ const postInstructorQualification = async (newLecturePreparation: any, id: numbe
 };
 
 const LecturePreparation = () => {
-  const {id} = useParams()
+  const { id } = useParams();
   const [files, setFiles] = useState([]);
   const [links, setLinks] = useState([]);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const location = useLocation();
   const editObj = location.state;
-  console.log("🚀 ~ LecturePreparation ~ editObj:", editObj)
 
   const initialValues = {
     title_ar: editObj?.title || "",
@@ -46,7 +48,6 @@ const LecturePreparation = () => {
     instructions_ar: editObj?.instructions_ar || "",
     instructions_en: editObj?.instructions_en || "",
   };
-  console.log("🚀 ~ LecturePreparation ~ initialValues:", initialValues)
 
   const handleFileChange = (event) => {
     setFiles([...files, event.target.files[0]]);
@@ -90,9 +91,8 @@ const LecturePreparation = () => {
       instructions_ar: values.instructions_ar,
       instructions_en: values.instructions_en,
       links: links,
-      attachments: files?.map((file) => ({file: file})),
+      attachments: files?.map((file) => ({ file: file })),
     };
-    console.log("🚀 ~ handleAddLecturePreparation ~ newLecturePreparation:", newLecturePreparation)
 
     await mutate(newLecturePreparation);
   };
@@ -105,13 +105,11 @@ const LecturePreparation = () => {
       <Formik
         initialValues={initialValues}
         onSubmit={(values) => {
-          console.log("🚀 ~ LecturePreparation ~ values:", values)
           // mutate(values);
-          handleAddLecturePreparation(values)
+          handleAddLecturePreparation(values);
         }}
       >
         {({ setFieldValue, values }) => {
-          console.log("🚀 ~ LecturePreparation ~ values:", values)
           return (
             <Form>
               <div className="flex gap-12">
@@ -138,7 +136,7 @@ const LecturePreparation = () => {
                   />
                 </div>
               </div>
-              <div className="my-5 flex gap-12">
+              <div className="flex gap-12 my-5">
                 <div className="w-full">
                   <BaseInput
                     name="desc_ar"

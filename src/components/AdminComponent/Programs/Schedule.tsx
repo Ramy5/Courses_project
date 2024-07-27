@@ -33,7 +33,6 @@ const Schedule = ({ scheduleData }) => {
       backgroundColor: getRandomColor(),
     };
   });
-  console.log("🚀 ~ events ~ events:", events);
 
   function getResourceIdByDayId(day_id) {
     const dayMapping = {

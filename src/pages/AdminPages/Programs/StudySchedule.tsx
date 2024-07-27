@@ -44,7 +44,6 @@ const StudySchedule = () => {
     end_date: "",
     lecture_time: [],
   });
-  console.log("🚀 ~ StudySchedule ~ scheduleData:", scheduleData)
 
   const [editStudySchedule, setEditStudySchedule] = useState({});
   const navigate = useNavigate();
@@ -52,7 +51,6 @@ const StudySchedule = () => {
   const { id: scheduleId } = useParams();
 
   const day = JSON.parse(localStorage.getItem("day"));
-  console.log("🚀 ~ StudySchedule ~ day:", day)
 
   const queryClient = useQueryClient();
 
@@ -72,20 +70,12 @@ const StudySchedule = () => {
     queryFn: fetchInstructorSchedule,
   });
 
-  console.log("🚀 ~ StudySchedule ~ isFetching:", isFetching)
-  console.log("🚀 ~ StudySchedule ~ isRefetching:", isRefetching)
-  console.log("🚀 ~ StudySchedule ~ isLoading:", isLoading)
-
-
   const instructorScheduleData = data?.data?.data || [];
-  console.log("🚀 ~ StudySchedule ~ instructorScheduleData:", instructorScheduleData)
 
   const filterScheduleData = instructorScheduleData?.filter(
     (schedule) => schedule.day.id === day?.id
   );
 
-  console.log("🚀 ~ StudySchedule ~ filterScheduleData:", filterScheduleData)
-  
   useEffect(() => {
     if (data) {
       setScheduleData({

@@ -50,7 +50,6 @@ const InstructorViewProject = () => {
     queryKey: ["view-one-project"],
     queryFn: () => getProject(id),
   });
-  console.log("🚀 ~ InstructorViewProject ~ project:", project);
 
   if (projectIsLoading || projectIsFetching || projectIsRefetching)
     return <Loading />;

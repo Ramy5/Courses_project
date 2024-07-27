@@ -12,21 +12,16 @@ import { useQuery } from "@tanstack/react-query";
 import Loading from "../../../components/UI/Loading";
 import useDebounce from "../../../hooks/useDebounce";
 
-const fetchStudent = async (page: number) => {
-  const { data } = await customFetch(`students?page=${page}`);
+const fetchStudent = async (page: number, search: string) => {
+  const { data } = await customFetch(`students?page=${page}&search=${search}`);
   return data.data;
 };
-
-// const fetchStudent = async (page: number) => {
-//   const { data } = await customFetch(`students?page=${page}`);
-//   return data.data;
-// };
 
 const Students = () => {
   const navigate = useNavigate();
   const [page, setPage] = useState<number>(1);
   const [search, setSearch] = useState<string>("");
-  const debounceSearchTerm = useDebounce(search, 200);
+  const debounceSearchTerm = useDebounce(search, 400);
 
   const {
     data: studentsData,
@@ -37,7 +32,7 @@ const Students = () => {
     refetch,
   } = useQuery({
     queryKey: ["students"],
-    queryFn: () => fetchStudent(page),
+    queryFn: () => fetchStudent(page, search),
   });
 
   const studentsColumns = useMemo<ColumnDef<any>[]>(
@@ -115,8 +110,9 @@ const Students = () => {
   }, [page]);
 
   useEffect(() => {
-    if (debounceSearchTerm) {
-      console.log(search);
+    if (debounceSearchTerm.length >= 0) {
+      setPage(1);
+      refetch();
     }
   }, [debounceSearchTerm]);
 

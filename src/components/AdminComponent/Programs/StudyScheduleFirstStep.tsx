@@ -17,14 +17,12 @@ const StudyScheduleFirstStep = ({
   scheduleData,
   setEditStudySchedule,
 }) => {
-  console.log("🚀 ~ scheduleData:", scheduleData);
   const [activeButton, setActiveButton] = useState<any>(
     JSON.parse(localStorage.getItem("day")) || {
       id: 1,
       day: "Saturday",
     }
   );
-  console.log("🚀 ~ activeButton:", activeButton);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const isRTL = useRTL();
@@ -125,8 +123,6 @@ const StudyScheduleFirstStep = ({
   const filterScheduleTable = scheduleData?.lecture_time?.filter(
     (item) => item.day_id === activeButton.id
   );
-
-  console.log("🚀 ~ filterScheduleTable:", filterScheduleTable);
 
   {
     isLoading || (isRefetching && <Loading />);
@@ -234,7 +230,7 @@ const StudyScheduleFirstStep = ({
       {loading ? (
         <div>
           <Spinner />
-          <p className="text-center font-semibold text-xl mt-5">
+          <p className="mt-5 text-xl font-semibold text-center">
             {!isRTL ? t("Loading...") : t("جاري التحميل...")}
           </p>
         </div>
@@ -243,7 +239,7 @@ const StudyScheduleFirstStep = ({
           <Table data={filterScheduleTable} columns={studyScheduleColumns} />
         </div>
       ) : (
-        <p className="text-center font-semibold text-xl mt-12">
+        <p className="mt-12 text-xl font-semibold text-center">
           {t("no timing has been added for the lectures yet")}
         </p>
       )}

@@ -23,11 +23,8 @@ const postAttendance = async (newAttendance: any) => {
 const RecordAttendance = () => {
   const [page, setPage] = useState<number>(1);
   const [selectedRows, setSelectedRows] = useState<any>([]);
-  console.log("🚀 ~ RecordAttendance ~ selectedRows:", selectedRows);
   const [coursesSelect, setCoursesSelect] = useState({});
-  console.log("🚀 ~ RecordAttendance ~ coursesSelect:", coursesSelect);
   const [dateSelect, setDateSelect] = useState(null);
-  console.log("🚀 ~ RecordAttendance ~ dateSelect:", dateSelect);
   const formatDates = formatDate(dateSelect);
   const queryClient = useQueryClient();
 
@@ -67,7 +64,6 @@ const RecordAttendance = () => {
   });
 
   const coursesData = courses && courses?.data?.data.course;
-  console.log("🚀 ~ RecordAttendance ~ coursesData:", coursesData);
 
   const courseOption = coursesData?.map((course) => ({
     id: course.course_id,
@@ -86,11 +82,9 @@ const RecordAttendance = () => {
   });
 
   const lectureDateData = lectureDate && lectureDate?.data?.data;
-  console.log("🚀 ~ RecordAttendance ~ lectureDateData:", lectureDateData);
   const filterLectureDate = lectureDateData?.filter(
     (date) => date.date === formatDates
   );
-  console.log("🚀 ~ RecordAttendance ~ filterLectureDate:", filterLectureDate);
 
   // ?course_id=${coursesSelect}&date=${dateSelect}
 
@@ -146,7 +140,7 @@ const RecordAttendance = () => {
               : "";
           return (
             <CircularProgressbar
-              className="w-12 font-bold m-auto"
+              className="w-12 m-auto font-bold"
               value={Number(info.getValue())}
               text={`${Number(info.getValue())}%`}
               strokeWidth={11}
@@ -204,15 +198,12 @@ const RecordAttendance = () => {
   return (
     <div>
       <div className="bg-[#F9F9F9] rounded-3xl py-5 px-8 main_shadow mb-5">
-        <Formik initialValues={initialValues} onSubmit={(values) => {
-          
-          console.log("🚀 ~ RecordAttendance ~ values:", values)
-        }}>
+        <Formik initialValues={initialValues} onSubmit={(values) => {}}>
           {({ setFieldValue }) => {
             return (
-              <Form className="grid grid-cols-1 md:grid-cols-3 sm:grid-cols-2 gap-8">
+              <Form className="grid grid-cols-1 gap-8 md:grid-cols-3 sm:grid-cols-2">
                 <div>
-                  <label htmlFor="course" className="font-bold block mb-2">
+                  <label htmlFor="course" className="block mb-2 font-bold">
                     {t("course")}
                   </label>
                   <Select
@@ -239,7 +230,7 @@ const RecordAttendance = () => {
                   />
                 </div>
                 <div className="flex flex-col">
-                  <label htmlFor="lecture_date" className="font-bold mb-2">
+                  <label htmlFor="lecture_date" className="mb-2 font-bold">
                     {t("lecture date")}
                   </label>
                   <DatePicker
@@ -261,7 +252,7 @@ const RecordAttendance = () => {
         </Formik>
       </div>
 
-      <div className="bg-white p-5 rounded-3xl">
+      <div className="p-5 bg-white rounded-3xl">
         <div>
           <Table
             data={RecordAttendanceData}
@@ -274,7 +265,7 @@ const RecordAttendance = () => {
         </div>
       </div>
 
-      <div className="flex justify-end items-center my-8">
+      <div className="flex items-center justify-end my-8">
         <Button>{t("submit")}</Button>
       </div>
     </div>

@@ -42,13 +42,9 @@ const AddNewCertificatesInput = ({
   dataReceived,
   setEditCertificateData,
 }: AddNewCertificatesInput_TP) => {
-  console.log("🚀 ~ dataReceived:", dataReceived);
-  console.log("🚀 ~ newCertificates:", newCertificates);
   // const editCertificate = editObj?.newCertificate && editObj?.newCertificate[0];
   const [editCertificate, setEditCertificate] = useState({});
-  console.log("🚀 ~ editCertificate:", editCertificate);
   const { id: instructorParamID } = useParams();
-  console.log("🚀 ~ instructorParamID:", instructorParamID);
 
   // const initialValues: Certificate = {
   //   type_certificate: editCertificate?.type_certificate || "",
@@ -104,25 +100,19 @@ const AddNewCertificatesInput = ({
         header: () => <span>{t("")}</span>,
         accessorKey: "action",
         cell: (info) => {
-          console.log("🚀 ~ info.row.original.day_id:", info.row.original);
           const editData = newCertificates?.length
             ? newCertificates
             : editObj?.newCertificate;
-          console.log("🚀 ~ editData:", editData);
           return (
             <div className="flex items-center gap-5">
               <FaRegEdit
                 size={22}
-                className="fill-mainColor cursor-pointer"
+                className="cursor-pointer fill-mainColor"
                 onClick={() => {
                   const suggestedReferencesFilter = editData?.filter(
                     (data: any) => {
                       return data.id !== info.row.original.id;
                     }
-                  );
-                  console.log(
-                    "🚀 ~ suggestedReferencesFilter:",
-                    suggestedReferencesFilter
                   );
 
                   setNewCertificates(suggestedReferencesFilter);
@@ -161,7 +151,6 @@ const AddNewCertificatesInput = ({
   return (
     <Formik initialValues={initialValues} onSubmit={() => {}}>
       {({ values, resetForm, setFieldValue }) => {
-        console.log("🚀 ~ values:", values);
         useEffect(() => {
           if (editCertificate?.id) {
             Object.keys(values).map((key) => {

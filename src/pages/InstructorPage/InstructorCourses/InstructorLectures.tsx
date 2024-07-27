@@ -17,7 +17,6 @@ const InstructorLectures = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const numbers = ConvertNumberToWord();
-  console.log("🚀 ~ InstructorLectures ~ numbers:", numbers)
 
   const fetchInstructorSchedule = async () => {
     const response = await customFetch(`getCourses?course_id=${id}`);
@@ -30,10 +29,6 @@ const InstructorLectures = () => {
   });
 
   const instructorCoursesData = data?.data?.data.lectures || [];
-  console.log(
-    "🚀 ~ InstructorLectures ~ instructorCoursesData:",
-    instructorCoursesData
-  );
 
   const borderColors = [
     "border-s-[#369252]",
@@ -82,7 +77,9 @@ const InstructorLectures = () => {
             >
               <div className="flex items-center gap-2">
                 <CgPlayButtonR size={24} className="text-mainColor" />
-                <p className="font-semibold text-lg">{`${t("Lecture")} ${numbers[index]}`}</p>
+                <p className="font-semibold text-lg">{`${t("Lecture")} ${
+                  numbers[index]
+                }`}</p>
               </div>
               <div className="flex items-center gap-2 my-4">
                 <FaUserAlt size={24} className="text-mainColor rounded-full" />

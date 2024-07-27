@@ -13,7 +13,6 @@ import { useParams } from "react-router-dom";
 
 const ViewCourseDescription = () => {
   const { id: descriptionParamID } = useParams();
-  console.log("🚀 ~ ViewCourseDescription ~ descriptionParamID:", descriptionParamID)
 
   const fetchCourseData = async () => {
     const response = await customFetch(`/course/${descriptionParamID}`);
@@ -26,7 +25,6 @@ const ViewCourseDescription = () => {
   });
 
   const courseData = data?.data.data.course || {};
-  console.log("🚀 ~ ViewCourseDescription ~ courseData:", courseData);
 
   useEffect(() => {
     if (error) {

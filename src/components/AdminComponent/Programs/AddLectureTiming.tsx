@@ -18,7 +18,6 @@ const AddLectureTiming = ({
   editStudySchedule,
   setEditStudySchedule,
 }) => {
-  console.log("🚀 ~ scheduleData:", scheduleData);
   const [coursesSelect, setCoursesSelect] = useState(null);
   const [groupSelect, setGroupSelect] = useState(null);
   const [teacherSelect, setTeacherSelect] = useState(null);
@@ -157,7 +156,6 @@ const AddLectureTiming = ({
     <div className="p-6 bg-white rounded-xl">
       <Formik initialValues={initialValues} onSubmit={() => {}}>
         {({ values, setFieldValue }) => {
-          console.log("🚀 ~ values:", values);
           return (
             <Form>
               <div className="w-full md:w-4/5">
@@ -397,7 +395,6 @@ export default AddLectureTiming;
 //     };
 //   } else {
 //     if (appointmentBooked) {
-//       console.log("🚀 ~ setScheduleData ~ error:", "error");
 //       return false;
 //     } else {
 //       return {
