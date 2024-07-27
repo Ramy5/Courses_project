@@ -28,7 +28,6 @@ interface InstructorHomeworkBox_TP {
 }
 
 const InstructorHomeworkBox = (props: InstructorHomeworkBox_TP) => {
-  console.log("🚀 ~ InstructorHomeworkBox ~ props:", props);
   const {
     desc: homeworkTitle,
     title: homeworkMaterial,

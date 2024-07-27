@@ -16,12 +16,14 @@ import customFetch from "../../../utils/axios";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import Loading from "../../../components/UI/Loading";
+import useDebounce from "../../../hooks/useDebounce";
 
 const Instructors = () => {
   const [openRow, setOpenRow] = useState<number | null>(null);
   const queryClient = useQueryClient();
-  const [page, setPage] = useState<number>();
-
+  const [page, setPage] = useState<number>(1);
+  const [search, setSearch] = useState<string>("");
+  const debounceSearchTerm = useDebounce(search, 400);
   const navigate = useNavigate();
 
   const options = [
@@ -31,7 +33,9 @@ const Instructors = () => {
   ];
 
   const fetchInstructorData = async () => {
-    const response = await customFetch(`/allTeachers?page=${page}`);
+    const response = await customFetch(
+      `/allTeachers?page=${page}&search=${search}`
+    );
     return response;
   };
 
@@ -72,6 +76,13 @@ const Instructors = () => {
     refetch();
   }, [page]);
 
+  useEffect(() => {
+    if (debounceSearchTerm.length >= 0) {
+      setPage(1);
+      refetch();
+    }
+  }, [debounceSearchTerm]);
+
   const handleProfileClick = (instructorId: number) => {
     navigate(`/instructors/instructorProfile/${instructorId}`);
   };
@@ -95,7 +106,13 @@ const Instructors = () => {
       <div className="flex items-center justify-between p-4 bg-white rounded-2xl">
         {/* <Select options={options} placeholder="short by" /> */}
 
-        <SearchInput />
+        <SearchInput
+          name="instructorSearch"
+          value={search}
+          className="w-64"
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder={t("search about instructor")}
+        />
 
         <Button
           type="button"

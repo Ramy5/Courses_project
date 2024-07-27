@@ -24,10 +24,7 @@ const ViewInstructorSchedule = () => {
     queryFn: fetchInstructorSchedule,
   });
 
-  console.log("🚀 ~ ViewInstructorSchedule ~ data:", data);
-
   const instructorSchedule = data?.data?.data.lectures || [];
-  console.log("🚀 ~ ViewInstructorSchedule ~ instructorSchedule:", instructorSchedule)
 
   const handlePrint = useReactToPrint({
     content: () => contentRef.current,
@@ -41,7 +38,9 @@ const ViewInstructorSchedule = () => {
       ) : (
         <div>
           <div className="flex items-center justify-between mx-8 mb-4">
-            <p className="font-semibold text-2xl text-mainColor">{t("school schedule")}</p>
+            <p className="font-semibold text-2xl text-mainColor">
+              {t("school schedule")}
+            </p>
             <Button action={handlePrint}>{t("print")}</Button>
           </div>
           <div ref={contentRef} className="mx-3">

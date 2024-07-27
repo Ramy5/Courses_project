@@ -8,23 +8,32 @@ import { Button } from "../..";
 import { PiBookOpenTextBold } from "react-icons/pi";
 import { MdOutlineDateRange } from "react-icons/md";
 import { FaArrowLeftLong } from "react-icons/fa6";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "react-toastify";
+import customFetch from "../../../utils/axios";
 
 interface InstructorProjectBox_TP {
-  projectMaterial: string;
-  projectStartShow: string;
-  projectEndShow: string;
-  projectId: number;
+  title: string;
+  start_date: string;
+  end_date: string;
+  id: number;
   color: string;
 }
 
+const deleteProject = async (id: number) => {
+  const response = await customFetch.delete(`/projects/${id}`);
+  return response;
+};
+
 const InstructorProjectBox = (props: InstructorProjectBox_TP) => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const {
-    projectMaterial,
-    projectStartShow,
-    projectEndShow,
-    projectId,
+    title: projectMaterial,
+    start_date: projectStartShow,
+    end_date: projectEndShow,
+    id: projectId,
     color,
   } = props;
 
@@ -32,6 +41,17 @@ const InstructorProjectBox = (props: InstructorProjectBox_TP) => {
   const handleToggleDropDown = (id: number) => {
     setOpenRow((prevOpenRow) => (prevOpenRow == id ? null : id));
   };
+
+  const { mutate: deleteMutate } = useMutation({
+    mutationKey: ["delete-project"],
+    mutationFn: deleteProject,
+    onSuccess: (data) => {
+      toast.success(t("the project has deleted successfully"));
+      queryClient.invalidateQueries(["all-projects"]);
+    },
+  });
+
+  const handleDeleteProject = () => deleteMutate(projectId);
 
   return (
     <div
@@ -47,8 +67,10 @@ const InstructorProjectBox = (props: InstructorProjectBox_TP) => {
             </h2>
           </div>
           <DotsDropDown
-            instructorId={projectId}
-            instructorRoute="/instructors/addHomework"
+            onFirstClick={() =>
+              navigate(`/instructors/editProject/${projectId}`)
+            }
+            onSecondClick={() => handleDeleteProject()}
             firstName="edit"
             firstIcon={<FaRegEdit size={22} className="fill-mainColor" />}
             secondName="delete"

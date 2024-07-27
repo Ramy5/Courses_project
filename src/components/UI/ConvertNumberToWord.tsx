@@ -157,7 +157,6 @@ const englishUnits = [
 const ConvertNumberToWord = () => {
   const [numbers, setNumbers] = useState([]);
   const isRTL = useRTL();
-  console.log("🚀 ~ ConvertNumberToWord ~ isRTL:", isRTL);
 
   useEffect(() => {
     const getArabicNumber = (n) => {

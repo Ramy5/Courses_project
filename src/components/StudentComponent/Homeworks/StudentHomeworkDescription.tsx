@@ -22,7 +22,6 @@ interface StudentHomeworkDescription_TP {
 }
 
 const StudentHomeworkDescription = (props: StudentHomeworkDescription_TP) => {
-  console.log("🚀 ~ StudentHomeworkDescription ~ props:", props);
   const {
     isProject,
     desc: description,

@@ -61,7 +61,6 @@ const editProject = async (ProjectData: editObj_TP, id: number | string) => {
 };
 
 const InstructorAddProject = ({ editObj }: { editObj: editObj_TP }) => {
-  console.log("🚀 ~ InstructorAddProject ~ editObj:", editObj);
   const [files, setFiles] = useState<File[] | null>(null);
   const [courseSelect, setCourseSelect] = useState(null);
   const navigate = useNavigate();
@@ -103,7 +102,7 @@ const InstructorAddProject = ({ editObj }: { editObj: editObj_TP }) => {
     mutationFn: addNewProject,
     onSuccess: (data) => {
       navigate(-1);
-      // queryClient.invalidateQueries(["all-project"]);
+      // queryClient.invalidateQueries(["all-projects"]);
       toast.success(t("project has added successfully"));
     },
   });
@@ -115,7 +114,7 @@ const InstructorAddProject = ({ editObj }: { editObj: editObj_TP }) => {
         editProject(projectData, projectId),
       onSuccess: (data) => {
         navigate(-1);
-        // queryClient.invalidateQueries(["all-project"]);
+        // queryClient.invalidateQueries(["all-projects"]);
         toast.success(t("project has updated successfully"));
       },
     });
