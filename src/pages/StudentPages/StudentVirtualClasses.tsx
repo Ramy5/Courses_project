@@ -1,83 +1,21 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { t } from "i18next";
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import { Button, Table } from "../../components";
+import customFetch from "../../utils/axios";
+import { useQuery } from "@tanstack/react-query";
+import Loading from "../../components/UI/Loading";
+
+const getVirtualClasses = async () => {
+  const { data } = await customFetch("todayStudentLectures");
+  return data.data.lectures;
+};
 
 const StudentVirtualClasses = () => {
-  const virtualClassesData = [
-    {
-      index: 1,
-      subject: "Physics",
-      academicProgram: "Artificial Intelligence",
-      level: "Level Three",
-      branch: "Computer Science",
-      lectureDate: "21/5/2025",
-      startTime: "8 AM",
-      endTime: "10 AM",
-      zoomLink: "https://zoom.us/j",
-      status: "green",
-    },
-    {
-      index: 2,
-      subject: "Physics",
-      academicProgram: "Artificial Intelligence",
-      level: "Level Three",
-      branch: "Computer Science",
-      lectureDate: "21/5/2025",
-      startTime: "8 AM",
-      endTime: "10 AM",
-      zoomLink: "https://zoom.us/j",
-      status: "red",
-    },
-    {
-      index: 3,
-      subject: "Physics",
-      academicProgram: "Artificial Intelligence",
-      level: "Level Three",
-      branch: "Computer Science",
-      lectureDate: "21/5/2025",
-      startTime: "8 AM",
-      endTime: "10 AM",
-      zoomLink: "https://zoom.us/j",
-      status: "orange",
-    },
-    {
-      index: 4,
-      subject: "Physics",
-      academicProgram: "Artificial Intelligence",
-      level: "Level Three",
-      branch: "Computer Science",
-      lectureDate: "21/5/2025",
-      startTime: "8 AM",
-      endTime: "10 AM",
-      zoomLink: "https://zoom.us/j",
-      status: "green",
-    },
-    {
-      index: 5,
-      subject: "Physics",
-      academicProgram: "Artificial Intelligence",
-      level: "Level Three",
-      branch: "Computer Science",
-      lectureDate: "21/5/2025",
-      startTime: "8 AM",
-      endTime: "10 AM",
-      zoomLink: "https://zoom.us/j",
-      status: "green",
-    },
-    {
-      index: 6,
-      subject: "Physics",
-      academicProgram: "Artificial Intelligence",
-      level: "Level Three",
-      branch: "Computer Science",
-      lectureDate: "21/5/2025",
-      startTime: "8 AM",
-      endTime: "10 AM",
-      zoomLink: "https://zoom.us/j",
-      status: "red",
-    },
-  ];
+  const { data, isLoading, isFetching, isRefetching } = useQuery({
+    queryKey: ["get-student-virtual-classes"],
+    queryFn: getVirtualClasses,
+  });
 
   const virtualClassesColumns = useMemo<ColumnDef<[]>[]>(
     () => [
@@ -87,13 +25,13 @@ const StudentVirtualClasses = () => {
         cell: (info) => {
           let statusColor;
           switch (info.getValue()) {
-            case "green":
+            case "complete":
               statusColor = "bg-green-700";
               break;
-            case "red":
+            case "inProgress":
               statusColor = "bg-[#D42828]";
               break;
-            case "orange":
+            case "setup":
               statusColor = "bg-[#F2B385]";
               break;
             default:
@@ -110,13 +48,13 @@ const StudentVirtualClasses = () => {
       },
       {
         header: () => <span>{t("subject")}</span>,
-        accessorKey: "subject",
-        cell: (info) => info.getValue(),
+        accessorKey: "course",
+        cell: (info) => info.getValue()?.course_name || "---",
       },
       {
         header: () => <span>{t("academic program")}</span>,
-        accessorKey: "academicProgram",
-        cell: (info) => info.getValue(),
+        accessorKey: "program",
+        cell: (info) => info.getValue()?.program_name || "---",
       },
       {
         header: () => <span>{t("level")}</span>,
@@ -125,22 +63,22 @@ const StudentVirtualClasses = () => {
       },
       {
         header: () => <span>{t("branch")}</span>,
-        accessorKey: "branch",
+        accessorKey: "group",
         cell: (info) => info.getValue(),
       },
       {
         header: () => <span>{t("lecture date")}</span>,
-        accessorKey: "lectureDate",
+        accessorKey: "date",
         cell: (info) => info.getValue(),
       },
       {
         header: () => <span>{t("start time")}</span>,
-        accessorKey: "startTime",
+        accessorKey: "start_time",
         cell: (info) => info.getValue(),
       },
       {
         header: () => <span>{t("end time")}</span>,
-        accessorKey: "endTime",
+        accessorKey: "end_time",
         cell: (info) => info.getValue(),
       },
       {
@@ -148,11 +86,11 @@ const StudentVirtualClasses = () => {
         accessorKey: "zoomLink",
         cell: (info: any) => {
           if (
-            info.row.original.status === "red" ||
-            info.row.original.status === "orange"
+            info.row.original.status === "inProgress" ||
+            info.row.original.status === "setup"
           ) {
             return (
-              <Button className="text-xs">
+              <Button className="text-xs bg-cyan-600">
                 <a
                   href={info.getValue()}
                   target="_blank"
@@ -169,12 +107,14 @@ const StudentVirtualClasses = () => {
     []
   );
 
+  if (isLoading || isFetching || isRefetching) return <Loading />;
+
   return (
     <div className="py-6 bg-white rounded-2xl">
       <h2 className="mb-6 text-lg font-bold lg:text-2xl ms-4">
         {t("virtual classes (today's lecture)")}
       </h2>
-      <Table data={virtualClassesData} columns={virtualClassesColumns} />
+      <Table data={data || []} columns={virtualClassesColumns} />
     </div>
   );
 };

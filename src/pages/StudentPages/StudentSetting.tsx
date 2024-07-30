@@ -6,10 +6,17 @@ import { Form, Formik } from "formik";
 import { BaseInput, Button } from "../../components";
 import { IoMdEyeOff } from "react-icons/io";
 import { IoEye } from "react-icons/io5";
+import customFetch from "../../utils/axios";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "react-toastify";
+
+const changePassword = async (newPassword: any) => {
+  const data = customFetch.post("changeStudentPassword", newPassword);
+  return data;
+};
 
 const StudentSetting = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
-
   const [isOpen, setIsOpen] = useState(true);
 
   const isRTL = useRTL();
@@ -25,6 +32,25 @@ const StudentSetting = () => {
     new_password: "",
     confirm_new_password: "",
   };
+
+  const { mutate, isPending } = useMutation({
+    mutationKey: ["change-student-password"],
+    mutationFn: changePassword,
+    onSuccess: (data: any) => {
+      toast.success(t("password has been changed successfully"));
+    },
+  });
+
+  const handleChangePassword = async (values: any) => {
+    const newPassword = {
+      current_password: values.current_password,
+      new_password: values.new_password,
+      new_password_confirmation: values.confirm_new_password,
+    };
+
+    await mutate(newPassword);
+  };
+
   return (
     <div>
       <h2 className="mt-4 mb-12 text-xl font-semibold">{t("settings")}</h2>
@@ -53,7 +79,10 @@ const StudentSetting = () => {
             isOpen ? "max-h-screen" : "max-h-0"
           }`}
         >
-          <Formik initialValues={initialValues} onSubmit={(values) => {}}>
+          <Formik
+            initialValues={initialValues}
+            onSubmit={(values) => handleChangePassword(values)}
+          >
             <Form className="px-5 pt-8">
               <div className="relative">
                 <BaseInput

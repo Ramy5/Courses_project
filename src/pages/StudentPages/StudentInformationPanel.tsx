@@ -5,6 +5,7 @@ import {
   StudentLecturesBoxes,
 } from "../../components";
 import { t } from "i18next";
+import { useAppSelector } from "../../hooks/reduxHooks";
 
 const StudentInformationPanel = () => {
   const latestNewsData = [

@@ -25,12 +25,15 @@ import {
 import { useMemo, useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { t } from "i18next";
+import { useAppSelector } from "../../hooks/reduxHooks";
 
 const InformationPanel = () => {
   const isRTL = useRTL();
   const [startDate, setStartDate] = useState(new Date());
   // const [searchTerm, setSearchTerm] = useState("");
   const [sortOption, setSortOption] = useState(null);
+  const { user } = useAppSelector((slice) => slice.user);
+  console.log("🚀 ~ InformationPanel ~ user:", user);
 
   const programsData = [
     {

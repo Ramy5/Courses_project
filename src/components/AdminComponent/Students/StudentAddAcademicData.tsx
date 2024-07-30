@@ -55,7 +55,10 @@ const StudentAddAcademicData = ({
     program_academic: editObj?.program_academic?.id || "",
     level_academic: editObj?.level_academic?.id || "",
     division_number_academic: editObj?.division_number_academic?.id || "",
-    join_date_academic: editObj?.join_date_academic || new Date(),
+    join_date_academic:
+      editObj?.join_date_academic != "Invalid Date"
+        ? editObj?.join_date_academic
+        : new Date(),
   };
 
   const errorFields = [
