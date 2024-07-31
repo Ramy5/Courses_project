@@ -8,6 +8,8 @@ const useRefreshToken = () => {
     const response = await customFetch("", {
       withCredentials: true,
     });
+
+    return response.data.data.token;
   };
 
   return refresh;

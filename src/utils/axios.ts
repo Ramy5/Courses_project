@@ -9,6 +9,10 @@ const customFetch = axios.create({
   baseURL: BASE_URL,
 });
 
+// export const axiosPrivate = axios.create({
+//   baseURL: BASE_URL,
+// });
+
 customFetch.interceptors.request.use(
   (config) => {
     const token = Cookies.get("token");

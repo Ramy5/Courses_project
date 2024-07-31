@@ -15,25 +15,38 @@ import { FaRegEdit } from "react-icons/fa";
 import { HiOutlineIdentification } from "react-icons/hi";
 import { IoMdPhonePortrait } from "react-icons/io";
 import { PiCertificate, PiMapPinLight } from "react-icons/pi";
+import customFetch from "../../utils/axios";
+import { useQuery } from "@tanstack/react-query";
+import Loading from "../../components/UI/Loading";
+
+const getStudentProfile = async () => {
+  const { data } = await customFetch("studentProfile");
+  return data.data.student;
+};
 
 const PersonlyProfile = () => {
   const [selectAll, setSelectAll] = useState<boolean>(false);
   const [selectedRows, setSelectedRows] = useState<any>([]);
   const [openRow, setOpenRow] = useState<number | null>(null);
 
+  const { data, isLoading, isFetching, isRefetching } = useQuery({
+    queryKey: ["get-student-profile"],
+    queryFn: getStudentProfile,
+  });
+
   const studentProfileData = {
     id: 1,
     profileCover: studentProfileCover,
-    personalImage: studentProfileImg,
-    name: "معاذ ادم",
-    phoneNumber: "+009735625632",
-    email: "Albert Adam@gmail.com",
-    address: "123,المنصورة الجديدة",
-    idNumber: "2394894757",
-    educationalQualification: "الثانوية العامه",
-    fatherName: "adam",
-    fatherPhone: "+3435465543",
-    fatherEmail: "albertadam@gmail.com",
+    personalImage: data?.personal_image || studentProfileImg,
+    name: data?.full_name,
+    phoneNumber: "",
+    email: data?.email,
+    address: data?.address,
+    idNumber: data?.id_number,
+    educationalQualification: data?.qualification,
+    fatherName: data?.parent?.full_name,
+    fatherPhone: data?.parent?.phone,
+    fatherEmail: data?.parent?.email,
   };
 
   const studentAcademicData = [
@@ -198,6 +211,8 @@ const PersonlyProfile = () => {
     [openRow]
   );
 
+  if (isLoading || isFetching || isRefetching) return <Loading />;
+
   return (
     <div>
       <div className="pb-2 bg-white rounded-2xl">
@@ -250,7 +265,7 @@ const PersonlyProfile = () => {
             </div>
         </div> */}
 
-        <div className="flex flex-col gap-10 p-4 pt-0 lg:p-8 mt-24">
+        <div className="flex flex-col gap-10 p-4 pt-0 mt-24 lg:p-8">
           {/* PERSONAL DETAILS */}
           <div className="p-6 lg:p-10 bg-mainColor/15 rounded-xl">
             <div className="grid items-center gap-8 md:grid-cols-2 lg:grid-cols-3 lg:gap-14">
