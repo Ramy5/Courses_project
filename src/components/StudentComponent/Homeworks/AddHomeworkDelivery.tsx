@@ -2,18 +2,42 @@ import { useFormikContext } from "formik";
 import { t } from "i18next";
 import { CiCalendarDate } from "react-icons/ci";
 import { IoTimeOutline } from "react-icons/io5";
-import UploadFile from "../../UI/UploadFile";
 import { useEffect, useState } from "react";
 import { Button } from "../..";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
+import { RiDeleteBin5Line } from "react-icons/ri";
+import { HiMiniFolderArrowDown } from "react-icons/hi2";
+import { AiOutlineCloudUpload } from "react-icons/ai";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "react-toastify";
+import Cookies from "js-cookie";
+import axios from "axios";
+import { BASE_URL } from "../../../utils/constants";
+
+const addNewHomework = async (homeworkData: any) => {
+  const token = Cookies.get("token");
+  const response = await axios.post(
+    `${BASE_URL}homeWorkAnswers`,
+    homeworkData,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
+  return response;
+};
 
 const AddHomeworkDelivery = (props) => {
   const { startDate, startTime, endDate, endTime, isProject } = props;
   const { setFieldValue, values } = useFormikContext();
-  const [fileUpload, setFileUpload] = useState(null);
+  const [files, setFiles] = useState(null);
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const { id: homeWorkID } = useParams();
 
   const [timeData, setTimeData] = useState({
     daysInWeek: 7,
@@ -69,6 +93,30 @@ const AddHomeworkDelivery = (props) => {
     timeData.secondsCompleted;
   const percentageTime =
     (totalSecondsCompleted / timeData.totalSecondsInDay) * 100;
+
+  const { mutate, isPending } = useMutation({
+    mutationKey: ["add-student-homework"],
+    mutationFn: addNewHomework,
+    onSuccess: (data) => {
+      navigate(-1);
+      // queryClient.invalidateQueries(["all-students-homework"]);
+      toast.success(t("homework has added successfully"));
+      navigate(isProject ? "/students/projects" : "/students/homeworks");
+    },
+  });
+
+  const handleSubmit = async () => {
+    const formattedValues: any = {
+      homework_id: homeWorkID,
+      answer: values.brief_about_task,
+      attachment: files,
+    };
+
+    await mutate(formattedValues);
+  };
+
+  const handleFileChange = (event) => setFiles(event.target.files[0]);
+  const handleFileDelete = () => setFiles(null);
 
   return (
     <div className="grid h-full gap-8 xl:grid-cols-3">
@@ -174,7 +222,57 @@ const AddHomeworkDelivery = (props) => {
 
         <div className="flex flex-col items-start mt-8 text-center">
           <h2 className="px-6 text-xl font-bold">{t("files")}</h2>
-          <UploadFile files={fileUpload} setFiles={setFileUpload} id="file" />
+
+          <div className="">
+            <div className="flex flex-col items-center gap-8 sm:flex-row">
+              <input
+                type="file"
+                onChange={handleFileChange}
+                className="hidden"
+                id="file-upload"
+              />
+              <div className="relative px-12 py-6 text-center border-2 border-dashed cursor-pointer border-mainColor">
+                <label
+                  htmlFor="file-upload"
+                  className="absolute top-0 bottom-0 left-0 right-0 w-full h-full cursor-pointer"
+                ></label>
+                <AiOutlineCloudUpload
+                  size={150}
+                  className="fill-[#E6EAEE] m-auto"
+                />
+                <p>{t("drag or click to add a file")}</p>
+              </div>
+              {files && (
+                <div className="flex items-center gap-5">
+                  <div className="flex flex-col justify-center gap-1">
+                    <span className="text-sm font-medium text-center text-gray-700">
+                      الملفات
+                    </span>
+                    <div className="relative p-1 rounded-md bg-mainBg">
+                      <div
+                        // onClick={() => setManyPdfsOpen(true)}
+                        className="flex items-center justify-center p-2 cursor-pointer "
+                      >
+                        <span className="absolute flex items-center justify-center w-6 h-6 text-sm font-medium text-white rounded-full -top-1 -right-3 bg-mainColor">
+                          1
+                        </span>
+                        <HiMiniFolderArrowDown
+                          className="fill-mainColor"
+                          size={35}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <RiDeleteBin5Line
+                    size={35}
+                    className="cursor-pointer fill-mainRed"
+                    onClick={handleFileDelete}
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+          {/* <UploadFile files={fileUpload} setFiles={setFileUpload} id="file" /> */}
         </div>
 
         <div className="flex justify-end gap-6 mt-14">
@@ -184,11 +282,7 @@ const AddHomeworkDelivery = (props) => {
           >
             {t("cancel")}
           </Button>
-          <Button
-            action={() =>
-              navigate(isProject ? "/students/projects" : "/students/homeworks")
-            }
-          >
+          <Button loading={isPending} action={handleSubmit}>
             {t("save")}
           </Button>
         </div>
