@@ -3,7 +3,8 @@ import axios from "axios";
 import { BASE_URL } from "./constants";
 import { toast } from "react-toastify";
 import { logoutUser } from "../features/user/userSlice";
-import i18next from "i18next";
+import i18next, { t } from "i18next";
+import { clearCookies } from "./cookies";
 
 const customFetch = axios.create({
   baseURL: BASE_URL,
@@ -27,6 +28,24 @@ customFetch.interceptors.request.use(
     return config;
   },
   (error) => {
+    return Promise.reject(error);
+  }
+);
+
+customFetch.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    const prevRequest = error?.config;
+
+    if (error?.response?.status === 401 && !prevRequest.sent) {
+      prevRequest.sent = true;
+      clearCookies();
+      Cookies.remove("role");
+      Cookies.remove("token");
+      toast.error(t("your session is end, please log in again"));
+      location.href = "/";
+    }
+
     return Promise.reject(error);
   }
 );

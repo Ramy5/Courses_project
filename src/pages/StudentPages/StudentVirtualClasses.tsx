@@ -83,7 +83,7 @@ const StudentVirtualClasses = () => {
       },
       {
         header: () => <span>{t("zoom link")}</span>,
-        accessorKey: "zoomLink",
+        accessorKey: "zoom_link",
         cell: (info: any) => {
           if (
             info.row.original.status === "inProgress" ||

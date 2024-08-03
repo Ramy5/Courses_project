@@ -9,6 +9,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import customFetch from "../../../utils/axios";
 import Loading from "../../../components/UI/Loading";
 import { useQuery } from "@tanstack/react-query";
+import ConvertNumberToWord from "../../../components/UI/ConvertNumberToWord";
 
 const getStudentCourses = async (id: number | string) => {
   const { data } = await customFetch(`getStudentCourses?course_id=${id}`);
@@ -18,6 +19,8 @@ const getStudentCourses = async (id: number | string) => {
 const StudentLectures = () => {
   const navigate = useNavigate();
   const { id } = useParams();
+  const numbers = ConvertNumberToWord();
+  console.log("🚀 ~ StudentLectures ~ numbers:", numbers);
 
   const { data, isLoading, isFetching, isRefetching } = useQuery({
     queryKey: ["get-lectures"],
@@ -114,7 +117,7 @@ const StudentLectures = () => {
         <TitlePage
           mainTitle="Courses"
           mainLink="/student/Courses"
-          supTitle={`${t("lectures")} الفزياء`}
+          supTitle={`${t("lectures")} ${data?.[0]?.lecture_data?.course_name}`}
           icon={<LiaBookReaderSolid size={25} className="fill-mainColor" />}
         />
       </div>
@@ -128,24 +131,28 @@ const StudentLectures = () => {
               key={cource.id}
               className={`border-s-[12px] ${borderColor} py-5 px-4 bg-white rounded-lg  cursor-pointer`}
               onClick={() =>
-                navigate(`/student/Courses/lecture/details/${cource.id}`)
+                navigate(
+                  `/student/Courses/lecture/details/${cource?.lecture_data?.id}`
+                )
               }
             >
               <div className="flex items-center gap-[6px]">
                 <CgPlayButtonR size={24} className="text-mainColor" />
-                <p className="text-lg font-semibold">{cource.course_name}</p>
+                <p className="text-lg font-semibold">
+                  {t("lecture")} {numbers?.[index]}
+                </p>
               </div>
               <div className="flex items-center gap-[6px] my-4">
                 <FaUserAlt size={24} className="rounded-full text-mainColor" />
-                <p>{cource.instructor_name}</p>
+                <p>{cource?.teacher?.full_name}</p>
               </div>
               <div className="flex items-center gap-[6px]">
                 <LiaBookReaderSolid size={28} className="text-mainColor" />
-                <p>{cource.course_desc}</p>
+                <p>{cource?.lecture_data?.title}</p>
               </div>
               <div className="flex items-center gap-[6px] mt-4">
                 <PiClockCountdownBold size={26} className="text-mainColor" />
-                <p>{cource.course_date}</p>
+                <p>({cource?.start_time})</p>
               </div>
             </div>
           );

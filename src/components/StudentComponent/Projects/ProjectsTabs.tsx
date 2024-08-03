@@ -5,112 +5,70 @@ import HomeworkRequiredBox from "../Homeworks/HomeworkRequiredBox";
 import HomeworkDone from "../Homeworks/HomeworkDone";
 import { ColumnDef } from "@tanstack/react-table";
 import { useNavigate } from "react-router-dom";
+import customFetch from "../../../utils/axios";
+import { useQuery } from "@tanstack/react-query";
+import Loading from "../../UI/Loading";
+
+const getAllProjects = async () => {
+  const { data } = await customFetch("getStudentProjects");
+  return data.data;
+};
 
 const ProjectsTabs = () => {
   const [activeTab, setActiveTab] = useState(1);
-
-  const data = [
-    {
-      id: 1,
-      subject: "Physics",
-      professor: "Professor Abdullah Fares",
-      taskName: "project",
-      startDate: "23/3/2024",
-      endDate: "30/3/2024",
-      color: "#f00",
-    },
-    {
-      id: 2,
-      subject: "Mathematics",
-      professor: "Professor Ali Ahmed",
-      taskName: "project",
-      startDate: "1/4/2024",
-      endDate: "8/4/2024",
-      color: "#f0f",
-    },
-    {
-      id: 3,
-      subject: "Mathematics",
-      professor: "Professor Ali Ahmed",
-      taskName: "project",
-      startDate: "1/4/2024",
-      endDate: "8/4/2024",
-      color: "#f0f",
-    },
-    {
-      id: 4,
-      subject: "Mathematics",
-      professor: "Professor Ali Ahmed",
-      taskName: "project",
-      startDate: "1/4/2024",
-      endDate: "8/4/2024",
-      color: "#ff0",
-    },
-  ];
-
   const navigate = useNavigate();
 
-  const projectDoneData = [
-    {
-      id: 1,
-      subject: "الفيزياء",
-      projectTitle: "مسألة كيرشوف",
-      submissionDate: "23/5/2025",
-      grade: 100,
-      viewProject: "#",
-    },
-    {
-      id: 2,
-      subject: "الفيزياء",
-      projectTitle: "مسألة كيرشوف",
-      submissionDate: "23/5/2025",
-      grade: 100,
-      viewProject: "#",
-    },
-    {
-      id: 3,
-      subject: "الفيزياء",
-      projectTitle: "مسألة كيرشوف",
-      submissionDate: "23/5/2025",
-      grade: 100,
-      viewProject: "#",
-    },
-  ];
+  const { data, isLoading, isFetching, isRefetching } = useQuery({
+    queryKey: ["get-all-projects"],
+    queryFn: getAllProjects,
+  });
+
+  console.log(data);
 
   const projectDoneColumns = useMemo<ColumnDef<[]>[]>(
     () => [
       {
         header: () => <span>{t("#")}</span>,
         accessorKey: "id",
-        cell: (info) => info.getValue(),
+        cell: (info) => info.row.index + 1,
       },
       {
         header: () => <span>{t("subject")}</span>,
-        accessorKey: "subject",
+        accessorKey: "course_name",
         cell: (info) => info.getValue(),
       },
       {
-        header: () => <span>{t("project title")}</span>,
-        accessorKey: "projectTitle",
+        header: () => <span>{t("instructor")}</span>,
+        accessorKey: "teacher_name",
         cell: (info) => info.getValue(),
+      },
+      {
+        header: () => <span>{t("assignment title")}</span>,
+        accessorKey: "project",
+        cell: (info) => info.getValue()?.title,
       },
       {
         header: () => <span>{t("submission date")}</span>,
-        accessorKey: "submissionDate",
+        accessorKey: "delivered_at",
         cell: (info) => info.getValue(),
       },
       {
         header: () => <span>{t("grade")}</span>,
-        accessorKey: "grade",
-        cell: (info) => info.getValue(),
+        accessorKey: "degree",
+        cell: (info) => info.getValue() || "---",
+      },
+      {
+        header: () => <span>{t("total grade")}</span>,
+        accessorKey: "project",
+        cell: (info) => info.getValue()?.score,
       },
       {
         header: () => <span>{t("")}</span>,
-        accessorKey: "viewProject",
+        accessorKey: "project",
         cell: (info) => (
           <Button
             action={() =>
-              navigate(`/students/viewProjects/${info.row.original.id}`)
+              navigate(`/students/viewProjects/${info.getValue().id}`)
             }
           >
             {t("view assignment")}
@@ -120,6 +78,8 @@ const ProjectsTabs = () => {
     ],
     []
   );
+
+  if (isLoading || isFetching || isRefetching) return <Loading />;
 
   return (
     <div>
@@ -145,13 +105,16 @@ const ProjectsTabs = () => {
       <div>
         {activeTab === 1 && (
           <div className="grid items-center my-10 lg:grid-cols-2 xl:grid-cols-3 gap-x-14 gap-y-8">
-            {data.map((el, index) => {
-              return <HomeworkRequiredBox key={index} {...el} isProject />;
+            {data?.requiredProject?.map((el: any) => {
+              return <HomeworkRequiredBox key={el.id} {...el} isProject />;
             })}
           </div>
         )}
         {activeTab === 2 && (
-          <HomeworkDone data={projectDoneData} column={projectDoneColumns} />
+          <HomeworkDone
+            data={data?.deliveredProject || []}
+            column={projectDoneColumns}
+          />
         )}
       </div>
     </div>

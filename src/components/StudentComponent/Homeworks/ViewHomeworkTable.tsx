@@ -26,7 +26,7 @@ const ViewHomeworkTable = ({ data, isInstructor, setEvaluateHomeworkFile }) => {
 
         <li className="grid items-center grid-cols-4 border-b border-gray-800">
           <span className="col-span-1 text-sm font-bold text-center lg:px-6 lg:text-xl text-mainColor">
-            {t(`assignment title`)}
+            {data?.isProject ? t("project title") : t(`assignment title`)}
           </span>
           <span className="col-span-3 px-6 py-8 text-lg border-gray-800 border-s">
             {t(`${data.assignmentTitle}`)}

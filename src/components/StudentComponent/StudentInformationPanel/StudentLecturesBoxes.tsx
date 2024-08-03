@@ -1,46 +1,72 @@
 import { Autoplay, Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import LectureBox from "./LectureBox";
-import { t } from "i18next";
+import customFetch from "../../../utils/axios";
+import { useQuery } from "@tanstack/react-query";
+import LoadingIndicator from "../../UI/LoadingIndicator";
+import { generateRandomColor } from "../../../utils/helpers";
+
+const getCourses = async () => {
+  const { data } = await customFetch("getStudentCourses");
+  return data.data.courses;
+};
 
 const StudentLecturesBoxes = () => {
-  const studentLecturesData = [
-    {
-      programTitle: t("Web"),
-      programColor: "#3498db",
-      lectureDate: t("Sunday"),
-      numOfStudents: 150,
-      instructors: ["John Doe", "John Doe"],
-    },
-    {
-      programTitle: t("Data Science"),
-      programColor: "#2ecc71",
-      lectureDate: t("Monday"),
-      numOfStudents: 200,
-      instructors: ["Jane Smith", "Jane Smith"],
-    },
-    {
-      programTitle: t("UX/UI"),
-      programColor: "#e74c3c",
-      lectureDate: t("Tuesday"),
-      numOfStudents: 180,
-      instructors: ["Emily Davis", "Emily Davis"],
-    },
-    {
-      programTitle: t("Cybersecurity"),
-      programColor: "#f39c12",
-      lectureDate: t("Wednesday"),
-      numOfStudents: 120,
-      instructors: ["Michael Brown", "Michael Brown"],
-    },
-    {
-      programTitle: t("Cloud Computing"),
-      programColor: "#8e44ad",
-      lectureDate: t("Thursday"),
-      numOfStudents: 160,
-      instructors: ["Sarah Wilson", "Sarah Wilson"],
-    },
-  ];
+  const { data, isLoading, isFetching, isRefetching } = useQuery({
+    queryKey: ["get-course"],
+    queryFn: getCourses,
+  });
+
+  const studentLecturesData = data?.map((course: any) => {
+    return {
+      programTitle: course.course_name,
+      programColor: generateRandomColor(),
+      lectureDate: course.day,
+      numOfStudents: course.students_count,
+      instructors: course?.teachers?.map((teacher) => teacher.full_name),
+    };
+  });
+
+  // const studentLecturesData = [
+  //   {
+  //     programTitle: t("Web"),
+  //     programColor: "#3498db",
+  //     lectureDate: t("Sunday"),
+  //     numOfStudents: 150,
+  //     instructors: ["John Doe", "John Doe"],
+  //   },
+  //   {
+  //     programTitle: t("Data Science"),
+  //     programColor: "#2ecc71",
+  //     lectureDate: t("Monday"),
+  //     numOfStudents: 200,
+  //     instructors: ["Jane Smith", "Jane Smith"],
+  //   },
+  //   {
+  //     programTitle: t("UX/UI"),
+  //     programColor: "#e74c3c",
+  //     lectureDate: t("Tuesday"),
+  //     numOfStudents: 180,
+  //     instructors: ["Emily Davis", "Emily Davis"],
+  //   },
+  //   {
+  //     programTitle: t("Cybersecurity"),
+  //     programColor: "#f39c12",
+  //     lectureDate: t("Wednesday"),
+  //     numOfStudents: 120,
+  //     instructors: ["Michael Brown", "Michael Brown"],
+  //   },
+  //   {
+  //     programTitle: t("Cloud Computing"),
+  //     programColor: "#8e44ad",
+  //     lectureDate: t("Thursday"),
+  //     numOfStudents: 160,
+  //     instructors: ["Sarah Wilson", "Sarah Wilson"],
+  //   },
+  // ];
+
+  if (isLoading || isFetching || isRefetching) return <LoadingIndicator />;
+  console.log("🚀 ~ StudentLecturesBoxes ~ data:", data);
 
   return (
     <div className="relative">

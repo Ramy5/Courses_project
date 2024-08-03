@@ -131,11 +131,15 @@ const StudentCourses = () => {
               </div>
               <div className="flex items-center gap-[6px] my-4">
                 <FaUserAlt size={24} className="rounded-full text-mainColor" />
-                <p>{cource.instructor_name}</p>
+                <div className="">
+                  {cource.teachers.map((teacher: any, i: number) => {
+                    return <p key={teacher.id}>{teacher.full_name}</p>;
+                  })}
+                </div>
               </div>
               <div className="flex items-center gap-[6px]">
                 <FiCalendar size={25} className="text-mainColor" />
-                <p>{cource.course_date}</p>
+                <p>{cource.day}</p>
               </div>
             </div>
           );

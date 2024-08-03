@@ -31,13 +31,25 @@ const addNewHomework = async (homeworkData: any) => {
   return response;
 };
 
+const addNewProject = async (projectData: any) => {
+  const token = Cookies.get("token");
+  const response = await axios.post(`${BASE_URL}projectAnswers`, projectData, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return response;
+};
+
 const AddHomeworkDelivery = (props) => {
+  console.log("🚀 ~ AddHomeworkDelivery ~ props:", props);
   const { startDate, startTime, endDate, endTime, isProject } = props;
   const { setFieldValue, values } = useFormikContext();
   const [files, setFiles] = useState(null);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { id: homeWorkID } = useParams();
+  const { id } = useParams();
 
   const [timeData, setTimeData] = useState({
     daysInWeek: 7,
@@ -98,21 +110,38 @@ const AddHomeworkDelivery = (props) => {
     mutationKey: ["add-student-homework"],
     mutationFn: addNewHomework,
     onSuccess: (data) => {
-      navigate(-1);
-      // queryClient.invalidateQueries(["all-students-homework"]);
+      queryClient.invalidateQueries(["get-all-homeworks"]);
       toast.success(t("homework has added successfully"));
-      navigate(isProject ? "/students/projects" : "/students/homeworks");
+      navigate("/students/homeworks");
+    },
+  });
+
+  const { mutate: mutateProject, isPending: isPendingProject } = useMutation({
+    mutationKey: ["add-student-project"],
+    mutationFn: addNewProject,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries(["get-all-projects"]);
+      toast.success(t("project has added successfully"));
+      navigate("/students/projects");
     },
   });
 
   const handleSubmit = async () => {
-    const formattedValues: any = {
-      homework_id: homeWorkID,
+    const formattedHomeworkValues: any = {
+      homework_id: id,
       answer: values.brief_about_task,
       attachment: files,
     };
 
-    await mutate(formattedValues);
+    const formattedProjectValues: any = {
+      project_id: id,
+      answer: values.brief_about_task,
+      attachment: files,
+    };
+
+    isProject
+      ? await mutateProject(formattedProjectValues)
+      : await mutate(formattedHomeworkValues);
   };
 
   const handleFileChange = (event) => setFiles(event.target.files[0]);
@@ -199,7 +228,7 @@ const AddHomeworkDelivery = (props) => {
       <div className="col-span-2 p-6 bg-white rounded-xl">
         <h2 className="mb-10 text-3xl font-bold text-mainColor">
           <span>{isProject ? t("project") : t("homework")}: </span>
-          <span>الخطاب الخارجي</span>
+          <span>{props.title}</span>
         </h2>
 
         <div className="mb-3">
@@ -282,7 +311,7 @@ const AddHomeworkDelivery = (props) => {
           >
             {t("cancel")}
           </Button>
-          <Button loading={isPending} action={handleSubmit}>
+          <Button loading={isPending || isPendingProject} action={handleSubmit}>
             {t("save")}
           </Button>
         </div>

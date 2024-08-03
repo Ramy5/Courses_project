@@ -9,6 +9,7 @@ interface Grades_TP {
 }
 
 const Grades = ({ studentGrade, title }: Grades_TP) => {
+  console.log("🚀 ~ Grades ~ studentGrade:", studentGrade);
   const [isOpen, setIsOpen] = useState(false);
 
   const isRTL = useRTL();
@@ -21,10 +22,10 @@ const Grades = ({ studentGrade, title }: Grades_TP) => {
     <div>
       <div>
         <div
-          className="bg-mainColor flex items-center justify-between p-5 rounded-t-xl"
+          className="flex items-center justify-between p-5 bg-mainColor rounded-t-xl"
           onClick={toggleAccordion}
         >
-          <h1 className="text-white font-semibold text-lg opacity-100">
+          <h1 className="text-lg font-semibold text-white opacity-100">
             {t(title)}
           </h1>
           {isOpen ? (
@@ -45,7 +46,7 @@ const Grades = ({ studentGrade, title }: Grades_TP) => {
           }`}
         >
           <div className="py-6 px-5 border-b border-dashed border-[#222222] text-center sm:text-start">
-            <div className="flex  flex-col sm:flex-row gap-y-8 gap-x-24 mb-8">
+            <div className="flex flex-col mb-8 sm:flex-row gap-y-8 gap-x-24">
               <p className="font-medium text-xl text-[##000000b3]">
                 {t("academic year")} :{" "}
                 <span className="text-mainColor">
@@ -64,32 +65,39 @@ const Grades = ({ studentGrade, title }: Grades_TP) => {
               <span className="text-mainColor">{studentGrade.Courses}</span>
             </p>
           </div>
-          <div className="flex flex-col gap-4 py-8 px-5">
+          <div className="flex flex-col gap-4 px-5 py-8">
             {studentGrade.assignments.map((assignment) => (
               <div className="flex justify-between items-center bg-[#F9F9F9] rounded-xl py-8 px-5 flex-col sm:flex-row gap-y-5">
-                <div className="flex items-center md:items-center sm:items-start flex-col md:flex-row gap-y-4">
+                <div className="flex flex-col items-center md:items-center sm:items-start md:flex-row gap-y-4">
                   <h2 className="text-[#073051] font-medium text-lg border-e-0 md:border-e-2 pe-2">
-                    {t("duty")} <span>{assignment.assignment_number}</span> :{" "}
+                    {title === "exam grades"
+                      ? `${t("exam")} `
+                      : title === "project grades"
+                      ? `${t("project")} `
+                      : `${t("homework")} `}{" "}
+                    <span>{assignment.assignment_number}</span> :{" "}
                     <span>{assignment.assignment_type}</span>
                   </h2>
                   <p className="ps-0 md:ps-3 font-medium text-lg text-[#22222280]">
                     {t("grade")} :{" "}
-                    <span className="bg-white py-2 px-3 rounded-2xl">
+                    <span className="px-3 py-2 bg-white rounded-2xl">
                       {assignment.grade}
                     </span>
                   </p>
                 </div>
-                <div
-                  className={`${
-                    assignment.isSuccess
-                      ? "bg-[#369252] px-4"
-                      : "bg-mainRed px-6"
-                  } text-white font-medium text-lg  py-2 rounded-2xl`}
-                >
-                  {assignment.isSuccess
-                    ? `${t("delivered")}`
-                    : `${t("not delivered")}`}
-                </div>
+                {title !== "exam grades" && (
+                  <div
+                    className={`${
+                      assignment.isSuccess
+                        ? "bg-[#369252] px-4"
+                        : "bg-mainRed px-6"
+                    } text-white font-medium text-lg  py-2 rounded-2xl`}
+                  >
+                    {assignment.isSuccess
+                      ? `${t("delivered")}`
+                      : `${t("not delivered")}`}
+                  </div>
+                )}
               </div>
             ))}
           </div>

@@ -5,9 +5,7 @@ const useRefreshToken = () => {
   const { user } = useAppSelector((slice: any) => slice.user);
 
   const refresh = async () => {
-    const response = await customFetch("", {
-      withCredentials: true,
-    });
+    const response = await customFetch("");
 
     return response.data.data.token;
   };
