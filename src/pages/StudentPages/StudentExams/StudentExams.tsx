@@ -1,71 +1,47 @@
-import React, { useMemo, useState } from "react";
+import React, { Fragment, useEffect, useMemo, useState } from "react";
 import { Button, Table } from "../../../components";
 import { t } from "i18next";
 import { ColumnDef } from "@tanstack/react-table";
 import { useNavigate } from "react-router-dom";
+import customFetch from "../../../utils/axios";
+import { useQuery } from "@tanstack/react-query";
+import Loading from "../../../components/UI/Loading";
+import { toast } from "react-toastify";
 
 const StudentExams = () => {
-  const [tabs, setTabs] = useState(1);
+  const [tabs, setTabs] = useState("today_exams");
+  console.log("🚀 ~ StudentExams ~ tabs:", tabs);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const buttons = [
-    { id: 1, label: "tests today" },
-    { id: 2, label: "upcoming tests" },
-    { id: 3, label: "previous tests" },
+    { id: "today_exams", label: "tests today" },
+    { id: "upcoming_exams", label: "upcoming tests" },
+    { id: "past_exams", label: "previous tests" },
   ];
 
-  const examsTodayData = [
-    {
-      id: 1,
-      course_code: "#65654SD",
-      course_name: "الفزياء",
-      exam_date: "2023-12-06",
-      exam_time: "12:00 مساء",
-      exam_type: "فصلي اول",
-    },
-    {
-      id: 2,
-      course_code: "#65654SD",
-      course_name: "الفزياء",
-      exam_date: "2023-12-06",
-      exam_time: "12:00 مساء",
-      exam_type: "نهائي",
-    },
-    {
-      id: 3,
-      course_code: "#65654SD",
-      course_name: "الفزياء",
-      exam_date: "2023-12-06",
-      exam_time: "12:00 مساء",
-      exam_type: "فصلي اول",
-    },
-    {
-      id: 4,
-      course_code: "#65654SD",
-      course_name: "الفزياء",
-      exam_date: "2023-12-06",
-      exam_time: "12:00 مساء",
-      exam_type: "نهائي",
-    },
-    {
-      id: 5,
-      course_code: "#65654SD",
-      course_name: "الفزياء",
-      exam_date: "2023-12-06",
-      exam_time: "12:00 مساء",
-      exam_type: "فصلي اول",
-    },
-    {
-      id: 6,
-      course_code: "#65654SD",
-      course_name: "الفزياء",
-      exam_date: "2023-12-06",
-      exam_time: "12:00 مساء",
-      exam_type: "نهائي",
-    },
-  ];
+  const fetchStudentExams = async () => {
+    const response = await customFetch(`getTimeExams`);
+    return response;
+  };
 
-  const examsTodayColumns = useMemo<ColumnDef<any>[]>(
+  const { data, isFetching, isRefetching, isLoading } = useQuery({
+    queryKey: ["student_ExamsData"],
+    queryFn: fetchStudentExams,
+  });
+
+  const studentExamsData = data && data?.data?.data;
+  console.log("🚀 ~ StudentExams ~ studentExamsData:", studentExamsData);
+
+  const examsData =
+    tabs === "past_exams"
+      ? studentExamsData?.past_exams
+      : tabs === "today_exams"
+      ? studentExamsData?.today_exams
+      : studentExamsData?.upcoming_exams;
+  console.log("🚀 ~ StudentExams ~ examsData:", examsData);
+
+  const examsColumns = useMemo<ColumnDef<any>[]>(
     () => [
       {
         header: () => <span>{t("type of certificate")}</span>,
@@ -75,134 +51,80 @@ const StudentExams = () => {
       {
         header: () => <span>{t("certificate name")}</span>,
         accessorKey: "course_name",
-        cell: (info) => <span>{t(`${info.getValue()}`)}</span>,
+        cell: (info) => info.getValue(),
       },
       {
         header: () => <span>{t("exam date")}</span>,
-        accessorKey: "exam_date",
+        accessorKey: "date",
         cell: (info) => info.getValue(),
       },
       {
         header: () => <span>{t("exam time")}</span>,
-        accessorKey: "exam_time",
-        cell: (info) => info.getValue(),
+        accessorKey: "start_time",
+        cell: (info) => `${info.getValue()}`,
       },
       {
         header: () => <span>{t("exam type")}</span>,
         accessorKey: "exam_type",
         cell: (info) => info.getValue(),
       },
-      {
-        header: () => <span>{t("")}</span>,
-        accessorKey: "action",
-        cell: (info) => {
-          return (
-            <Button
-              action={() =>
-                navigate(`/student/exams/details/${info.row.original.id}`)
-              }
-            >
-              {t("start exam")}
-            </Button>
-          );
-        },
-      },
+      ...(tabs === "past_exams"
+        ? [
+            {
+              header: () => <span>{t("student grade")}</span>,
+              accessorKey: "degree",
+              cell: (info) => info.getValue(),
+            },
+          ]
+        : [
+            {
+              header: () => <span>{t("")}</span>,
+              accessorKey: "action",
+              cell: (info) => {
+                const examDate = info.row.original.date;
+                const startTime = info.row.original.start_time;
+
+                const now = new Date();
+                const currentDate = now.toISOString().split("T")[0];
+                const currentTime = now.toTimeString();
+
+                const isReady =
+                  examDate <= currentDate && startTime <= currentTime;
+
+                return (
+                  <Button
+                    action={() => {
+                      if (isReady) {
+                        navigate(
+                          `/student/exams/details/${info.row.original.id}`
+                        );
+                      } else {
+                        toast.info(t("the exam is not ready"));
+                      }
+                    }}
+                    disabled={!isReady}
+                  >
+                    {t("start exam")}
+                  </Button>
+                );
+              },
+            },
+          ]),
     ],
-    []
+    [tabs]
   );
 
-  const examsPrevData = [
-    {
-      id: 1,
-      course_code: "#65654SD",
-      course_name: "الفزياء",
-      exam_date: "2023-12-06",
-      exam_time: "12:00 مساء",
-      student_grade: "75",
-      exam_type: "نهائي",
-    },
-    {
-      id: 2,
-      course_code: "#65654SD",
-      course_name: "الفزياء",
-      exam_date: "2023-12-06",
-      exam_time: "12:00 مساء",
-      student_grade: "75",
-      exam_type: "فصلي اول",
-    },
-    {
-      id: 3,
-      course_code: "#65654SD",
-      course_name: "الفزياء",
-      exam_date: "2023-12-06",
-      exam_time: "12:00 مساء",
-      student_grade: "75",
-      exam_type: "نهائي",
-    },
-    {
-      id: 4,
-      course_code: "#65654SD",
-      course_name: "الفزياء",
-      exam_date: "2023-12-06",
-      exam_time: "12:00 مساء",
-      student_grade: "75",
-      exam_type: "فصلي اول",
-    },
-    {
-      id: 5,
-      course_code: "#65654SD",
-      course_name: "الفزياء",
-      exam_date: "2023-12-06",
-      exam_time: "12:00 مساء",
-      student_grade: "75",
-      exam_type: "نهائي",
-    },
-    {
-      id: 6,
-      course_code: "#65654SD",
-      course_name: "الفزياء",
-      exam_date: "2023-12-06",
-      exam_time: "12:00 مساء",
-      student_grade: "75",
-      exam_type: "فصلي اول",
-    },
-  ];
+  useEffect(() => {
+    setLoading(true);
 
-  const examsPrevColumns = useMemo<ColumnDef<any>[]>(
-    () => [
-      {
-        header: () => <span>{t("type of certificate")}</span>,
-        accessorKey: "course_code",
-        cell: (info) => info.getValue(),
-      },
-      {
-        header: () => <span>{t("certificate name")}</span>,
-        accessorKey: "course_name",
-        cell: (info) => <span>{t(`${info.getValue()}`)}</span>,
-      },
-      {
-        header: () => <span>{t("exam date")}</span>,
-        accessorKey: "exam_date",
-        cell: (info) => info.getValue(),
-      },
-      {
-        header: () => <span>{t("exam time")}</span>,
-        accessorKey: "exam_time",
-        cell: (info) => info.getValue(),
-      },
-      {
-        header: () => <span>{t("exam type")}</span>,
-        accessorKey: "exam_type",
-        cell: (info) => info.getValue(),
-      },
-      {
-        header: () => <span>{t("student grade")}</span>,
-        accessorKey: "student_grade",
-        cell: (info) => info.getValue(),
-      },
-    ],
-    []
-  );
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 800);
+
+    return () => clearTimeout(timer);
+  }, [tabs]);
+
+  if (isFetching || isRefetching || isLoading) return <Loading />;
 
   return (
     <div>
@@ -223,38 +145,34 @@ const StudentExams = () => {
       </div>
 
       <div className="bg-white p-5 rounded-3xl">
-        {tabs === 1 && (
-          <div>
-            <Table
-              data={examsTodayData}
-              columns={examsTodayColumns}
-              showNavigation={true}
-              totalPages={40}
-              currentPage={"1"}
-            />
-          </div>
-        )}
-        {tabs === 2 && (
-          <div>
-            <Table
-              data={examsTodayData}
-              columns={examsTodayColumns}
-              showNavigation={true}
-              totalPages={40}
-              currentPage={"1"}
-            />
-          </div>
-        )}
-        {tabs === 3 && (
-          <div>
-            <Table
-              data={examsPrevData}
-              columns={examsPrevColumns}
-              showNavigation={true}
-              totalPages={40}
-              currentPage={"1"}
-            />
-          </div>
+        {examsData?.length > 0 ? (
+          <>
+            {buttons.map((button) => (
+              <div key={button.id}>
+                {loading ? (
+                  <Loading />
+                ) : (
+                  <div className="fade-in">
+                    {tabs === button.id && (
+                      <div>
+                        <Table
+                          data={examsData|| []}
+                          columns={examsColumns}
+                          showNavigation={examsData?.length > 10}
+                          totalPages={40}
+                          currentPage={"1"}
+                        />
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            ))}
+          </>
+        ) : (
+          <p className="text-center font-semibold text-xl my-8">
+            {t("there is no test available yet.")}
+          </p>
         )}
       </div>
     </div>

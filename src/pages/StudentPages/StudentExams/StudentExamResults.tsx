@@ -1,23 +1,48 @@
 import { t } from "i18next";
-import React, { useEffect } from "react";
 import { Button } from "../../../components";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import customFetch from "../../../utils/axios";
+import { useQuery } from "@tanstack/react-query";
+import Loading from "../../../components/UI/Loading";
 
 const StudentExamResults = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  console.log("🚀 ~ StudentExamResults ~ location:", location);
 
-  const examResults = {
-    resut_number: 100,
-    correct_answers: 40,
-    wrong_answers: 50,
-    unanswered_questions: 10,
-    total_grade: 140,
-    your_grade: 70,
+  const fetchStudentExamResult = async () => {
+    const response = await customFetch(`/getExamDetails/${location.state}`);
+    return response;
   };
 
-  const percentage = (examResults.your_grade / examResults.total_grade) * 100;
+  const { data, isFetching, isRefetching, isLoading } = useQuery({
+    queryKey: ["student_ExamData"],
+    queryFn: fetchStudentExamResult,
+  });
+
+  const studentExamResult = data && data?.data?.data;
+  console.log(
+    "🚀 ~ StudentExamResults ~ studentExamResult:",
+    studentExamResult
+  );
+
+  const examResults = {
+    totalQuestions: studentExamResult?.totalQuestions,
+    correctAnswers: studentExamResult?.correctAnswers,
+    wrongAnswers: studentExamResult?.wrongAnswers,
+    unansweredQuestions: studentExamResult?.unansweredQuestions,
+    totalDegree: studentExamResult?.totalDegree,
+    studentDegree: studentExamResult?.degree,
+  };
+  console.log("🚀 ~ StudentExamResults ~ examResults:", examResults);
+
+  const percentage =
+    (examResults?.studentDegree / examResults?.totalDegree) * 100;
+  console.log("🚀 ~ StudentExamResults ~ percentage:", percentage);
+
+  if (isFetching || isRefetching || isLoading) return <Loading />;
 
   return (
     <div className="flex items-center justify-center pt-12">
@@ -42,8 +67,8 @@ const StudentExamResults = () => {
           </div>
           <div>
             <p className="text-lg font-medium">
-              {t("grade")} : <span>{examResults.your_grade}</span> {t("out of")}{" "}
-              <span>{examResults.total_grade}</span>
+              {t("grade")} : <span>{examResults.studentDegree}</span>{" "}
+              {t("out of")} <span>{examResults.totalDegree}</span>
             </p>
           </div>
         </div>
@@ -51,18 +76,17 @@ const StudentExamResults = () => {
           <ul className="flex flex-col gap-4 text-lg font-medium">
             <li>
               {t("number of questions")} :{" "}
-              <span>{examResults.resut_number}</span>
+              <span>{examResults.totalQuestions}</span>
             </li>
             <li>
-              {t("correct answers")} :{" "}
-              <span>{examResults.correct_answers}</span>
+              {t("correct answers")} : <span>{examResults.correctAnswers}</span>
             </li>
             <li>
-              {t("wrong answers")} : <span>{examResults.wrong_answers}</span>
+              {t("wrong answers")} : <span>{examResults.wrongAnswers}</span>
             </li>
             <li>
               {t("unanswered questions")} :{" "}
-              <span>{examResults.unanswered_questions}</span>
+              <span>{examResults.unansweredQuestions}</span>
             </li>
           </ul>
 

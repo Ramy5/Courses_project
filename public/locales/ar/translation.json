@@ -475,5 +475,13 @@
   "the homework has deleted successfully": "تم حذف الواجب بنجاح",
   "homework has updated successfully": "تم تعديل الواجب بنجاح",
   "joined date": "تاريخ الالتحاق",
+  "student attendance has been successfully registered":"تم تسجيل حضور الطلاب بنجاح",
+  "download the test template":"تحميل قالب الاختبار",
+  "the exam has been added successfully.":"تم إضافة الإمتحان بنجاح",
+  "the exam has been deleted successfully.":"تم حذف الامتحان بنجاح.",
+  "the exam has been edited successfully.":"تم تعديل الامتحان بنجاح.",
+  "there is no test available yet.":"لا يوجد اختبار متاح حتى الآن.",
+  "the test was successfully passed.":"تم اجتياز الاختبار بنجاح",
+  "the exam is not ready":"الامتحان ليس جاهز",
   "search about student": "البحث عن طالب"
 }

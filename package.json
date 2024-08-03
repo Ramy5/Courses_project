@@ -44,6 +44,7 @@
     "react-toastify": "^10.0.5",
     "swiper": "^11.1.4",
     "tailwind-variants": "^0.2.1",
+    "xlsx": "^0.18.5",
     "yup": "^1.4.0"
   },
   "devDependencies": {

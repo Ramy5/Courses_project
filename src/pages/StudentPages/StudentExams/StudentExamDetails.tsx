@@ -1,23 +1,42 @@
 import { t } from "i18next";
 import React from "react";
 import { Button } from "../../../components";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import customFetch from "../../../utils/axios";
+import Loading from "../../../components/UI/Loading";
 
 const StudentExamDetails = () => {
   const navigate = useNavigate();
+  const { id } = useParams();
+
+  const fetchStudentExam = async () => {
+    const response = await customFetch(`/getStudentExams?exam_id=${id}`);
+    return response;
+  };
+
+  const { data, isFetching, isRefetching, isLoading } = useQuery({
+    queryKey: ["student_ExamData"],
+    queryFn: fetchStudentExam,
+  });
+
+  const studentExamData = data && data?.data?.data?.exam;
+  console.log("🚀 ~ StudentExamDetails ~ studentExamData:", studentExamData);
 
   const examDetails = {
-    id: 1,
-    exam_name: "الفزياء",
-    exam_title: "اختبار فصلي اول",
-    exam_type: "اختبار فصلي",
-    instructions:
-      "تتطلب مناقشة العلاقة بين اللغة و الخطاب النظر في مجموعة من العلاقات، كعلاقة اللغة بالسلطة و الإيديولوجية و الثقافة، و طرح جملة من المستويات النظرية و المشكلات المعرفية، كأصل اللغة،و سلطة اللغة، و السلط المساندة لها، و التمييز الذي تقيمه اللسانيات بين اللغة و الكلام و الخطاب، و الوحدات المشكلة للخطاب و اللسانيات الداخلية و الخارجية، و النظر في بعض المسائل الابستيمولوجية التي تطرحها هذه العلاقة ضمن ميدان معرفي يحاول التأسيس لمناهجه و مفاهيمه و مسائله على الرغم مما  و المشكلات المعرفية، كأصل اللغة،و سلطة اللغة، و السلط المساندة لها، ",
-    exam_mark: "100",
-    degree_success: "50",
-    exam_date: "21/8/2024",
-    exam_duration: "45 دقيقة",
+    id: studentExamData?.id,
+    exam_name: studentExamData?.course?.course_name,
+    exam_title: studentExamData?.title,
+    exam_type: studentExamData?.exam_type,
+    instructions: studentExamData?.instructions,
+    exam_mark: studentExamData?.score,
+    degree_success: studentExamData?.passing_score,
+    exam_date: studentExamData?.date,
+    exam_duration: studentExamData?.duration,
   };
+
+  if (isFetching || isRefetching || isLoading) return <Loading />;
+
   return (
     <div className="bg-white py-10 px-8 rounded-3xl">
       <h2 className="text-2xl font-semibold text-mainColor text-center sm:text-start">
@@ -77,7 +96,7 @@ const StudentExamDetails = () => {
           <h2 className="text-xl font-medium text-mainColor">
             {t("exam duration:")}{" "}
             <span className="font-medium text-black">
-              {examDetails.exam_duration}
+              {examDetails.exam_duration} <span>{t("minute")}</span>
             </span>
           </h2>
         </div>
@@ -87,7 +106,9 @@ const StudentExamDetails = () => {
         <Button bordered action={() => navigate(-1)}>
           {t("retreat")}
         </Button>
-        <Button action={() => navigate(`/student/exam/${examDetails.id}`)}>{t("start exam")}</Button>
+        <Button action={() => navigate(`/student/exam/${examDetails.id}`)}>
+          {t("start exam")}
+        </Button>
       </div>
     </div>
   );
