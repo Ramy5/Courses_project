@@ -4,24 +4,24 @@ import { FaArrowLeft, FaBookReader } from "react-icons/fa";
 import { FiFileText } from "react-icons/fi";
 import { IoMdPerson } from "react-icons/io";
 import { Link } from "react-router-dom";
+import { generateRandomColor } from "../../../utils/helpers";
 
 const HomeworkRequiredBox = (props) => {
+  console.log("🚀 ~ HomeworkRequiredBox ~ props:", props);
+  const { course_name: subject, teacher_name: professor, isProject } = props;
+
   const {
-    color,
-    subject,
-    professor,
-    taskName,
-    startDate,
-    endDate,
+    title: taskName,
+    start_date: startDate,
+    end_date: endDate,
     id,
-    isProject,
-  } = props;
+  } = props?.isProject ? props?.project : props?.homework;
 
   return (
     <Link
       to={isProject ? `/students/projects/${id}` : `/students/homeworks/${id}`}
       className={`rounded-lg border-s-[12px] p-4 border border-gray-400 shadow-xl bg-gray-100 space-y-4`}
-      style={{ borderInlineStartColor: color }}
+      style={{ borderInlineStartColor: generateRandomColor() }}
     >
       <p className="flex items-center gap-3">
         <span>
@@ -42,7 +42,7 @@ const HomeworkRequiredBox = (props) => {
           <FiFileText className="text-3xl text-mainColor" />
         </span>
         <span>
-          {isProject ? t("project") : t("homework")} {id}: {taskName}
+          {isProject ? t("project") : t("homework")}: {taskName}
         </span>
       </p>
       <div className="flex items-center gap-6">

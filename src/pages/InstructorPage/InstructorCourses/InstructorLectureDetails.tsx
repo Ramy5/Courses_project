@@ -19,7 +19,6 @@ const InstructorLectureDetails = () => {
   const location = useLocation();
   const showCourse = location.state;
   const numbers = ConvertNumberToWord();
-  console.log("🚀 ~ InstructorLectureDetails ~ showCourse:", showCourse)
 
   const fetchInstructorSchedule = async () => {
     const response = await customFetch(`showLectureData/${id}`);
@@ -32,10 +31,6 @@ const InstructorLectureDetails = () => {
   });
 
   const instructorLectureShow = data?.data?.data.lecture_data || [];
-  console.log(
-    "🚀 ~ InstructorLectureDetails ~ instructorLectureShow:",
-    instructorLectureShow
-  );
 
   const videoRef = useRef(null);
 

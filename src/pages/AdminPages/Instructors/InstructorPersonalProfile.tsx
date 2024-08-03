@@ -41,10 +41,6 @@ const InstructorPersonalProfile = () => {
   });
 
   const instructorPersonalData = data?.data.data.teacher || {};
-  console.log(
-    "🚀 ~ InstructorPersonalProfile ~ instructorPersonalData:",
-    instructorPersonalData
-  );
 
   useEffect(() => {
     if (error) {
@@ -188,10 +184,6 @@ const InstructorPersonalProfile = () => {
         header: () => <span>{t("")}</span>,
         accessorKey: "action",
         cell: (info) => {
-          console.log(
-            "🚀 ~ InstructorPersonalProfile ~ info.row.original.id:",
-            info.row.original
-          );
           const rowIndex = info.row.index;
           const totalRows = info.table.getCoreRowModel().rows.length;
           return (

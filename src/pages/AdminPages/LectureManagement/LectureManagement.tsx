@@ -42,7 +42,6 @@ const LectureManagement = () => {
   const [instructorSelectId, setInstructorSelectId] = useState("");
   const [lecturesData, setLecturesData] = useState([]);
   const [page, setPage] = useState(1);
-  console.log("🚀 ~ LectureManagement ~ page:", page);
   const queryClient = useQueryClient();
   // LECTURE DATE
   const [lectureDate, setLectureDate] = useState("");

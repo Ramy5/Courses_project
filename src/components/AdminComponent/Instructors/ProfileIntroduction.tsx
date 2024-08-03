@@ -35,7 +35,7 @@ const ProfileIntroduction = ({
       <div className="absolute flex items-end justify-between w-full md:px-12 px-5 md:top-32 top-[155px]">
         <div className="flex items-end gap-3">
           <img
-            src={personalData.personal_image}
+            src={personalData.personalImage}
             alt="personal Image"
             className="border-[3px] border-[#393D94] rounded-full md:w-[134px] w-24"
           />
@@ -43,7 +43,7 @@ const ProfileIntroduction = ({
             <h2 className="text-lg font-semibold md:text-xl">
               {personalData.full_name}
             </h2>
-            <p className="md:text-base font-medium text-sm">{jobTitle}</p>
+            <p className="text-sm font-medium md:text-base">{jobTitle}</p>
           </div>
         </div>
 

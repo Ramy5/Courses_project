@@ -18,7 +18,6 @@ const ProgramInformation = () => {
   const [openRow, setOpenRow] = useState<number | null>(null);
   const navigate = useNavigate();
   const { id: programParamID } = useParams();
-  console.log("🚀 ~ ProgramInformation ~ programParamID:", programParamID)
 
   const handleToggleDropDown = (id: number) => {
     setOpenRow((prevOpenRow) => (prevOpenRow == id ? null : id));

@@ -22,8 +22,8 @@ const InstructorSchedule = () => {
       {isRefetching || isFetching ? (
         <Loading />
       ) : (
-        <div className="pb-2 bg-white rounded-2xl py-8">
-          <p className="mb-5 text-mainColor font-semibold text-2xl text-center">
+        <div className="py-8 pb-2 bg-white rounded-2xl">
+          <p className="mb-5 text-2xl font-semibold text-center text-mainColor">
             ذكاء اصطناعي
           </p>
           <div className="fade-in">

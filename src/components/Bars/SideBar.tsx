@@ -56,19 +56,19 @@ const SideBar: React.FC<SideBarProps> = ({
     }
   }, [isSmallScreen]);
 
-  const getOrganizationSetting = async () => {
-    const { data } = await customFetch.get("setting/1");
-    return data.data.setting;
-  };
+  // const getOrganizationSetting = async () => {
+  //   const { data } = await customFetch.get("setting/1");
+  //   return data.data.setting;
+  // };
 
-  const { data } = useQuery({
-    queryKey: ["get-setting-data"],
-    queryFn: getOrganizationSetting,
-  });
+  // const { data } = useQuery({
+  //   queryKey: ["get-setting-data"],
+  //   queryFn: getOrganizationSetting,
+  // });
 
-  useEffect(() => {
-    dispatch(changeSidebarColor(data?.color));
-  }, [data?.color, dispatch]);
+  // useEffect(() => {
+  //   dispatch(changeSidebarColor(data?.color));
+  // }, [data?.color, dispatch]);
 
   const { role: userData } = useAppSelector((state) => state.user);
 

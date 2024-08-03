@@ -29,7 +29,7 @@ const LectureBox: React.FC<LectureBox_TP> = ({
         <span>
           <IoBookOutline color={programColor} size={30} />
         </span>
-        <span className="text-2xl font-bold truncate">
+        <span className="text-2xl font-bold truncate w-44">
           {t(`${programTitle}`)}
         </span>
       </div>
@@ -47,7 +47,7 @@ const LectureBox: React.FC<LectureBox_TP> = ({
           <span>
             <MdDateRange size={21} color={programColor} />
           </span>
-          <span className="text-lg">{t("lecture date")}</span>
+          <span className="text-lg">{t("date")}</span>
         </p>
         <p className="text-lg font-bold" style={{ color: programColor }}>
           {t(`${lectureDate}`)}

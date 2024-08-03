@@ -7,6 +7,7 @@ import {
   getFromCookies,
 } from "../../utils/cookies";
 import Cookies from "js-cookie";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export interface User_TP {
   email: string;

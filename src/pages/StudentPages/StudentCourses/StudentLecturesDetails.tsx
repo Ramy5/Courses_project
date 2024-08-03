@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Button, TitlePage } from "../../../components";
 import { LiaBookReaderSolid } from "react-icons/lia";
 import { FiCalendar } from "react-icons/fi";
@@ -6,78 +6,116 @@ import { PiClockCountdownBold } from "react-icons/pi";
 import Education from "../../../assets/lecture/istockphoto-1472553376-640_adpp_is.mp4";
 import { t } from "i18next";
 import { FaPersonChalkboard } from "react-icons/fa6";
+import customFetch from "../../../utils/axios";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import Loading from "../../../components/UI/Loading";
+import { IoDocumentTextOutline } from "react-icons/io5";
+import { subtractTwoTime } from "../../../utils/helpers";
+
+const getStudentLectureDetails = async (id: number | string) => {
+  const { data } = await customFetch(`/showLectureData/${id}`);
+  return data.data.lecture_data;
+};
+
+const getStudentRemainingLectureDetails = async (id: number | string) => {
+  const { data } = await customFetch(`LecturesData?lecture_data_id=${id}`);
+  return data.data;
+};
 
 const StudentLecturesDetails = () => {
   const [tabs, setTabs] = useState(1);
+  const [differenceInMinutes, setDifferenceInMinutes] = useState(0);
+  const { id } = useParams();
+  const navigate = useNavigate();
+
+  const {
+    data,
+    isLoading,
+    isFetching,
+    isRefetching,
+    refetch: lecturesRefetch,
+  } = useQuery({
+    queryKey: ["get-lectures"],
+    queryFn: () => getStudentLectureDetails(id),
+  });
+  console.log("🚀 ~ StudentLecturesDetails ~ data:", data);
+
+  const { data: remainingLectures, refetch: remainingLectureRefetch } =
+    useQuery({
+      queryKey: ["get-remaining-lectures"],
+      queryFn: () => getStudentRemainingLectureDetails(id),
+    });
+  console.log(
+    "🚀 ~ StudentLecturesDetails ~ remainingLectures:",
+    remainingLectures
+  );
+
+  useEffect(() => {
+    const diffMinutes = subtractTwoTime(
+      data?.lecture?.date,
+      data?.lecture?.start_time,
+      data?.lecture?.end_time
+    );
+    setDifferenceInMinutes(diffMinutes);
+  }, [data]);
 
   const lecturesDate = {
-    course_name: "الفيزياء",
-    lecture_day: "الاحد 17 مارس 2024",
-    lecture_date: "08:30",
-    lecture_video: Education,
+    course_name: data?.course_name,
+    lecture_day: data?.lecture?.date,
+    lecture_date: differenceInMinutes,
+    lecture_video: data?.youtube_link,
     lecure_number: " الاولي",
-    lecure_part: "مدخل الباب الاول",
-    lecture_instructor: "د.اسامة السيد",
-    description: {
-      title: "كيفية تحويل  ثاني اكسيد الكربون الي اكسجين",
-      desc: "تتطلب مناقشة العلاقة بين اللغة و الخطاب النظر في مجموعةعلاقات، كعلاقة اللغة بالسلطة و الإيديولوج و الثقافة، و طرح جملة ",
-    },
-    instructions: {
-      title: "كيفية تحويل  ثاني اكسيد الكربون الي اكسجين",
-      desc: "تتطلب مناقشة العلاقة بين اللغة و الخطاب النظر في مجموعةعلاقات، كعلاقة اللغة بالسلطة و الإيديولوج و الثقافة، و طرح جملة ",
-    },
-    files: {
-      title: "كيفية تحويل  ثاني اكسيد الكربون الي اكسجين",
-      desc: "تتطلب مناقشة العلاقة بين اللغة و الخطاب النظر في مجموعةعلاقات، كعلاقة اللغة بالسلطة و الإيديولوج و الثقافة، و طرح جملة ",
-    },
-    links: {
-      title: "كيفية تحويل  ثاني اكسيد الكربون الي اكسجين",
-      desc: "تتطلب مناقشة العلاقة بين اللغة و الخطاب النظر في مجموعةعلاقات، كعلاقة اللغة بالسلطة و الإيديولوج و الثقافة، و طرح جملة ",
-    },
-    remaining_lectures: [
-      {
-        id: 1,
-        lec_image: <FaPersonChalkboard size={50} className="m-auto" />,
-        lecure_number: " الاولي",
-        lecure_part: "مدخل الباب الاول",
-        lecture_date: "08:30",
-      },
-      {
-        id: 2,
-        lec_image: <FaPersonChalkboard size={50} className="m-auto" />,
-        lecure_number: " الاولي",
-        lecure_part: "مدخل الباب الاول",
-        lecture_date: "08:30",
-      },
-      {
-        id: 1,
-        lec_image: <FaPersonChalkboard size={50} className="m-auto" />,
-        lecure_number: " الاولي",
-        lecure_part: "مدخل الباب الاول",
-        lecture_date: "08:30",
-      },
-      {
-        id: 1,
-        lec_image: <FaPersonChalkboard size={50} className="m-auto" />,
-        lecure_number: " الاولي",
-        lecure_part: "مدخل الباب الاول",
-        lecture_date: "08:30",
-      },
-      {
-        id: 1,
-        lec_image: <FaPersonChalkboard size={50} className="m-auto" />,
-        lecure_number: " الاولي",
-        lecure_part: "مدخل الباب الاول",
-        lecture_date: "08:30",
-      },
-      {
-        id: 1,
-        lec_image: <FaPersonChalkboard size={50} className="m-auto" />,
-        lecure_number: " الاولي",
-        lecure_part: "مدخل الباب الاول",
-        lecture_date: "08:30",
-      },
-    ],
+    lecure_part: data?.title,
+    lecture_instructor: data?.teacher_name,
+    description: data?.desc,
+    instructions: data?.instructions,
+    files: data?.attachments,
+    links: data?.links,
+    // remaining_lectures: [
+    //   {
+    //     id: 1,
+    //     lec_image: <FaPersonChalkboard size={50} className="m-auto" />,
+    //     lecure_number: " الاولي",
+    //     lecure_part: "مدخل الباب الاول",
+    //     lecture_date: "08:30",
+    //   },
+    //   {
+    //     id: 2,
+    //     lec_image: <FaPersonChalkboard size={50} className="m-auto" />,
+    //     lecure_number: " الاولي",
+    //     lecure_part: "مدخل الباب الاول",
+    //     lecture_date: "08:30",
+    //   },
+    //   {
+    //     id: 1,
+    //     lec_image: <FaPersonChalkboard size={50} className="m-auto" />,
+    //     lecure_number: " الاولي",
+    //     lecure_part: "مدخل الباب الاول",
+    //     lecture_date: "08:30",
+    //   },
+    //   {
+    //     id: 1,
+    //     lec_image: <FaPersonChalkboard size={50} className="m-auto" />,
+    //     lecure_number: " الاولي",
+    //     lecure_part: "مدخل الباب الاول",
+    //     lecture_date: "08:30",
+    //   },
+    //   {
+    //     id: 1,
+    //     lec_image: <FaPersonChalkboard size={50} className="m-auto" />,
+    //     lecure_number: " الاولي",
+    //     lecure_part: "مدخل الباب الاول",
+    //     lecture_date: "08:30",
+    //   },
+    //   {
+    //     id: 1,
+    //     lec_image: <FaPersonChalkboard size={50} className="m-auto" />,
+    //     lecure_number: " الاولي",
+    //     lecure_part: "مدخل الباب الاول",
+    //     lecture_date: "08:30",
+    //   },
+    // ],
   };
 
   const videoRef = useRef(null);
@@ -89,8 +127,15 @@ const StudentLecturesDetails = () => {
     { id: 4, label: "links" },
   ];
 
+  useEffect(() => {
+    lecturesRefetch();
+    remainingLectureRefetch();
+  }, [id]);
+
+  if (isLoading || isFetching || isRefetching) return <Loading />;
+
   return (
-    <div className="flex flex-col md:flex-row gap-5">
+    <div className="flex flex-col gap-5 md:flex-row">
       <div className="w-full lg:w-[70%] md:w-[65%]">
         <div>
           <TitlePage
@@ -134,7 +179,7 @@ const StudentLecturesDetails = () => {
             </p>
           </div>
           <div className="mt-3">
-            <div className="flex gap-4 sm:gap-12 ms-0 sm:ms-8 mb-4">
+            <div className="flex gap-4 mb-4 sm:gap-12 ms-0 sm:ms-8">
               {buttons.map((button) => (
                 <Button
                   key={button.id}
@@ -152,37 +197,86 @@ const StudentLecturesDetails = () => {
             <div className="bg-[#E7EFFB]  rounded-xl p-5">
               {tabs === 1 && (
                 <div>
-                  <h2 className="text-black font-semibold mb-3">
-                    {lecturesDate.description.title}
-                  </h2>
                   <p className="text-[#696974] text-base font-medium">
-                    {lecturesDate.description.desc}
+                    {lecturesDate.description}
                   </p>
                 </div>
               )}
-              {tabs === 2 && <div>2</div>}
-              {tabs === 3 && <div>3</div>}
-              {tabs === 4 && <div>4</div>}
+              {tabs === 2 && (
+                <div>
+                  <p className="text-[#696974] text-base font-medium">
+                    {lecturesDate.instructions}
+                  </p>
+                </div>
+              )}
+              {tabs === 3 && (
+                <div className="flex flex-col gap-2">
+                  {lecturesDate?.files?.map(
+                    (file: { id: number; attachment: string }) => {
+                      return (
+                        <p
+                          key={file.id}
+                          className="flex items-center gap-1 px-4 py-2 bg-white border w-max"
+                        >
+                          <span>
+                            <IoDocumentTextOutline className="text-2xl text-green-600" />
+                          </span>
+                          <Link to={file.attachment} target="_blank">
+                            {file.attachment}
+                          </Link>
+                        </p>
+                      );
+                    }
+                  )}
+                </div>
+              )}
+              {tabs === 4 && (
+                <div>
+                  {lecturesDate.links.map((link: any) => {
+                    return (
+                      <Link key={link.id} to={link.link} target="_blank">
+                        {link.link}
+                      </Link>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           </div>
         </div>
       </div>
 
       <div className="w-full lg:w-[30%] md:w-[35%] bg-white main_shadow pt-4 pb-8 rounded-xl h-fit">
-        <h2 className="bg-mainColor text-white font-semibold text-xl text-center rounded-xl py-5 mx-5">
+        <h2 className="py-5 mx-5 text-xl font-semibold text-center text-white bg-mainColor rounded-xl">
           {t("lectures")} <span>{lecturesDate.course_name}</span>
         </h2>
-        <p className="font-semibold text-lg my-3 mx-4">{t("Lectures")}</p>
+        <p className="mx-4 my-3 text-lg font-semibold">{t("Lectures")}</p>
         <div className="flex flex-col gap-y-3">
-          {lecturesDate.remaining_lectures.map((item) => (
-            <div className="flex items-center shadow-md rounded-2xl bg-[#a1c2f126] cursor-pointer">
-              <div className=" h-full w-[30%] ">{item.lec_image}</div>
+          {remainingLectures?.map((item: any) => (
+            <div
+              key={item.id}
+              onClick={() =>
+                navigate(`/student/Courses/lecture/details/${item?.id}`)
+              }
+              className="flex items-center shadow-md rounded-2xl bg-[#a1c2f126] cursor-pointer"
+            >
+              <div className=" h-full w-[30%] ">
+                <FaPersonChalkboard size={50} className="m-auto" />
+              </div>
               <div className="bg-[#a1c2f133] w-[70%] py-1 px-2">
                 <h2 className="text-[#073051] text-lg font-medium">
                   {t("Lecture")} <span>{item.lecure_number}</span>
                 </h2>
-                <p className="text-sm mb-1">{item.lecure_part}</p>
-                <span className="text-sm">({item.lecture_date})</span>
+                <p className="mb-1 text-sm">{item.title}</p>
+                <span className="text-sm">
+                  (
+                  {subtractTwoTime(
+                    item?.lecture?.date,
+                    item?.lecture?.start_time,
+                    item?.lecture?.end_time
+                  )}
+                  )
+                </span>
               </div>
             </div>
           ))}
