@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { t } from "i18next";
 import { ColumnDef } from "@tanstack/react-table";
-import { BaseInput, Button, DateInputField, Table } from "../../components";
+import { Button, Table } from "../../components";
 import Select from "react-select";
 import { Form, Formik } from "formik";
 import selectStyle from "../../utils/selectStyle";
@@ -26,6 +26,7 @@ const RecordAttendance = () => {
   const [coursesSelect, setCoursesSelect] = useState({});
   const [dateSelect, setDateSelect] = useState(null);
   const formatDates = formatDate(dateSelect);
+  console.log("🚀 ~ RecordAttendance ~ formatDates:", formatDates);
   const queryClient = useQueryClient();
 
   const initialValues = {
@@ -33,18 +34,42 @@ const RecordAttendance = () => {
     lecture_date: "",
   };
 
-  const handleCheckboxChange = (event: any, selectedRow: any) => {
-    const checkboxId = event.target.id;
-    if (event.target.checked) {
-      setSelectedRows((prevSelectedItems: any) => [
-        ...prevSelectedItems,
-        selectedRow.row.original,
-      ]);
-    } else {
-      setSelectedRows((prevSelectedItems: any) =>
-        prevSelectedItems.filter((item: any) => item.id === Number(checkboxId))
+  const selectStudent = selectedRows?.map((student) => ({
+    course_id: student?.id,
+  }));
+  console.log("🚀 ~ RecordAttendance ~ selectStudent:", selectStudent);
+
+  // const handleCheckboxChange = (event: any, selectedRow: any) => {
+  //   const checkboxId = event.target.id;
+  //   if (event.target.checked) {
+  //     setSelectedRows((prevSelectedItems: any) => [
+  //       ...prevSelectedItems,
+  //       selectedRow.row.original,
+  //     ]);
+  //   } else {
+  //     setSelectedRows((prevSelectedItems: any) =>
+  //       prevSelectedItems.filter((item: any) => item.id !== Number(checkboxId))
+  //     );
+  //   }
+  // };
+
+  const handleCheckboxChange = (event, selectedRow) => {
+    const checkboxId = selectedRow.row.original.id;
+    setSelectedRows((prevSelectedItems) => {
+      const isAlreadySelected = prevSelectedItems.some(
+        (item) => item.id === checkboxId
       );
-    }
+
+      if (isAlreadySelected) {
+        return prevSelectedItems.filter((item) => item.id !== checkboxId);
+      } else {
+        return [...prevSelectedItems, selectedRow.row.original];
+      }
+    });
+  };
+
+  const isRowSelected = (id) => {
+    return selectedRows.some((row) => row.id === id);
   };
 
   const fetchCoursesData = async () => {
@@ -68,7 +93,7 @@ const RecordAttendance = () => {
   const courseOption = coursesData?.map((course) => ({
     id: course.course_id,
     value: course.course.course_name,
-    label: course.course.course_name,
+    label: course.course.course_name || `${t("course")}`,
   }));
 
   const fetchLectureDate = async () => {
@@ -83,10 +108,8 @@ const RecordAttendance = () => {
 
   const lectureDateData = lectureDate && lectureDate?.data?.data;
   const filterLectureDate = lectureDateData?.filter(
-    (date) => date.date === formatDates
+    (date) => date.date == formatDates
   );
-
-  // ?course_id=${coursesSelect}&date=${dateSelect}
 
   const fetchRecordAttendance = async () => {
     const course_id = coursesSelect?.id;
@@ -105,6 +128,10 @@ const RecordAttendance = () => {
   });
 
   const RecordAttendanceData = (data && data?.data?.data.students) || [];
+  console.log(
+    "🚀 ~ RecordAttendance ~ RecordAttendanceData:",
+    RecordAttendanceData
+  );
   const RecordAttendancePagination = data?.data?.data || {};
 
   const examsTodayColumns = useMemo<ColumnDef<any>[]>(
@@ -130,19 +157,22 @@ const RecordAttendance = () => {
         header: () => <span>{t("absence rate")}</span>,
         accessorKey: "attend_percentage",
         cell: (info) => {
+          const attendPercentage = Number(
+            info.getValue() ? info.getValue()?.replace("%", "").trim() : 10
+          );
           const colorAbsence =
-            Number(info.getValue()) <= 15
+            Number(attendPercentage) <= 15
               ? "#46BD84"
-              : Number(info.getValue()) > 15 && Number(info.getValue()) < 50
+              : Number(attendPercentage) > 15 && Number(attendPercentage) < 50
               ? "#FEAE4F"
-              : Number(info.getValue()) >= 50
+              : Number(attendPercentage) >= 50
               ? "#E63329"
               : "";
           return (
             <CircularProgressbar
-              className="w-12 m-auto font-bold"
-              value={Number(info.getValue())}
-              text={`${Number(info.getValue())}%`}
+              className="w-12 font-bold m-auto"
+              value={attendPercentage}
+              text={`${attendPercentage}%`}
               strokeWidth={11}
               styles={buildStyles({
                 textColor: colorAbsence,
@@ -158,6 +188,8 @@ const RecordAttendance = () => {
         header: () => <span>{t("presence")}</span>,
         accessorKey: "presence",
         cell: (info: any) => {
+          const isDisabled = info.row.original.attendance[0]?.attend === 1;
+          const isChecked = isRowSelected(info.row.original.id);
           return (
             <div className="flex items-center justify-center gap-4">
               <input
@@ -165,14 +197,16 @@ const RecordAttendance = () => {
                 className="w-5 h-5 cursor-pointer"
                 id={info.row.original.id}
                 name="selectedItem"
-                onClick={(event) => handleCheckboxChange(event, info)}
+                onChange={(event) => handleCheckboxChange(event, info)}
+                disabled={isDisabled}
+                checked={isChecked}
               />
             </div>
           );
         },
       },
     ],
-    []
+    [selectedRows]
   );
 
   const { mutate, isPending } = useMutation({
@@ -180,9 +214,7 @@ const RecordAttendance = () => {
     mutationFn: postAttendance,
     onSuccess: (data) => {
       queryClient.invalidateQueries("attendance");
-      toast.success(
-        t("instructor login information has been added successfully")
-      );
+      toast.success(t("student attendance has been successfully registered"));
     },
     onError: (error) => {
       const errorMessage = error?.response?.data?.error[0];
@@ -198,8 +230,9 @@ const RecordAttendance = () => {
   return (
     <div>
       <div className="bg-[#F9F9F9] rounded-3xl py-5 px-8 main_shadow mb-5">
-        <Formik initialValues={initialValues} onSubmit={(values) => {}}>
-          {({ setFieldValue }) => {
+        <Formik initialValues={initialValues} onSubmit={() => {}}>
+          {({ setFieldValue, values }) => {
+            console.log("🚀 ~ RecordAttendance ~ values:", values);
             return (
               <Form className="grid grid-cols-1 gap-8 md:grid-cols-3 sm:grid-cols-2">
                 <div>
@@ -265,8 +298,30 @@ const RecordAttendance = () => {
         </div>
       </div>
 
-      <div className="flex items-center justify-end my-8">
-        <Button>{t("submit")}</Button>
+      <div className="flex justify-end items-center my-8">
+        <Button
+          action={() => {
+            mutate({
+              course_id: coursesSelect?.id,
+              lecture_id: filterLectureDate?.length && filterLectureDate[0]?.id,
+              students: selectedRows?.map((student) => ({
+                student_id: student?.id,
+                attend: true,
+              })),
+            });
+            console.log("🚀 ~ RecordAttendance ~ values:", {
+              course_id: coursesSelect?.id,
+              lecture_id: filterLectureDate?.length && filterLectureDate[0]?.id,
+              students: selectedRows?.map((student) => ({
+                student_id: student?.id,
+                attend: true,
+              })),
+            });
+          }}
+          loading={isPending}
+        >
+          {t("submit")}
+        </Button>
       </div>
     </div>
   );

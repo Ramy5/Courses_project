@@ -8,8 +8,10 @@ import { IoTimeOutline } from "react-icons/io5";
 import { useRTL } from "../../../hooks/useRTL";
 
 const Schedule = ({ scheduleData }) => {
+  console.log("🚀 ~ Schedule ~ scheduleData:", scheduleData)
   const isRTL = useRTL();
   const arrangeScheduleData = scheduleData?.sort((a, b) => a.day_id - b.day_id);
+  console.log("🚀 ~ Schedule ~ arrangeScheduleData:", arrangeScheduleData)
   const calendarRef = useRef(null);
 
   const events = arrangeScheduleData?.map((lecture, index) => {

@@ -328,7 +328,7 @@ function App() {
           <Route path="/instructor/exams" element={<InstructorExams />} />
 
           {/* INSTRUCTOR ADD EXAM*/}
-          <Route path="/instructor/exams/add" element={<InstructorAddExam />} />
+          <Route path="/instructor/exams/add/" element={<InstructorAddExam />} />
 
           {/* INSTRUCTOR GRADES */}
           <Route path="/instructor/setting" element={<InstructorSetting />} />
