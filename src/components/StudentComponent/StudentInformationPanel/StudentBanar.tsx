@@ -1,12 +1,15 @@
 import { t } from "i18next";
 import studentBanarImg from "../../../assets/studentInformationPanel/studentInformationPanel_banar.svg";
 import instructorPerson from "../../../assets/studentInformationPanel/person.svg";
+import { useAppSelector } from "../../../hooks/reduxHooks";
 
 interface StudentBanar_TP {
-  userName: string;
+  userName?: string;
 }
 
 const StudentBanar: React.FC<StudentBanar_TP> = ({ userName }) => {
+  const { user } = useAppSelector((slice) => slice.user);
+
   return (
     <div
       className="flex items-center gap-8 px-6 py-2 bg-no-repeat bg-cover"
@@ -17,7 +20,7 @@ const StudentBanar: React.FC<StudentBanar_TP> = ({ userName }) => {
       </div>
       <div>
         <h2 className="mb-3 text-4xl font-bold text-white">
-          {t(`hello, ${userName}`)}
+          {t(`hello, ${user?.name}`)}
         </h2>
         <p className="font-bold text-white">
           {t(

@@ -1,7 +1,7 @@
 import HomeworkRequiredBox from "./HomeworkRequiredBox";
 
-const HomeworksRequired = () => {
-  const data = [
+const HomeworksRequired = ({ data }: { data: any }) => {
+  const datas = [
     {
       id: 1,
       subject: "Physics",
@@ -42,7 +42,7 @@ const HomeworksRequired = () => {
 
   return (
     <div className="grid items-center my-10 lg:grid-cols-2 xl:grid-cols-3 gap-x-14 gap-y-8">
-      {data.map((el, index) => {
+      {data?.map((el: any, index: number) => {
         return <HomeworkRequiredBox key={index} {...el} />;
       })}
     </div>

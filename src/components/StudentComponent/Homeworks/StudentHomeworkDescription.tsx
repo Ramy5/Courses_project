@@ -17,6 +17,7 @@ interface StudentHomeworkDescription_TP {
   degree: number;
   attachment: File;
   links: string;
+  score: number;
   isInstructotHomework?: boolean;
   isInstructorProject?: boolean;
 }
@@ -74,14 +75,14 @@ const StudentHomeworkDescription = (props: StudentHomeworkDescription_TP) => {
               </span>
               <span className="text-gray-700">{startDate}</span>
             </p>
-            {!isInstructotHomework && (
+            {/* {!isInstructotHomework && (
               <p className="flex items-center gap-2">
                 <span>
                   <IoTimeOutline className="text-2xl text-mainColor" />
                 </span>
                 <span className="text-gray-700">{startTime}</span>
               </p>
-            )}
+            )} */}
           </div>
         </div>
 
@@ -96,14 +97,14 @@ const StudentHomeworkDescription = (props: StudentHomeworkDescription_TP) => {
               </span>
               <span className="text-gray-700">{endDate}</span>
             </p>
-            {!isInstructotHomework && (
+            {/* {!isInstructotHomework && (
               <p className="flex items-center gap-2">
                 <span>
                   <IoTimeOutline className="text-2xl text-mainColor" />
                 </span>
                 <span className="text-gray-700">{endTime}</span>
               </p>
-            )}
+            )} */}
           </div>
         </div>
       </div>
@@ -112,7 +113,7 @@ const StudentHomeworkDescription = (props: StudentHomeworkDescription_TP) => {
       <p className="flex items-center gap-4">
         <span className="text-2xl font-bold text-mainColor">{t("grade")}:</span>
         <span className="text-xl font-bold">
-          {isInstructorProject ? score : grade}
+          {isInstructorProject || isProject ? score : grade}
         </span>
       </p>
 
@@ -134,7 +135,7 @@ const StudentHomeworkDescription = (props: StudentHomeworkDescription_TP) => {
       </div>
 
       {/* LINKS */}
-      {!isInstructotHomework && (
+      {/* {!isInstructotHomework && (
         <div>
           <h2 className="mb-4 text-2xl font-bold text-mainColor">
             {t("enrichment links")}
@@ -153,7 +154,7 @@ const StudentHomeworkDescription = (props: StudentHomeworkDescription_TP) => {
             })}
           </div>
         </div>
-      )}
+      )} */}
 
       {/* ADD HOMEWORK OR PROJECT */}
       <div className="flex items-center justify-between w-full mt-24">

@@ -5,40 +5,56 @@ import {
   StudentLecturesBoxes,
 } from "../../components";
 import { t } from "i18next";
+import customFetch from "../../utils/axios";
+import { useQuery } from "@tanstack/react-query";
+import Loading from "../../components/UI/Loading";
+
+const getNewsData = async () => {
+  const { data } = await customFetch("getLatestCourseItems");
+  return data.data.courses;
+};
 
 const StudentInformationPanel = () => {
+  const { data, isLoading, isFetching, isRefetching } = useQuery({
+    queryKey: ["get-news"],
+    queryFn: getNewsData,
+  });
+
+  console.log("courses", data);
+
   const latestNewsData = [
     {
       titleHead: "latest lectures",
-      data: [
-        "first project added physics course",
-        "first project added physics course",
-        "first project added physics course",
-      ],
+      data: data?.flatMap((course) =>
+        course?.latest_lectures?.map(
+          (lecture, i) => `lecture ${i + 1} added ${course?.course_name} course`
+        )
+      ),
     },
     {
       titleHead: "latest tests",
-      data: [
-        "first homework added physics course",
-        "first homework added physics course",
-        "first homework added physics course",
-      ],
+      data: data?.flatMap((course) =>
+        course?.latest_exams?.map(
+          (exam, i) => `test ${i + 1} added ${course?.course_name} course`
+        )
+      ),
     },
     {
       titleHead: "latest projects",
-      data: [
-        "first project added physics course",
-        "first project added physics course",
-        "first project added physics course",
-      ],
+      data: data?.flatMap((course) =>
+        course?.latest_projects?.map(
+          (project, i) => `project ${i + 1} added ${course?.course_name} course`
+        )
+      ),
     },
     {
       titleHead: "latest homeworks",
-      data: [
-        "first homework added physics course",
-        "first homework added physics course",
-        "first homework added physics course",
-      ],
+      data: data?.flatMap((course) =>
+        course?.latest_homeworks?.map(
+          (homework, i) =>
+            `homework ${i + 1} added ${course?.course_name} course`
+        )
+      ),
     },
   ];
 
@@ -48,6 +64,8 @@ const StudentInformationPanel = () => {
     { title: "homeworks", percentage: 50 },
     { title: "lectures", percentage: 5 },
   ];
+
+  if (isLoading || isFetching || isRefetching) return <Loading />;
 
   return (
     <div className="space-y-10">
