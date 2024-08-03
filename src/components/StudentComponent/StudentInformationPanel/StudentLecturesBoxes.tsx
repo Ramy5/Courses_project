@@ -6,27 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import LoadingIndicator from "../../UI/LoadingIndicator";
 import { generateRandomColor } from "../../../utils/helpers";
 
-const getCourses = async () => {
-  const { data } = await customFetch("getStudentCourses");
-  return data.data.courses;
-};
-
-const StudentLecturesBoxes = () => {
-  const { data, isLoading, isFetching, isRefetching } = useQuery({
-    queryKey: ["get-course"],
-    queryFn: getCourses,
-  });
-
-  const studentLecturesData = data?.map((course: any) => {
-    return {
-      programTitle: course.course_name,
-      programColor: generateRandomColor(),
-      lectureDate: course.day,
-      numOfStudents: course.students_count,
-      instructors: course?.teachers?.map((teacher) => teacher.full_name),
-    };
-  });
-
+const StudentLecturesBoxes = ({ studentLecturesData }) => {
   // const studentLecturesData = [
   //   {
   //     programTitle: t("Web"),
@@ -65,9 +45,6 @@ const StudentLecturesBoxes = () => {
   //   },
   // ];
 
-  if (isLoading || isFetching || isRefetching) return <LoadingIndicator />;
-  console.log("🚀 ~ StudentLecturesBoxes ~ data:", data);
-
   return (
     <div className="relative">
       <Swiper
@@ -100,7 +77,7 @@ const StudentLecturesBoxes = () => {
         modules={[Navigation, Autoplay]}
         className="mySwiper"
       >
-        {studentLecturesData.map((lecture, index) => (
+        {studentLecturesData?.map((lecture, index) => (
           <SwiperSlide>
             <LectureBox
               programTitle={lecture.programTitle}
