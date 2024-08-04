@@ -8,9 +8,15 @@ import { t } from "i18next";
 import customFetch from "../../utils/axios";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "../../components/UI/Loading";
+import { generateRandomColor } from "../../utils/helpers";
 
 const getNewsData = async () => {
   const { data } = await customFetch("getLatestCourseItems");
+  return data.data.courses;
+};
+
+const getCourses = async () => {
+  const { data } = await customFetch("getStudentCourses");
   return data.data.courses;
 };
 
@@ -20,7 +26,27 @@ const StudentInformationPanel = () => {
     queryFn: getNewsData,
   });
 
+  const {
+    data: coursesData,
+    isLoading: coursesDataIsLoading,
+    isFetching: coursesDataIsFetching,
+    isRefetching: coursesDataIsRefetching,
+  } = useQuery({
+    queryKey: ["get-course"],
+    queryFn: getCourses,
+  });
+
   console.log("courses", data);
+
+  const studentLecturesData = coursesData?.map((course: any) => {
+    return {
+      programTitle: course.course_name,
+      programColor: generateRandomColor(),
+      lectureDate: course.day,
+      numOfStudents: course.students_count,
+      instructors: course?.teachers?.map((teacher) => teacher.full_name),
+    };
+  });
 
   const latestNewsData = [
     {
@@ -65,7 +91,15 @@ const StudentInformationPanel = () => {
     { title: "lectures", percentage: 5 },
   ];
 
-  if (isLoading || isFetching || isRefetching) return <Loading />;
+  if (
+    isLoading ||
+    isFetching ||
+    isRefetching ||
+    coursesDataIsLoading ||
+    coursesDataIsFetching ||
+    coursesDataIsRefetching
+  )
+    return <Loading />;
 
   return (
     <div className="space-y-10">
@@ -73,7 +107,7 @@ const StudentInformationPanel = () => {
       <StudentBanar />
 
       {/* STUDENT LECTURES BOXES */}
-      <StudentLecturesBoxes />
+      <StudentLecturesBoxes studentLecturesData={studentLecturesData} />
 
       {/* NEWS */}
       <div className="grid items-center gap-8 lg:grid-cols-2">

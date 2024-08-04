@@ -42,8 +42,8 @@ customFetch.interceptors.response.use(
       clearCookies();
       Cookies.remove("role");
       Cookies.remove("token");
-      toast.error(t("your session is end, please log in again"));
-      location.href = "/";
+      toast.error(t("your session is end, please login again"));
+      // location.href = "/";
     }
 
     return Promise.reject(error);
