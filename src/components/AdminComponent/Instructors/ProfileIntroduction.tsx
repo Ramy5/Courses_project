@@ -19,6 +19,7 @@ const ProfileIntroduction = ({
   navigation,
   deleteInstructor,
 }: PersonlyProfile) => {
+  console.log("🚀 ~ personalData:", personalData)
   const [openRow, setOpenRow] = useState<number | null>(null);
   const navigate = useNavigate();
 
@@ -35,7 +36,7 @@ const ProfileIntroduction = ({
       <div className="absolute flex items-end justify-between w-full md:px-12 px-5 md:top-32 top-[155px]">
         <div className="flex items-end gap-3">
           <img
-            src={personalData.personalImage}
+            src={personalData.personal_image}
             alt="personal Image"
             className="border-[3px] border-[#393D94] rounded-full md:w-[134px] w-24"
           />

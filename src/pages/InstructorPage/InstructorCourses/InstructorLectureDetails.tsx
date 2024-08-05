@@ -21,13 +21,14 @@ const InstructorLectureDetails = () => {
   const numbers = ConvertNumberToWord();
 
   const fetchInstructorSchedule = async () => {
-    const response = await customFetch(`showLectureData/${id}`);
+    const response = await customFetch(`showLectureDataIns/${id}`);
     return response;
   };
 
   const { data, isFetching, isRefetching } = useQuery({
     queryKey: ["show_lecture"],
     queryFn: fetchInstructorSchedule,
+    enabled: !!id
   });
 
   const instructorLectureShow = data?.data?.data.lecture_data || [];
@@ -66,7 +67,7 @@ const InstructorLectureDetails = () => {
           <div className="flex items-center gap-2 mt-3">
             <PiClockCountdownBold size={26} className="text-mainColor" />
             <p>
-              {instructorLectureShow?.lecture.start_time
+              {instructorLectureShow?.lecture?.start_time
                 ?.split(":")
                 .slice(0, 2)
                 .join(":")}

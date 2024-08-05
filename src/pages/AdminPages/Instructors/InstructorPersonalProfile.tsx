@@ -23,8 +23,6 @@ export type InstructorPersonalData_TP = {
 };
 
 const InstructorPersonalProfile = () => {
-  // const [selectAll, setSelectAll] = useState<Boolean>(false);
-  // const [selectedRows, setSelectedRows] = useState<any>([]);
   const [openRow, setOpenRow] = useState<number | null>(null);
   const queryClient = useQueryClient();
   const { id } = useParams();
@@ -41,6 +39,7 @@ const InstructorPersonalProfile = () => {
   });
 
   const instructorPersonalData = data?.data.data.teacher || {};
+  console.log("🚀 ~ InstructorPersonalProfile ~ instructorPersonalData:", instructorPersonalData)
 
   useEffect(() => {
     if (error) {

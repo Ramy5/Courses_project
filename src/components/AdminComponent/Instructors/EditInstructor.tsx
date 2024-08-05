@@ -102,7 +102,7 @@ const EditInstructor = () => {
 
   useEffect(() => {
     refetch();
-  }, [instructorParamID]);
+  }, [instructorParamID, loginEditData]);
 
   if (isLoading || isFetching || isRefetching) return <Loading />;
 
