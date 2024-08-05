@@ -48,9 +48,9 @@ const InstructorAddExam = () => {
     id: grade?.id,
   }));
 
-  // useEffect(() => {
-  //   setGrades(editGrade);
-  // }, [isSuccess]);
+  useEffect(() => {
+    setGrades(editGrade || []);
+  }, [isSuccess]);
 
   const initialValues = {
     course_id: editExamData?.course?.id || "",

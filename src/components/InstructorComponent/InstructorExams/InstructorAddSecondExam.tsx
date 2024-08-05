@@ -18,6 +18,7 @@ const InstructorAddSecondExam = ({
   const questionsPerPage = 2;
 
   const { values, setFieldValue } = useFormikContext();
+  console.log("🚀 ~ values:", values)
 
   const filterBoolenFromExam = fileExam?.filter(
     (item) => item.answer == "true" || item.answer == "false"
@@ -82,9 +83,11 @@ const InstructorAddSecondExam = ({
   const handleGradeChange = (e, itemId) => {
     const { value } = e.target;
     setGrades((prev) => {
+      console.log("🚀 ~ setGrades ~ prev:", prev)
       const existingGradeIndex = prev?.findIndex((grade) => grade.id == itemId);
       if (existingGradeIndex !== -1) {
         const updatedGrades = [...prev];
+        console.log("🚀 ~ setGrades ~ updatedGrades:", updatedGrades)
         updatedGrades[existingGradeIndex].grade = value;
         return updatedGrades;
       }
@@ -93,12 +96,10 @@ const InstructorAddSecondExam = ({
   };
 
   const getGradeValue = (itemId) => {
-    console.log("🚀 ~ getGradeValue ~ itemId:", itemId);
     const grade = grades?.find((grade) => {
       return grade.id == itemId;
     });
-    console.log("🚀 ~ getGradeValue ~ grade:", grade);
-    return grade ? "" : grade?.grade;
+    return grade ? grade?.grade  : " " ; 
   };
 
   // useEffect(() => {
@@ -200,6 +201,7 @@ const InstructorAddSecondExam = ({
                   <p>No answers available</p>
                 )}
               </div>
+              
               <div className="flex flex-row items-center justify-between gap-2 sm:flex-col">
                 <div className="flex items-center ">
                   <label htmlFor="grade" className="font-semibold me-3">
@@ -210,7 +212,7 @@ const InstructorAddSecondExam = ({
                     id={`grades-${item.id}`}
                     type="number"
                     className="w-full text-lg py-2 bg-[#2222220d] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
-                    placeholder={`grades-${item.id}`}
+                    placeholder={t("grade")}
                     labelProps="!font-semibold"
                     value={getGradeValue(item.id)}
                     onChange={(e) => handleGradeChange(e, item.id)}
