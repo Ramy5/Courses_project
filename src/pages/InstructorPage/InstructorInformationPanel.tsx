@@ -20,46 +20,94 @@ import DatePicker from "react-datepicker";
 import { useState } from "react";
 import { t } from "i18next";
 import { useAppSelector } from "../../hooks/reduxHooks";
+import customFetch from "../../utils/axios";
+import { useQuery } from "@tanstack/react-query";
+import Loading from "../../components/UI/Loading";
+import { generateRandomColor } from "../../utils/helpers";
+
+const getCourses = async () => {
+  const { data } = await customFetch("TeacherCourses");
+  return data.data;
+};
+
+const getCount = async () => {
+  const { data } = await customFetch("TeacherCoursesCount");
+  return data.data;
+};
 
 const InstructorInformationPanel = () => {
   const [startDate, setStartDate] = useState(new Date());
   const { user } = useAppSelector((slice) => slice.user);
 
+  const {
+    data: countData,
+    isLoading: countIsLoading,
+    isFetching: countIsFetching,
+    isRefetching: countIsRefetching,
+  } = useQuery({
+    queryKey: ["get-counts"],
+    queryFn: getCount,
+  });
+  console.log("🚀 ~ InformationPanel ~ countData:", countData);
+
+  const {
+    data: courseData,
+    isLoading: courseIsLoading,
+    isFetching: courseIsFetching,
+    isRefetching: courseIsRefetching,
+  } = useQuery({
+    queryKey: ["get-courses"],
+    queryFn: getCourses,
+  });
+  console.log("🚀 ~ InformationPanel ~ programData:", courseData);
+
+  const studentLecturesData = courseData?.map((course: any) => {
+    return {
+      programTitle: course.course_name,
+      programColor: generateRandomColor(),
+      lectureDate: course.day,
+      numOfStudents: course.student_count,
+      instructors: course?.teachers
+        ?.slice(0, 2)
+        ?.map((teacher) => teacher.teacher_name),
+    };
+  });
+
   const dataCounts = [
     {
       dataTitle: "number of lectures",
       dataColor: "#005560",
-      dataCount: 10,
+      dataCount: countData?.lecture_count,
       dataIcon: <FaHashtag className="text-lg lg:text-2xl" color="#005560" />,
     },
     {
       dataTitle: "lecture hours",
       dataColor: "#7E57C2",
-      dataCount: 40,
+      dataCount: countData?.lecture_count, // TODO:
       dataIcon: <FaClock className="text-lg lg:text-2xl" color="#7E57C2" />,
     },
     {
       dataTitle: "courses",
       dataColor: "#388E3C",
-      dataCount: 20,
+      dataCount: countData?.course_count,
       dataIcon: <FaBook className="text-lg lg:text-2xl" color="#388E3C" />,
     },
     {
       dataTitle: "number of exams",
       dataColor: "#D32F2F",
-      dataCount: 10,
+      dataCount: countData?.exam_count,
       dataIcon: <FaListAlt className="text-lg lg:text-2xl" color="#D32F2F" />,
     },
     {
       dataTitle: "projects",
       dataColor: "#8D6E63",
-      dataCount: 40,
+      dataCount: countData?.project_count,
       dataIcon: <FaTasks className="text-lg lg:text-2xl" color="#8D6E63" />,
     },
     {
       dataTitle: "assignments",
       dataColor: "#0277BD",
-      dataCount: 20,
+      dataCount: countData?.homework_count,
       dataIcon: (
         <FaClipboardList className="text-lg lg:text-2xl" color="#0277BD" />
       ),
@@ -107,13 +155,23 @@ const InstructorInformationPanel = () => {
     { title: "lectures", percentage: 5 },
   ];
 
+  if (
+    countIsLoading ||
+    countIsFetching ||
+    countIsRefetching ||
+    courseIsLoading ||
+    courseIsFetching ||
+    courseIsRefetching
+  )
+    return <Loading />;
+
   return (
     <div className="space-y-10">
       {/* INSTRUCTOR BANAR */}
       <StudentBanar userName={user?.name} />
 
       {/* STUDENT LECTURES BOXES */}
-      <StudentLecturesBoxes />
+      <StudentLecturesBoxes studentLecturesData={studentLecturesData} />
 
       {/* DATA COUNT AND PERSONS DATA */}
       <div className="grid items-center grid-cols-2 gap-6 lg:grid-cols-3">

@@ -20,7 +20,7 @@ const HomeworkRequiredBox = (props) => {
   return (
     <Link
       to={isProject ? `/students/projects/${id}` : `/students/homeworks/${id}`}
-      className={`rounded-lg border-s-[12px] p-4 border border-gray-400 shadow-xl bg-gray-100 space-y-4`}
+      className={`rounded-lg border-s-[12px] w-max p-4 border border-gray-400 shadow-xl bg-gray-100 space-y-4`}
       style={{ borderInlineStartColor: generateRandomColor() }}
     >
       <p className="flex items-center gap-3">
