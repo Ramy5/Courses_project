@@ -12,13 +12,13 @@ import Loading from "../../../components/UI/Loading";
 
 type reportsFilter = "program" | "level" | "course";
 
-const getReport = async (page: number, search: string) => {
+const getReport = async (page: number, search: string="", levelID: string="", courseID:string="") => {
   const { data } = await customFetch(
-    `getProgramCoursesLevel?page=${page}&search=${search}&level=`
+    `getProgramCoursesLevel?level=${levelID}&course_id=${courseID}`
   );
   return data.data;
 };
-
+ 
 const getAllPrograms = async () => {
   const { data } = await customFetch("programs");
   return data.data;
@@ -28,7 +28,7 @@ const getAllCourses = async (programId: number) => {
   const { data } = await customFetch(`courses?program_id=${programId}`);
   return data.data;
 };
-
+ 
 const Reports = () => {
   const [page, setPage] = useState<number>(1);
   const [search, setSearch] = useState<string>("");
@@ -51,7 +51,7 @@ const Reports = () => {
     refetch,
   } = useQuery({
     queryKey: ["students-reports"],
-    queryFn: () => getReport(page, search),
+    queryFn: () => getReport(page, search, levelSelect?.id, courseSelect?.id),
   });
   console.log("🚀 ~ Reports ~ studentReportsData:", studentReportsData);
 
@@ -264,7 +264,7 @@ const Reports = () => {
 
   useEffect(() => {
     coursesRefetch();
-  }, [programsOptions]);
+  }, [programSelect]);
 
   if (isLoading || isRefetching || isFetching) return <Loading />;
 

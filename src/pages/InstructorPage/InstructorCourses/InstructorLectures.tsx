@@ -67,8 +67,7 @@ const InstructorLectures = () => {
               onClick={() => {
                 if (!!instructor?.lecture_data) {
                   navigate(
-                    `/instructor/Courses/lecture/details/${instructor?.lecture_data.id}`,
-                    { state: showCourse }
+                    `/instructor/Courses/lecture/details/${instructor?.lecture_data.id}`
                   );
                 } else {
                   toast.info(t("the lecture must be prepared first"));
