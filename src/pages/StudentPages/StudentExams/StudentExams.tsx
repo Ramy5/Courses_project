@@ -7,11 +7,21 @@ import customFetch from "../../../utils/axios";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "../../../components/UI/Loading";
 import { toast } from "react-toastify";
+import { useRTL } from "../../../hooks/useRTL";
+import {
+  calculateTime,
+  formatDate,
+  formatEgyptDate,
+  formatTime,
+  formatTimeTo12Hour,
+  formatTimeTo24Hour,
+} from "../../../utils/helpers";
 
 const StudentExams = () => {
   const [tabs, setTabs] = useState("today_exams");
   console.log("🚀 ~ StudentExams ~ tabs:", tabs);
   const [loading, setLoading] = useState(false);
+  const isRTL = useRTL();
   const navigate = useNavigate();
 
   const buttons = [
@@ -25,7 +35,7 @@ const StudentExams = () => {
     return response;
   };
 
-  const { data, isFetching, isRefetching, isLoading } = useQuery({
+  const { data, isFetching, isRefetching, isLoading, refetch } = useQuery({
     queryKey: ["student_ExamsData"],
     queryFn: fetchStudentExams,
   });
@@ -39,7 +49,7 @@ const StudentExams = () => {
       : tabs === "today_exams"
       ? studentExamsData?.today_exams
       : studentExamsData?.upcoming_exams;
-  console.log("🚀 ~ StudentExams ~ examsData:", examsData);
+  console.log("🚀 ~ StudentExams ~ examsStatus:", examsData);
 
   const examsColumns = useMemo<ColumnDef<any>[]>(
     () => [
@@ -61,7 +71,7 @@ const StudentExams = () => {
       {
         header: () => <span>{t("exam time")}</span>,
         accessorKey: "start_time",
-        cell: (info) => `${info.getValue()}`,
+        cell: (info) => formatTimeTo12Hour(info.getValue()),
       },
       {
         header: () => <span>{t("exam type")}</span>,
@@ -84,19 +94,29 @@ const StudentExams = () => {
                 const examDate = info.row.original.date;
                 const startTime = info.row.original.start_time;
 
-                const now = new Date();
-                const currentDate = now.toISOString().split("T")[0];
-                const currentTime = now.toTimeString();
+                const duration = info.row.original.duration;
+                const formatDuration = formatTime(duration * 60);
+
+                const currentDate = new Date();
+                const currentTime = formatEgyptDate(currentDate);
+                const currentTimeFormat = formatTimeTo24Hour(currentTime);
+
+                const currentDateFormat = formatDate(currentDate);
+
+                const finishedTime = calculateTime(formatDuration, startTime);
 
                 const isReady =
-                  examDate <= currentDate && startTime <= currentTime;
+                  currentDateFormat == examDate &&
+                  currentTimeFormat >= startTime &&
+                  currentTimeFormat <= finishedTime;
 
                 return (
                   <Button
                     action={() => {
                       if (isReady) {
                         navigate(
-                          `/student/exams/details/${info.row.original.id}`
+                          `/student/exams/details/${info.row.original.id}`,
+                          { replace: true }
                         );
                       } else {
                         toast.info(t("the exam is not ready"));
@@ -156,11 +176,11 @@ const StudentExams = () => {
                     {tabs === button.id && (
                       <div>
                         <Table
-                          data={examsData|| []}
+                          data={examsData || []}
                           columns={examsColumns}
-                          showNavigation={examsData?.length > 10}
-                          totalPages={40}
-                          currentPage={"1"}
+                          // showNavigation={examsData?.length > 10}
+                          // totalPages={40}
+                          // currentPage={"1"}
                         />
                       </div>
                     )}

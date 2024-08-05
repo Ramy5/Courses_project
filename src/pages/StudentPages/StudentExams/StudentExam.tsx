@@ -8,6 +8,8 @@ import customFetch from "../../../utils/axios";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Loading from "../../../components/UI/Loading";
 import { toast, useToast } from "react-toastify";
+import { format } from 'date-fns';
+import { formatTime } from "../../../utils/helpers";
 
 const postQuestionExam = async (newQuestionExam: any) => {
   const data = customFetch.post("/storeAnswer", newQuestionExam);
@@ -20,13 +22,18 @@ const StudentExam = () => {
   console.log("🚀 ~ StudentExam ~ answers:", answers);
   const [showReceiptModal, setShowReceiptModal] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState(null);
-  const [questionsExam, setQuestionsExam] = useState([]);
-  console.log("🚀 ~ StudentExam ~ questionsExam:", questionsExam);
   console.log("🚀 ~ StudentExam ~ timeRemaining:", timeRemaining);
+  const [questionsExam, setQuestionsExam] = useState([]);
+  const [finishedExam, setFinishedExam] = useState("");
+  console.log("🚀 ~ StudentExam ~ finishedExam:", finishedExam);
   const navigate = useNavigate();
   const isRTL = useRTL();
   const { id } = useParams();
   const queryClient = useQueryClient();
+
+  // useEffect(() => {
+  //     navigate(`/student/exam/${id}`, { replace: true });
+  // }, [navigate, id]);
 
   const fetchStudentQuestionExam = async () => {
     const response = await customFetch(`/examQuestion/${id}?per_page=10000`);
@@ -38,22 +45,38 @@ const StudentExam = () => {
     queryFn: fetchStudentQuestionExam,
   });
 
-  const studentQuestionExam = data && data?.data?.data?.examQuestion;
-  console.log("🚀 ~ StudentExam ~ studentQuestionExam:", studentQuestionExam);
-
-  const examCourseName =
-    studentQuestionExam?.length &&
-    studentQuestionExam[0]?.exam?.course.course_name;
-
-  const examDuration =
-    studentQuestionExam?.length && studentQuestionExam[0]?.exam?.duration;
+  const studentQuestionExam = data?.data?.data?.examQuestion;
+  const examCourseName = studentQuestionExam?.[0]?.exam?.course.course_name;
+  const examDuration = studentQuestionExam?.[0]?.exam?.duration;
+  console.log("🚀 ~ StudentExam ~ examDuration:", examDuration);
+  const examStartTime = studentQuestionExam?.[0]?.exam?.start_time;
 
   const examDetails = {
     exam_name: examCourseName,
-    exam_duration: `${examDuration}:00`,
+    exam_duration: examDuration,
     exam_questions: studentQuestionExam,
+    start_time: examStartTime,
   };
   console.log("🚀 ~ StudentExam ~ examDetails:", examDetails);
+
+  useEffect(() => {
+    if (examDetails?.exam_duration) {
+      setTimeRemaining(examDetails?.exam_duration * 60);
+    }
+  }, [examDetails?.exam_duration]);
+
+  // const formatTime = (seconds) => {
+  //   const hrs = Math.floor(seconds / 3600);
+  //   const mins = Math.floor((seconds % 3600) / 60);
+  //   const secs = Math.floor(seconds % 60);
+
+  //   if (seconds >= 3600) {
+  //     return `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+  //   } else {
+  //     return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+  //   }
+  // };
+  // console.log("🚀 ~ formatTime ~ formatTime:", formatTime(7000))
 
   const handleAnswerChange = (questionId, answer) => {
     setAnswers((prevAnswers) => ({
@@ -62,69 +85,43 @@ const StudentExam = () => {
     }));
   };
 
-  // const getStatusClass = (questionId, index) => {
-  //   if (index < questionNumber && answers[questionId]) {
-  //     return "bg-[#369252]";
-  //   } else if (index < questionNumber && !answers[questionId]) {
-  //     return "bg-mainRed";
-  //   } else {
-  //     return "bg-[#DDDDDD]";
-  //   }
-  // };
-
-  const convertDurationToSeconds = (duration) => {
-    const [minutes, seconds] = duration.split(":").map(Number);
-    return minutes * 60 + seconds;
-  };
+  useEffect(() => {
+    let timerInterval;
+    const startTimer = () => {
+      const timerInterval = setInterval(() => {
+        setTimeRemaining((prev) => {
+          if (prev <= 1) {
+            clearInterval(timerInterval);
+            return 0;
+          } else {
+            return prev - 1;
+          }
+        });
+      }, 1000);
+    };
+    const timerTimeout = setTimeout(startTimer, 1000);
+    return () => {
+      clearTimeout(timerTimeout);
+      clearInterval(timerInterval);
+    };
+  }, [timeRemaining]);
 
   useEffect(() => {
-    if (examDetails?.exam_duration) {
-      const initialTime = convertDurationToSeconds(examDetails?.exam_duration);
-      setTimeRemaining(initialTime);
+    if (timeRemaining === 0) {
+      mutate({
+        exam_id: id,
+        questions: questionsExam,
+      });
+      toast.success(t("the test was successfully passed."));
+      navigate("/student/exams/result", { state: id, replace: true });
     }
-  }, [examDetails?.exam_duration]);
+  }, [timeRemaining === 0]);
 
-  // useEffect(() => {
-  //   let timerInterval;
-
-  //   const startTimer = () => {
-  //     const timerInterval = setInterval(() => {
-  //       setTimeRemaining((prev) => {
-  //         if (prev <= 1) {
-  //           clearInterval(timerInterval);
-  //           return 0;
-  //         } else {
-  //           return prev - 1;
-  //         }
-  //       });
-  //     }, 1000);
-  //   };
-
-  //   const timerTimeout = setTimeout(startTimer, 1000);
-
-  //   return () => {
-  //     clearTimeout(timerTimeout);
-  //     clearInterval(timerInterval);
-  //   };
-  // }, []);
-
-  const formatTime = (seconds) => {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
-  };
-
-  const currentQuestion =
-    examDetails?.exam_questions?.length &&
-    examDetails?.exam_questions[questionNumber];
-  console.log("🚀 ~ StudentExam ~ currentQuestion:", currentQuestion);
-
+  const currentQuestion = examDetails?.exam_questions?.[questionNumber];
   const numberOfAnswer = Object.keys(answers).length;
 
   const unansweredQuestions =
     examDetails?.exam_questions?.length - numberOfAnswer;
-
-  const initialValues = {};
 
   const handleNextQuestion = () => {
     setQuestionNumber((prevIndex) => prevIndex + 1);
@@ -168,7 +165,7 @@ const StudentExam = () => {
     onSuccess: (data) => {
       queryClient.invalidateQueries("question");
       toast.success(t("the test was successfully passed."));
-      navigate("/student/exams/result", { state: id });
+      navigate("/student/exams/result", { state: id, replace: true });
     },
     onError: (error) => {
       const errorMessage = error?.response?.data?.error[0];
@@ -179,7 +176,7 @@ const StudentExam = () => {
   if (isFetching || isRefetching || isLoading) return <Loading />;
 
   return (
-    <Formik initialValues={initialValues} onSubmit={(values) => {}}>
+    <Formik initialValues={{}} onSubmit={(values) => {}}>
       <Form>
         <div className="bg-[#D9D9D9] flex flex-col sm:flex-row gap-5 px-5 py-12 min-h-screen">
           <div className="w-full lg:w-[25%] md:w-[33%] sm:w-[40%] bg-white main_shadow pt-4 pb-8 rounded-xl h-fit px-5">
@@ -188,7 +185,9 @@ const StudentExam = () => {
             </h2>
 
             <h1 className="text-[#369252] font-bold text-6xl opacity-100 my-6">
+              {/* {timeRemaining} */}
               {formatTime(timeRemaining)}
+              {/* {convertMinutesToHHMMSS(timeRemaining)} */}
             </h1>
 
             <div className="flex gap-2 items-center">

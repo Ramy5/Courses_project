@@ -2,15 +2,21 @@ import { t } from "i18next";
 import { Button } from "../../../components";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import customFetch from "../../../utils/axios";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "../../../components/UI/Loading";
+import { useEffect, useState } from "react";
 
 const StudentExamResults = () => {
   const navigate = useNavigate();
+  console.log("🚀 ~ StudentExamResults ~ navigate:", navigate);
   const location = useLocation();
+  const param = useParams();
+  console.log("🚀 ~ StudentExamResults ~ param:", param);
   console.log("🚀 ~ StudentExamResults ~ location:", location);
+  const hasPreviousPage = window.history
+  console.log("🚀 ~ StudentExamResults ~ hasPreviousPage:", hasPreviousPage)
 
   const fetchStudentExamResult = async () => {
     const response = await customFetch(`/getExamDetails/${location.state}`);
@@ -93,7 +99,7 @@ const StudentExamResults = () => {
           <div className="flex justify-center my-5">
             <Button
               className="bg-[#369252]"
-              action={() => navigate("/student/exams", { replace: true })}
+              action={() => navigate("/student/exams")}
             >
               {t("finish")}
             </Button>

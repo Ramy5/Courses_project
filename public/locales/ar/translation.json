@@ -492,5 +492,8 @@
   "edit homework": "تعديل الواجب",
   "password has been changed successfully": "تم تغيير كلمة المرور بنجاح",
   "the project has deleted successfully": "تم حذف المشروع بنجاح",
+  "evening":"مساء",
+  "morning":"صباح",
+  "time is over":"انتهى الوقت",
   "search about instructor": "البحث عن محاضر"
 }
