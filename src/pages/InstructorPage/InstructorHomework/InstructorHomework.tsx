@@ -46,7 +46,7 @@ const InstructorHomework = () => {
       </div>
 
       <div className="grid gap-12 mt-20 lg:grid-cols-2 xl:grid-cols-3">
-        {allHomeworks.map((homework: any) => (
+        {allHomeworks?.map((homework: any) => (
           <InstructorHomeworkBox key={homework.id} {...homework} />
         ))}
       </div>
