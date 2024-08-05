@@ -26,6 +26,20 @@ import { useMemo, useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { t } from "i18next";
 import { useAppSelector } from "../../hooks/reduxHooks";
+import customFetch from "../../utils/axios";
+import { useQuery } from "@tanstack/react-query";
+import Loading from "../../components/UI/Loading";
+import { generateRandomColor } from "../../utils/helpers";
+
+const getPrograms = async () => {
+  const { data } = await customFetch("showPrograms");
+  return data.data;
+};
+
+const getCount = async () => {
+  const { data } = await customFetch("getCounts");
+  return data.data;
+};
 
 const InformationPanel = () => {
   const isRTL = useRTL();
@@ -33,81 +47,74 @@ const InformationPanel = () => {
   // const [searchTerm, setSearchTerm] = useState("");
   const [sortOption, setSortOption] = useState(null);
   const { user } = useAppSelector((slice) => slice.user);
-  console.log("🚀 ~ InformationPanel ~ user:", user);
 
-  const programsData = [
-    {
-      programTitle: "Web Development Bootcamp",
-      programColor: "#3498db",
-      numOfCourses: 12,
-      numOfStudents: 150,
-      numOfInstructor: 10,
-    },
-    {
-      programTitle: "Data Science Program",
-      programColor: "#2ecc71",
-      numOfCourses: 8,
-      numOfStudents: 200,
-      numOfInstructor: 15,
-    },
-    {
-      programTitle: "UX/UI Design Course",
-      programColor: "#e74c3c",
-      numOfCourses: 10,
-      numOfStudents: 180,
-      numOfInstructor: 8,
-    },
-    {
-      programTitle: "Data Science Program",
-      programColor: "#2ecc71",
-      numOfCourses: 8,
-      numOfStudents: 200,
-      numOfInstructor: 15,
-    },
-    {
-      programTitle: "UX/UI Design Course",
-      programColor: "#e74c3c",
-      numOfCourses: 10,
-      numOfStudents: 180,
-      numOfInstructor: 8,
-    },
-  ];
+  const {
+    data: countData,
+    isLoading: countIsLoading,
+    isFetching: countIsFetching,
+    isRefetching: countIsRefetching,
+  } = useQuery({
+    queryKey: ["get-counts"],
+    queryFn: getCount,
+  });
+  console.log("🚀 ~ InformationPanel ~ countData:", countData);
+
+  const {
+    data: programData,
+    isLoading: programIsLoading,
+    isFetching: programIsFetching,
+    isRefetching: programIsRefetching,
+  } = useQuery({
+    queryKey: ["get-programs"],
+    queryFn: getPrograms,
+  });
+  console.log("🚀 ~ InformationPanel ~ programData:", programData);
+
+  const programsData = programData?.map((program: any) => {
+    return {
+      programTitle: program?.program_name,
+      programColor: generateRandomColor(),
+      numOfCourses: program?.course_count,
+      numOfStudents: program?.student_count,
+      numOfInstructor: program?.teacher_count,
+    };
+  });
 
   const dataCounts = [
     {
       dataTitle: "number of lectures",
       dataColor: "#005560",
-      dataCount: 10,
+      dataCount: countData?.total_lectures,
       dataIcon: <FaHashtag className="text-lg lg:text-2xl" color="#005560" />,
     },
     {
       dataTitle: "lecture hours",
       dataColor: "#7E57C2",
-      dataCount: 40,
+      dataCount: countData?.total_lectures, // TODO:
       dataIcon: <FaClock className="text-lg lg:text-2xl" color="#7E57C2" />,
     },
     {
       dataTitle: "courses",
       dataColor: "#388E3C",
-      dataCount: 20,
+      dataCount: countData?.total_courses,
       dataIcon: <FaBook className="text-lg lg:text-2xl" color="#388E3C" />,
     },
     {
       dataTitle: "number of exams",
       dataColor: "#D32F2F",
-      dataCount: 10,
+      dataCount: countData?.total_exams,
       dataIcon: <FaListAlt className="text-lg lg:text-2xl" color="#D32F2F" />,
     },
     {
       dataTitle: "projects",
       dataColor: "#8D6E63",
-      dataCount: 40,
+      dataCount: countData?.total_projects,
       dataIcon: <FaTasks className="text-lg lg:text-2xl" color="#8D6E63" />,
     },
     {
       dataTitle: "assignments",
       dataColor: "#0277BD",
-      dataCount: 20,
+      dataCount: countData?.total_homeworks,
       dataIcon: (
         <FaClipboardList className="text-lg lg:text-2xl" color="#0277BD" />
       ),
@@ -265,6 +272,16 @@ const InformationPanel = () => {
     { value: "asc", label: t("ascending") },
     { value: "desc", label: t("descending") },
   ];
+
+  if (
+    countIsLoading ||
+    countIsFetching ||
+    countIsRefetching ||
+    programIsLoading ||
+    programIsFetching ||
+    programIsRefetching
+  )
+    return <Loading />;
 
   return (
     <div className="px-1 space-y-6 lg:px-6">

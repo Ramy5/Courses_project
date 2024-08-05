@@ -7,7 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import Loading from "../../../components/UI/Loading";
 
 const getHomework = async (id: number | string) => {
-  const { data } = await customFetch(`projects/${id}`);
+  const { data } = await customFetch(`showProjectStudent/${id}`);
   return data.data;
 };
 
