@@ -494,7 +494,8 @@
   "the project has deleted successfully": "تم حذف المشروع بنجاح",
   "search about instructor": "البحث عن محاضر",
   "select a level": "اختار مستوي",
-  "select a course": "اختار مقرر"
+  "select a course": "اختار مقرر",
+  "exams is approved successfully": "تم اعتماد الاختبار بنجاح"
   "evening":"مساء",
   "morning":"صباح",
   "time is over":"انتهى الوقت",

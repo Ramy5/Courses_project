@@ -1,12 +1,31 @@
 import { FiFileText } from "react-icons/fi";
 import { Button, MainCheckBox, Table, TitlePage } from "../../../components";
 import { t } from "i18next";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
+import customFetch from "../../../utils/axios";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "react-toastify";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import Loading from "../../../components/UI/Loading";
+
+const getStudentExam = async (id: number | string) => {
+  const { data } = await customFetch(`examStudent/${id}`);
+  return data.data;
+};
+
+const addExamApproved = async (newExam: any) => {
+  const data = await customFetch.post(`examApprove`, newExam);
+  return data;
+};
 
 const TestApproved = () => {
   const [approvalStudent, setApprovalStudent] = useState([]);
   const [allIsChecked, setAllIsChecked] = useState(null);
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+  const { id: examId } = useParams();
+  const location = useLocation();
 
   const studentsApprovalData = [
     {
@@ -52,12 +71,39 @@ const TestApproved = () => {
       approvalStatus: false,
     },
   ];
-  const [test, setTest] = useState(studentsApprovalData);
+  const [examsData, setExamsData] = useState(studentsApprovalData);
+
+  const { data, isLoading, isFetching, isRefetching } = useQuery({
+    queryKey: ["get-exam-students"],
+    queryFn: () => getStudentExam(examId),
+  });
+
+  const { mutate, isPending } = useMutation({
+    mutationKey: ["add-exam-approved"],
+    mutationFn: addExamApproved,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries(["get-all-exams"]);
+      toast.success(t("exams is approved successfully"));
+      navigate("/testManagement");
+    },
+    onError: (error) => {
+      const errorMessage =
+        error?.response?.data?.error[0]?.email[0] ||
+        error?.response?.data?.error[0]?.password[0];
+      toast.error(errorMessage);
+    },
+  });
+
+  useEffect(() => {
+    if (data) {
+      setExamsData(data?.program?.students);
+    }
+  }, [data]);
 
   const handleSelectAll = (isChecked) => {
     setAllIsChecked(isChecked);
     if (isChecked) {
-      setApprovalStudent([...test]);
+      setApprovalStudent([...examsData]);
     } else {
       setApprovalStudent([]);
     }
@@ -83,19 +129,19 @@ const TestApproved = () => {
             name="approve"
             label=""
             checked={approvalStudent.some(
-              (student) => student.index === info.row.original.index
+              (student) => student.id === info.row.original.id
             )}
             onChange={(e) => {
               if (e.target.checked) {
                 setApprovalStudent((prev) => {
                   return [
                     ...prev,
-                    { ...info.row.original, id: info.row.index },
+                    { ...info.row.original, id: info.row.original.id },
                   ];
                 });
               } else {
                 setApprovalStudent((prev) => {
-                  return prev.filter((el) => el.id !== info.row.index);
+                  return prev.filter((el) => el.id !== info.row.original.id);
                 });
               }
             }}
@@ -103,18 +149,33 @@ const TestApproved = () => {
         ),
       },
       {
-        header: () => <span>{t("student ID")}</span>,
-        accessorKey: "studentID",
-        cell: (info) => info.getValue(),
+        header: () => <span>{t("student code")}</span>,
+        accessorKey: "academicData",
+        cell: (info) => info.getValue()?.Academic_code,
       },
       {
         header: () => <span>{t("student name")}</span>,
-        accessorKey: "studentName",
+        accessorKey: "full_name",
         cell: (info) => info.getValue(),
       },
     ],
     [allIsChecked, approvalStudent, handleSelectAll]
   );
+
+  const handleAddExamApprove = async () => {
+    const studentIDS = approvalStudent?.map((approve) => approve?.id);
+    console.log(location);
+
+    const newExam = {
+      exam_id: location?.state,
+      student_ids: studentIDS,
+      is_approved: 1,
+    };
+
+    await mutate(newExam);
+  };
+
+  if (isLoading || isFetching || isRefetching) return <Loading />;
 
   return (
     <div className="flex flex-col">
@@ -131,10 +192,16 @@ const TestApproved = () => {
             {t("determine which students are allowed to choose")}
           </h2>
         </div>
-        <Table data={test} columns={studentsApprovalColumns} />
+        <Table data={examsData || []} columns={studentsApprovalColumns} />
       </div>
 
-      <Button className="self-end mt-12">{t("test approval")}</Button>
+      <Button
+        action={handleAddExamApprove}
+        loading={isPending}
+        className="self-end mt-12"
+      >
+        {t("test approval")}
+      </Button>
     </div>
   );
 };
