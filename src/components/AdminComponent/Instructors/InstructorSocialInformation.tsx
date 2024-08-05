@@ -9,6 +9,7 @@ const InstructorSocialInformation = ({ personalData }: any) => {
 
   const contactInfo =
   personalData?.contactInfo?.length && personalData?.contactInfo[0];
+  console.log("🚀 ~ InstructorSocialInformation ~ contactInfo:", contactInfo)
 
   return (
     <div className="px-8 py-6 mx-5 bg-mainBg rounded-2xl mt-28">
