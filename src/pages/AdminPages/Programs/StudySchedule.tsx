@@ -85,7 +85,7 @@ const StudySchedule = () => {
         lecture_time:
           filterScheduleData?.map((schedule) => ({
             id: schedule.id,
-            day_id: day.id,
+            day_id: day?.id,
             group: schedule.group,
             level: schedule.level,
             start_time: schedule.start_time.split(":").slice(0, 2).join(":"),
@@ -100,7 +100,7 @@ const StudySchedule = () => {
           })) || [],
       });
     }
-  }, [day.id && data]);
+  }, [day?.id && data]);
 
   const { mutate, isPending } = useMutation({
     mutationKey: ["add-schedule"],

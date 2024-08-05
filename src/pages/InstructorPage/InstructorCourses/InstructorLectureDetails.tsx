@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button, TitlePage } from "../../../components";
 import { LiaBookReaderSolid } from "react-icons/lia";
 import { FiCalendar } from "react-icons/fi";
@@ -7,31 +7,65 @@ import Education from "../../../assets/lecture/istockphoto-1472553376-640_adpp_i
 import { t } from "i18next";
 import customFetch from "../../../utils/axios";
 import { useQuery } from "@tanstack/react-query";
-import { useLocation, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Loading from "../../../components/UI/Loading";
 import { BiSolidFile } from "react-icons/bi";
 import { IoMdLink } from "react-icons/io";
 import ConvertNumberToWord from "../../../components/UI/ConvertNumberToWord";
+import { subtractTwoTime } from "../../../utils/helpers";
+import { FaPersonChalkboard } from "react-icons/fa6";
 
 const InstructorLectureDetails = () => {
   const [tabs, setTabs] = useState(1);
   const { id } = useParams();
-  const location = useLocation();
-  const showCourse = location.state;
+  const navigate = useNavigate();
   const numbers = ConvertNumberToWord();
+  const [differenceInMinutes, setDifferenceInMinutes] = useState(0);
 
-  const fetchInstructorSchedule = async () => {
+  const fetchLectureData = async () => {
     const response = await customFetch(`showLectureDataIns/${id}`);
     return response;
   };
 
-  const { data, isFetching, isRefetching } = useQuery({
+  const { data, isFetching, isRefetching, refetch } = useQuery({
     queryKey: ["show_lecture"],
-    queryFn: fetchInstructorSchedule,
-    enabled: !!id
+    queryFn: fetchLectureData,
+    enabled: !!id,
   });
 
   const instructorLectureShow = data?.data?.data.lecture_data || [];
+  console.log("🚀 ~ InstructorLectureDetails ~ instructorLectureShow:", instructorLectureShow)
+
+  const fetchLectureAllData = async () => {
+    const response = await customFetch(`LecturesDataIns?lecture_data_id=${id}`);
+    return response;
+  }; 
+
+  const {
+    data: allData,
+    isFetching: isFetchingAllData,
+    isRefetching: isRefetchingAllData,
+    refetch: refetchAllData,
+  } = useQuery({
+    queryKey: ["show_lecture_data"],
+    queryFn: fetchLectureAllData,
+    enabled: !!id,
+  });
+  console.log("🚀 ~ InstructorLectureDetails ~ allData:", allData);
+  const instructorLectureDataShow = allData?.data?.data || [];
+  console.log(
+    "🚀 ~ InstructorLectureDetails ~ instructorLectureDataShow:",
+    instructorLectureDataShow
+  );
+
+  useEffect(() => {
+    const diffMinutes = subtractTwoTime(
+      instructorLectureShow?.lecture?.date,
+      instructorLectureShow?.lecture?.start_time,
+      instructorLectureShow?.lecture?.end_time
+    );
+    setDifferenceInMinutes(diffMinutes);
+  }, [allData]);
 
   const videoRef = useRef(null);
 
@@ -42,19 +76,27 @@ const InstructorLectureDetails = () => {
     { id: 4, label: "links" },
   ];
 
-  if (isFetching || isRefetching) return <Loading />;
+  useEffect(() => {
+    refetch();
+    refetchAllData()
+  }, [id]);
+
+  if (isFetching || isRefetching || isFetchingAllData || isRefetchingAllData)
+    return <Loading />;
 
   return (
     <div className="flex flex-col md:flex-row gap-5">
       <div className="w-full lg:w-[70%] md:w-[65%]">
         <div>
           <TitlePage
-            title={`${showCourse?.course_name} - ${t("Lecture")} ${numbers[showCourse?.index]}`}
+            title={`${instructorLectureShow?.course_name} - ${t("Lecture")} ${
+              numbers[instructorLectureShow?.id - 1]
+            }`}
             mainTitle="Courses"
             mainLink="/instructor/Courses"
-            supTitle={`${t("lectures")} ${showCourse?.course_name}`}
-            supLink={`/instructor/Courses/lectures/${showCourse?.id}`}
-            ThirdTitle={`${t("Lecture")} ${numbers[showCourse?.index]}`}
+            supTitle={`${t("lectures")} ${instructorLectureShow?.course_name}`}
+            supLink={`/instructor/Courses/lectures/${instructorLectureShow?.id}`}
+            ThirdTitle={`${t("Lecture")} ${numbers[instructorLectureShow?.id - 1]}`}
             icon={<LiaBookReaderSolid size={25} className="fill-mainColor" />}
           />
         </div>
@@ -66,12 +108,7 @@ const InstructorLectureDetails = () => {
           </div>
           <div className="flex items-center gap-2 mt-3">
             <PiClockCountdownBold size={26} className="text-mainColor" />
-            <p>
-              {instructorLectureShow?.lecture?.start_time
-                ?.split(":")
-                .slice(0, 2)
-                .join(":")}
-            </p>
+            <p>{differenceInMinutes}</p>
           </div>
         </div>
 
@@ -85,7 +122,7 @@ const InstructorLectureDetails = () => {
           </video>
           <div className="mt-2">
             <h2 className="text-[#073051] font-medium text-xl">
-              <span>{`${t("Lecture")} ${numbers[showCourse?.index]} : `}</span>
+              <span>{`${t("Lecture")} ${numbers[instructorLectureShow?.id - 1]} : `}</span>
               {instructorLectureShow?.title}
             </h2>
             <p className="text-[#696974] text-base font-medium mt-3">
@@ -165,26 +202,41 @@ const InstructorLectureDetails = () => {
         </div>
       </div>
 
-      {/* <div className="w-full lg:w-[30%] md:w-[35%] bg-white main_shadow pt-4 pb-8 rounded-xl h-fit">
+      <div className="w-full lg:w-[30%] md:w-[35%] bg-white main_shadow pt-4 pb-8 rounded-xl h-fit">
         <h2 className="bg-mainColor text-white font-semibold text-xl text-center rounded-xl py-5 mx-5">
           {t("lectures")} <span>{instructorLectureShow?.course_name}</span>
         </h2>
         <p className="font-semibold text-lg my-3 mx-4">{t("Lectures")}</p>
         <div className="flex flex-col gap-y-3">
-          {instructorLectureShow?.remaining_lectures.map((item) => (
-            <div className="flex items-center shadow-md rounded-2xl bg-[#a1c2f126] cursor-pointer">
-              <div className=" h-full w-[30%] ">{item.lec_image}</div>
+          {instructorLectureDataShow?.map((item, index) => (
+            <div
+              className="flex items-center shadow-md rounded-2xl bg-[#a1c2f126] cursor-pointer"
+              onClick={() => {
+                navigate(`/instructor/Courses/lecture/details/${item?.id}`);
+              }}
+            >
+              <div className=" h-full w-[30%] ">
+                <FaPersonChalkboard size={50} className="m-auto" />
+              </div>
               <div className="bg-[#a1c2f133] w-[70%] py-1 px-2">
                 <h2 className="text-[#073051] text-lg font-medium">
-                  {t("Lecture")} <span>{item.lecure_number}</span>
+                  {`${t("Lecture")} ${numbers[index]}`}
                 </h2>
-                <p className="text-sm mb-1">{item.lecure_part}</p>
-                <span className="text-sm">({item.lecture_date})</span>
+                <p className="text-sm mb-1">{item.title}</p>
+                <span className="text-sm">
+                  (
+                  {subtractTwoTime(
+                    item?.lecture?.date,
+                    item?.lecture?.start_time,
+                    item?.lecture?.end_time
+                  )}
+                  )
+                </span>
               </div>
             </div>
           ))}
         </div>
-      </div> */}
+      </div>
     </div>
   );
 };
