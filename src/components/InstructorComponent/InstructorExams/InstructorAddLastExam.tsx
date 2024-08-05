@@ -44,6 +44,9 @@ const InstructorAddLastExam = ({
   editExamData,
   grades,
 }: any) => {
+  console.log("🚀 ~ questionExam:", questionExam)
+  console.log("🚀 ~ grades:", grades)
+  console.log("🚀 ~ editExamData:", editExamData)
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
   const { values } = useFormikContext();
@@ -93,16 +96,19 @@ const InstructorAddLastExam = ({
       const errorMessage = error?.response?.data?.error[0];
       toast.error(errorMessage);
     },
-  });
+  }); 
 
-  const questions = questionExam?.map((question) => {
+  const questions = editExamData?.questions?.map((question) => {
+    const matchingGrade = grades?.find((grade) => grade.id == question.id);
     return {
+      id: question.id,
       question: question.question,
       answers: question.answers,
-      questions_degrees: question.questions_degrees,
+      questions_degrees: matchingGrade ? matchingGrade.grade : 0,
       questions_number: question.questions_number,
     };
   });
+  console.log("🚀 ~ questions ~ questions:", questions)
 
   return (
     <div className="w-full sm:w-4/5 m-auto relative">
@@ -125,7 +131,7 @@ const InstructorAddLastExam = ({
           </h2>
           <p className="px-5 py-4 flex items-center">
             {examInformation?.total_number_questions}
-          </p>
+          </p> 
         </div>
         <div className="flex border-b-2 border-b-[#E7F0FB] font-semibold text-center">
           <h2 className="px-5 py-4 w-40 bg-[#E7F0FB]">{t("total score")}</h2>
@@ -182,7 +188,7 @@ const InstructorAddLastExam = ({
                   passing_score: values?.passing_score,
                   duration: values?.duration,
                   exam_type: values?.exam_type,
-                  questions: questionExam?.length ? questionExam : editExamData?.questions,
+                  questions: questionExam?.length ? questionExam : questions,
                 };
                 console.log("🚀 ~ finalExamData:", finalExamData);
 
