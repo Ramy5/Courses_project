@@ -13,12 +13,19 @@ import Loading from "../../../components/UI/Loading";
 type reportsFilter = "program" | "level" | "course";
 
 const getReport = async (page: number, search: string) => {
-  const { data } = await customFetch(`students?page=${page}&search=${search}`);
+  const { data } = await customFetch(
+    `getProgramCoursesLevel?page=${page}&search=${search}&level=`
+  );
   return data.data;
 };
 
 const getAllPrograms = async () => {
   const { data } = await customFetch("programs");
+  return data.data;
+};
+
+const getAllCourses = async (programId: number) => {
+  const { data } = await customFetch(`courses?program_id=${programId}`);
   return data.data;
 };
 
@@ -28,6 +35,13 @@ const Reports = () => {
   const debounceSearchTerm = useDebounce(search, 400);
   const [programSelect, setProgramSelect] = useState(null);
   const [levelSelect, setLevelSelect] = useState(null);
+  const [courseSelect, setCourseSelect] = useState(null);
+
+  const initialValues: Record<reportsFilter, string> = {
+    course: "",
+    level: "",
+    program: "",
+  };
 
   const {
     data: studentReportsData,
@@ -60,11 +74,25 @@ const Reports = () => {
     },
   });
 
-  const initialValues: Record<reportsFilter, string> = {
-    course: "",
-    level: "",
-    program: "",
-  };
+  const {
+    data: coursesOptions,
+    isLoading: coursesIsLoading,
+    isFetching: coursesIsFetching,
+    isRefetching: coursesIsRefetching,
+    refetch: coursesRefetch,
+  } = useQuery({
+    queryKey: ["get-all-courses"],
+    queryFn: () => getAllCourses(programSelect?.id),
+    select: (data) => {
+      return data?.courses?.map((course) => {
+        return {
+          id: course?.id,
+          label: course?.course_name,
+          value: course?.id,
+        };
+      });
+    },
+  });
 
   const levelsOption = [
     {
@@ -160,37 +188,62 @@ const Reports = () => {
       {
         header: () => <span>{t("#")}</span>,
         accessorKey: "index",
-        cell: (info) => info.getValue(),
+        cell: (info) => info.row.index + 1,
       },
       {
         header: () => <span>{t("student number")}</span>,
-        accessorKey: "studentNumber",
-        cell: (info) => info.getValue(),
+        accessorKey: "academic_data",
+        cell: (info) => info.getValue()?.Academic_code || "---",
       },
       {
         header: () => <span>{t("student name")}</span>,
-        accessorKey: "studentName",
-        cell: (info) => info.getValue(),
+        accessorKey: "full_name",
+        cell: (info) => info.getValue() || "---",
       },
       {
         header: () => <span>{t("section")}</span>,
-        accessorKey: "section",
-        cell: (info) => info.getValue(),
+        accessorKey: "academic_data",
+        cell: (info) => info.getValue()?.group || "---",
       },
       {
         header: () => <span>{t("grade")}</span>,
-        accessorKey: "grade",
-        cell: (info) => info.getValue(),
+        accessorKey: "total_degree",
+        cell: (info) => info.getValue() || "---",
       },
       {
         header: () => <span>{t("percentage")}</span>,
         accessorKey: "percentage",
-        cell: (info) => info.getValue(),
+        cell: (info) => `${Number(info.getValue())?.toFixed(2)}%` || "---",
       },
       {
         header: () => <span>{t("status")}</span>,
-        accessorKey: "status",
+        accessorKey: "performance",
         cell: (info) => {
+          // const target = info.getValue()?.program;
+          // let grade;
+          // console.log(parseInt(info.row.original?.attend_percentage));
+
+          // if (
+          //   parseInt(info.row.original?.attend_percentage) >=
+          //     target?.acceptable &&
+          //   parseInt(info.row.original?.attend_percentage) <= target?.good
+          // ) {
+          //   grade = "acceptable";
+          // } else if (
+          //   parseInt(info.row.original?.attend_percentage) >= target?.good &&
+          //   parseInt(info.row.original?.attend_percentage) <= target?.very_good
+          // ) {
+          //   grade = "good";
+          // } else if (
+          //   parseInt(info.row.original?.attend_percentage) >=
+          //     target?.very_good &&
+          //   parseInt(info.row.original?.attend_percentage) <= target?.excellence
+          // ) {
+          //   grade = "very good";
+          // } else {
+          //   grade = "excellence";
+          // }
+
           return <span>{t(`${info.getValue()}`)}</span>;
         },
       },
@@ -200,7 +253,7 @@ const Reports = () => {
 
   useEffect(() => {
     refetch();
-  }, [page]);
+  }, [page, programSelect, levelSelect, courseSelect]);
 
   useEffect(() => {
     if (debounceSearchTerm.length >= 0) {
@@ -208,6 +261,10 @@ const Reports = () => {
       refetch();
     }
   }, [debounceSearchTerm]);
+
+  useEffect(() => {
+    coursesRefetch();
+  }, [programsOptions]);
 
   if (isLoading || isRefetching || isFetching) return <Loading />;
 
@@ -243,6 +300,32 @@ const Reports = () => {
                   />
                 </div>
                 <div className="w-52">
+                  <label className="font-bold" htmlFor="course">
+                    {t("course")}
+                  </label>
+                  <Select
+                    id="course"
+                    name="course"
+                    placeholder={t("select a course")}
+                    options={coursesOptions}
+                    value={courseSelect}
+                    isDisabled={
+                      programIsLoading ||
+                      programIsFetching ||
+                      programIsRefetching
+                    }
+                    isLoading={
+                      coursesIsLoading ||
+                      coursesIsFetching ||
+                      coursesIsRefetching
+                    }
+                    onChange={(e) => {
+                      setCourseSelect(e);
+                      setFieldValue("course", e.id);
+                    }}
+                  />
+                </div>
+                <div className="w-52">
                   <label className="font-bold" htmlFor="level">
                     {t("level")}
                   </label>
@@ -258,17 +341,7 @@ const Reports = () => {
                     }}
                   />
                 </div>
-                <div className="w-52">
-                  <label className="font-bold" htmlFor="course">
-                    {t("course")}
-                  </label>
-                  <Select
-                    placeholder={t("select a course")}
-                    className="mt-1"
-                    id="course"
-                    name="course"
-                  />
-                </div>
+
                 <div className="flex items-center self-end gap-8 ">
                   <SearchInput
                     name="reportSearch"
@@ -287,10 +360,10 @@ const Reports = () => {
               </div>
             </div>
             <Table
-              data={studentsData}
+              data={studentReportsData || []}
               columns={studentsColumns}
               showNavigation={true}
-              totalPages={40}
+              totalPages={10}
               currentPage={1}
               setPage={setPage}
             />
