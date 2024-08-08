@@ -498,5 +498,7 @@
   "evening":"مساء",
   "morning":"صباح",
   "time is over":"انتهى الوقت",
+  "Data is not completed":"لم يتم استكمال البيانات",
+  "Are you sure you want to leave this page?":"هل أنت متأكد من أنك تريد مغادرة هذه الصفحة؟",
   "search about instructor": "البحث عن محاضر"
 }
