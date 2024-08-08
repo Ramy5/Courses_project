@@ -13,7 +13,7 @@ const LatestNews: React.FC<LatestNews_TP> = ({ titleHead, data }) => {
         <h2>{t(titleHead)}</h2>
       </div>
       <div className="bg-white rounded-br-xl rounded-bl-xl">
-        {data.map((item, index) => (
+        {data?.map((item, index) => (
           <div className="p-3 border-b-2 border-b-slate-200" key={index}>
             {t(item)}
           </div>

@@ -495,6 +495,11 @@
   "select a level": "اختار مستوي",
   "select a course": "اختار مقرر",
   "exams is approved successfully": "تم اعتماد الاختبار بنجاح",
+  "evening": "مساء",
+  "morning": "صباح",
+  "time is over": "انتهى الوقت",
+  "search about instructor": "البحث عن محاضر",
+  "there is no today's lecture": "لا يوجد محاضرات اليوم"
   "evening":"مساء",
   "morning":"صباح",
   "time is over":"انتهى الوقت",

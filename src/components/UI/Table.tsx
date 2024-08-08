@@ -31,7 +31,7 @@ const Table = <T extends object>({
   totalPages,
   currentPage,
   className,
-  setPage
+  setPage,
 }: ReactTableProps<T>) => {
   const table = useReactTable({
     data,
