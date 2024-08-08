@@ -45,23 +45,23 @@ const PersonlyProfile = () => {
   const studentAcademicData = [
     {
       title: t("academic number"),
-      value: studentProfileData?.academicData.Academic_code,
+      value: studentProfileData?.academicData?.Academic_code,
     },
     {
       title: t("program"),
-      value: studentProfileData?.academicData.program.program_name,
+      value: studentProfileData?.academicData?.program.program_name,
     },
     {
       title: t("level"),
-      value: studentProfileData?.academicData.level,
+      value: studentProfileData?.academicData?.level,
     },
     {
       title: t("date of enrollment"),
-      value: studentProfileData?.academicData.joined_date,
+      value: studentProfileData?.academicData?.joined_date,
     },
     {
       title: t("section number"),
-      value: studentProfileData?.academicData.group,
+      value: studentProfileData?.academicData?.group,
     },
     {
       title: t("educational qualification"),
@@ -121,7 +121,7 @@ const PersonlyProfile = () => {
             <h2 className="mb-10 text-2xl font-bold">{t("academic data")}</h2>
 
             <div className="grid items-center gap-8 md:grid-cols-2 lg:grid-cols-3 lg:gap-14">
-              {studentAcademicData.map((item, index) => (
+              {studentAcademicData?.map((item, index) => (
                 <StudentPersonalContactWithOptionalIcon
                   key={index}
                   contactTitle={item.title}
