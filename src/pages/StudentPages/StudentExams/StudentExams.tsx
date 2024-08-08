@@ -7,7 +7,6 @@ import customFetch from "../../../utils/axios";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "../../../components/UI/Loading";
 import { toast } from "react-toastify";
-import { useRTL } from "../../../hooks/useRTL";
 import {
   calculateTime,
   formatDate,
@@ -19,9 +18,7 @@ import {
 
 const StudentExams = () => {
   const [tabs, setTabs] = useState("today_exams");
-  console.log("🚀 ~ StudentExams ~ tabs:", tabs);
   const [loading, setLoading] = useState(false);
-  const isRTL = useRTL();
   const navigate = useNavigate();
 
   const buttons = [
@@ -41,7 +38,6 @@ const StudentExams = () => {
   });
 
   const studentExamsData = data && data?.data?.data;
-  console.log("🚀 ~ StudentExams ~ studentExamsData:", studentExamsData);
 
   const examsData =
     tabs === "past_exams"
@@ -49,7 +45,6 @@ const StudentExams = () => {
       : tabs === "today_exams"
       ? studentExamsData?.today_exams
       : studentExamsData?.upcoming_exams;
-  console.log("🚀 ~ StudentExams ~ examsStatus:", examsData);
 
   const examsColumns = useMemo<ColumnDef<any>[]>(
     () => [

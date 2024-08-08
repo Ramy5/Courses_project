@@ -8,7 +8,7 @@ import customFetch from "../../../utils/axios";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Loading from "../../../components/UI/Loading";
 import { toast, useToast } from "react-toastify";
-import { format } from 'date-fns';
+import { format } from "date-fns";
 import { formatTime } from "../../../utils/helpers";
 
 const postQuestionExam = async (newQuestionExam: any) => {
@@ -19,13 +19,9 @@ const postQuestionExam = async (newQuestionExam: any) => {
 const StudentExam = () => {
   const [questionNumber, setQuestionNumber] = useState(0);
   const [answers, setAnswers] = useState({});
-  console.log("🚀 ~ StudentExam ~ answers:", answers);
   const [showReceiptModal, setShowReceiptModal] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState(null);
-  console.log("🚀 ~ StudentExam ~ timeRemaining:", timeRemaining);
   const [questionsExam, setQuestionsExam] = useState([]);
-  const [finishedExam, setFinishedExam] = useState("");
-  console.log("🚀 ~ StudentExam ~ finishedExam:", finishedExam);
   const navigate = useNavigate();
   const isRTL = useRTL();
   const { id } = useParams();
@@ -46,10 +42,22 @@ const StudentExam = () => {
   });
 
   const studentQuestionExam = data?.data?.data?.examQuestion;
+  console.log("🚀 ~ StudentExam ~ studentQuestionExam:", studentQuestionExam);
   const examCourseName = studentQuestionExam?.[0]?.exam?.course.course_name;
   const examDuration = studentQuestionExam?.[0]?.exam?.duration;
-  console.log("🚀 ~ StudentExam ~ examDuration:", examDuration);
   const examStartTime = studentQuestionExam?.[0]?.exam?.start_time;
+
+  // const rondomExamQuestoin = (array) => {
+  //   let rondomQuestion = array?.slice(); // Copy the array to avoid modifying the original one
+  //   for (let i = rondomQuestion?.length - 1; i > 0; i--) {
+  //     const j = Math.floor(Math.random() * (i + 1));
+  //     [rondomQuestion[i], rondomQuestion[j]] = [
+  //       rondomQuestion[j],
+  //       rondomQuestion[i],
+  //     ];
+  //   }
+  //   return rondomQuestion;
+  // };
 
   const examDetails = {
     exam_name: examCourseName,
@@ -65,19 +73,6 @@ const StudentExam = () => {
     }
   }, [examDetails?.exam_duration]);
 
-  // const formatTime = (seconds) => {
-  //   const hrs = Math.floor(seconds / 3600);
-  //   const mins = Math.floor((seconds % 3600) / 60);
-  //   const secs = Math.floor(seconds % 60);
-
-  //   if (seconds >= 3600) {
-  //     return `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-  //   } else {
-  //     return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-  //   }
-  // };
-  // console.log("🚀 ~ formatTime ~ formatTime:", formatTime(7000))
-
   const handleAnswerChange = (questionId, answer) => {
     setAnswers((prevAnswers) => ({
       ...prevAnswers,
@@ -85,26 +80,55 @@ const StudentExam = () => {
     }));
   };
 
+  // useEffect(() => {
+  //   let timerInterval;
+  //   const startTimer = () => {
+  //     const timerInterval = setInterval(() => {
+  //       setTimeRemaining((prev) => {
+  //         if (prev <= 1) {
+  //           clearInterval(timerInterval);
+  //           return 0;
+  //         } else {
+  //           return prev - 1;
+  //         }
+  //       });
+  //     }, 1000);
+  //   };
+  //   const timerTimeout = setTimeout(startTimer, 1000);z
+  //   return () => {
+  //     clearTimeout(timerTimeout);
+  //     clearInterval(timerInterval);
+  //   };
+  // }, [timeRemaining]);
+
   useEffect(() => {
-    let timerInterval;
-    const startTimer = () => {
-      const timerInterval = setInterval(() => {
-        setTimeRemaining((prev) => {
-          if (prev <= 1) {
-            clearInterval(timerInterval);
-            return 0;
-          } else {
-            return prev - 1;
-          }
-        });
-      }, 1000);
+    const handleKeyDown = (e) => {
+      console.log("🚀 ~ handleKeyDown ~ e:", e.key) 
+      if (e.key === 'PrintScreen') {
+        e.preventDefault();
+        alert('Screenshots are disabled on this page.');
+      }
+
+      if (e.keyCode === 123 || 
+          (e.ctrlKey && e.shiftKey && (e.keyCode === 'I'.charCodeAt(0) || e.keyCode === 'J'.charCodeAt(0))) || 
+          (e.ctrlKey && e.keyCode === 'U'.charCodeAt(0))) {
+        e.preventDefault();
+        return false;
+      }
+    }; 
+
+    const handleContextMenu = (e) => {
+      e.preventDefault();
     };
-    const timerTimeout = setTimeout(startTimer, 1000);
+
+    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('contextmenu', handleContextMenu);
+
     return () => {
-      clearTimeout(timerTimeout);
-      clearInterval(timerInterval);
+      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('contextmenu', handleContextMenu);
     };
-  }, [timeRemaining]);
+  }, []);
 
   useEffect(() => {
     if (timeRemaining === 0) {
@@ -118,6 +142,7 @@ const StudentExam = () => {
   }, [timeRemaining === 0]);
 
   const currentQuestion = examDetails?.exam_questions?.[questionNumber];
+  console.log("🚀 ~ StudentExam ~ currentQuestion:", currentQuestion)
   const numberOfAnswer = Object.keys(answers).length;
 
   const unansweredQuestions =
@@ -263,7 +288,7 @@ const StudentExam = () => {
                         {t("grades")}
                       </p>
                     </div>
-                    <p className="px-4 pt-10 pb-5 text-[#222222bf] font-medium">
+                    <p className="px-4 pt-10 pb-5 text-[#222222bf] font-medium no-copy">
                       {currentQuestion?.question}
                     </p>
                   </div>
@@ -284,7 +309,7 @@ const StudentExam = () => {
                             checked={answers[currentQuestion.id] === ans}
                             readOnly
                           />{" "}
-                          <span className="text-[#222222bf] font-medium">
+                          <span className="text-[#222222bf] font-medium no-copy">
                             {ans?.answer}
                           </span>
                         </li>

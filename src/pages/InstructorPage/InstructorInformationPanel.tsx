@@ -48,7 +48,6 @@ const InstructorInformationPanel = () => {
     queryKey: ["get-counts"],
     queryFn: getCount,
   });
-  console.log("🚀 ~ InformationPanel ~ countData:", countData);
 
   const {
     data: courseData,
@@ -59,7 +58,6 @@ const InstructorInformationPanel = () => {
     queryKey: ["get-courses"],
     queryFn: getCourses,
   });
-  console.log("🚀 ~ InformationPanel ~ programData:", courseData);
 
   const studentLecturesData = courseData?.map((course: any) => {
     return {

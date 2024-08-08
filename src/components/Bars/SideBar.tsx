@@ -11,7 +11,7 @@ import { CgPlayButtonR } from "react-icons/cg";
 import { HiBars3CenterLeft } from "react-icons/hi2";
 import { RxCross2 } from "react-icons/rx";
 import { t } from "i18next";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import SearchInput from "../UI/SearchInput";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import { FiCalendar } from "react-icons/fi";
@@ -325,6 +325,7 @@ const SideBar: React.FC<SideBarProps> = ({
                         }
                     `}
               onClick={() => handleNavigate(item.link)}
+              // href={item.link}
             >
               {item.icon}
               <span

@@ -61,7 +61,7 @@ const AddLectureTiming = ({
 
   const fetchTeacherData = async () => {
     const response = await customFetch(
-      `/allTeachers?course_id=${coursesSelect?.id}?per_page=10000`
+      `/allTeachers?course_id=${coursesSelect?.id || ""}?per_page=10000`
     );
     return response;
   };

@@ -10,13 +10,7 @@ import { useEffect, useState } from "react";
 
 const StudentExamResults = () => {
   const navigate = useNavigate();
-  console.log("🚀 ~ StudentExamResults ~ navigate:", navigate);
   const location = useLocation();
-  const param = useParams();
-  console.log("🚀 ~ StudentExamResults ~ param:", param);
-  console.log("🚀 ~ StudentExamResults ~ location:", location);
-  const hasPreviousPage = window.history
-  console.log("🚀 ~ StudentExamResults ~ hasPreviousPage:", hasPreviousPage)
 
   const fetchStudentExamResult = async () => {
     const response = await customFetch(`/getExamDetails/${location.state}`);
@@ -29,10 +23,6 @@ const StudentExamResults = () => {
   });
 
   const studentExamResult = data && data?.data?.data;
-  console.log(
-    "🚀 ~ StudentExamResults ~ studentExamResult:",
-    studentExamResult
-  );
 
   const examResults = {
     totalQuestions: studentExamResult?.totalQuestions,
@@ -42,11 +32,9 @@ const StudentExamResults = () => {
     totalDegree: studentExamResult?.totalDegree,
     studentDegree: studentExamResult?.degree,
   };
-  console.log("🚀 ~ StudentExamResults ~ examResults:", examResults);
 
   const percentage =
     (examResults?.studentDegree / examResults?.totalDegree) * 100;
-  console.log("🚀 ~ StudentExamResults ~ percentage:", percentage);
 
   if (isFetching || isRefetching || isLoading) return <Loading />;
 

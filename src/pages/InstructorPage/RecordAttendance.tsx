@@ -26,18 +26,12 @@ const RecordAttendance = () => {
   const [coursesSelect, setCoursesSelect] = useState({});
   const [dateSelect, setDateSelect] = useState(null);
   const formatDates = formatDate(dateSelect);
-  console.log("🚀 ~ RecordAttendance ~ formatDates:", formatDates);
   const queryClient = useQueryClient();
 
   const initialValues = {
     Courses: "",
     lecture_date: "",
   };
-
-  const selectStudent = selectedRows?.map((student) => ({
-    course_id: student?.id,
-  }));
-  console.log("🚀 ~ RecordAttendance ~ selectStudent:", selectStudent);
 
   // const handleCheckboxChange = (event: any, selectedRow: any) => {
   //   const checkboxId = event.target.id;
@@ -128,10 +122,7 @@ const RecordAttendance = () => {
   });
 
   const RecordAttendanceData = (data && data?.data?.data.students) || [];
-  console.log(
-    "🚀 ~ RecordAttendance ~ RecordAttendanceData:",
-    RecordAttendanceData
-  );
+
   const RecordAttendancePagination = data?.data?.data || {};
 
   const examsTodayColumns = useMemo<ColumnDef<any>[]>(
@@ -232,7 +223,6 @@ const RecordAttendance = () => {
       <div className="bg-[#F9F9F9] rounded-3xl py-5 px-8 main_shadow mb-5">
         <Formik initialValues={initialValues} onSubmit={() => {}}>
           {({ setFieldValue, values }) => {
-            console.log("🚀 ~ RecordAttendance ~ values:", values);
             return (
               <Form className="grid grid-cols-1 gap-8 md:grid-cols-3 sm:grid-cols-2">
                 <div>
@@ -302,14 +292,6 @@ const RecordAttendance = () => {
         <Button
           action={() => {
             mutate({
-              course_id: coursesSelect?.id,
-              lecture_id: filterLectureDate?.length && filterLectureDate[0]?.id,
-              students: selectedRows?.map((student) => ({
-                student_id: student?.id,
-                attend: true,
-              })),
-            });
-            console.log("🚀 ~ RecordAttendance ~ values:", {
               course_id: coursesSelect?.id,
               lecture_id: filterLectureDate?.length && filterLectureDate[0]?.id,
               students: selectedRows?.map((student) => ({

@@ -19,10 +19,8 @@ const getExam = async (id) => {
 
 const InstructorAddExam = () => {
   const [grades, setGrades] = useState([]);
-  console.log("🚀 ~ InstructorAddExam ~ grades:", grades);
   const [steps, setSteps] = useState<number>(1);
   const [fileExam, setFileExam] = useState([]);
-  console.log("🚀 ~ InstructorAddExam ~ fileExam:", fileExam);
   const numbers = ConvertNumberToWord();
   const [file, setFile] = useState();
   const location = useLocation();
@@ -41,7 +39,11 @@ const InstructorAddExam = () => {
   });
 
   const editExamData = data?.data?.data?.exam || null;
-  console.log("🚀 ~ InstructorAddExam ~ editExamData:", editExamData);
+
+  const gradeFromExcel = fileExam?.map((item) => ({
+    grade: item?.grade,
+    id: item?.No,
+  }));
 
   const editGrade = editExamData?.questions?.map((grade) => ({
     grade: grade?.questions_degrees,
@@ -49,8 +51,12 @@ const InstructorAddExam = () => {
   }));
 
   useEffect(() => {
-    setGrades(editGrade || []);
-  }, [isSuccess]);
+    if (editGrade) {
+      setGrades(editGrade || []);
+    } else {
+      setGrades(gradeFromExcel || []);
+    }
+  }, [isSuccess, fileExam]);
 
   const initialValues = {
     course_id: editExamData?.course?.id || "",
@@ -86,8 +92,6 @@ const InstructorAddExam = () => {
       answers,
     };
   });
-
-  console.log("🚀 ~ questionExam ~ questionExam:", questionExam);
 
   if (isLoading || isFetching) return <Loading />;
 

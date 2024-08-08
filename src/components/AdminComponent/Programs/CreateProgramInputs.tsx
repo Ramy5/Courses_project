@@ -7,11 +7,11 @@ import {
   Table,
 } from "../../../components";
 import { t } from "i18next";
-import { useMemo, useState } from "react";
+import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { FaRegEdit } from "react-icons/fa";
 import { RiDeleteBin5Line } from "react-icons/ri";
-import { useNavigate } from "react-router-dom";
+import { UNSAFE_NavigationContext, useBeforeUnload, useLocation, useNavigate } from "react-router-dom";
 
 const CreateProgramInputs = ({
   setStep,
@@ -23,7 +23,103 @@ const CreateProgramInputs = ({
   const [openRow, setOpenRow] = useState<number | null>(null);
   const navigate = useNavigate();
 
-  const { values, setFieldValue } = useFormikContext();
+  const { values, setFieldValue, dirty, isSubmitting } = useFormikContext();
+  console.log("🚀 ~ dirty:", dirty);
+  const location = useLocation();
+  console.log("🚀 ~ location:", location);
+
+  console.log("🚀 ~ useEffect ~ window:", window);
+  // const [state, setState] = useState(false);
+  // console.log("🚀 ~ state:", state)
+
+  function useBlocker(blocker, when) {
+    const { navigator } = useContext(UNSAFE_NavigationContext);
+  
+    useEffect(() => {
+      if (!when) return;
+  
+      const unblock = navigator.block((tx) => {
+        const autoUnblockingTx = {
+          ...tx,
+          retry() {
+            unblock();
+            tx.retry();
+          },
+        };
+  
+        blocker(autoUnblockingTx);
+      });
+  
+      return unblock;
+    }, [navigator, blocker, when]);
+  }
+  
+  function usePrompt(message, when) {
+    const blocker = (tx) => {
+      if (window.confirm(message)) {
+        tx.retry();
+      }
+    };
+  
+    useBlocker(blocker, when);
+  }
+
+  usePrompt(
+    'You have unsaved changes, are you sure you want to leave?',
+    dirty && !isSubmitting
+  );
+
+
+  // useBeforeUnload(
+  //   useCallback(() => {
+  //     if (dirty) {
+  //       // localStorage.setItem("formData", JSON.stringify(formik.values));
+  //       alert("fwncjnek");
+  //       setState(true)
+
+  //     }
+  //   }, [dirty])
+  // );
+
+  // // Load form state from localStorage when the component mounts
+  // useEffect(() => {
+  //   // const savedData = localStorage.getItem("formData");
+  //   if (state) {
+  //     // formik.setValues(JSON.parse(savedData));
+  //     alert("fwncjnek");
+
+  //   }
+  // }, [state, dirty]);
+
+  // useEffect(() => {
+
+  // }, [state]);
+
+  // const usePrompt = (when, message) => {
+  //   useEffect(() => {
+  //     const handleBeforeUnload = (event) => {
+  //       if (when) {
+  //         event.preventDefault();
+  //         event.returnValue = message;
+  //         alert("fwncjnek");
+  //       }
+  //     };
+
+  //     window.addEventListener("beforeunload", handleBeforeUnload);
+
+  //     return () => {
+  //       window.removeEventListener("beforeunload", handleBeforeUnload);
+  //     };
+  //   }, [when, message]);
+  // };
+
+  // usePrompt(dirty, "You have unsaved changes. Are you sure you want to leave?");
+
+  // useEffect(() => {
+  //   if (location && dirty === true) {
+  //     alert("fwncjnek");
+  //   }
+  // }, [location.pathname && dirty === true]);
 
   // const validationSchema = Yup.object({
   //   program_name: Yup.string().required(t("Required")),

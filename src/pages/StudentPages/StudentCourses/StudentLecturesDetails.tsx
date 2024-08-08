@@ -39,17 +39,12 @@ const StudentLecturesDetails = () => {
     queryKey: ["get-lectures"],
     queryFn: () => getStudentLectureDetails(id),
   });
-  console.log("🚀 ~ StudentLecturesDetails ~ data:", data);
 
   const { data: remainingLectures, refetch: remainingLectureRefetch } =
     useQuery({
       queryKey: ["get-remaining-lectures"],
       queryFn: () => getStudentRemainingLectureDetails(id),
     });
-  console.log(
-    "🚀 ~ StudentLecturesDetails ~ remainingLectures:",
-    remainingLectures
-  );
 
   useEffect(() => {
     const diffMinutes = subtractTwoTime(

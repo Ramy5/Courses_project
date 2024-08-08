@@ -20,72 +20,7 @@ const StudentCourses = () => {
     queryKey: ["get-courses"],
     queryFn: getStudentCourses,
   });
-
-  const studentCoursesData = [
-    {
-      id: 1,
-      course_name: "الفيزياء",
-      instructor_name: "بروفيسور. عبدالله فارس ",
-      course_date: "الأحد",
-      course_number: 4,
-    },
-    {
-      id: 2,
-      course_name: "الفيزياء",
-      instructor_name: "بروفيسور. عبدالله فارس ",
-      course_date: "الأحد",
-      course_number: 0,
-    },
-    {
-      id: 3,
-      course_name: "الفيزياء",
-      instructor_name: "بروفيسور. عبدالله فارس ",
-      course_date: "الأحد",
-      course_number: 4,
-    },
-    {
-      id: 4,
-      course_name: "الفيزياء",
-      instructor_name: "بروفيسور. عبدالله فارس ",
-      course_date: "الأحد",
-      course_number: 3,
-    },
-    {
-      id: 5,
-      course_name: "الفيزياء",
-      instructor_name: "بروفيسور. عبدالله فارس ",
-      course_date: "الأحد",
-      course_number: 4,
-    },
-    {
-      id: 6,
-      course_name: "الفيزياء",
-      instructor_name: "بروفيسور. عبدالله فارس ",
-      course_date: "الأحد",
-      course_number: 0,
-    },
-    {
-      id: 7,
-      course_name: "الفيزياء",
-      instructor_name: "بروفيسور. عبدالله فارس ",
-      course_date: "الأحد",
-      course_number: 4,
-    },
-    {
-      id: 8,
-      course_name: "الفيزياء",
-      instructor_name: "بروفيسور. عبدالله فارس ",
-      course_date: "الأحد",
-      course_number: 4,
-    },
-    {
-      id: 9,
-      course_name: "الفيزياء",
-      instructor_name: "بروفيسور. عبدالله فارس ",
-      course_date: "الأحد",
-      course_number: 4,
-    },
-  ];
+  console.log("🚀 ~ StudentCourses ~ data:", data)
 
   const borderColors = [
     "border-s-[#369252]",
