@@ -87,7 +87,9 @@ const StudentExams = () => {
               accessorKey: "action",
               cell: (info) => {
                 const examDate = info.row.original.date;
+                console.log("🚀 ~ StudentExams ~ examDate:", examDate);
                 const startTime = info.row.original.start_time;
+                console.log("🚀 ~ StudentExams ~ startTime:", startTime);
 
                 const duration = info.row.original.duration;
                 const formatDuration = formatTime(duration * 60);
@@ -99,12 +101,20 @@ const StudentExams = () => {
                 const currentDateFormat = formatDate(currentDate);
 
                 const finishedTime = calculateTime(formatDuration, startTime);
+                console.log("🚀 ~ StudentExams ~ finishedTime:", finishedTime);
 
+                // const isReady =
+                //   currentDateFormat == examDate &&
+                //   currentTimeFormat >= startTime &&
+                //   currentTimeFormat <= finishedTime;
                 const isReady =
                   currentDateFormat == examDate &&
-                  currentTimeFormat >= startTime &&
-                  currentTimeFormat <= finishedTime;
+                  currentTimeFormat >= startTime;
 
+                console.log(
+                  "🚀 ~ StudentExams ~ isReady:",
+                  currentTimeFormat <= finishedTime
+                );
                 return (
                   <Button
                     action={() => {
@@ -159,7 +169,7 @@ const StudentExams = () => {
         ))}
       </div>
 
-      <div className="bg-white p-5 rounded-3xl">
+      <div className="p-5 bg-white rounded-3xl">
         {examsData?.length > 0 ? (
           <>
             {buttons.map((button) => (
@@ -185,7 +195,7 @@ const StudentExams = () => {
             ))}
           </>
         ) : (
-          <p className="text-center font-semibold text-xl my-8">
+          <p className="my-8 text-xl font-semibold text-center">
             {t("there is no test available yet.")}
           </p>
         )}
