@@ -7,6 +7,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { t } from "i18next";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useAppDispatch } from "../../../hooks/reduxHooks";
+import { changeSidebarRoute } from "../../../features/dirty/dirtySlice";
 interface AddProgram_TP {
   program_name: string;
   program_type: boolean;
@@ -36,6 +38,7 @@ const CreateProgram = () => {
   const nanigate = useNavigate();
   const location = useLocation();
   const dataReceived = location.state;
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (dataReceived) {
@@ -100,28 +103,35 @@ const CreateProgram = () => {
         validationSchema=""
         onSubmit={(values) => handleAddProgram(values)}
       >
-        <Form>
-          {step === 1 && (
-            <CreateProgramInputs
-              setStep={setStep}
-              coursesData={coursesData}
-              setCoursesData={setCoursesData}
-              setEditCoursesData={setEditCoursesData}
-              isPending={isPending}
-            />
-          )}
-          {step === 2 && (
-            <CreateCoursesInputs
-              setStep={setStep}
-              setCoursesData={setCoursesData}
-              coursesData={coursesData}
-              editCoursesData={editCoursesData}
-              setEditCoursesData={setEditCoursesData}
-              editFinishedCoursesData={editFinishedCoursesData}
-              setEditFinishedCoursesData={setEditFinishedCoursesData}
-            />
-          )}
-        </Form>
+        {({ dirty, isSubmitting }) => {
+          useEffect(() => {
+            dispatch(changeSidebarRoute(dirty && !isSubmitting));
+          }, [dirty]);
+          return (
+            <Form>
+              {step === 1 && (
+                <CreateProgramInputs
+                  setStep={setStep}
+                  coursesData={coursesData}
+                  setCoursesData={setCoursesData}
+                  setEditCoursesData={setEditCoursesData}
+                  isPending={isPending}
+                />
+              )}
+              {step === 2 && (
+                <CreateCoursesInputs
+                  setStep={setStep}
+                  setCoursesData={setCoursesData}
+                  coursesData={coursesData}
+                  editCoursesData={editCoursesData}
+                  setEditCoursesData={setEditCoursesData}
+                  editFinishedCoursesData={editFinishedCoursesData}
+                  setEditFinishedCoursesData={setEditFinishedCoursesData}
+                />
+              )}
+            </Form>
+          );
+        }}
       </Formik>
     </div>
   );

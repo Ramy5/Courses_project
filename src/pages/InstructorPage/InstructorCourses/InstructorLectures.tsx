@@ -10,7 +10,6 @@ import customFetch from "../../../utils/axios";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "../../../components/UI/Loading";
 import { toast } from "react-toastify";
-import { useEffect, useState } from "react";
 import ConvertNumberToWord from "../../../components/UI/ConvertNumberToWord";
 
 const InstructorLectures = () => {
@@ -67,7 +66,7 @@ const InstructorLectures = () => {
               onClick={() => {
                 if (!!instructor?.lecture_data) {
                   navigate(
-                    `/instructor/Courses/lecture/details/${instructor?.lecture_data.id}`
+                    `/instructor/Courses/lecture/details/${instructor?.lecture_data.id}`, {state: numbers[index]}
                   );
                 } else {
                   toast.info(t("the lecture must be prepared first"));

@@ -54,6 +54,8 @@ const CreateCoursesInputs = ({
   ]);
   const [generalSkillsSteps, setGeneralSkillsSteps] = useState(["1- "]);
 
+
+
   const courseTeacherID = editFinishedCoursesData?.teachers?.map(
     (teacher) => teacher.id
   );
@@ -346,7 +348,7 @@ const CreateCoursesInputs = ({
         initialValues={initialValues}
         validationSchema=""
         onSubmit={(values) => {
-          //   setCoursesData(values);
+          // setCoursesData(values);
         }}
       >
         {({ setFieldValue, values, resetForm }) => {
