@@ -37,13 +37,17 @@ customFetch.interceptors.response.use(
   (error) => {
     const prevRequest = error?.config;
 
-    if (error?.response?.status === 401 && !prevRequest.sent) {
+    if (
+      error?.response?.status === 401 &&
+      !prevRequest.sent &&
+      location.pathname !== "/"
+    ) {
       prevRequest.sent = true;
       clearCookies();
       Cookies.remove("role");
       Cookies.remove("token");
       toast.error(t("your session is end, please login again"));
-      // location.href = "/";
+      location.href = "/";
     }
 
     return Promise.reject(error);
@@ -57,7 +61,7 @@ export const checkForUnauthorizedResponse = (error: any, thunkAPI: any) => {
       : "An error occurred";
 
   if (error?.response?.status === 401) {
-    thunkAPI.dispatch(logoutUser("Unauthorized!"));
+    thunkAPI.dispatch(logoutUser());
     return thunkAPI.rejectWithValue("Unauthorized!");
   }
 
