@@ -19,8 +19,6 @@ const StudentViewProjects = () => {
     queryFn: () => getProject(id),
   });
 
-  console.log(data);
-
   const customData = {
     studentName: data?.student?.full_name,
     studentCode: data?.student?.academicData?.Academic_code,

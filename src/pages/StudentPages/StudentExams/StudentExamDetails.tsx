@@ -21,7 +21,6 @@ const StudentExamDetails = () => {
   });
 
   const studentExamData = data && data?.data?.data?.exam;
-  console.log("🚀 ~ StudentExamDetails ~ studentExamData:", studentExamData);
 
   const examDetails = {
     id: studentExamData?.id,

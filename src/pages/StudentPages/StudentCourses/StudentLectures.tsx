@@ -31,7 +31,6 @@ const StudentLectures = () => {
     "border-s-[#025464]",
   ];
 
-  console.log("🚀 ~ StudentLectures ~ data:", data);
   if (isLoading || isFetching || isRefetching) return <Loading />;
 
   return (

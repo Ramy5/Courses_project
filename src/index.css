@@ -14,6 +14,10 @@ body {
   font-family: "Tajawal", sans-serif;
 }
 
+.student_banner-img {
+  background-image: url("./assets/studentInformationPanel/studentInformationPanel_banar.svg");
+}
+
 .no-copy {
   user-select: none;
   -webkit-user-select: none;
@@ -421,44 +425,42 @@ tbody .fc-datagrid-cell-frame {
   border-bottom: 2px solid #4ecb71 !important;
 }
 
-.fc-timeline-lane-frame .fc-timeline-event-harness:nth-child(1)  {
+.fc-timeline-lane-frame .fc-timeline-event-harness:nth-child(1) {
   margin-left: 5px !important;
   margin-right: -20px !important;
 }
 
-.fc-timeline-lane-frame .fc-timeline-event-harness:nth-child(2)  {
+.fc-timeline-lane-frame .fc-timeline-event-harness:nth-child(2) {
   margin-left: 20px !important;
   margin-right: -25px !important;
 }
-.fc-timeline-lane-frame .fc-timeline-event-harness:nth-child(3)  {
+.fc-timeline-lane-frame .fc-timeline-event-harness:nth-child(3) {
   margin-left: 25px !important;
   margin-right: -30px !important;
 }
-.fc-timeline-lane-frame .fc-timeline-event-harness:nth-child(4)  {
+.fc-timeline-lane-frame .fc-timeline-event-harness:nth-child(4) {
   margin-left: 30px !important;
   margin-right: -35px !important;
 }
-.fc-timeline-lane-frame .fc-timeline-event-harness:nth-child(5)  {
+.fc-timeline-lane-frame .fc-timeline-event-harness:nth-child(5) {
   margin-left: 35px !important;
   margin-right: -40px !important;
 }
-.fc-timeline-lane-frame .fc-timeline-event-harness:nth-child(6)  {
+.fc-timeline-lane-frame .fc-timeline-event-harness:nth-child(6) {
   margin-left: 40px !important;
   margin-right: -45px !important;
 }
-.fc-timeline-lane-frame .fc-timeline-event-harness:nth-child(7)  {
+.fc-timeline-lane-frame .fc-timeline-event-harness:nth-child(7) {
   margin-left: 45px !important;
   margin-right: -50px !important;
 }
-.fc-timeline-lane-frame .fc-timeline-event-harness:nth-child(8)  {
+.fc-timeline-lane-frame .fc-timeline-event-harness:nth-child(8) {
   margin-left: 50px !important;
   margin-right: -55px !important;
 }
-.fc-timeline-lane-frame .fc-timeline-event-harness:nth-child(9)  {
+.fc-timeline-lane-frame .fc-timeline-event-harness:nth-child(9) {
   margin-left: 55px !important;
   margin-right: -60px !important;
 }
 
 /* End Schedule */
-
-

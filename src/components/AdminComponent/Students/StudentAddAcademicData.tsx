@@ -29,7 +29,7 @@ const postStudentAcademic = async (newStudent: any) => {
   return data;
 };
 
-const editStudentAcademic = async (newStudent: any, id: number) => {
+const editStudentAcademic = async (newStudent: any, id: number | string) => {
   const data = customFetch.post(`updateAcademicData/${id}`, newStudent);
   return data;
 };
@@ -112,7 +112,7 @@ const StudentAddAcademicData = ({
   const { mutate: updateAcademicData, isPending: editIsPending } = useMutation({
     mutationKey: ["update-academic-student"],
     mutationFn: (editAcademic: any) =>
-      editStudentAcademic(editAcademic, Number(editObj.id)),
+      editStudentAcademic(editAcademic, studentIDParam),
     onSuccess: (data: any) => {
       queryClient.invalidateQueries("students");
       toast.success(

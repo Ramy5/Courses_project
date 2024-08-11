@@ -87,9 +87,7 @@ const StudentExams = () => {
               accessorKey: "action",
               cell: (info) => {
                 const examDate = info.row.original.date;
-                console.log("🚀 ~ StudentExams ~ examDate:", examDate);
                 const startTime = info.row.original.start_time;
-                console.log("🚀 ~ StudentExams ~ startTime:", startTime);
 
                 const duration = info.row.original.duration;
                 const formatDuration = formatTime(duration * 60);
@@ -101,7 +99,6 @@ const StudentExams = () => {
                 const currentDateFormat = formatDate(currentDate);
 
                 const finishedTime = calculateTime(formatDuration, startTime);
-                console.log("🚀 ~ StudentExams ~ finishedTime:", finishedTime);
 
                 // const isReady =
                 //   currentDateFormat == examDate &&
@@ -111,10 +108,6 @@ const StudentExams = () => {
                   currentDateFormat == examDate &&
                   currentTimeFormat >= startTime;
 
-                console.log(
-                  "🚀 ~ StudentExams ~ isReady:",
-                  currentTimeFormat <= finishedTime
-                );
                 return (
                   <Button
                     action={() => {

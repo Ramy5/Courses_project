@@ -94,7 +94,7 @@ const InstructorViewAllProject = () => {
 
   return (
     <div>
-      <TitlePage mainLink="/instructors/viewHomework" mainTitle="homeworks" />
+      <TitlePage mainLink="/instructor/viewHomework" mainTitle="homeworks" />
 
       <div>
         <Table data={allHomeworksData} columns={allHomeworksColumns} />

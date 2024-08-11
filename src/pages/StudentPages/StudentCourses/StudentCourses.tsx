@@ -20,7 +20,6 @@ const StudentCourses = () => {
     queryKey: ["get-courses"],
     queryFn: getStudentCourses,
   });
-  console.log("🚀 ~ StudentCourses ~ data:", data)
 
   const borderColors = [
     "border-s-[#369252]",

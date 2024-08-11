@@ -11,6 +11,7 @@ import { FaArrowLeftLong } from "react-icons/fa6";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import customFetch from "../../../utils/axios";
+import { generateRandomColor } from "../../../utils/helpers";
 
 interface InstructorProjectBox_TP {
   title: string;
@@ -34,7 +35,6 @@ const InstructorProjectBox = (props: InstructorProjectBox_TP) => {
     start_date: projectStartShow,
     end_date: projectEndShow,
     id: projectId,
-    color,
   } = props;
 
   const [openRow, setOpenRow] = useState<number | null>(null);
@@ -55,20 +55,20 @@ const InstructorProjectBox = (props: InstructorProjectBox_TP) => {
 
   return (
     <div
-      style={{ borderColor: color }}
+      style={{ borderColor: generateRandomColor() }}
       className={`border-s-[15px] rounded-xl bg-white shadow-sm`}
     >
       <div className="p-4 border-b border-gray-400">
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <PiBookOpenTextBold className="text-2xl text-mainColor" />
-            <h2 className="w-64 text-xl font-bold truncate text-mainColor">
+            <h2 className="text-xl font-bold truncate w-44 text-mainColor">
               {projectMaterial}
             </h2>
           </div>
           <DotsDropDown
             onFirstClick={() =>
-              navigate(`/instructors/editProject/${projectId}`)
+              navigate(`/instructor/editProject/${projectId}`)
             }
             onSecondClick={() => handleDeleteProject()}
             firstName="edit"

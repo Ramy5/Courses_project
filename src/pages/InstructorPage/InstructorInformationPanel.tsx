@@ -207,9 +207,9 @@ const InstructorInformationPanel = () => {
       </div>
 
       {/* CHART PERFORMANCE AND CALENDER */}
-      <div className="grid items-center grid-cols-2 gap-x-14 gap-y-6 lg:grid-cols-3">
+      <div className="grid items-center grid-cols-2 gap-x-10 gap-y-6 lg:grid-cols-3">
         {/* CALENDER */}
-        <div className="col-span-2 justify-self-center lg:justify-self-auto lg:col-span-1">
+        <div className="col-span-2 justify-self-center lg:col-span-1">
           <DatePicker
             selected={startDate}
             onChange={(date) => setStartDate(date)}

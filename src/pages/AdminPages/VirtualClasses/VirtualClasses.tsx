@@ -17,8 +17,6 @@ const VirtualClasses = () => {
     queryFn: getVirtualClassesData,
   });
 
-  console.log(data?.data);
-
   const virtualClassesColumns = useMemo<ColumnDef<[]>[]>(
     () => [
       {
