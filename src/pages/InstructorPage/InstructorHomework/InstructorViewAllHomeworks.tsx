@@ -96,7 +96,7 @@ const InstructorViewAllHomeworks = () => {
   return (
     <div>
       <div className="flex items-center justify-between">
-        <TitlePage mainLink="/instructors/viewHomework" mainTitle="homeworks" />
+        <TitlePage mainLink="/instructor/viewHomework" mainTitle="homeworks" />
         <Back className="bg-white border border-mainColor text-mainColor" />
       </div>
       <div>

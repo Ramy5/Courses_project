@@ -9,7 +9,6 @@ interface Grades_TP {
 }
 
 const Grades = ({ studentGrade, title }: Grades_TP) => {
-  console.log("🚀 ~ Grades ~ studentGrade:", studentGrade);
   const [isOpen, setIsOpen] = useState(false);
 
   const isRTL = useRTL();

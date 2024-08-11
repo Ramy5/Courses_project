@@ -100,10 +100,13 @@ const StudentExams = () => {
 
                 const finishedTime = calculateTime(formatDuration, startTime);
 
+                // const isReady =
+                //   currentDateFormat == examDate &&
+                //   currentTimeFormat >= startTime &&
+                //   currentTimeFormat <= finishedTime;
                 const isReady =
                   currentDateFormat == examDate &&
-                  currentTimeFormat >= startTime &&
-                  currentTimeFormat <= finishedTime;
+                  currentTimeFormat >= startTime;
 
                 return (
                   <Button
@@ -159,7 +162,7 @@ const StudentExams = () => {
         ))}
       </div>
 
-      <div className="bg-white p-5 rounded-3xl">
+      <div className="p-5 bg-white rounded-3xl">
         {examsData?.length > 0 ? (
           <>
             {buttons.map((button) => (
@@ -185,7 +188,7 @@ const StudentExams = () => {
             ))}
           </>
         ) : (
-          <p className="text-center font-semibold text-xl my-8">
+          <p className="my-8 text-xl font-semibold text-center">
             {t("there is no test available yet.")}
           </p>
         )}

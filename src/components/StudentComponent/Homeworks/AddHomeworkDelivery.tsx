@@ -43,7 +43,6 @@ const addNewProject = async (projectData: any) => {
 };
 
 const AddHomeworkDelivery = (props) => {
-  console.log("🚀 ~ AddHomeworkDelivery ~ props:", props);
   const { startDate, startTime, endDate, endTime, isProject } = props;
   const { setFieldValue, values } = useFormikContext();
   const [files, setFiles] = useState(null);
@@ -110,8 +109,8 @@ const AddHomeworkDelivery = (props) => {
     mutationKey: ["add-student-homework"],
     mutationFn: addNewHomework,
     onSuccess: (data) => {
-      queryClient.invalidateQueries(["get-all-homeworks"]);
       toast.success(t("homework has added successfully"));
+      queryClient.invalidateQueries(["get-all-homeworks"]);
       navigate("/students/homeworks");
     },
   });
@@ -120,8 +119,8 @@ const AddHomeworkDelivery = (props) => {
     mutationKey: ["add-student-project"],
     mutationFn: addNewProject,
     onSuccess: (data) => {
-      queryClient.invalidateQueries(["get-all-projects"]);
       toast.success(t("project has added successfully"));
+      queryClient.invalidateQueries(["get-all-projects"]);
       navigate("/students/projects");
     },
   });

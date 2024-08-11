@@ -35,7 +35,6 @@ const StudentGrades = () => {
     queryKey: ["homework-degree"],
     queryFn: getHomeworkDegree,
   });
-  console.log("🚀 ~ StudentGrades ~ homeworkData:", homeworkData);
 
   const {
     data: projectData,
@@ -46,7 +45,6 @@ const StudentGrades = () => {
     queryKey: ["project-degree"],
     queryFn: getProjectDegree,
   });
-  console.log("🚀 ~ StudentGrades ~ projectData:", projectData);
 
   const {
     data: examsData,
@@ -57,7 +55,6 @@ const StudentGrades = () => {
     queryKey: ["exams-degree"],
     queryFn: getExamsDegree,
   });
-  console.log("🚀 ~ Studentexams ~ examsData:", examsData);
 
   const studentWorkGrade = {
     academic_year: "2023-2024",

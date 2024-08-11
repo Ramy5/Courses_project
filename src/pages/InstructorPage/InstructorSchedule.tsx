@@ -15,10 +15,6 @@ const InstructorSchedule = () => {
   });
 
   const instructorSchedule = data?.data?.data.lectures || [];
-  console.log(
-    "🚀 ~ InstructorSchedule ~ instructorSchedule:",
-    instructorSchedule
-  );
 
   return (
     <div>

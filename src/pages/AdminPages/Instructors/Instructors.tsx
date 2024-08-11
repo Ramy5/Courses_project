@@ -23,7 +23,7 @@ const Instructors = () => {
   const queryClient = useQueryClient();
   const [page, setPage] = useState<number>(1);
   const [search, setSearch] = useState<string>("");
-  const debounceSearchTerm = useDebounce(search, 400);
+  const debounceSearchTerm = useDebounce(search, 1000);
   const navigate = useNavigate();
 
   const options = [
@@ -110,6 +110,7 @@ const Instructors = () => {
           name="instructorSearch"
           value={search}
           className="w-64"
+          autoFocus
           onChange={(e) => setSearch(e.target.value)}
           placeholder={t("search about instructor")}
         />

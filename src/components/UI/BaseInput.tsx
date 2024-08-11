@@ -13,7 +13,15 @@ export type BaseInput_TP = {
   name: string;
   placeholder?: string;
   ref?: any;
-  type?: "text" | "number" | "password" | "email" | "checkbox" | "text" | "date" | "time";
+  type?:
+    | "text"
+    | "number"
+    | "password"
+    | "email"
+    | "checkbox"
+    | "text"
+    | "date"
+    | "time";
 };
 
 const BaseInput = ({
@@ -26,6 +34,7 @@ const BaseInput = ({
   placeholder,
   ref,
   disabled,
+  autoFocus,
   ...props
 }: BaseInput_TP) => {
   const { setFieldValue, setFieldTouched, errors, touched, values } =
@@ -77,6 +86,7 @@ const BaseInput = ({
         )}
         <input
           type={type}
+          autoFocus={autoFocus}
           id={id}
           value={props.value || values[props.name]}
           error={touched[props.name] && !!errors[props.name]}

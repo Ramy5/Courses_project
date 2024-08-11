@@ -42,7 +42,6 @@ const StudentExam = () => {
   });
 
   const studentQuestionExam = data?.data?.data?.examQuestion;
-  console.log("🚀 ~ StudentExam ~ studentQuestionExam:", studentQuestionExam);
   const examCourseName = studentQuestionExam?.[0]?.exam?.course.course_name;
   const examDuration = studentQuestionExam?.[0]?.exam?.duration;
   const examStartTime = studentQuestionExam?.[0]?.exam?.start_time;
@@ -65,7 +64,6 @@ const StudentExam = () => {
     exam_questions: studentQuestionExam,
     start_time: examStartTime,
   };
-  console.log("🚀 ~ StudentExam ~ examDetails:", examDetails);
 
   useEffect(() => {
     if (examDetails?.exam_duration) {
@@ -103,7 +101,6 @@ const StudentExam = () => {
 
   useEffect(() => {
     const handleKeyDown = (e) => {
-      console.log("🚀 ~ handleKeyDown ~ e:", e.key) 
       if (e.key === 'PrintScreen') {
         e.preventDefault();
         alert('Screenshots are disabled on this page.');
@@ -142,7 +139,6 @@ const StudentExam = () => {
   }, [timeRemaining === 0]);
 
   const currentQuestion = examDetails?.exam_questions?.[questionNumber];
-  console.log("🚀 ~ StudentExam ~ currentQuestion:", currentQuestion)
   const numberOfAnswer = Object.keys(answers).length;
 
   const unansweredQuestions =
@@ -205,7 +201,7 @@ const StudentExam = () => {
       <Form>
         <div className="bg-[#D9D9D9] flex flex-col sm:flex-row gap-5 px-5 py-12 min-h-screen">
           <div className="w-full lg:w-[25%] md:w-[33%] sm:w-[40%] bg-white main_shadow pt-4 pb-8 rounded-xl h-fit px-5">
-            <h2 className="bg-mainColor text-white font-semibold text-xl text-center rounded-xl py-5">
+            <h2 className="py-5 text-xl font-semibold text-center text-white bg-mainColor rounded-xl">
               {t("lectures")} <span>{examDetails.exam_name}</span>
             </h2>
 
@@ -215,15 +211,15 @@ const StudentExam = () => {
               {/* {convertMinutesToHHMMSS(timeRemaining)} */}
             </h1>
 
-            <div className="flex gap-2 items-center">
-              <div className="w-5 h-5 bg-mainRed rounded-full"></div>
+            <div className="flex items-center gap-2">
+              <div className="w-5 h-5 rounded-full bg-mainRed"></div>
               <p>{t("an unanswered question")}</p>
             </div>
-            <div className="flex gap-2 items-center my-2">
+            <div className="flex items-center gap-2 my-2">
               <div className="w-5 h-5 bg-[#369252] rounded-full"></div>
               <p>{t("question answered")}</p>
             </div>
-            <div className="flex gap-2 items-center">
+            <div className="flex items-center gap-2">
               <div className="w-5 h-5 bg-[#DDDDDD] rounded-full"></div>
               <p>{t("question not displayed")}</p>
             </div>
@@ -297,7 +293,7 @@ const StudentExam = () => {
                       return (
                         <li
                           key={i}
-                          className="bg-white px-4 py-3 rounded-xl flex gap-1 items-center cursor-pointer"
+                          className="flex items-center gap-1 px-4 py-3 bg-white cursor-pointer rounded-xl"
                           onClick={() =>
                             handleAnswerChange(currentQuestion.id, ans)
                           }
@@ -326,7 +322,7 @@ const StudentExam = () => {
                 className="bg-white"
               >
                 <div className="text-center">
-                  <p className="font-semibold text-lg my-6 text-black">
+                  <p className="my-6 text-lg font-semibold text-black">
                     {t("there are unanswered questions")}
                   </p>
 
@@ -346,7 +342,7 @@ const StudentExam = () => {
                     {t("questions answered:")} <span>{numberOfAnswer}</span>
                   </p>
 
-                  <p className="text-mainRed font-medium text-lg my-6">
+                  <p className="my-6 text-lg font-medium text-mainRed">
                     {t("unanswered questions:")}{" "}
                     <span>{unansweredQuestions}</span>
                   </p>

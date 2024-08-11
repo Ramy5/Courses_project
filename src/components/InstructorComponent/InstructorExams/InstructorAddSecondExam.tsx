@@ -13,12 +13,10 @@ const InstructorAddSecondExam = ({
   questionExam,
   editExamData,
 }: any) => {
-  console.log("🚀 ~ grades:", grades);
   const [currentIndex, setCurrentIndex] = useState(0);
   const questionsPerPage = 2;
 
   const { values, setFieldValue } = useFormikContext();
-  console.log("🚀 ~ values:", values)
 
   const filterBoolenFromExam = fileExam?.filter(
     (item) => item.answer == "true" || item.answer == "false"
@@ -59,7 +57,6 @@ const InstructorAddSecondExam = ({
     currentIndex,
     currentIndex + 2
   );
-  console.log("🚀 ~ currentQuestions:", currentQuestions);
 
   const currentPage = Math.floor(currentIndex / questionsPerPage) + 1;
 
@@ -83,11 +80,9 @@ const InstructorAddSecondExam = ({
   const handleGradeChange = (e, itemId) => {
     const { value } = e.target;
     setGrades((prev) => {
-      console.log("🚀 ~ setGrades ~ prev:", prev)
       const existingGradeIndex = prev?.findIndex((grade) => grade.id == itemId);
       if (existingGradeIndex !== -1) {
         const updatedGrades = [...prev];
-        console.log("🚀 ~ setGrades ~ updatedGrades:", updatedGrades)
         updatedGrades[existingGradeIndex].grade = value;
         return updatedGrades;
       }
@@ -99,7 +94,7 @@ const InstructorAddSecondExam = ({
     const grade = grades?.find((grade) => {
       return grade.id == itemId;
     });
-    return grade ? grade?.grade  : " " ; 
+    return grade ? grade?.grade : " ";
   };
 
   // useEffect(() => {
@@ -153,7 +148,6 @@ const InstructorAddSecondExam = ({
 
       <div className="my-4">
         {currentQuestions?.map((item, i) => {
-          console.log("🚀 ~ {currentQuestions?.map ~ item:", item);
           return (
             <div
               key={i}
@@ -172,7 +166,6 @@ const InstructorAddSecondExam = ({
                 </div>
                 {item.answers && item.answers.length > 0 ? (
                   item.answers.map((answer, index) => {
-                    console.log("🚀 ~ item.answers.map ~ answer:", answer);
                     if (!answer.answer) {
                       return null;
                     }
@@ -201,7 +194,7 @@ const InstructorAddSecondExam = ({
                   <p>No answers available</p>
                 )}
               </div>
-              
+
               <div className="flex flex-row items-center justify-between gap-2 sm:flex-col">
                 <div className="flex items-center ">
                   <label htmlFor="grade" className="font-semibold me-3">

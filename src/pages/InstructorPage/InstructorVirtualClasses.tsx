@@ -125,7 +125,13 @@ const InstructorVirtualClasses = () => {
       <h2 className="mb-6 text-lg font-bold lg:text-2xl ms-4">
         {t("virtual classes (today's lecture)")}
       </h2>
-      <Table data={data || []} columns={virtualClassesColumns} />
+      {data?.length > 0 ? (
+        <Table data={data || []} columns={virtualClassesColumns} />
+      ) : (
+        <p className="text-xl font-bold text-center text-mainColor">
+          {t("there is no today lecture yet")}
+        </p>
+      )}
     </div>
   );
 };

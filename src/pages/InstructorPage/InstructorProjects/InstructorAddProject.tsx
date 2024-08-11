@@ -60,7 +60,7 @@ const editProject = async (ProjectData: editObj_TP, id: number | string) => {
   return response;
 };
 
-const InstructorAddProject = ({ editObj }: { editObj: editObj_TP }) => {
+const InstructorAddProject = ({ editObj }: { editObj?: editObj_TP }) => {
   const [files, setFiles] = useState<File[] | null>(null);
   const [courseSelect, setCourseSelect] = useState(null);
   const navigate = useNavigate();

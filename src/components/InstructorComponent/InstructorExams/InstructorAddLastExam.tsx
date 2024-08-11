@@ -44,13 +44,9 @@ const InstructorAddLastExam = ({
   editExamData,
   grades,
 }: any) => {
-  console.log("🚀 ~ questionExam:", questionExam)
-  console.log("🚀 ~ grades:", grades)
-  console.log("🚀 ~ editExamData:", editExamData)
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
   const { values } = useFormikContext();
-  console.log("🚀 ~ values:", values)
   const queryClient = useQueryClient();
 
   const examInformation = {
@@ -108,20 +104,19 @@ const InstructorAddLastExam = ({
       questions_number: question.questions_number,
     };
   });
-  console.log("🚀 ~ questions ~ questions:", questions)
 
   return (
-    <div className="w-full sm:w-4/5 m-auto relative">
+    <div className="relative w-full m-auto sm:w-4/5">
       <div className="border-2 border-[#E7F0FB] rounded-2xl mt-20 overflow-hidden">
         <div className="flex border-b-2 border-b-[#E7F0FB] font-semibold text-center">
           <h2 className="px-6 py-4 w-40 bg-[#E7F0FB]">{t("exam name")}</h2>
-          <p className="px-5 py-4 flex items-center">
+          <p className="flex items-center px-5 py-4">
             {examInformation?.course_name}
           </p>
         </div>
         <div className="flex border-b-2 border-b-[#E7F0FB] font-semibold text-center">
           <h2 className=" px-5 py-4 w-40 bg-[#E7F0FB]">{t("duration")}</h2>
-          <p className="px-5 py-4 flex items-center">
+          <p className="flex items-center px-5 py-4">
             {examInformation?.duration} <span>{t("minute")}</span>
           </p>
         </div>
@@ -129,13 +124,13 @@ const InstructorAddLastExam = ({
           <h2 className="px-5 py-4 w-40 bg-[#E7F0FB]">
             {t("total questions")}
           </h2>
-          <p className="px-5 py-4 flex items-center">
+          <p className="flex items-center px-5 py-4">
             {examInformation?.total_number_questions}
           </p> 
         </div>
         <div className="flex border-b-2 border-b-[#E7F0FB] font-semibold text-center">
           <h2 className="px-5 py-4 w-40 bg-[#E7F0FB]">{t("total score")}</h2>
-          <p className="px-5 py-4 flex items-center">
+          <p className="flex items-center px-5 py-4">
             {examInformation?.score}
           </p>
         </div>
@@ -143,13 +138,13 @@ const InstructorAddLastExam = ({
           <h2 className="px-5 py-4 w-40 bg-[#E7F0FB]">
             {t("degree of success")}
           </h2>
-          <p className="px-5 py-4 flex items-center">
+          <p className="flex items-center px-5 py-4">
             {examInformation?.passing_score}
           </p>
         </div>
         <div className="flex border-b-2 border-b-[#E7F0FB] font-semibold text-center">
           <h2 className="px-5 py-4 w-40 bg-[#E7F0FB]">{t("exam date")}</h2>
-          <p className="px-5 py-4 flex items-center">
+          <p className="flex items-center px-5 py-4">
             {formatDate(examInformation?.exam_date)}
           </p>
         </div>
@@ -160,9 +155,9 @@ const InstructorAddLastExam = ({
           onClose={() => setShowModal(false)}
           className="bg-white w-[90vw] sm:w-[60vw] lg:w-[50vw] xl:w-[50vw]"
         >
-          <div className="text-center py-12">
-            <PiCheckCircleThin size={120} className="fill-mainColor m-auto" />
-            <p className="text-mainColor font-semibold text-2xl my-7">
+          <div className="py-12 text-center">
+            <PiCheckCircleThin size={120} className="m-auto fill-mainColor" />
+            <p className="text-2xl font-semibold text-mainColor my-7">
               {t("the test structure has been completed")}
             </p>
 
@@ -190,7 +185,6 @@ const InstructorAddLastExam = ({
                   exam_type: values?.exam_type,
                   questions: questionExam?.length ? questionExam : questions,
                 };
-                console.log("🚀 ~ finalExamData:", finalExamData);
 
                 if (!!editExamData) {
                   editExamMutate(finalExamData);
@@ -206,7 +200,7 @@ const InstructorAddLastExam = ({
         </MainPopup>
       )}
 
-      <div className="flex justify-end items-center gap-5 mt-8">
+      <div className="flex items-center justify-end gap-5 mt-8">
         <Button bordered action={() => setSteps(2)}>
           {t("previous")}
         </Button>
