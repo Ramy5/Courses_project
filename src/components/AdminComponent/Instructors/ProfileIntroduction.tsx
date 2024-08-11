@@ -7,7 +7,6 @@ import { useNavigate } from "react-router-dom";
 import { FiCalendar } from "react-icons/fi";
 import studentProfileImg from "../../../assets/students/studentProfileImg.svg";
 
-
 interface PersonlyProfile {
   personalData: any;
   blocking?: boolean;
@@ -21,7 +20,6 @@ const ProfileIntroduction = ({
   navigation,
   deleteInstructor,
 }: PersonlyProfile) => {
-  console.log("🚀 ~ personalData:", personalData)
   const [openRow, setOpenRow] = useState<number | null>(null);
   const navigate = useNavigate();
 

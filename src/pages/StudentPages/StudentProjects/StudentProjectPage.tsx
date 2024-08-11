@@ -44,7 +44,6 @@ const StudentProjectPage = () => {
   });
 
   if (isLoading || isFetching || isRefetching) return <Loading />;
-  console.log("🚀 ~ StudentProjectPage ~ data:", data);
 
   return (
     <div className="p-6 space-y-6 bg-white border rounded-3xl">

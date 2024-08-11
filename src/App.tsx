@@ -71,6 +71,7 @@ import AddInstructor from "./components/AdminComponent/Instructors/AddInstructor
 import EditInstructor from "./components/AdminComponent/Instructors/EditInstructor";
 import ViewInstructorSchedule from "./pages/AdminPages/Instructors/ViewInstructorSchedule";
 import InstructorEditHomework from "./pages/InstructorPage/InstructorHomework/InstructorEditHomework";
+import InstructorEditProject from "./pages/InstructorPage/InstructorProjects/InstructorEditProject";
 
 function App() {
   const isRTL = useRTL();
@@ -277,7 +278,7 @@ function App() {
             element={<InstructorHomework />}
           />
           <Route
-            path="/instructors/viewHomework/:id"
+            path="/instructor/viewHomework/:id"
             element={<InstructorViewHomework />}
           />
           <Route
@@ -318,12 +319,19 @@ function App() {
             path="/instructors/addProject"
             element={<InstructorAddProject />}
           />
+          <Route
+            path="/instructor/editProject/:id"
+            element={<InstructorEditProject />}
+          />
 
           {/* INSTRUCTOR EXAMS*/}
           <Route path="/instructor/exams" element={<InstructorExams />} />
 
           {/* INSTRUCTOR ADD EXAM*/}
-          <Route path="/instructor/exams/add/" element={<InstructorAddExam />} />
+          <Route
+            path="/instructor/exams/add/"
+            element={<InstructorAddExam />}
+          />
 
           {/* INSTRUCTOR GRADES */}
           <Route path="/instructor/setting" element={<InstructorSetting />} />

@@ -1,5 +1,4 @@
 import { t } from "i18next";
-import studentBanarImg from "../../../assets/studentInformationPanel/studentInformationPanel_banar.svg";
 import instructorPerson from "../../../assets/studentInformationPanel/person.svg";
 import { useAppSelector } from "../../../hooks/reduxHooks";
 
@@ -11,10 +10,7 @@ const StudentBanar: React.FC<StudentBanar_TP> = ({ userName }) => {
   const { user } = useAppSelector((slice) => slice.user);
 
   return (
-    <div
-      className="flex items-center gap-8 px-6 py-2 bg-no-repeat bg-cover"
-      style={{ backgroundImage: `url(${studentBanarImg})` }}
-    >
+    <div className="flex items-center gap-8 px-6 py-2 bg-no-repeat bg-cover student_banner-img">
       <div className="hidden lg:inline-block">
         <img src={instructorPerson} alt="instructor person" />
       </div>

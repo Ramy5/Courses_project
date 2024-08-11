@@ -130,7 +130,7 @@ const InstructorHomeworkBox = (props: InstructorHomeworkBox_TP) => {
           {homeworkIsFinished ? t("finished") : t("current")}
         </p>
         <Button
-          action={() => navigate(`/instructors/viewHomework/${homeworkId}`)}
+          action={() => navigate(`/instructor/viewHomework/${homeworkId}`)}
         >
           {t("watch")}
         </Button>

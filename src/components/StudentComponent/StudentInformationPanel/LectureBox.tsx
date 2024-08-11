@@ -35,7 +35,7 @@ const LectureBox: React.FC<LectureBox_TP> = ({
       </div>
       <div className="flex items-center gap-1">
         <FiFileText size={12} color={programColor} />
-        <Link className="w-24 text-xs truncate" to="">
+        <Link className="w-20 text-xs truncate" to="">
           {t("enrichment information")}
         </Link>
       </div>

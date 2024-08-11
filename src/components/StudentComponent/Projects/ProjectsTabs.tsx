@@ -23,8 +23,6 @@ const ProjectsTabs = () => {
     queryFn: getAllProjects,
   });
 
-  console.log(data);
-
   const projectDoneColumns = useMemo<ColumnDef<[]>[]>(
     () => [
       {
