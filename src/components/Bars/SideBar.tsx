@@ -286,6 +286,7 @@ const SideBar: React.FC<SideBarProps> = ({
 
   const getCurrentPathName = (path: string) => {
     const segments = path.split("/").filter(Boolean);
+    console.log("🚀 ~ getCurrentPathName ~ segments:", segments)
 
     const segmentsType =
       userData !== "admin" && segments.length > 0
@@ -296,6 +297,7 @@ const SideBar: React.FC<SideBarProps> = ({
   };
 
   const currentPathtName = getCurrentPathName(location.pathname);
+  console.log("🚀 ~ currentPathtName:", currentPathtName)
 
   return (
     <aside
@@ -334,7 +336,7 @@ const SideBar: React.FC<SideBarProps> = ({
                         font-medium rounded-s-full cursor-pointer
                         transition-colors group text-[#E7E7E7]
                         ${
-                          currentPathtName == item.link
+                          item.link.includes(currentPathtName)
                             ? "bg-[#F9F9F9] !text-mainColor"
                             : `hover:bg-[#F9F9F9] hover:text-mainColor`
                         }

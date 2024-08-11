@@ -192,7 +192,6 @@ const LecturePreparation = () => {
               </div>
 
               <div className="mt-8">
-                <h2 className="mb-3 font-semibold">{t("CV file")}</h2>
                 <div className="flex flex-col md:flex-row gap-x-24 lg:gap-x-28 gap-y-5">
                   <input
                     type="file"
