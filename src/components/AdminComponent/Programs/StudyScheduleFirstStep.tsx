@@ -121,8 +121,10 @@ const StudyScheduleFirstStep = ({
   }, [activeButton]);
 
   const filterScheduleTable = scheduleData?.lecture_time?.filter(
-    (item) => item.day_id === activeButton.id
+    (item) => item.day_id == activeButton.id
   );
+  console.log("🚀 ~ filterScheduleTable:", filterScheduleTable)
+
 
   {
     isLoading || (isRefetching && <Loading />);
@@ -203,10 +205,10 @@ const StudyScheduleFirstStep = ({
               action={() => {
                 setLoading(true);
                 setActiveButton({ id: item.id, day: item.day });
-                setScheduleData((prevState) => ({
-                  ...prevState,
-                  day: { id: item.id, day: item.day },
-                }));
+                // setScheduleData((prevState) => ({
+                //   ...prevState,
+                //   day: { id: item.id, day: item.day },
+                // }));
                 localStorage.setItem(
                   "day",
                   JSON.stringify({ id: item.id, day: item.day })

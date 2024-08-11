@@ -15,7 +15,10 @@ const InstructorSchedule = () => {
   });
 
   const instructorSchedule = data?.data?.data.lectures || [];
-  console.log("🚀 ~ InstructorSchedule ~ instructorSchedule:", instructorSchedule)
+  console.log(
+    "🚀 ~ InstructorSchedule ~ instructorSchedule:",
+    instructorSchedule
+  );
 
   return (
     <div>
@@ -24,7 +27,7 @@ const InstructorSchedule = () => {
       ) : (
         <div className="py-8 pb-2 bg-white rounded-2xl">
           <p className="mb-5 text-2xl font-semibold text-center text-mainColor">
-            ذكاء اصطناعي
+            {instructorSchedule?.[0]?.program_name}
           </p>
           <div className="fade-in">
             <Schedule scheduleData={instructorSchedule} />

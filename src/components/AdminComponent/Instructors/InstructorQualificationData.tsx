@@ -66,6 +66,7 @@ const InstructorQualificationData = ({
   instructorID,
   dataReceived,
 }: InstructorAddQualificationData_TP) => {
+  console.log("🚀 ~ editObj:", editObj)
   const [file, setFile] = useState(editObj?.file || null);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
@@ -76,6 +77,7 @@ const InstructorQualificationData = ({
   );
 
   const [editCertificateData, setEditCertificateData] = useState({});
+  console.log("🚀 ~ editCertificateData:", editCertificateData)
 
   const initialValues: AddInstructorQualification_TP = {
     general_specialization: editObj?.general_specialization || "",
