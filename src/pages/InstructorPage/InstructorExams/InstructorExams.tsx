@@ -166,16 +166,20 @@ const InstructorExams = () => {
       </div>
 
       <div className="p-5 bg-white rounded-3xl">
-        <div>
-          <Table
-            data={reverseExamsData}
-            columns={examsColumns}
-            showNavigation
-            totalPages={examsPagenation?.totalPages}
-            currentPage={examsPagenation?.currentPage}
-            setPage={setPage}
-          />
-        </div>
+        {reverseExamsData?.length ? (
+          <div>
+            <Table
+              data={reverseExamsData}
+              columns={examsColumns}
+              showNavigation
+              totalPages={examsPagenation?.totalPages}
+              currentPage={examsPagenation?.currentPage}
+              setPage={setPage}
+            />
+          </div>
+        ) : (
+          <p className="text-center font-semibold text-xl text-mainColor py-8">{t("No exams added yet")}</p>
+        )}
       </div>
     </div>
   );

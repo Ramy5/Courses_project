@@ -98,7 +98,7 @@ const InstructorProjectBox = (props: InstructorProjectBox_TP) => {
 
       <div className="flex items-center justify-end p-4">
         <Button
-          action={() => navigate(`/instructors/viewProject/${projectId}`)}
+          action={() => navigate(`/instructor/projects/view/${projectId}`)}
         >
           {t("watch")}
         </Button>

@@ -83,7 +83,7 @@ const InstructorViewAllHomeworks = () => {
         accessorKey: "evaluate",
         cell: ({ row }) => (
           <Button className="text-white">
-            <Link to={`/instructors/evaluateProject/${row.original.id}`}>
+            <Link to={`/instructor/projects/evaluate/${row.original.id}`}>
               {t("evaluate")}
             </Link>
           </Button>

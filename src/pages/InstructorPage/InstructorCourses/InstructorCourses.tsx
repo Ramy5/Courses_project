@@ -21,7 +21,10 @@ const InstructorCourses = () => {
   });
 
   const instructorCoursesData = data?.data?.data.courses || [];
-  console.log("🚀 ~ InstructorCourses ~ instructorCoursesData:", instructorCoursesData)
+  console.log(
+    "🚀 ~ InstructorCourses ~ instructorCoursesData:",
+    instructorCoursesData
+  );
 
   // const buttons = [
   //   { id: 1, label: "first semester" },
@@ -56,7 +59,15 @@ const InstructorCourses = () => {
         ))}
       </div> */}
 
-      <InstructorCoursesCard instructorCoursesData={instructorCoursesData} />
+      {instructorCoursesData?.length ? (
+        <InstructorCoursesCard instructorCoursesData={instructorCoursesData} />
+      ) : (
+        <div className="p-5 bg-white rounded-3xl">
+          <p className="text-center font-semibold text-xl text-mainColor py-8">
+            {t("No courses added yet")}
+          </p>
+        </div>
+      )}
     </div>
   );
 };

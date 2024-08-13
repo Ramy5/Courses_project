@@ -46,10 +46,12 @@ const SideBar: React.FC<SideBarProps> = ({
   const location = useLocation();
   const { sidebarColor } = useAppSelector((state) => state.global);
   const { isDirty } = useAppSelector((state) => state.dirty);
+  console.log("🚀 ~ isDirty:", isDirty);
   const dispatch = useAppDispatch();
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 640);
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [locationRoute, setLocationRoute] = useState<string>("");
+  console.log("🚀 ~ locationRoute:", locationRoute);
 
   const handleResize = () => {
     setIsSmallScreen(window.innerWidth < 640);
@@ -239,19 +241,19 @@ const SideBar: React.FC<SideBarProps> = ({
       title: "Virtual Classroom",
       icon: <CgPlayButtonR size={24} />,
       alert: "alt",
-      link: "/instructors/virtualClasses",
+      link: "/instructor/virtualClasses",
     },
     {
       title: "homeworks",
       icon: <SlBookOpen size={24} />,
       alert: "alt",
-      link: "/instructors/homeworks",
+      link: "/instructor/homeworks",
     },
     {
       title: "Projects",
       icon: <IoBulbOutline size={24} />,
       alert: "alt",
-      link: "/instructors/projects",
+      link: "/instructor/projects",
     },
     {
       title: "exams",
@@ -336,7 +338,7 @@ const SideBar: React.FC<SideBarProps> = ({
                         font-medium rounded-s-full cursor-pointer
                         transition-colors group text-[#E7E7E7]
                         ${
-                          item.link.includes(currentPathtName)
+                          currentPathtName == item.link
                             ? "bg-[#F9F9F9] !text-mainColor"
                             : `hover:bg-[#F9F9F9] hover:text-mainColor`
                         }
@@ -379,17 +381,10 @@ const SideBar: React.FC<SideBarProps> = ({
       </nav>
 
       {isDialogOpen && (
-        <MainPopup
-          onClose={() => setDialogOpen(false)}
-          className="bg-white w-[90vw] sm:w-[60vw] lg:w-[50vw] xl:w-[50vw]"
-        >
+        <MainPopup onClose={() => setDialogOpen(false)} className="bg-white w-[90vw] sm:w-[60vw] lg:w-[50vw] xl:w-[50vw]">
           <div className="text-center text-mainColor">
-            <h2 className="text-2xl font-semibold">
-              {t("Data is not completed")}
-            </h2>
-            <p className="text-xl font-medium my-8">
-              {t("Are you sure you want to leave this page?")}
-            </p>
+            <h2 className="text-2xl font-semibold">{t("Data is not completed")}</h2>
+            <p className="text-xl font-medium my-8">{t("Are you sure you want to leave this page?")}</p>
           </div>
           <div className="flex justify-center gap-4 mt-12">
             <Button
@@ -401,9 +396,7 @@ const SideBar: React.FC<SideBarProps> = ({
             >
               {t("confirm")}
             </Button>
-            <Button action={() => setDialogOpen(false)} bordered>
-              {t("cancel")}
-            </Button>
+            <Button action={() => setDialogOpen(false)} bordered>{t("cancel")}</Button>
           </div>
         </MainPopup>
       )}

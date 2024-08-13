@@ -73,88 +73,96 @@ const PersonlyProfile = () => {
 
   return (
     <div>
-      <div className="pb-2 bg-white rounded-2xl">
-        <ProfileIntroduction
-          personalData={studentProfileData}
-          blocking={false}
-        />
+      {!studentProfileData ? (
+        <div className="pb-2 bg-white rounded-2xl">
+          <ProfileIntroduction
+            personalData={studentProfileData}
+            blocking={false}
+          />
 
-        <div className="flex flex-col gap-10 p-4 pt-0 mt-24 lg:p-8">
-          {/* PERSONAL DETAILS */}
-          <div className="p-6 lg:p-10 bg-mainColor/15 rounded-xl">
-            <div className="grid items-center gap-8 md:grid-cols-2 lg:grid-cols-3 lg:gap-14">
-              <StudentPersonalContact
-                contactTitle={t("address")}
-                contactValue={studentProfileData.address}
-                icon={<PiMapPinLight size={30} />}
-              />
-              <StudentPersonalContact
-                contactTitle={t("phone")}
-                contactValue={studentProfileData.phoneNumber}
-                icon={<IoMdPhonePortrait size={30} />}
-              />
-              <StudentPersonalContact
-                contactTitle={t("email")}
-                contactValue={studentProfileData.email}
-                icon={<MdOutlineEmail size={30} />}
-              />
-              <StudentPersonalContactWithOptionalIcon
-                contactTitle={t("id number")}
-                contactValue={studentProfileData.idNumber}
-                icon={
-                  <HiOutlineIdentification
-                    className="text-mainColor"
-                    size={30}
-                  />
-                }
-              />
-              <StudentPersonalContactWithOptionalIcon
-                contactTitle={t("educational qualification")}
-                contactValue={studentProfileData.educationalQualification}
-                icon={<PiCertificate className="text-mainColor" size={30} />}
-              />
-            </div>
-          </div>
-
-          {/* ACADEMIC DETAILS */}
-          <div className="p-6 lg:p-10 bg-mainColor/15 rounded-xl">
-            <h2 className="mb-10 text-2xl font-bold">{t("academic data")}</h2>
-
-            <div className="grid items-center gap-8 md:grid-cols-2 lg:grid-cols-3 lg:gap-14">
-              {studentAcademicData?.map((item, index) => (
-                <StudentPersonalContactWithOptionalIcon
-                  key={index}
-                  contactTitle={item.title}
-                  contactValue={item.value}
+          <div className="flex flex-col gap-10 p-4 pt-0 mt-24 lg:p-8">
+            {/* PERSONAL DETAILS */}
+            <div className="p-6 lg:p-10 bg-mainColor/15 rounded-xl">
+              <div className="grid items-center gap-8 md:grid-cols-2 lg:grid-cols-3 lg:gap-14">
+                <StudentPersonalContact
+                  contactTitle={t("address")}
+                  contactValue={studentProfileData.address}
+                  icon={<PiMapPinLight size={30} />}
                 />
-              ))}
+                <StudentPersonalContact
+                  contactTitle={t("phone")}
+                  contactValue={studentProfileData.phoneNumber}
+                  icon={<IoMdPhonePortrait size={30} />}
+                />
+                <StudentPersonalContact
+                  contactTitle={t("email")}
+                  contactValue={studentProfileData.email}
+                  icon={<MdOutlineEmail size={30} />}
+                />
+                <StudentPersonalContactWithOptionalIcon
+                  contactTitle={t("id number")}
+                  contactValue={studentProfileData.idNumber}
+                  icon={
+                    <HiOutlineIdentification
+                      className="text-mainColor"
+                      size={30}
+                    />
+                  }
+                />
+                <StudentPersonalContactWithOptionalIcon
+                  contactTitle={t("educational qualification")}
+                  contactValue={studentProfileData.educationalQualification}
+                  icon={<PiCertificate className="text-mainColor" size={30} />}
+                />
+              </div>
             </div>
-          </div>
 
-          {/* FATHER  DETAILS */}
-          <div className="p-6 lg:p-10 bg-mainColor/15 rounded-xl">
-            <h2 className="mb-10 text-2xl font-bold">{t("father data")}</h2>
+            {/* ACADEMIC DETAILS */}
+            <div className="p-6 lg:p-10 bg-mainColor/15 rounded-xl">
+              <h2 className="mb-10 text-2xl font-bold">{t("academic data")}</h2>
 
-            <div className="grid items-center gap-8 md:grid-cols-2 lg:grid-cols-3 lg:gap-14">
-              <StudentPersonalContact
-                contactTitle={t("name")}
-                contactValue={studentProfileData.fatherName}
-                icon={<MdPeople size={30} />}
-              />
-              <StudentPersonalContact
-                contactTitle={t("phone")}
-                contactValue={studentProfileData.fatherPhone}
-                icon={<IoMdPhonePortrait size={30} />}
-              />
-              <StudentPersonalContact
-                contactTitle={t("email")}
-                contactValue={studentProfileData.fatherEmail}
-                icon={<MdOutlineEmail size={30} />}
-              />
+              <div className="grid items-center gap-8 md:grid-cols-2 lg:grid-cols-3 lg:gap-14">
+                {studentAcademicData?.map((item, index) => (
+                  <StudentPersonalContactWithOptionalIcon
+                    key={index}
+                    contactTitle={item.title}
+                    contactValue={item.value}
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* FATHER  DETAILS */}
+            <div className="p-6 lg:p-10 bg-mainColor/15 rounded-xl">
+              <h2 className="mb-10 text-2xl font-bold">{t("father data")}</h2>
+
+              <div className="grid items-center gap-8 md:grid-cols-2 lg:grid-cols-3 lg:gap-14">
+                <StudentPersonalContact
+                  contactTitle={t("name")}
+                  contactValue={studentProfileData.fatherName}
+                  icon={<MdPeople size={30} />}
+                />
+                <StudentPersonalContact
+                  contactTitle={t("phone")}
+                  contactValue={studentProfileData.fatherPhone}
+                  icon={<IoMdPhonePortrait size={30} />}
+                />
+                <StudentPersonalContact
+                  contactTitle={t("email")}
+                  contactValue={studentProfileData.fatherEmail}
+                  icon={<MdOutlineEmail size={30} />}
+                />
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <div className="p-5 bg-white rounded-3xl my-8">
+          <p className="text-center font-semibold text-xl text-mainColor py-8">
+            {t("No data has been added to the profile yet")}
+          </p>
+        </div>
+      )}
     </div>
   );
 };
