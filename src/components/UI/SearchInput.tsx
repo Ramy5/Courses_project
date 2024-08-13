@@ -15,6 +15,7 @@ interface SearchInput_TP {
   className?: string;
   placeholder: string;
   value?: string;
+  autoFocus?: boolean;
 }
 
 const SearchInput: React.FC<SearchInput_TP> = ({
@@ -24,6 +25,7 @@ const SearchInput: React.FC<SearchInput_TP> = ({
   id,
   className,
   placeholder,
+  autoFocus,
 }) => {
   const isRTL = useRTL();
 
@@ -49,6 +51,7 @@ const SearchInput: React.FC<SearchInput_TP> = ({
           type="search"
           id={id || name}
           name={name}
+          autoFocus={autoFocus}
           placeholder={placeholder}
           onChange={onChange}
           value={value}

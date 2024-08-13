@@ -164,7 +164,6 @@ const TestApproved = () => {
 
   const handleAddExamApprove = async () => {
     const studentIDS = approvalStudent?.map((approve) => approve?.id);
-    console.log(location);
 
     const newExam = {
       exam_id: location?.state,

@@ -17,8 +17,6 @@ const VirtualClasses = () => {
     queryFn: getVirtualClassesData,
   });
 
-  console.log(data?.data);
-
   const virtualClassesColumns = useMemo<ColumnDef<[]>[]>(
     () => [
       {
@@ -103,12 +101,13 @@ const VirtualClasses = () => {
       <h2 className="mb-6 text-lg font-bold lg:text-2xl ms-4">
         {t("virtual classes (today's lecture)")}
       </h2>
-      <Table
-        data={data?.data?.lectures || []}
-        columns={virtualClassesColumns}
-      ></Table>
-      {data?.data?.lectures?.length === 0 && (
-        <p className="mt-2 text-xl font-bold text-center text-mainColor">
+      {data?.data?.lectures?.length ? (
+        <Table
+          data={data?.data?.lectures || []}
+          columns={virtualClassesColumns}
+        ></Table>
+      ) : (
+        <p className="mt-12 mb-4 text-xl font-bold text-center text-mainColor">
           {t("there is no today's lecture")}
         </p>
       )}

@@ -12,13 +12,18 @@ import Loading from "../../../components/UI/Loading";
 
 type reportsFilter = "program" | "level" | "course";
 
-const getReport = async (page: number, search: string="", levelID: string="", courseID:string="") => {
+const getReport = async (
+  page: number,
+  search: string = "",
+  levelID: string = "",
+  courseID: string = ""
+) => {
   const { data } = await customFetch(
     `getProgramCoursesLevel?level=${levelID}&course_id=${courseID}`
   );
   return data.data;
 };
- 
+
 const getAllPrograms = async () => {
   const { data } = await customFetch("programs");
   return data.data;
@@ -28,7 +33,7 @@ const getAllCourses = async (programId: number) => {
   const { data } = await customFetch(`courses?program_id=${programId}`);
   return data.data;
 };
- 
+
 const Reports = () => {
   const [page, setPage] = useState<number>(1);
   const [search, setSearch] = useState<string>("");
@@ -53,7 +58,6 @@ const Reports = () => {
     queryKey: ["students-reports"],
     queryFn: () => getReport(page, search, levelSelect?.id, courseSelect?.id),
   });
-  console.log("🚀 ~ Reports ~ studentReportsData:", studentReportsData);
 
   const {
     data: programsOptions,
@@ -201,7 +205,7 @@ const Reports = () => {
         cell: (info) => info.getValue() || "---",
       },
       {
-        header: () => <span>{t("section")}</span>,
+        header: () => <span>{t("group")}</span>,
         accessorKey: "academic_data",
         cell: (info) => info.getValue()?.group || "---",
       },
@@ -221,7 +225,6 @@ const Reports = () => {
         cell: (info) => {
           // const target = info.getValue()?.program;
           // let grade;
-          // console.log(parseInt(info.row.original?.attend_percentage));
 
           // if (
           //   parseInt(info.row.original?.attend_percentage) >=
@@ -359,14 +362,20 @@ const Reports = () => {
                 </div>
               </div>
             </div>
-            <Table
-              data={studentReportsData || []}
-              columns={studentsColumns}
-              showNavigation={true}
-              totalPages={10}
-              currentPage={1}
-              setPage={setPage}
-            />
+            {studentReportsData?.length > 0 ? (
+              <Table
+                data={studentReportsData || []}
+                columns={studentsColumns}
+                showNavigation={true}
+                totalPages={10}
+                currentPage={1}
+                setPage={setPage}
+              />
+            ) : (
+              <p className="py-4 text-xl font-bold text-center text-mainColor">
+                {t("there is no reports yet")}
+              </p>
+            )}
           </Form>
         );
       }}

@@ -29,9 +29,7 @@ const getAllStudentsTest = async (
 
 const TestManagement = () => {
   const [programSelect, setProgramSelect] = useState(null);
-  console.log("🚀 ~ TestManagement ~ programSelect:", programSelect);
   const [levelSelect, setLevelSelect] = useState(null);
-  console.log("🚀 ~ TestManagement ~ levelSelect:", levelSelect);
   const [page, setPage] = useState<number>(1);
   const navigate = useNavigate();
 
@@ -69,10 +67,8 @@ const TestManagement = () => {
     queryKey: ["get-all-exams"],
     queryFn: () => getAllStudentsTest(programSelect?.id, levelSelect?.id),
   });
-  console.log("🚀 ~ TestManagement ~ examData:", examsData);
 
   const examsFlatData = examsData?.map((exam) => exam.exam)?.flat();
-  console.log("🚀 ~ TestManagement ~ examsFlatData:", examsFlatData);
 
   const levelsOption = [
     {
@@ -292,14 +288,20 @@ const TestManagement = () => {
                 </div>
               </div>
 
-              <Table
-                data={examsFlatData || []}
-                columns={examsColumns}
-                showNavigation={true}
-                totalPages={40}
-                currentPage={1}
-                setPage={setPage}
-              />
+              {examsFlatData.length > 0 ? (
+                <Table
+                  data={examsFlatData || []}
+                  columns={examsColumns}
+                  showNavigation={true}
+                  totalPages={40}
+                  currentPage={1}
+                  setPage={setPage}
+                ></Table>
+              ) : (
+                <p className="py-2 text-xl font-bold text-center text-mainColor">
+                  {t("there is no exams yet")}
+                </p>
+              )}
             </div>
           </Form>
         );

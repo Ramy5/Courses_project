@@ -26,7 +26,6 @@ const InstructorAddFirstExam = ({
   const navigate = useNavigate();
   const [examTypeSelect, setExamTypeSelect] = useState();
   const { values, setFieldValue } = useFormikContext();
-  console.log("🚀 ~ values:", values)
 
   const fetchCoursesData = async () => {
     const response = await customFetch(`TeacherCourseLecture`);

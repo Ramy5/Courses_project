@@ -33,7 +33,6 @@ const InstructorExams = () => {
   });
 
   const reverseExamsData = data?.data?.data?.exams || [];
-  console.log("🚀 ~ InstructorExams ~ reverseExamsData:", reverseExamsData)
   const examsPagenation = data?.data?.data || [];
 
   const { mutate } = useMutation({
@@ -160,23 +159,27 @@ const InstructorExams = () => {
         />
       </div>
 
-      <div className="flex justify-end items-center mb-5">
+      <div className="flex items-center justify-end mb-5">
         <Button action={() => navigate("/instructor/exams/add")}>
           {t("add exam +")}
         </Button>
       </div>
 
-      <div className="bg-white p-5 rounded-3xl">
-        <div>
-          <Table
-            data={reverseExamsData}
-            columns={examsColumns}
-            showNavigation
-            totalPages={examsPagenation?.totalPages}
-            currentPage={examsPagenation?.currentPage}
-            setPage={setPage}
-          />
-        </div>
+      <div className="p-5 bg-white rounded-3xl">
+        {reverseExamsData?.length ? (
+          <div>
+            <Table
+              data={reverseExamsData}
+              columns={examsColumns}
+              showNavigation
+              totalPages={examsPagenation?.totalPages}
+              currentPage={examsPagenation?.currentPage}
+              setPage={setPage}
+            />
+          </div>
+        ) : (
+          <p className="text-center font-semibold text-xl text-mainColor py-8">{t("No exams added yet")}</p>
+        )}
       </div>
     </div>
   );

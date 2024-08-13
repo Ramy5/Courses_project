@@ -32,7 +32,7 @@ const InstructorProjects = () => {
       <div className="flex justify-end">
         <Button
           className="flex items-center gap-1"
-          action={() => navigate("/instructors/addProject")}
+          action={() => navigate("/instructor/projects/add")}
         >
           <IoMdAdd className="text-xl" />
           <span className="pb-1 border-b-2 border-mainColor">
@@ -41,11 +41,19 @@ const InstructorProjects = () => {
         </Button>
       </div>
 
-      <div className="grid gap-12 mt-20 lg:grid-cols-2 xl:grid-cols-3">
-        {allProjects?.map((project: any) => (
-          <InstructorProjectBox key={project.projectId} {...project} />
-        ))}
-      </div>
+      {allProjects?.length ? (
+        <div className="grid gap-12 mt-20 lg:grid-cols-2 xl:grid-cols-3">
+          {allProjects?.map((project: any) => (
+            <InstructorProjectBox key={project.projectId} {...project} />
+          ))}
+        </div>
+      ) : (
+        <div className="p-5 bg-white rounded-3xl my-8">
+          <p className="text-center font-semibold text-xl text-mainColor py-8">
+            {t("No projects added yet")}
+          </p>
+        </div>
+      )}
     </div>
   );
 };

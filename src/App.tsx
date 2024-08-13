@@ -267,55 +267,55 @@ function App() {
 
           {/* INSTRUCTOR VIRTUAL CLASSES */}
           <Route
-            path="/instructors/virtualClasses"
+            path="/instructor/virtualClasses"
             element={<InstructorVirtualClasses />}
           />
 
           {/* INSTRUCTOR HOMEWORK */}
           <Route
-            path="/instructors/homeworks"
+            path="/instructor/homeworks"
             element={<InstructorHomework />}
           />
           <Route
-            path="/instructors/viewHomework/:id"
+            path="/instructor/homeworks/view/:id"
             element={<InstructorViewHomework />}
           />
           <Route
-            path="/instructors/editHomework/:id"
+            path="/instructor/homeworks/edit/:id"
             element={<InstructorEditHomework />}
           />
           <Route
-            path="/instructors/viewAllHomeworks/:id"
+            path="/instructor/homeworks/viewAll/:id"
             element={<InstructorViewAllHomeworks />}
           />
           <Route
-            path="/instructors/evaluateHomework/:id"
+            path="/instructor/homeworks/evaluate/:id"
             element={<InstrunctorEvaluateHomework />}
           />
           <Route
-            path="/instructors/addHomeworks"
+            path="/instructor/homeworks/add"
             element={<InstructorAddHomework />}
           />
 
           {/* INSTRUCTOR PROJECT */}
           <Route
-            path="/instructors/projects"
+            path="/instructor/projects"
             element={<InstructorProjects />}
           />
           <Route
-            path="/instructors/viewProject/:id"
+            path="/instructor/projects/view/:id"
             element={<InstructorViewProject />}
           />
           <Route
-            path="/instructors/viewAllProject/:id"
+            path="/instructor/projects/viewAll/:id"
             element={<InstructorViewAllProject />}
           />
           <Route
-            path="/instructors/evaluateProject/:id"
+            path="/instructor/projects/evaluate/:id"
             element={<InstrunctorEvaluateProject />}
           />
           <Route
-            path="/instructors/addProject"
+            path="/instructor/projects/add"
             element={<InstructorAddProject />}
           />
 
@@ -323,7 +323,10 @@ function App() {
           <Route path="/instructor/exams" element={<InstructorExams />} />
 
           {/* INSTRUCTOR ADD EXAM*/}
-          <Route path="/instructor/exams/add/" element={<InstructorAddExam />} />
+          <Route
+            path="/instructor/exams/add/"
+            element={<InstructorAddExam />}
+          />
 
           {/* INSTRUCTOR GRADES */}
           <Route path="/instructor/setting" element={<InstructorSetting />} />

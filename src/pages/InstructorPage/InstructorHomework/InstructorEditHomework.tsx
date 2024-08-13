@@ -20,7 +20,7 @@ const InstructorEditHomework = () => {
   if (isLoading || isFetching || isRefetching) return <Loading />;
 
   const editObj = {
-    course_id: data?.course,
+    course_id: data?.corse,
     titleHomework: data?.title,
     titleHomeworkEn: data?.title_en,
     description: data?.desc,

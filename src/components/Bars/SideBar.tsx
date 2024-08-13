@@ -241,19 +241,19 @@ const SideBar: React.FC<SideBarProps> = ({
       title: "Virtual Classroom",
       icon: <CgPlayButtonR size={24} />,
       alert: "alt",
-      link: "/instructors/virtualClasses",
+      link: "/instructor/virtualClasses",
     },
     {
       title: "homeworks",
       icon: <SlBookOpen size={24} />,
       alert: "alt",
-      link: "/instructors/homeworks",
+      link: "/instructor/homeworks",
     },
     {
       title: "Projects",
       icon: <IoBulbOutline size={24} />,
       alert: "alt",
-      link: "/instructors/projects",
+      link: "/instructor/projects",
     },
     {
       title: "exams",
@@ -338,7 +338,7 @@ const SideBar: React.FC<SideBarProps> = ({
                         font-medium rounded-s-full cursor-pointer
                         transition-colors group text-[#E7E7E7]
                         ${
-                          item.link.includes(currentPathtName)
+                          currentPathtName == item.link
                             ? "bg-[#F9F9F9] !text-mainColor"
                             : `hover:bg-[#F9F9F9] hover:text-mainColor`
                         }

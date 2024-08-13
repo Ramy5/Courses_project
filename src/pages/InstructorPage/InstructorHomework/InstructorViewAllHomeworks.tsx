@@ -83,7 +83,7 @@ const InstructorViewAllHomeworks = () => {
         accessorKey: "evaluate",
         cell: ({ row }) => (
           <Button className="text-white">
-            <Link to={`/instructors/evaluateProject/${row.original.id}`}>
+            <Link to={`/instructor/projects/evaluate/${row.original.id}`}>
               {t("evaluate")}
             </Link>
           </Button>
@@ -96,7 +96,7 @@ const InstructorViewAllHomeworks = () => {
   return (
     <div>
       <div className="flex items-center justify-between">
-        <TitlePage mainLink="/instructors/viewHomework" mainTitle="homeworks" />
+        <TitlePage mainLink="/instructor/viewHomework" mainTitle="homeworks" />
         <Back className="bg-white border border-mainColor text-mainColor" />
       </div>
       <div>

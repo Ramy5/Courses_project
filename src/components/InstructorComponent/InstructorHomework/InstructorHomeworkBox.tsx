@@ -72,7 +72,7 @@ const InstructorHomeworkBox = (props: InstructorHomeworkBox_TP) => {
           </h2>
           <DotsDropDown
             onFirstClick={() =>
-              navigate(`/instructors/editHomework/${homeworkId}`)
+              navigate(`/instructor/homeworks/edit/${homeworkId}`)
             }
             onSecondClick={() => handleDeleteHomework()}
             firstName="edit"
@@ -130,7 +130,7 @@ const InstructorHomeworkBox = (props: InstructorHomeworkBox_TP) => {
           {homeworkIsFinished ? t("finished") : t("current")}
         </p>
         <Button
-          action={() => navigate(`/instructors/viewHomework/${homeworkId}`)}
+          action={() => navigate(`/instructor/homeworks/view/${homeworkId}`)}
         >
           {t("watch")}
         </Button>

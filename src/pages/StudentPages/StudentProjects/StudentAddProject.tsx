@@ -33,7 +33,6 @@ const StudentAddProject = () => {
   };
 
   if (isLoading || isFetching || isRefetching) return <Loading />;
-  console.log("🚀 ~ StudentAddProject ~ data:", data);
 
   return (
     <Formik initialValues={initialValues} onSubmit={(values) => {}}>

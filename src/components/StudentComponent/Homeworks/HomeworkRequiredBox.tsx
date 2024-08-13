@@ -7,7 +7,6 @@ import { Link } from "react-router-dom";
 import { generateRandomColor } from "../../../utils/helpers";
 
 const HomeworkRequiredBox = (props) => {
-  console.log("🚀 ~ HomeworkRequiredBox ~ props:", props);
   const { course_name: subject, teacher_name: professor, isProject } = props;
 
   const {
