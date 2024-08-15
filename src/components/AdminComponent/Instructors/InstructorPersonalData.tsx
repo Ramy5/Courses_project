@@ -13,6 +13,8 @@ import { formatDate } from "../../../utils/helpers";
 import { BASE_URL } from "../../../utils/constants";
 import axios from "axios";
 import Cookies from "js-cookie";
+import { changeSidebarRoute } from "../../../features/dirty/dirtySlice";
+import { useAppDispatch } from "../../../hooks/reduxHooks";
 
 // const postInstructorPersonal = async (newStudent: any) => {
 //   const data = customFetch.post("addPersonalData", newStudent);
@@ -76,8 +78,7 @@ const InstructorPersonalData = ({
   const [selectedImage, setSelectedImage] = useState();
   const [imagePreview, setImagePreview] = useState(null);
   const queryClient = useQueryClient();
-  const navigate = useNavigate();
-  const formData = new FormData();
+  const dispatch = useAppDispatch();
 
   const initialValues = {
     // PERSONAL DATA
@@ -181,7 +182,10 @@ const InstructorPersonalData = ({
         initialValues={initialValues}
         onSubmit={(values) => handleAddInstructor(values)}
       >
-        {({ setFieldValue, values }) => {
+        {({ setFieldValue, values, dirty, isSubmitting }) => {
+          useEffect(() => {
+            dispatch(changeSidebarRoute(dirty && !isSubmitting));
+          }, [dirty]);
           return (
             <Form className="flex flex-col gap-5 px-8 md:px-16 ">
               <div className="flex flex-col-reverse justify-between gap-8 md:flex-row">

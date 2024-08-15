@@ -1,7 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-
 interface initialState_TP {
-    isDirty: boolean;
+  isDirty: boolean;
 }
 
 const initialState: initialState_TP = {

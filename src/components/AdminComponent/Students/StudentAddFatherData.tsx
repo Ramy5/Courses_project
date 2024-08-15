@@ -6,6 +6,9 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import customFetch from "../../../utils/axios";
 import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
+import { useAppDispatch } from "../../../hooks/reduxHooks";
+import { useEffect } from "react";
+import { changeSidebarRoute } from "../../../features/dirty/dirtySlice";
 
 interface AddStudentParent_TP {
   address_father: string;
@@ -39,6 +42,7 @@ const StudentAddFatherData = ({
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const { id: studentIDParam } = useParams();
+  const dispatch = useAppDispatch();
 
   const initialValues: AddStudentParent_TP = {
     address_father: editObj?.address_father || "",
@@ -114,7 +118,10 @@ const StudentAddFatherData = ({
       initialValues={initialValues}
       onSubmit={(values) => handleAddStudent(values)}
     >
-      {({ values, setFieldValue }) => {
+      {({ values, setFieldValue, dirty, isSubmitting }) => {
+        useEffect(() => {
+          dispatch(changeSidebarRoute(dirty && !isSubmitting));
+        }, [dirty]);
         return (
           <Form className="flex flex-col w-full gap-5 px-4 lg:px-16 md:w-3/4">
             <BaseInput

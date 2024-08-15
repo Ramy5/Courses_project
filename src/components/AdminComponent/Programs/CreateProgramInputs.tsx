@@ -12,6 +12,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { FaRegEdit } from "react-icons/fa";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
+import { FormikError } from "../../UI/FormikError";
 
 const CreateProgramInputs = ({
   setStep,
@@ -24,21 +25,7 @@ const CreateProgramInputs = ({
   const navigate = useNavigate();
 
   const { values, setFieldValue } = useFormikContext();
-
-  // const validationSchema = Yup.object({
-  //   program_name: Yup.string().required(t("Required")),
-  //   program_type: Yup.string().required(t("Required")),
-  //   program_code: Yup.string().required(t("Required")),
-  //   specialization: Yup.string().required(t("Required")),
-  //   academic_levels: Yup.number().required(t("Required")),
-  //   number_classes: Yup.number().required(t("Required")),
-  //   vision: Yup.string().required(t("Required")),
-  //   message: Yup.string().required(t("Required")),
-  //   excellence: Yup.number().required(t("Required")),
-  //   very_good: Yup.number().required(t("Required")),
-  //   good: Yup.number().required(t("Required")),
-  //   acceptable: Yup.number().required(t("Required")),
-  // });
+  console.log("🚀 ~ values:", values);
 
   const CoursesColumns = useMemo<ColumnDef<any>[]>(
     () => [
@@ -118,7 +105,7 @@ const CreateProgramInputs = ({
               label={t("program name")}
               labelProps="!font-semibold"
             />
-            <div>
+            <div className="relative">
               <p className="font-semibold mb-4">{t("program type")}</p>
               <div className="flex gap-5">
                 <MainRadio
@@ -144,6 +131,10 @@ const CreateProgramInputs = ({
                   }}
                 />
               </div>
+              <FormikError
+                name="program_type"
+                className="absolute whitespace-nowrap"
+              />
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-5 my-5">
@@ -201,6 +192,7 @@ const CreateProgramInputs = ({
                   setFieldValue("vision", e.target.value);
                 }}
               />
+              <FormikError name="vision" className="whitespace-nowrap" />
             </div>
             <div>
               <label htmlFor="message" className="font-semibold">
@@ -216,6 +208,7 @@ const CreateProgramInputs = ({
                   setFieldValue("message", e.target.value);
                 }}
               />
+              <FormikError name="message" className="whitespace-nowrap" />
             </div>
           </div>
 
