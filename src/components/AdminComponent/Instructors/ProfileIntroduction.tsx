@@ -38,7 +38,7 @@ const ProfileIntroduction = ({
           <img
             src={personalData.personal_image || studentProfileImg}
             alt="personal Image"
-            className="border-[3px] border-[#393D94] rounded-full md:w-[134px] w-24"
+            className="border-[3px] border-[#393D94] rounded-full md:w-[134px] w-24 md:h-[134px] h-24"
           />
           <div className="text-black">
             <h2 className="text-lg font-semibold md:text-xl">

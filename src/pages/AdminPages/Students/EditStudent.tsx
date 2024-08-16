@@ -25,8 +25,8 @@ const EditStudent = () => {
   const [academicEditData, setAcademicEditData] = useState(null);
   const { id: studentParamID } = useParams();
 
-  const { data, isSuccess, isRefetching, isLoading, isFetching } = useQuery({
-    queryKey: ["get-students-edit"],
+  const { data, isSuccess, isRefetching, isLoading, isFetching, refetch } = useQuery({
+    queryKey: ["get-students-edit", studentParamID],
     queryFn: () => getStudentsEdit(studentParamID),
   });
 
@@ -90,6 +90,10 @@ const EditStudent = () => {
     { id: 2, title: "father" },
     { id: 3, title: "academic" },
   ];
+
+  useEffect(() => {
+    refetch();
+  }, [studentParamID, loginEditData]);
 
   if (isRefetching || isLoading || isFetching) return <Loading />;
 

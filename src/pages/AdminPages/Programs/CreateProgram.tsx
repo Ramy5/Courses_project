@@ -9,6 +9,7 @@ import { t } from "i18next";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../../hooks/reduxHooks";
 import { changeSidebarRoute } from "../../../features/dirty/dirtySlice";
+import * as Yup from "yup";
 interface AddProgram_TP {
   program_name: string;
   program_type: boolean;
@@ -24,6 +25,21 @@ interface AddProgram_TP {
   acceptable: string;
 }
 
+const validationSchema = Yup.object({
+  program_name: Yup.string().required("program name is required"),
+  program_code: Yup.string().required("program code is required"),
+  program_type: Yup.string().required("program code is required"),
+  specialization: Yup.string().required("specialization is required"),
+  academic_levels: Yup.string().required("academic levels are required"),
+  number_classes: Yup.string().required("number of classes is required"),
+  vision: Yup.string().required("vision is required"),
+  message: Yup.string().required("message is required"),
+  excellence: Yup.string().required("grade is required"),
+  very_good: Yup.string().required("grade is required"),
+  good: Yup.string().required("grade is required"),
+  acceptable: Yup.string().required("grade is required"),
+});
+
 const postInstructorLogin = async (newProgram: any) => {
   const data = await customFetch.post("programs", newProgram);
   return data;
@@ -32,6 +48,7 @@ const postInstructorLogin = async (newProgram: any) => {
 const CreateProgram = () => {
   const [step, setStep] = useState<number>(1);
   const [coursesData, setCoursesData] = useState([]);
+  console.log("🚀 ~ CreateProgram ~ coursesData:", coursesData)
   const [editCoursesData, setEditCoursesData] = useState({});
   const [editFinishedCoursesData, setEditFinishedCoursesData] = useState({});
   const queryClient = useQueryClient();
@@ -49,7 +66,7 @@ const CreateProgram = () => {
 
   const initialValues = {
     program_name: "",
-    program_type: false,
+    program_type: "",
     program_code: "",
     specialization: "",
     academic_levels: "",
@@ -100,7 +117,7 @@ const CreateProgram = () => {
     <div>
       <Formik
         initialValues={initialValues}
-        validationSchema=""
+        validationSchema={validationSchema}
         onSubmit={(values) => handleAddProgram(values)}
       >
         {({ dirty, isSubmitting }) => {

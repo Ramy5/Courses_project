@@ -26,12 +26,6 @@ const Instructors = () => {
   const debounceSearchTerm = useDebounce(search, 1000);
   const navigate = useNavigate();
 
-  const options = [
-    { value: "chocolate", label: "Chocolate" },
-    { value: "strawberry", label: "Strawberry" },
-    { value: "vanilla", label: "Vanilla" },
-  ];
-
   const fetchInstructorData = async () => {
     const response = await customFetch(
       `/allTeachers?page=${page}&search=${search}`

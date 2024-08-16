@@ -166,12 +166,12 @@ const StudentHomeworkDescription = (props: StudentHomeworkDescription_TP) => {
             }
 
             if (isInstructotHomework) {
-              navigate(`/instructors/viewAllHomeworks/${id}`);
+              navigate(`/instructor/homeworks/viewAll/${id}`);
               return;
             }
 
             if (isInstructorProject) {
-              navigate(`/instructors/viewAllProject/${id}`);
+              navigate(`/instructor/projects/viewAll/${id}`);
               return;
             }
 

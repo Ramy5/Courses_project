@@ -10,6 +10,8 @@ import { formatDate } from "../../../utils/helpers";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import selectStyle from "../../../utils/selectStyle";
+import { useAppDispatch } from "../../../hooks/reduxHooks";
+import { changeSidebarRoute } from "../../../features/dirty/dirtySlice";
 
 interface AddStudentAcademic_TP {
   number_academic: string;
@@ -49,6 +51,7 @@ const StudentAddAcademicData = ({
   const [programSelect, setProgramSelect] = useState(null);
   const [groupSelect, setGroupSelect] = useState(null);
   const [levelSelect, setLevelSelect] = useState(null);
+  const dispatch = useAppDispatch();
 
   const initialValues: AddStudentAcademic_TP = {
     number_academic: editObj?.number_academic || "",
@@ -210,7 +213,10 @@ const StudentAddAcademicData = ({
       initialValues={initialValues}
       onSubmit={(values) => handleAddStudent(values)}
     >
-      {({ values, setFieldValue }) => {
+      {({ setFieldValue, dirty, isSubmitting }) => {
+        useEffect(() => {
+          dispatch(changeSidebarRoute(dirty && !isSubmitting));
+        }, [dirty]);
         return (
           <Form className="flex flex-col w-full gap-5 px-4 lg:px-16 md:w-3/4">
             <BaseInput

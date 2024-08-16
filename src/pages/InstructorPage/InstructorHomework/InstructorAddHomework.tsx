@@ -15,8 +15,31 @@ import { BASE_URL } from "../../../utils/constants";
 import { formatDate } from "../../../utils/helpers";
 import selectStyle from "../../../utils/selectStyle";
 import { toast } from "react-toastify";
+import { changeSidebarRoute } from "../../../features/dirty/dirtySlice";
+import { useAppDispatch } from "../../../hooks/reduxHooks";
+import * as Yup from "yup";
+import { FormikError } from "../../../components/UI/FormikError";
+
+const validationSchema = Yup.object().shape({
+  course_id: Yup.string().required("Course is required"),
+  titleHomework: Yup.string().required("Title in Arabic is required"),
+  titleHomeworkEn: Yup.string().required("Title in English is required"),
+  description: Yup.string().required("Description in Arabic is required"),
+  descriptionEn: Yup.string().required("Description in English is required"),
+  instructions: Yup.string().required("Instructions in Arabic are required"),
+  instructionsEn: Yup.string().required("Instructions in English are required"),
+  start_delivery: Yup.date()
+    .required("Start delivery date is required")
+    .nullable(),
+  end_delivery: Yup.date().required("End delivery date is required").nullable(),
+  grade: Yup.number()
+    .required("Grade is required")
+    .positive("Grade must be positive")
+    .integer("Grade must be an integer"),
+});
 
 interface initialValues_TP {
+  course_id: string;
   titleHomework: string;
   titleHomeworkEn: string;
   description: string;
@@ -69,8 +92,10 @@ const InstructorAddHomework = ({ editObj }: { editObj?: editObj_TP }) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { id: homeworkId } = useParams();
+  const dispatch = useAppDispatch();
 
   const initialValues: initialValues_TP = {
+    course_id: editObj?.course_id || "",
     titleHomework: editObj?.titleHomework || "",
     titleHomeworkEn: editObj?.titleHomeworkEn || "",
     description: editObj?.description || "",
@@ -123,6 +148,15 @@ const InstructorAddHomework = ({ editObj }: { editObj?: editObj_TP }) => {
     });
 
   const handleSubmit = async (values: initialValues_TP) => {
+    console.log("🚀 ~ handleSubmit ~ values:", values)
+    // if (!courseSelect?.id && !editObj) {
+    //   toast.info("file is required");
+    //   return;
+    // }
+    // if (!files && !editObj) {
+    //   toast.info("file is required");
+    //   return;
+    // }
     const formattedValues: any = {
       title_ar: values.titleHomework,
       title_en: values.titleHomeworkEn,
@@ -136,6 +170,7 @@ const InstructorAddHomework = ({ editObj }: { editObj?: editObj_TP }) => {
       start_date: formatDate(values.start_delivery),
       end_date: formatDate(values.end_delivery),
     };
+    console.log("🚀 ~ handleSubmit ~ formattedValues:", formattedValues)
 
     editObj
       ? await editHomeworkMutate(formattedValues)
@@ -159,37 +194,51 @@ const InstructorAddHomework = ({ editObj }: { editObj?: editObj_TP }) => {
   return (
     <Formik
       initialValues={initialValues}
+      validationSchema={validationSchema}
       onSubmit={(values) => handleSubmit(values)}
     >
-      {({ values, setFieldValue }) => {
+      {({ values, setFieldValue, dirty, isSubmitting }) => {
+        console.log("🚀 ~ InstructorAddHomework ~ values:", values);
+        useEffect(() => {
+          dispatch(changeSidebarRoute(dirty && !isSubmitting));
+        }, [dirty]);
         return (
           <Form className="p-6 space-y-8 bg-white rounded-xl">
             <h2 className="mb-6 text-2xl font-bold text-mainColor">
               {editObj ? t("edit homework") : t("add homework")}
             </h2>
-            <Select
-              onChange={(e) => {
-                setFieldValue("course_id", e!.value);
-                setCourseSelect({
-                  id: e!.id,
-                  label: e!.label,
-                  value: e!.id,
-                });
-              }}
-              options={coursesOption}
-              name="course_id"
-              styles={selectStyle}
-              value={courseSelect}
-              isDisabled={
-                coursesOptionIsFetching ||
-                coursesOptionIsLoading ||
-                coursesOptionIsRefetching
-              }
-              isLoading={coursesOptionIsLoading}
-              id="course_id"
-              placeholder={t("course")}
-              className="w-96"
-            />
+            <div className="relative">
+              <label htmlFor="course_id" className="font-semibold text-base">
+                {t("course")}
+              </label>
+              <Select
+                onChange={(e) => {
+                  setFieldValue("course_id", e!.value);
+                  setCourseSelect({
+                    id: e!.id,
+                    label: e!.label,
+                    value: e!.id,
+                  });
+                }}
+                options={coursesOption}
+                name="course_id"
+                styles={selectStyle}
+                value={courseSelect}
+                isDisabled={
+                  coursesOptionIsFetching ||
+                  coursesOptionIsLoading ||
+                  coursesOptionIsRefetching
+                }
+                isLoading={coursesOptionIsLoading}
+                id="course_id"
+                placeholder={t("course")}
+                className="w-96 mt-1"
+              />
+              <FormikError
+                name="course_id"
+                className="absolute whitespace-nowrap"
+              />
+            </div>
             <div className="grid items-center grid-cols-1 gap-6 lg:grid-cols-2">
               <BaseInput
                 name="titleHomework"
@@ -211,7 +260,7 @@ const InstructorAddHomework = ({ editObj }: { editObj?: editObj_TP }) => {
               />
             </div>
             <div className="grid items-center grid-cols-1 gap-6 lg:grid-cols-2">
-              <div>
+              <div className="relative">
                 <label htmlFor="description" className="font-semibold">
                   {t("description")}
                 </label>
@@ -225,8 +274,12 @@ const InstructorAddHomework = ({ editObj }: { editObj?: editObj_TP }) => {
                     setFieldValue("description", e.target.value);
                   }}
                 />
+                <FormikError
+                  name="description"
+                  className="absolute whitespace-nowrap"
+                />
               </div>
-              <div>
+              <div className="relative">
                 <label htmlFor="descriptionEn" className="font-semibold">
                   {t("description in english")}
                 </label>
@@ -240,10 +293,14 @@ const InstructorAddHomework = ({ editObj }: { editObj?: editObj_TP }) => {
                     setFieldValue("descriptionEn", e.target.value);
                   }}
                 />
+                <FormikError
+                  name="descriptionEn"
+                  className="absolute whitespace-nowrap"
+                />
               </div>
             </div>
             <div className="grid items-center grid-cols-1 gap-6 lg:grid-cols-2">
-              <div>
+              <div className="relative">
                 <label htmlFor="instructions" className="font-semibold">
                   {t("instructions")}
                 </label>
@@ -257,8 +314,12 @@ const InstructorAddHomework = ({ editObj }: { editObj?: editObj_TP }) => {
                     setFieldValue("instructions", e.target.value);
                   }}
                 />
+                <FormikError
+                  name="instructions"
+                  className="absolute whitespace-nowrap"
+                />
               </div>
-              <div>
+              <div className="relative">
                 <label htmlFor="instructionsEn" className="font-semibold">
                   {t("instructions in english")}
                 </label>
@@ -271,6 +332,10 @@ const InstructorAddHomework = ({ editObj }: { editObj?: editObj_TP }) => {
                   onChange={(e) => {
                     setFieldValue("instructionsEn", e.target.value);
                   }}
+                />
+                <FormikError
+                  name="instructionsEn"
+                  className="absolute whitespace-nowrap"
                 />
               </div>
             </div>

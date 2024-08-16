@@ -37,7 +37,6 @@ const SearchInput: React.FC<SearchInput_TP> = ({
     <Formik
       initialValues={initialValues}
       onSubmit={(values) => {}}
-      validationSchema={""}
     >
       <Form className="relative">
         <img

@@ -1,16 +1,30 @@
 import { Form, Formik } from "formik";
 import { t } from "i18next";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BaseInput, Button } from "../../../components";
 import { AiOutlineCloudUpload } from "react-icons/ai";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import customFetch from "../../../utils/axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { BASE_URL } from "../../../utils/constants";
+import * as Yup from "yup";
+import { FormikError } from "../../../components/UI/FormikError";
+import { changeSidebarRoute } from "../../../features/dirty/dirtySlice";
+import { useAppDispatch } from "../../../hooks/reduxHooks";
+
+const validationSchema = Yup.object().shape({
+  title_ar: Yup.string().required("Title in Arabic is required"),
+  title_en: Yup.string().required("Title in English is required"),
+  desc_ar: Yup.string().required("Description in Arabic is required"),
+  desc_en: Yup.string().required("Description in English is required"),
+  instructions_ar: Yup.string().required("Instructions in Arabic are required"),
+  instructions_en: Yup.string().required(
+    "Instructions in English are required"
+  ),
+});
 
 const postInstructorQualification = async (
   newLecturePreparation: any,
@@ -39,6 +53,7 @@ const LecturePreparation = () => {
   const queryClient = useQueryClient();
   const location = useLocation();
   const editObj = location.state;
+  const dispatch = useAppDispatch();
 
   const initialValues = {
     title_ar: editObj?.title || "",
@@ -83,6 +98,16 @@ const LecturePreparation = () => {
   });
 
   const handleAddLecturePreparation = async (values) => {
+    if (!files?.length) {
+      toast.info("file is required");
+      return;
+    }
+
+    if (!links?.length) {
+      toast.info("links are required");
+      return;
+    }
+
     const newLecturePreparation = {
       title_ar: values.title_ar,
       title_en: values.title_en,
@@ -104,12 +129,15 @@ const LecturePreparation = () => {
       </h2>
       <Formik
         initialValues={initialValues}
+        validationSchema={validationSchema}
         onSubmit={(values) => {
-          // mutate(values);
           handleAddLecturePreparation(values);
         }}
       >
-        {({ setFieldValue, values }) => {
+        {({ setFieldValue, values, dirty, isSubmitting }) => {
+                  useEffect(() => {
+                    dispatch(changeSidebarRoute(dirty && !isSubmitting));
+                  }, [dirty]);
           return (
             <Form>
               <div className="flex gap-12">
@@ -160,8 +188,8 @@ const LecturePreparation = () => {
                   />
                 </div>
               </div>
-              <div className="flex gap-12">
-                <div className="w-full">
+              <div className="flex gap-12 ">
+                <div className="w-full relative">
                   <label htmlFor="address" className="font-semibold">
                     {`${t("instructions")} (${t("arabic")})`}
                   </label>
@@ -174,8 +202,12 @@ const LecturePreparation = () => {
                       setFieldValue("instructions_ar", e.target.value);
                     }}
                   />
+                  <FormikError
+                    name="instructions_ar"
+                    className="absolute whitespace-nowrap"
+                  />
                 </div>
-                <div className="w-full">
+                <div className="w-full relative">
                   <label htmlFor="address" className="font-semibold">
                     {`${t("instructions")} (${t("english")})`}
                   </label>
@@ -188,11 +220,14 @@ const LecturePreparation = () => {
                       setFieldValue("instructions_en", e.target.value);
                     }}
                   />
+                  <FormikError
+                    name="instructions_en"
+                    className="absolute whitespace-nowrap"
+                  />
                 </div>
               </div>
 
               <div className="mt-8">
-                <h2 className="mb-3 font-semibold">{t("CV file")}</h2>
                 <div className="flex flex-col md:flex-row gap-x-24 lg:gap-x-28 gap-y-5">
                   <input
                     type="file"
@@ -256,7 +291,6 @@ const LecturePreparation = () => {
                           type="text"
                           className="w-full py-2 text-lg rounded-lg main_shadow text-slate-800 focus-within:outline-none"
                           placeholder={t("links")}
-                          //   label={t("links")}
                           labelProps="!font-semibold"
                         />
                       </div>

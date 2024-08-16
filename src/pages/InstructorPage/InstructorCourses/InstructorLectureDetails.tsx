@@ -7,7 +7,12 @@ import Education from "../../../assets/lecture/istockphoto-1472553376-640_adpp_i
 import { t } from "i18next";
 import customFetch from "../../../utils/axios";
 import { useQuery } from "@tanstack/react-query";
-import { useLoaderData, useLocation, useNavigate, useParams } from "react-router-dom";
+import {
+  useLoaderData,
+  useLocation,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
 import Loading from "../../../components/UI/Loading";
 import { BiSolidFile } from "react-icons/bi";
 import { IoMdLink } from "react-icons/io";
@@ -20,8 +25,8 @@ const InstructorLectureDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const numbers = ConvertNumberToWord();
-  const location = useLocation()
-  const lectureNumber = location?.state
+  const location = useLocation();
+  const lectureNumber = location?.state;
   const [differenceInMinutes, setDifferenceInMinutes] = useState(0);
 
   const fetchLectureData = async () => {
@@ -36,11 +41,15 @@ const InstructorLectureDetails = () => {
   });
 
   const instructorLectureShow = data?.data?.data.lecture_data || [];
+  console.log(
+    "🚀 ~ InstructorLectureDetails ~ instructorLectureShow:",
+    instructorLectureShow
+  );
 
   const fetchLectureAllData = async () => {
     const response = await customFetch(`LecturesDataIns?lecture_data_id=${id}`);
     return response;
-  }; 
+  };
 
   const {
     data: allData,
@@ -53,6 +62,10 @@ const InstructorLectureDetails = () => {
     enabled: !!id,
   });
   const instructorLectureDataShow = allData?.data?.data || [];
+  console.log(
+    "🚀 ~ InstructorLectureDetails ~ instructorLectureDataShow:",
+    instructorLectureDataShow
+  );
 
   useEffect(() => {
     const diffMinutes = subtractTwoTime(
@@ -74,7 +87,7 @@ const InstructorLectureDetails = () => {
 
   useEffect(() => {
     refetch();
-    refetchAllData()
+    refetchAllData();
   }, [id]);
 
   if (isFetching || isRefetching || isFetchingAllData || isRefetchingAllData)
@@ -85,9 +98,9 @@ const InstructorLectureDetails = () => {
       <div className="w-full lg:w-[70%] md:w-[65%]">
         <div>
           <TitlePage
-            title={`${instructorLectureShow?.course_name} - ${t("Lecture")} ${
-              lectureNumber
-            }`}
+            title={`${instructorLectureShow?.course_name} - ${t(
+              "Lecture"
+            )} ${lectureNumber}`}
             mainTitle="Courses"
             mainLink="/instructor/Courses"
             supTitle={`${t("lectures")} ${instructorLectureShow?.course_name}`}
@@ -111,14 +124,24 @@ const InstructorLectureDetails = () => {
         <div>
           <video ref={videoRef} controls className="w-full mt-4">
             <source
-              src={instructorLectureShow?.youtube_link || Education}
+              src="https://www.youtube.com/watch?v=MEZWstOcLgE&t=2010s"
               type="video/mp4"
             />
             Your browser does not support the video tag.
           </video>
+          {/* <iframe
+            width="100%"
+            height="315"
+            src="https://www.youtube.com/embed/MEZWstOcLgE?start=2010"
+            // frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          ></iframe> */}
           <div className="mt-2">
             <h2 className="text-[#073051] font-medium text-xl">
-              <span>{`${t("Lecture")} ${numbers[instructorLectureShow?.id - 1]} : `}</span>
+              <span>{`${t("Lecture")} ${
+                numbers[instructorLectureShow?.id - 1]
+              } : `}</span>
               {instructorLectureShow?.title}
             </h2>
             <p className="text-[#696974] text-base font-medium mt-3">
@@ -208,7 +231,9 @@ const InstructorLectureDetails = () => {
             <div
               className="flex items-center shadow-md rounded-2xl bg-[#a1c2f126] cursor-pointer"
               onClick={() => {
-                navigate(`/instructor/Courses/lecture/details/${item?.id}`, {state: numbers[index]});
+                navigate(`/instructor/Courses/lecture/details/${item?.id}`, {
+                  state: numbers[index],
+                });
               }}
             >
               <div className=" h-full w-[30%] ">

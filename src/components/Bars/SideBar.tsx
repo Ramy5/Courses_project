@@ -46,10 +46,12 @@ const SideBar: React.FC<SideBarProps> = ({
   const location = useLocation();
   const { sidebarColor } = useAppSelector((state) => state.global);
   const { isDirty } = useAppSelector((state) => state.dirty);
+  console.log("🚀 ~ isDirty:", isDirty);
   const dispatch = useAppDispatch();
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 640);
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [locationRoute, setLocationRoute] = useState<string>("");
+  console.log("🚀 ~ locationRoute:", locationRoute);
 
   const handleResize = () => {
     setIsSmallScreen(window.innerWidth < 640);
@@ -239,19 +241,19 @@ const SideBar: React.FC<SideBarProps> = ({
       title: "Virtual Classroom",
       icon: <CgPlayButtonR size={24} />,
       alert: "alt",
-      link: "/instructors/virtualClasses",
+      link: "/instructor/virtualClasses",
     },
     {
       title: "homeworks",
       icon: <SlBookOpen size={24} />,
       alert: "alt",
-      link: "/instructors/homeworks",
+      link: "/instructor/homeworks",
     },
     {
       title: "Projects",
       icon: <IoBulbOutline size={24} />,
       alert: "alt",
-      link: "/instructors/projects",
+      link: "/instructor/projects",
     },
     {
       title: "exams",
@@ -279,6 +281,7 @@ const SideBar: React.FC<SideBarProps> = ({
       setToggleSideBar(false);
     } else if (isDirty) {
       setDialogOpen(true);
+      setLocationRoute(link);
     } else {
       navigate(link);
     }
@@ -286,6 +289,7 @@ const SideBar: React.FC<SideBarProps> = ({
 
   const getCurrentPathName = (path: string) => {
     const segments = path.split("/").filter(Boolean);
+    console.log("🚀 ~ getCurrentPathName ~ segments:", segments);
 
     const segmentsType =
       userData !== "admin" && segments.length > 0
@@ -296,6 +300,7 @@ const SideBar: React.FC<SideBarProps> = ({
   };
 
   const currentPathtName = getCurrentPathName(location.pathname);
+  console.log("🚀 ~ currentPathtName:", currentPathtName);
 
   return (
     <aside

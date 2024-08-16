@@ -9,6 +9,19 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import LoadingIndicator from "../../UI/LoadingIndicator";
 import { toast } from "react-toastify";
+import * as Yup from "yup";
+import { FormikError } from "../../UI/FormikError";
+
+const validationSchema = Yup.object().shape({
+  day_id: Yup.number().required("Day is required").positive().integer(),
+  course_name: Yup.string().required("Course is required"),
+  start_time: Yup.string().required("Start time is required"),
+  end_time: Yup.string().required("End time is required"),
+  group: Yup.string().required("Group is required"),
+  group_name: Yup.string().required("Group name is required"),
+  teacher_name: Yup.string().required("Teacher name is required"),
+  level: Yup.string().required("Level is required"),
+});
 
 const AddLectureTiming = ({
   setSteps,
@@ -61,7 +74,7 @@ const AddLectureTiming = ({
 
   const fetchTeacherData = async () => {
     const response = await customFetch(
-      `/allTeachers?course_id=${coursesSelect?.id || ""}?per_page=10000`
+      `/allTeachers?course_id=${coursesSelect?.id}?per_page=10000`
     );
     return response;
   };
@@ -154,7 +167,11 @@ const AddLectureTiming = ({
 
   return (
     <div className="p-6 bg-white rounded-xl">
-      <Formik initialValues={initialValues} onSubmit={() => {}}>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={() => {}}
+      >
         {({ values, setFieldValue }) => {
           return (
             <Form>
@@ -196,6 +213,10 @@ const AddLectureTiming = ({
                     isLoading={isLoading || isFetching}
                     components={{ LoadingIndicator }}
                   />
+                  <FormikError
+                    name="course_name"
+                    className="whitespace-nowrap"
+                  />
                 </div>
 
                 <div>
@@ -221,6 +242,7 @@ const AddLectureTiming = ({
                     isLoading={isLoading || isFetching}
                     components={{ LoadingIndicator }}
                   />
+                  <FormikError name="group" className="whitespace-nowrap" />
                 </div>
 
                 <div className="flex flex-col justify-between mt-5 sm:flex-row gap-y-4">
@@ -247,6 +269,10 @@ const AddLectureTiming = ({
                       isLoading={isLoading || isFetching}
                       components={{ LoadingIndicator }}
                     />
+                    <FormikError
+                      name="teacher_name"
+                      className="whitespace-nowrap"
+                    />
                   </div>
                   <div className="w-full sm:w-[30%]">
                     <label htmlFor="section" className="font-bold">
@@ -270,6 +296,7 @@ const AddLectureTiming = ({
                       isLoading={isLoading || isFetching}
                       components={{ LoadingIndicator }}
                     />
+                    <FormikError name="level" className="whitespace-nowrap" />
                   </div>
                 </div>
 
@@ -302,7 +329,7 @@ const AddLectureTiming = ({
 
               <div className="flex items-center justify-end gap-5 mt-12">
                 <Button
-                  type="button"
+                  type="submit"
                   action={() => {
                     const isAppointmentBooked =
                       scheduleData?.lecture_time?.some((lecture) => {

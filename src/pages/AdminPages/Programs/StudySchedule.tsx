@@ -38,12 +38,15 @@ const editSchedule = async (editSchedule: any, id: number) => {
 
 const StudySchedule = () => {
   const [steps, setSteps] = useState<number>(1);
+
   const [scheduleData, setScheduleData] = useState({
-    day: {},
     start_date: "",
     end_date: "",
+    day: {},
     lecture_time: [],
   });
+
+  console.log("🚀 ~ StudySchedule ~ scheduleData:", scheduleData)
 
   const [editStudySchedule, setEditStudySchedule] = useState({});
   const navigate = useNavigate();
@@ -65,42 +68,47 @@ const StudySchedule = () => {
     return response;
   };
 
-  const { data, isFetching, isRefetching, isLoading } = useQuery({
+  const { data, isFetching, isRefetching, isLoading, isSuccess } = useQuery({
     queryKey: ["show_lecture", scheduleId],
     queryFn: fetchInstructorSchedule,
   });
 
   const instructorScheduleData = data?.data?.data || [];
-
-  const filterScheduleData = instructorScheduleData?.filter(
-    (schedule) => schedule.day.id === day?.id
+  console.log(
+    "🚀 ~ StudySchedule ~ instructorScheduleData:",
+    instructorScheduleData
   );
 
+  // const filterScheduleData = instructorScheduleData?.filter(
+  //   (schedule) => schedule.day.id === day?.id
+  // );
+
+  const lectureTimeData = instructorScheduleData?.map((schedule) => ({
+    id: schedule.id,
+    day_id: schedule?.day?.id,
+    group: schedule.group,
+    level: schedule.level,
+    start_time: schedule.start_time.split(":").slice(0, 2).join(":"),
+    end_time: schedule.end_time.split(":").slice(0, 2).join(":"),
+    program_id: schedule?.program.id,
+    program_name: schedule?.program.program_name,
+    course_name: schedule?.course.course_name,
+    course_id: schedule?.course.id,
+    group_name: schedule.group,
+    teacher_id: schedule.teacher?.id,
+    teacher_name: schedule.teacher?.full_name,
+  }));
+  
   useEffect(() => {
     if (data) {
       setScheduleData({
         day: day,
-        start_date: filterScheduleData[0]?.program?.start_date,
-        end_date: filterScheduleData[0]?.program?.end_date,
-        lecture_time:
-          filterScheduleData?.map((schedule) => ({
-            id: schedule.id,
-            day_id: day?.id,
-            group: schedule.group,
-            level: schedule.level,
-            start_time: schedule.start_time.split(":").slice(0, 2).join(":"),
-            end_time: schedule.end_time.split(":").slice(0, 2).join(":"),
-            program_id: schedule?.program.id,
-            program_name: schedule?.program.program_name,
-            course_name: schedule?.course.course_name,
-            course_id: schedule?.course.id,
-            group_name: schedule.group,
-            teacher_id: schedule.teacher?.id,
-            teacher_name: schedule.teacher?.full_name,
-          })) || [],
+        start_date: instructorScheduleData[0]?.program?.start_date,
+        end_date: instructorScheduleData[0]?.program?.end_date,
+        lecture_time: lectureTimeData || [],
       });
     }
-  }, [day?.id && data]);
+  }, [isSuccess]);
 
   const { mutate, isPending } = useMutation({
     mutationKey: ["add-schedule"],
@@ -119,7 +127,7 @@ const StudySchedule = () => {
   const { mutate: editMutate, isPending: editIsPending } = useMutation({
     mutationKey: ["edit-schedule"],
     mutationFn: (editScheduleData: any) =>
-      editSchedule(editScheduleData, Number(filterScheduleData[0]?.id)),
+      editSchedule(editScheduleData, Number(instructorScheduleData[0]?.id)),
     onSuccess: (data) => {
       queryClient.invalidateQueries("schedule");
       toast.success(t("study schedule has been edited successfully"));
@@ -137,6 +145,7 @@ const StudySchedule = () => {
       lecture_times: values.lecture_time,
       start_date: values.start_date,
     };
+    console.log("🚀 ~ handleAddSchedule ~ newSchedule:", newSchedule);
 
     instructorScheduleData?.length
       ? await editMutate(newSchedule)
@@ -216,6 +225,7 @@ const StudySchedule = () => {
                   className="py-3 mt-20 text-xl font-semibold rounded-2xl"
                   action={() => {
                     handleAddSchedule(scheduleData);
+                    localStorage.removeItem("day")
                   }}
                   loading={isPending || editIsPending}
                 >

@@ -92,9 +92,9 @@ const Programs = () => {
           </Button>
         </div>
 
-        <div className="grid grid-cols-1 gap-4 my-8 md:grid-cols-2 lg:grid-cols-3">
-          {programData &&
-            programData?.map((program, index) => (
+        {programData?.length ? (
+          <div className="grid grid-cols-1 gap-4 my-8 md:grid-cols-2 lg:grid-cols-3">
+            {programData?.map((program, index) => (
               <div
                 key={index}
                 className="p-4 text-center bg-white rounded-2xl border-[3.4px] border-[#025464]"
@@ -152,7 +152,14 @@ const Programs = () => {
                 </Button>
               </div>
             ))}
-        </div>
+          </div>
+        ) : (
+          <div className="p-5 bg-white rounded-3xl my-5">
+            <p className="text-center font-semibold text-xl text-mainColor py-8">
+              {t("No programs added yet")}
+            </p>
+          </div>
+        )}
 
         {showDeleteModal && (
           <MainPopup onClose={() => setShowDeleteModal(false)}>
@@ -180,14 +187,18 @@ const Programs = () => {
           </MainPopup>
         )}
 
-        <div>
-          <Pagination
-            showNavigation={true}
-            currentPage={programPagination?.currentPage}
-            totalPages={programPagination?.totalPages}
-            setPage={setPage}
-          />
-        </div>
+        {programData?.length ? (
+          <div>
+            <Pagination
+              showNavigation={true}
+              currentPage={programPagination?.currentPage}
+              totalPages={programPagination?.totalPages}
+              setPage={setPage}
+            />
+          </div>
+        ) : (
+          ""
+        )}
       </div>
     </div>
   );

@@ -2,21 +2,37 @@ import { Form, Formik } from "formik";
 import { BaseInput, Button, MainRadio } from "../../../components";
 import { t } from "i18next";
 import Select from "react-select";
-import { useEffect, useMemo, useState } from "react";
-import { RiDeleteBin5Line } from "react-icons/ri";
-import {
-  ColumnDef,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
+import { useEffect, useState } from "react";
 import selectStyle from "../../../utils/selectStyle";
 import { useNavigate } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import customFetch from "../../../utils/axios";
 import { toast } from "react-toastify";
+import * as Yup from "yup";
+import { FormikError } from "../../UI/FormikError";
+import SuggestedReferences from "./SuggestedReferences";
+
+const validationSchema = Yup.object().shape({
+  course_name: Yup.string().required("Course name is required"),
+  course_teachers: Yup.array().min(1, "At least one teacher is required"),
+  course_code: Yup.number()
+    .required("Course code is required")
+    .positive()
+    .integer(),
+  level: Yup.string().required("Level is required"),
+  course_objectives: Yup.string().required("Course objectives are required"),
+  information_concepts: Yup.string().required(
+    "Information concepts are required"
+  ),
+  mental_skills: Yup.string().required("Mental skills are required"),
+  general_skills: Yup.string().required("General skills are required"),
+  professional_skills: Yup.string().required(
+    "Professional skills are required"
+  ),
+  teaching_learning_methods: Yup.string().required(
+    "Teaching and learning methods are required"
+  ),
+});
 
 const editProgramCourse = async (editCourses: any, id: number) => {
   const data = await customFetch.post(`updateCourse/${id}`, editCourses);
@@ -33,6 +49,7 @@ const CreateCoursesInputs = ({
   const [suggestedReferences, setSuggestedReferences] = useState(
     editCoursesData?.references || editFinishedCoursesData?.references || []
   );
+  console.log("🚀 ~ suggestedReferences:", suggestedReferences);
 
   const [level, setLevel] = useState();
   const navigate = useNavigate();
@@ -54,13 +71,12 @@ const CreateCoursesInputs = ({
   ]);
   const [generalSkillsSteps, setGeneralSkillsSteps] = useState(["1- "]);
 
-
-
   const courseTeacherID = editFinishedCoursesData?.teachers?.map(
     (teacher) => teacher.id
   );
 
   const initialValues = {
+    id: editCoursesData?.id || 0,
     course_name:
       editCoursesData?.course_name ||
       editFinishedCoursesData?.course_name ||
@@ -94,7 +110,7 @@ const CreateCoursesInputs = ({
       editFinishedCoursesData?.teaching_learning_methods ||
       "",
     lectures:
-      editCoursesData?.lectures || editFinishedCoursesData?.lectures || 0,
+      editCoursesData?.lectures || editFinishedCoursesData?.lectures || "",
     practical_training:
       editCoursesData?.practical_training ||
       editFinishedCoursesData?.practical_training ||
@@ -157,67 +173,6 @@ const CreateCoursesInputs = ({
       const errorMessage = error?.response?.data?.error[0];
       toast.error(errorMessage);
     },
-  });
-
-  // const handleDeleteInstructorName = (instructorId: string) => {
-  //   const instructorNameFilter = editInstructors?.filter(
-  //     (instructor: any) => Number(instructor.id) !== Number(instructorId)
-  //   );
-  //   setSelectedInstructor(instructorNameFilter);
-  // };
-
-  const suggestedReferencesColumns = useMemo<ColumnDef<any>[]>(
-    () => [
-      {
-        header: () => <span>{t("reference title")}</span>,
-        accessorKey: "reference_title",
-        cell: (info) => info.getValue() || "---",
-      },
-      {
-        header: () => <span>{t("author")}</span>,
-        accessorKey: "author",
-        cell: (info) => info.getValue() || "---",
-      },
-      {
-        header: () => <span>{t("date")}</span>,
-        accessorKey: "date",
-        cell: (info) => info.getValue() || "---",
-      },
-      {
-        header: () => <span>{t("link")}</span>,
-        accessorKey: "link",
-        cell: (info) => info.getValue() || "---",
-      },
-      {
-        header: () => <span>{t("")}</span>,
-        accessorKey: "action",
-        cell: (info) => {
-          return (
-            <RiDeleteBin5Line
-              onClick={() => {
-                const suggestedReferencesFilter = suggestedReferences?.filter(
-                  (data: any, index) => {
-                    return index !== info.row.index;
-                  }
-                );
-                setSuggestedReferences(suggestedReferencesFilter);
-              }}
-              size={22}
-              className="m-auto cursor-pointer fill-mainRed"
-            />
-          );
-        },
-      },
-    ],
-    [suggestedReferences]
-  );
-
-  const table = useReactTable({
-    data: suggestedReferences,
-    columns: suggestedReferencesColumns,
-    getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
   });
 
   useEffect(() => {
@@ -346,12 +301,11 @@ const CreateCoursesInputs = ({
     <div>
       <Formik
         initialValues={initialValues}
-        validationSchema=""
-        onSubmit={(values) => {
-          // setCoursesData(values);
-        }}
+        validationSchema={validationSchema}
+        onSubmit={(values) => {}}
       >
-        {({ setFieldValue, values, resetForm }) => {
+        {({ setFieldValue, values, resetForm, setTouched, validateForm }) => {
+          console.log("🚀 ~ values:", values);
           return (
             <Form>
               <div className="pb-8 bg-white rounded-3xl">
@@ -384,10 +338,11 @@ const CreateCoursesInputs = ({
                           label={t("course code")}
                           labelProps="!font-semibold"
                           disabled={
-                            Object.keys(editFinishedCoursesData).length !== 0
+                            Object.keys(editFinishedCoursesData).length !== 0 ||
+                            Object.keys(editCoursesData).length !== 0
                           }
                         />
-                        <div>
+                        <div className="relative">
                           <label htmlFor="level" className="font-semibold">
                             {t("level")}
                           </label>
@@ -408,11 +363,15 @@ const CreateCoursesInputs = ({
                                 0
                               }
                             />
+                            <FormikError
+                              name="level"
+                              className="absolute whitespace-nowrap"
+                            />
                           </div>
                         </div>
                       </div>
                     </div>
-                    <div className="flex flex-col h-full">
+                    <div className="flex flex-col h-full ">
                       <label htmlFor="vision" className="font-semibold">
                         {t("course objectives")}
                       </label>
@@ -432,7 +391,7 @@ const CreateCoursesInputs = ({
                         id="course_objectives"
                         className="w-full h-full mt-1  text-lg py-2 px-4 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
                         placeholder={t("course objectives")}
-                        value={courseObjectives?.join("\n")}
+                        value={courseObjectives?.join("\n") || ["1- "]}
                         onChange={(e) => {
                           const stepValues = e.target.value
                             .split("\n")
@@ -454,6 +413,10 @@ const CreateCoursesInputs = ({
                           )
                         }
                       />
+                      <FormikError
+                        name="course_objectives"
+                        className="whitespace-nowrap"
+                      />
                     </div>
                   </div>
 
@@ -470,7 +433,7 @@ const CreateCoursesInputs = ({
                         id="information_concepts"
                         className="w-full h-36 text-lg py-2 px-4 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
                         placeholder={t("information and concepts")}
-                        value={informationConceptsSteps?.join("\n")}
+                        value={informationConceptsSteps?.join("\n") || ["1- "]}
                         onChange={(e) => {
                           const stepValues = e.target.value
                             .split("\n")
@@ -492,6 +455,10 @@ const CreateCoursesInputs = ({
                           )
                         }
                       />
+                      <FormikError
+                        name="information_concepts"
+                        className="whitespace-nowrap"
+                      />
                     </div>
                     <div>
                       <label htmlFor="mental_skills" className="font-semibold">
@@ -502,7 +469,7 @@ const CreateCoursesInputs = ({
                         id="mental_skills"
                         className="w-full h-36 text-lg py-2 px-4 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
                         placeholder={t("mental skills")}
-                        value={mentalSkillsSteps?.join("\n")}
+                        value={mentalSkillsSteps?.join("\n") || ["1- "]}
                         onChange={(e) => {
                           const stepValues = e.target.value
                             .split("\n")
@@ -520,6 +487,10 @@ const CreateCoursesInputs = ({
                             mentalSkillsSteps
                           )
                         }
+                      />
+                      <FormikError
+                        name="mental_skills"
+                        className="whitespace-nowrap"
                       />
                     </div>
                   </div>
@@ -559,6 +530,10 @@ const CreateCoursesInputs = ({
                           )
                         }
                       />
+                      <FormikError
+                        name="professional_skills"
+                        className="whitespace-nowrap"
+                      />
                     </div>
                     <div>
                       <label htmlFor="general_skills" className="font-semibold">
@@ -569,7 +544,7 @@ const CreateCoursesInputs = ({
                         id="general_skills"
                         className="w-full h-36 text-lg py-2 px-4 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
                         placeholder={t("general skills")}
-                        value={generalSkillsSteps?.join("\n")}
+                        value={generalSkillsSteps?.join("\n") || ["1- "]}
                         onChange={(e) => {
                           const stepValues = e.target.value
                             .split("\n")
@@ -587,6 +562,10 @@ const CreateCoursesInputs = ({
                             generalSkillsSteps
                           )
                         }
+                      />
+                      <FormikError
+                        name="general_skills"
+                        className="whitespace-nowrap"
                       />
                     </div>
                   </div>
@@ -608,6 +587,10 @@ const CreateCoursesInputs = ({
                             "lectures",
                             values.lectures === 1 ? 0 : 1
                           );
+                          setFieldValue(
+                            "teaching_learning_methods",
+                            "lectures"
+                          );
                           handleCheckboxChange("lectures");
                         }}
                       />
@@ -622,6 +605,10 @@ const CreateCoursesInputs = ({
                           setFieldValue(
                             "practical_training",
                             values.practical_training === 1 ? 0 : 1
+                          );
+                          setFieldValue(
+                            "teaching_learning_methods",
+                            "practical_training"
                           );
                           handleCheckboxChange("practical training");
                         }}
@@ -638,6 +625,10 @@ const CreateCoursesInputs = ({
                             "applications",
                             values.applications === 1 ? 0 : 1
                           );
+                          setFieldValue(
+                            "teaching_learning_methods",
+                            "applications"
+                          );
                           handleCheckboxChange("applications");
                         }}
                       />
@@ -652,6 +643,10 @@ const CreateCoursesInputs = ({
                           setFieldValue(
                             "research",
                             values.research === 1 ? 0 : 1
+                          );
+                          setFieldValue(
+                            "teaching_learning_methods",
+                            "research"
                           );
                           handleCheckboxChange("research");
                         }}
@@ -668,6 +663,10 @@ const CreateCoursesInputs = ({
                             "case_studies",
                             values.case_studies === 1 ? 0 : 1
                           );
+                          setFieldValue(
+                            "teaching_learning_methods",
+                            "case_studies"
+                          );
                           handleCheckboxChange("case studies");
                         }}
                       />
@@ -683,112 +682,18 @@ const CreateCoursesInputs = ({
                             "project",
                             values.project === 1 ? 0 : 1
                           );
+                          setFieldValue("teaching_learning_methods", "project");
                           handleCheckboxChange("project");
                         }}
                       />
                     </div>
+                    <FormikError
+                      name="teaching_learning_methods"
+                      className="whitespace-nowrap"
+                    />
                   </div>
 
-                  {/* <div className="w-full my-12 border-2 shadow-lg md:w-3/4 border-mainGray rounded-2xl">
-                    <div className="py-5 mx-6">
-                      <label
-                        htmlFor="instructors_name"
-                        className="font-semibold"
-                      >
-                        {t("instructor name")}
-                      </label>
-                      <div className="flex flex-col items-center justify-between mt-2 sm:flex-row gap-x-12 gap-y-6">
-                        <div className="w-full sm:w-3/4">
-                          <Select
-                            id="instructors_name"
-                            name="instructors_name"
-                            // isMulti
-                            // closeMenuOnSelect={false}
-                            onChange={(option) => {
-                              setFieldValue("instructors_name", option.value);
-                              setFieldValue("instructors_id", option.id);
-                            }}
-                            options={instructorsName}
-                            placeholder={t("instructor name")}
-                            styles={selectStyle}
-                          />
-                        </div>
-                        <Button
-                          className="s-full sm:w-1/4"
-                          action={() => {
-                            const findInstructorName = selectedInstructor?.some(
-                              (instructor: any) =>
-                                instructor.id === values.instructors_id
-                            );
-
-                            if (!values.instructors_id) {
-                              
-                              return;
-                            }
-                            if (findInstructorName) {
-                              
-                              return;
-                            }
-
-                            setSelectedInstructor((prev: any) => [
-                              {
-                                id: values.instructors_id,
-                                value: values.instructors_name,
-                              },
-                              ...prev,
-                            ]);
-
-                            // setSelectedInstructor((prev: any) => {
-                            //   const instructorExists = prev.some(
-                            //     (instructor: any) =>
-                            //       instructor.id === values.instructors_id
-                            //   );
-
-                            //   if (instructorExists) {
-                            //     // Edit the existing instructor
-                            //     return prev.map((instructor: any) =>
-                            //       instructor.id === values.instructors_id
-                            //         ? {
-                            //             ...instructor,
-                            //             value: values.instructors_name,
-                            //           }
-                            //         : instructor
-                            //     );
-                            //   } else {
-                            //     // Add a new instructor
-                            //     return [
-                            //       {
-                            //         id: values.instructors_id,
-                            //         value: values.instructors_name,
-                            //       },
-                            //       ...prev,
-                            //     ];
-                            //   }
-                            // });
-                          }}
-                        >
-                          {t("add")}
-                        </Button>
-                      </div>
-                    </div>
-
-                    <div>
-                      {selectedInstructor?.map((instructor: string) => (
-                        <div className="flex items-center justify-between px-6 py-3 border-t-2 border-mainGray">
-                          <p className="font-semibold">{instructor.value}</p>
-                          <RiDeleteBin5Line
-                            size={30}
-                            className="cursor-pointer fill-mainRed"
-                            onClick={() =>
-                              handleDeleteInstructorName(instructor.id)
-                            }
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  </div> */}
-
-                  <div className="w-full my-12 md:w-3/4">
+                  <div className="w-full my-12 md:w-3/4 relative">
                     <label htmlFor="instructors_name" className="font-semibold">
                       {t("instructor name")}
                     </label>
@@ -815,172 +720,72 @@ const CreateCoursesInputs = ({
                         />
                       </div>
                     </div>
+                    <FormikError
+                      name="course_teachers"
+                      className="absolute whitespace-nowrap"
+                    />
                   </div>
                 </div>
 
-                <div className="bg-[#EEEDED]">
-                  <h2 className="p-6 text-2xl font-medium">
-                    {t("suggested references")}
-                  </h2>
-                  <div className="overflow-auto">
-                    <table className="min-w-full text-center">
-                      <thead className="text-white bg-mainColor">
-                        {table?.getHeaderGroups().map((headerGroup) => (
-                          <tr key={headerGroup.id} className="w-full px-2 py-4">
-                            {headerGroup.headers.map((header) => (
-                              <th
-                                key={header.id}
-                                className="px-6 py-4 font-medium text-md"
-                              >
-                                {header.isPlaceholder
-                                  ? null
-                                  : flexRender(
-                                      header.column.columnDef.header,
-                                      header.getContext()
-                                    )}
-                              </th>
-                            ))}
-                          </tr>
-                        ))}
-                      </thead>
-                      <tbody>
-                        <tr className="text-center border-b-2 border-mainColor">
-                          <td className="p-4">
-                            <BaseInput
-                              name="reference_title"
-                              id="reference_title"
-                              type="text"
-                              className="w-full text-lg py-1 !border-2 !border-black rounded-lg text-center"
-                              placeholder={t("")}
-                            />
-                          </td>
-                          <td className="p-4">
-                            <BaseInput
-                              name="author"
-                              id="author"
-                              type="text"
-                              className="w-full text-lg py-1 !border-2 !border-black rounded-lg text-center"
-                              placeholder={t("")}
-                            />
-                          </td>
-                          <td className="p-4">
-                            <BaseInput
-                              name="date"
-                              id="date"
-                              type="date"
-                              className="w-full text-lg py-[3px] !border-2 !border-black rounded-lg"
-                              placeholder={t("")}
-                            />
-                          </td>
-                          <td className="p-4">
-                            <BaseInput
-                              name="link"
-                              id="link"
-                              type="text"
-                              className="w-full text-lg py-1 !border-2 !border-black rounded-lg text-center"
-                              placeholder={t("")}
-                            />
-                          </td>
-                          <td className="p-4">
-                            <Button
-                              type="button"
-                              action={() => {
-                                if (
-                                  !values.reference_title &&
-                                  !values.author &&
-                                  !values.date &&
-                                  !values.link
-                                ) {
-                                  return;
-                                }
-                                setSuggestedReferences((prev: any) => [
-                                  {
-                                    reference_title: values.reference_title,
-                                    author: values.author,
-                                    date: values.date,
-                                    link: values.link,
-                                  },
-                                  ...prev,
-                                ]);
-
-                                setFieldValue("reference_title", "");
-                                setFieldValue("author", "");
-                                setFieldValue("date", "");
-                                setFieldValue("link", "");
-                              }}
-                            >
-                              {t("add")}
-                            </Button>
-                          </td>
-                        </tr>
-                        {table.getRowModel().rows.map((row) => {
-                          return (
-                            <tr
-                              key={row.id}
-                              className="text-center border-b-2 border-mainColor"
-                            >
-                              {row.getVisibleCells().map((cell, i) => (
-                                <td
-                                  className="whitespace-nowrap px-6 py-4 text-md font-medium !text-[#292D32]"
-                                  key={cell.id}
-                                >
-                                  {flexRender(
-                                    cell.column.columnDef.cell,
-                                    cell.getContext()
-                                  )}
-                                </td>
-                              ))}
-                            </tr>
-                          );
-                        })}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
+                <SuggestedReferences
+                  suggestedReferences={suggestedReferences}
+                  setSuggestedReferences={setSuggestedReferences}
+                />
 
                 <div className="flex justify-end px-8 mt-8">
                   <Button
                     type="button"
                     className="me-5"
                     loading={isPending}
-                    action={() => {
-                      if (Object.keys(editFinishedCoursesData).length === 0) {
-                        setCoursesData((prev) => {
-                          const existingIndex = prev.findIndex(
-                            (course) =>
-                              course.course_code === values.course_code
-                          );
+                    action={async () => {
+                      const errors = await validateForm();
+                      setTouched(errors); // Mark all fields as touched to display validation errors
 
-                          if (existingIndex !== -1) {
-                            const updatedCourses = [...prev];
-                            updatedCourses[existingIndex] = {
-                              ...values,
-                              teaching_learning_methods:
-                                teachingLearningMethods?.join(","),
-                              references: suggestedReferences,
-                            };
-                            return updatedCourses;
-                          } else {
-                            return [
-                              ...prev,
-                              {
+                      if (Object.keys(errors).length === 0) {
+                        if (
+                          Object.keys(editFinishedCoursesData).length === 0 ||
+                          Object.keys(editCoursesData).length === 0
+                        ) {
+                          setCoursesData((prev) => {
+                            const existingIndex = prev.findIndex(
+                              (course) =>
+                                course.course_code === values.course_code
+                            );
+
+                            if (existingIndex !== -1) {
+                              const updatedCourses = [...prev];
+                              updatedCourses[existingIndex] = {
                                 ...values,
                                 teaching_learning_methods:
-                                  teachingLearningMethods?.join(", "),
+                                  teachingLearningMethods?.join(","),
                                 references: suggestedReferences,
-                              },
-                            ];
-                          }
-                        });
+                              };
+                              return updatedCourses;
+                            } else {
+                              return [
+                                ...prev,
+                                {
+                                  ...values,
+                                  teaching_learning_methods:
+                                    teachingLearningMethods?.join(", "),
+                                  references: suggestedReferences,
+                                },
+                              ];
+                            }
+                          });
 
-                        setEditCoursesData([]);
-
-                        resetForm();
-
-                        setStep(1);
+                          setEditCoursesData([]);
+                          resetForm();
+                          setStep(1);
+                        } else {
+                          mutate({
+                            ...values,
+                            references: suggestedReferences,
+                          });
+                          navigate(-1);
+                        }
                       } else {
-                        mutate({ ...values, references: suggestedReferences });
-                        navigate(-1);
+                        console.log("Validation failed:", errors);
                       }
                     }}
                   >

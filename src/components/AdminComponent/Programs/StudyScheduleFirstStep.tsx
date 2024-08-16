@@ -10,6 +10,13 @@ import { useQuery } from "@tanstack/react-query";
 import Loading from "../../UI/Loading";
 import { useNavigate } from "react-router-dom";
 import { useRTL } from "../../../hooks/useRTL";
+import * as Yup from "yup";
+import { toast } from "react-toastify";
+
+const validationSchema = Yup.object().shape({
+  start_date: Yup.string().required("start date name is required"),
+  end_date: Yup.string().required("end date name is required"),
+});
 
 const StudyScheduleFirstStep = ({
   setSteps,
@@ -17,6 +24,7 @@ const StudyScheduleFirstStep = ({
   scheduleData,
   setEditStudySchedule,
 }) => {
+  console.log("🚀 ~ scheduleData:", scheduleData);
   const [activeButton, setActiveButton] = useState<any>(
     JSON.parse(localStorage.getItem("day")) || {
       id: 1,
@@ -121,8 +129,9 @@ const StudyScheduleFirstStep = ({
   }, [activeButton]);
 
   const filterScheduleTable = scheduleData?.lecture_time?.filter(
-    (item) => item.day_id === activeButton.id
+    (item) => item.day_id == activeButton.id
   );
+  console.log("🚀 ~ filterScheduleTable:", filterScheduleTable);
 
   {
     isLoading || (isRefetching && <Loading />);
@@ -140,11 +149,9 @@ const StudyScheduleFirstStep = ({
           onSubmit={(values) => {
             setScheduleData(values);
           }}
+          validationSchema={validationSchema}
         >
           {({ values, setFieldValue }) => {
-            // useEffect(() => {
-            //   setScheduleData(values);
-            // }, [values.start_date || values.end_date]);
             return (
               <Form>
                 <div className="flex flex-col justify-between my-3 md:flex-row gap-y-4">
@@ -203,10 +210,6 @@ const StudyScheduleFirstStep = ({
               action={() => {
                 setLoading(true);
                 setActiveButton({ id: item.id, day: item.day });
-                setScheduleData((prevState) => ({
-                  ...prevState,
-                  day: { id: item.id, day: item.day },
-                }));
                 localStorage.setItem(
                   "day",
                   JSON.stringify({ id: item.id, day: item.day })
@@ -245,7 +248,32 @@ const StudyScheduleFirstStep = ({
       )}
 
       <div className="flex items-center justify-end gap-5 mt-12">
-        <Button action={() => setSteps(2)}>{t("next")}</Button>
+        <Button
+          action={() => {
+            console.log(
+              "🚀 ~ !!scheduleData?.start_date:",
+              !!scheduleData?.start_date
+            );
+            if (!scheduleData?.start_date) {
+              toast.info("Start time is required");
+              return;
+            }
+
+            if (!scheduleData?.end_date) {
+              toast.info("End time is required");
+              return;
+            }
+
+            if (!scheduleData?.lecture_time?.length) {
+              toast.info("lecture timing must be added first");
+              return;
+            }
+
+            setSteps(2);
+          }}
+        >
+          {t("next")}
+        </Button>
         <Button className="bg-mainRed" action={() => navigate(-1)}>
           {t("cancel")}
         </Button>

@@ -164,29 +164,37 @@ const InstructorProfile = () => {
         </h2>
       </div>
 
-      <div className="pb-2 bg-white rounded-2xl">
-        <ProfileIntroduction personalData={instructorPersonalData} />
+      {instructorPersonalData ? (
+        <div className="pb-2 bg-white rounded-2xl">
+          <ProfileIntroduction personalData={instructorPersonalData} />
 
-        <InstructorSocialInformation personalData={instructorPersonalData} />
+          <InstructorSocialInformation personalData={instructorPersonalData} />
 
-        <div className="bg-[#E6EAEE] rounded-2xl my-7 mx-5 py-6">
-          <h2 className="mb-5 text-2xl font-semibold text-center ms-5 sm:text-start">
-            {t("scientific certificates")}
-          </h2>
-          <Table
-            data={instructorPersonalData?.certificates}
-            columns={certificatesColumnsFee}
-            className="bg-mainColor"
+          <div className="bg-[#E6EAEE] rounded-2xl my-7 mx-5 py-6">
+            <h2 className="mb-5 text-2xl font-semibold text-center ms-5 sm:text-start">
+              {t("scientific certificates")}
+            </h2>
+            <Table
+              data={instructorPersonalData?.certificates}
+              columns={certificatesColumnsFee}
+              className="bg-mainColor"
+            />
+          </div>
+
+          <InstructorSpecialization
+            personalData={
+              instructorPersonalData?.qualifications &&
+              instructorPersonalData?.qualifications[0]
+            }
           />
         </div>
-
-        <InstructorSpecialization
-          personalData={
-            instructorPersonalData?.qualifications &&
-            instructorPersonalData?.qualifications[0]
-          }
-        />
-      </div>
+      ) : (
+        <div className="p-5 bg-white rounded-3xl my-8">
+          <p className="text-center font-semibold text-xl text-mainColor py-8">
+            {t("No data has been added to the profile yet")}
+          </p>
+        </div>
+      )}
     </div>
   );
 };
