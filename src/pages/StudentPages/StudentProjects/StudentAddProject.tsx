@@ -7,7 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import Loading from "../../../components/UI/Loading";
 
 const getHomework = async (id: number | string) => {
-  const { data } = await customFetch(`projects/${id}`);
+  const { data } = await customFetch(`showProjectStudent/${id}`);
   return data.data;
 };
 
@@ -33,7 +33,6 @@ const StudentAddProject = () => {
   };
 
   if (isLoading || isFetching || isRefetching) return <Loading />;
-  console.log("🚀 ~ StudentAddProject ~ data:", data);
 
   return (
     <Formik initialValues={initialValues} onSubmit={(values) => {}}>

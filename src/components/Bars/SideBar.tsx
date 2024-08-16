@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { CiGrid41 } from "react-icons/ci";
 import { FaFolder } from "react-icons/fa6";
 import { FaRegEdit, FaUserAlt } from "react-icons/fa";
@@ -11,7 +11,13 @@ import { CgPlayButtonR } from "react-icons/cg";
 import { HiBars3CenterLeft } from "react-icons/hi2";
 import { RxCross2 } from "react-icons/rx";
 import { t } from "i18next";
-import { useLocation, useNavigate } from "react-router-dom";
+import {
+  Link,
+  useBeforeUnload,
+  useBlocker,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import SearchInput from "../UI/SearchInput";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import { FiCalendar } from "react-icons/fi";
@@ -23,6 +29,9 @@ import { SlBookOpen } from "react-icons/sl";
 import customFetch from "../../utils/axios";
 import { useQuery } from "@tanstack/react-query";
 import { changeSidebarColor } from "../../features/global/globalSlice";
+import MainPopup from "../UI/MainPopup";
+import { Button } from "..";
+import { changeSidebarRoute } from "../../features/dirty/dirtySlice";
 
 export type SideBarProps = {
   setToggleSideBar: (value: boolean) => void;
@@ -36,8 +45,11 @@ const SideBar: React.FC<SideBarProps> = ({
   const navigate = useNavigate();
   const location = useLocation();
   const { sidebarColor } = useAppSelector((state) => state.global);
+  const { isDirty } = useAppSelector((state) => state.dirty);
   const dispatch = useAppDispatch();
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 640);
+  const [isDialogOpen, setDialogOpen] = useState(false);
+  const [locationRoute, setLocationRoute] = useState<string>("");
 
   const handleResize = () => {
     setIsSmallScreen(window.innerWidth < 640);
@@ -263,9 +275,12 @@ const SideBar: React.FC<SideBarProps> = ({
       : sideBarItemsOfStudents;
 
   const handleNavigate = (link: String) => {
-    navigate(link);
     if (isSmallScreen) {
       setToggleSideBar(false);
+    } else if (isDirty) {
+      setDialogOpen(true);
+    } else {
+      navigate(link);
     }
   };
 
@@ -325,6 +340,7 @@ const SideBar: React.FC<SideBarProps> = ({
                         }
                     `}
               onClick={() => handleNavigate(item.link)}
+              // href={item.link}
             >
               {item.icon}
               <span
@@ -359,6 +375,36 @@ const SideBar: React.FC<SideBarProps> = ({
           ))}
         </ul>
       </nav>
+
+      {isDialogOpen && (
+        <MainPopup
+          onClose={() => setDialogOpen(false)}
+          className="bg-white w-[90vw] sm:w-[60vw] lg:w-[50vw] xl:w-[50vw]"
+        >
+          <div className="text-center text-mainColor">
+            <h2 className="text-2xl font-semibold">
+              {t("Data is not completed")}
+            </h2>
+            <p className="text-xl font-medium my-8">
+              {t("Are you sure you want to leave this page?")}
+            </p>
+          </div>
+          <div className="flex justify-center gap-4 mt-12">
+            <Button
+              action={() => {
+                dispatch(changeSidebarRoute(false));
+                navigate(locationRoute);
+                setDialogOpen(false);
+              }}
+            >
+              {t("confirm")}
+            </Button>
+            <Button action={() => setDialogOpen(false)} bordered>
+              {t("cancel")}
+            </Button>
+          </div>
+        </MainPopup>
+      )}
     </aside>
   );
 };

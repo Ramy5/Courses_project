@@ -24,7 +24,7 @@ const LectureBox: React.FC<LectureBox_TP> = ({
     className={`rounded-xl border-s-8 bg-white p-4`}
     style={{ borderColor: programColor }}
   >
-    <div className="flex items-end justify-between gap-2 mb-6">
+    <div className="flex items-center justify-between gap-1 mb-6">
       <div className="flex items-center gap-2">
         <span>
           <IoBookOutline color={programColor} size={30} />
@@ -34,8 +34,8 @@ const LectureBox: React.FC<LectureBox_TP> = ({
         </span>
       </div>
       <div className="flex items-center gap-1">
-        <FiFileText size={21} color={programColor} />
-        <Link className="text-sm truncate" to="">
+        <FiFileText size={12} color={programColor} />
+        <Link className="w-20 text-xs truncate" to="">
           {t("enrichment information")}
         </Link>
       </div>
@@ -61,7 +61,7 @@ const LectureBox: React.FC<LectureBox_TP> = ({
           <span className="text-lg">{t("students")}</span>
         </p>
         <p className="text-lg font-bold" style={{ color: programColor }}>
-          {t(`${numOfStudents}`)}
+          {numOfStudents}
         </p>
       </div>
       <div className="flex flex-col items-center gap-1">

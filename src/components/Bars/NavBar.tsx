@@ -26,6 +26,7 @@ const NavBar: React.FC<SideBarProps> = ({
   const isRTL = useRTL();
 
   const { i18n } = useTranslation();
+
   useEffect(() => {
     document.documentElement.dir = isRTL ? "rtl" : "ltr";
     document.documentElement.lang = isRTL ? "ar" : "en";

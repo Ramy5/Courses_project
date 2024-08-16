@@ -5,6 +5,7 @@ import { FaRegEdit } from "react-icons/fa";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FiCalendar } from "react-icons/fi";
+import studentProfileImg from "../../../assets/students/studentProfileImg.svg";
 
 interface PersonlyProfile {
   personalData: any;
@@ -35,7 +36,7 @@ const ProfileIntroduction = ({
       <div className="absolute flex items-end justify-between w-full md:px-12 px-5 md:top-32 top-[155px]">
         <div className="flex items-end gap-3">
           <img
-            src={personalData.personalImage}
+            src={personalData.personal_image || studentProfileImg}
             alt="personal Image"
             className="border-[3px] border-[#393D94] rounded-full md:w-[134px] w-24"
           />

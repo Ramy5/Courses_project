@@ -10,6 +10,7 @@ import customFetch from "../../../utils/axios";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Loading from "../../../components/UI/Loading";
 import { toast } from "react-toastify";
+import { formatTimeTo12Hour } from "../../../utils/helpers";
 
 const getAllExam = async (page) => {
   const response = await customFetch(`exams?page=${page}`);
@@ -23,7 +24,6 @@ const deleteExam = async (examId) => {
 
 const InstructorExams = () => {
   const [page, setPage] = useState(1);
-  console.log("🚀 ~ InstructorExams ~ page:", page)
   const queryClient = useQueryClient();
 
   const navigate = useNavigate();
@@ -31,87 +31,9 @@ const InstructorExams = () => {
     queryKey: ["all_exam"],
     queryFn: () => getAllExam(page),
   });
-  console.log("🚀 ~ InstructorExams ~ data:", data);
 
-  const examsData = data?.data?.data?.exams || [];
+  const reverseExamsData = data?.data?.data?.exams || [];
   const examsPagenation = data?.data?.data || [];
-  const reverseExamsData = [...examsData]?.reverse();
-  console.log("🚀 ~ InstructorExams ~ examsData:", examsData);
-
-  // const examsData = [
-  //   {
-  //     id: 1,
-  //     course_name: "الفيزياء",
-  //     exam_title: "الفصل الدراسي الأول",
-  //     exam_type: "فصلي اول",
-  //     exam_date: "2023-12-06",
-  //     number_questions: 20,
-  //     duration: 40,
-  //     exam_time: "12:00",
-  //     final_score: 100,
-  //     exam_status: "قيد التنفيذ",
-  //   },
-  //   {
-  //     id: 2,
-  //     course_name: "الفيزياء",
-  //     exam_title: "الفصل الدراسي الأول",
-  //     exam_type: "فصلي اول",
-  //     exam_date: "2023-12-06",
-  //     number_questions: 20,
-  //     duration: 40,
-  //     exam_time: "12:00",
-  //     final_score: 100,
-  //     exam_status: "تم الإختبار",
-  //   },
-  //   {
-  //     id: 3,
-  //     course_name: "الفيزياء",
-  //     exam_title: "الفصل الدراسي الأول",
-  //     exam_type: "فصلي اول",
-  //     exam_date: "2023-12-06",
-  //     number_questions: 20,
-  //     duration: 40,
-  //     exam_time: "12:00",
-  //     final_score: 100,
-  //     exam_status: "قيد التنفيذ",
-  //   },
-  //   {
-  //     id: 4,
-  //     course_name: "الفيزياء",
-  //     exam_title: "الفصل الدراسي الأول",
-  //     exam_type: "فصلي اول",
-  //     exam_date: "2023-12-06",
-  //     number_questions: 20,
-  //     duration: 40,
-  //     exam_time: "12:00",
-  //     final_score: 100,
-  //     exam_status: "تم الإختبار",
-  //   },
-  //   {
-  //     id: 5,
-  //     course_name: "الفيزياء",
-  //     exam_title: "الفصل الدراسي الأول",
-  //     exam_type: "فصلي اول",
-  //     exam_date: "2023-12-06",
-  //     number_questions: 20,
-  //     duration: 40,
-  //     exam_time: "12:00",
-  //     final_score: 100,
-  //     exam_status: "قيد التنفيذ",
-  //   },
-  //   {
-  //     id: 6,
-  //     course_name: "الفيزياء",
-  //     exam_title: "الفصل الدراسي الأول",
-  //     exam_type: "فصلي اول",
-  //     exam_date: "2023-12-06",
-  //     number_questions: 20,
-  //     duration: 40,
-  //     exam_time: "12:00",
-  //     final_score: 100,
-  //     exam_status: "قيد التنفيذ",
-  //   },
-  // ];
 
   const { mutate } = useMutation({
     mutationKey: ["delete_exam"],
@@ -126,6 +48,7 @@ const InstructorExams = () => {
       toast.error(errorMessage);
     },
   });
+
   const examsColumns = useMemo<ColumnDef<any>[]>(
     () => [
       {
@@ -163,7 +86,7 @@ const InstructorExams = () => {
       {
         header: () => <span>{t("exam time")}</span>,
         accessorKey: "start_time",
-        cell: (info) => info.getValue(),
+        cell: (info) => formatTimeTo12Hour(info.getValue()),
       },
 
       {
@@ -236,13 +159,13 @@ const InstructorExams = () => {
         />
       </div>
 
-      <div className="flex justify-end items-center mb-5">
+      <div className="flex items-center justify-end mb-5">
         <Button action={() => navigate("/instructor/exams/add")}>
           {t("add exam +")}
         </Button>
       </div>
 
-      <div className="bg-white p-5 rounded-3xl">
+      <div className="p-5 bg-white rounded-3xl">
         <div>
           <Table
             data={reverseExamsData}

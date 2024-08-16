@@ -36,8 +36,6 @@ const StudentInformationPanel = () => {
     queryFn: getCourses,
   });
 
-  console.log("courses", data);
-
   const studentLecturesData = coursesData?.map((course: any) => {
     return {
       programTitle: course.course_name,

@@ -23,8 +23,6 @@ const HomeworksTabs = () => {
     queryFn: getAllHomeworks,
   });
 
-  console.log(data);
-
   const homeworkDoneColumns = useMemo<ColumnDef<[]>[]>(
     () => [
       {

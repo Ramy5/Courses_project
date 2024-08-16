@@ -1,5 +1,4 @@
 import { FaUserAlt } from "react-icons/fa";
-import { FiCalendar } from "react-icons/fi";
 import { LiaBookReaderSolid } from "react-icons/lia";
 import { TitlePage } from "../../../components";
 import { t } from "i18next";
@@ -20,87 +19,11 @@ const StudentLectures = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const numbers = ConvertNumberToWord();
-  console.log("🚀 ~ StudentLectures ~ numbers:", numbers);
 
   const { data, isLoading, isFetching, isRefetching } = useQuery({
     queryKey: ["get-lectures"],
     queryFn: () => getStudentCourses(id),
   });
-
-  const studentCoursesData = [
-    {
-      id: 1,
-      course_name: "المحاضرة الاولي",
-      instructor_name: "بروفيسور. عبدالله فارس ",
-      course_desc: "مدخل الباب الاول",
-      course_date: "3:36",
-      course_number: 4,
-    },
-    {
-      id: 2,
-      course_name: "المحاضرة الاولي",
-      instructor_name: "بروفيسور. عبدالله فارس ",
-      course_desc: "مدخل الباب الاول",
-      course_date: "3:36",
-      course_number: 0,
-    },
-    {
-      id: 3,
-      course_name: "المحاضرة الاولي",
-      instructor_name: "بروفيسور. عبدالله فارس ",
-      course_desc: "مدخل الباب الاول",
-      course_date: "3:36",
-      course_number: 4,
-    },
-    {
-      id: 4,
-      course_name: "المحاضرة الاولي",
-      instructor_name: "بروفيسور. عبدالله فارس ",
-      course_desc: "مدخل الباب الاول",
-      course_date: "3:36",
-      course_number: 3,
-    },
-    {
-      id: 5,
-      course_name: "المحاضرة الاولي",
-      instructor_name: "بروفيسور. عبدالله فارس ",
-      course_desc: "مدخل الباب الاول",
-      course_date: "3:36",
-      course_number: 4,
-    },
-    {
-      id: 6,
-      course_name: "المحاضرة الاولي",
-      instructor_name: "بروفيسور. عبدالله فارس ",
-      course_desc: "مدخل الباب الاول",
-      course_date: "3:36",
-      course_number: 0,
-    },
-    {
-      id: 7,
-      course_name: "المحاضرة الاولي",
-      instructor_name: "بروفيسور. عبدالله فارس ",
-      course_desc: "مدخل الباب الاول",
-      course_date: "3:36",
-      course_number: 4,
-    },
-    {
-      id: 8,
-      course_name: "المحاضرة الاولي",
-      instructor_name: "بروفيسور. عبدالله فارس ",
-      course_desc: "مدخل الباب الاول",
-      course_date: "3:36",
-      course_number: 4,
-    },
-    {
-      id: 9,
-      course_name: "المحاضرة الاولي",
-      instructor_name: "بروفيسور. عبدالله فارس ",
-      course_desc: "مدخل الباب الاول",
-      course_date: "3:36",
-      course_number: 4,
-    },
-  ];
 
   const borderColors = [
     "border-s-[#369252]",
@@ -108,7 +31,6 @@ const StudentLectures = () => {
     "border-s-[#025464]",
   ];
 
-  console.log("🚀 ~ StudentLectures ~ data:", data);
   if (isLoading || isFetching || isRefetching) return <Loading />;
 
   return (

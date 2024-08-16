@@ -278,7 +278,7 @@ function App() {
             element={<InstructorHomework />}
           />
           <Route
-            path="/instructors/viewHomework/:id"
+            path="/instructor/viewHomework/:id"
             element={<InstructorViewHomework />}
           />
           <Route
@@ -308,10 +308,6 @@ function App() {
             element={<InstructorViewProject />}
           />
           <Route
-            path="/instructors/editProject/:id"
-            element={<InstructorEditProject />}
-          />
-          <Route
             path="/instructors/viewAllProject/:id"
             element={<InstructorViewAllProject />}
           />
@@ -323,12 +319,19 @@ function App() {
             path="/instructors/addProject"
             element={<InstructorAddProject />}
           />
+          <Route
+            path="/instructor/editProject/:id"
+            element={<InstructorEditProject />}
+          />
 
           {/* INSTRUCTOR EXAMS*/}
           <Route path="/instructor/exams" element={<InstructorExams />} />
 
           {/* INSTRUCTOR ADD EXAM*/}
-          <Route path="/instructor/exams/add/" element={<InstructorAddExam />} />
+          <Route
+            path="/instructor/exams/add/"
+            element={<InstructorAddExam />}
+          />
 
           {/* INSTRUCTOR GRADES */}
           <Route path="/instructor/setting" element={<InstructorSetting />} />

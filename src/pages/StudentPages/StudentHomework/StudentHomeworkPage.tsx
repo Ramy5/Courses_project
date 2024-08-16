@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom";
 import Loading from "../../../components/UI/Loading";
 
 const getHomework = async (id: number | string) => {
-  const { data } = await customFetch(`showHomework/${id}`);
+  const { data } = await customFetch(`showHomeworkStudent/${id}`);
   return data.data;
 };
 

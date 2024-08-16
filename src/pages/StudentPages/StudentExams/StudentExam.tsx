@@ -8,6 +8,8 @@ import customFetch from "../../../utils/axios";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Loading from "../../../components/UI/Loading";
 import { toast, useToast } from "react-toastify";
+import { format } from "date-fns";
+import { formatTime } from "../../../utils/helpers";
 
 const postQuestionExam = async (newQuestionExam: any) => {
   const data = customFetch.post("/storeAnswer", newQuestionExam);
@@ -17,16 +19,17 @@ const postQuestionExam = async (newQuestionExam: any) => {
 const StudentExam = () => {
   const [questionNumber, setQuestionNumber] = useState(0);
   const [answers, setAnswers] = useState({});
-  console.log("🚀 ~ StudentExam ~ answers:", answers);
   const [showReceiptModal, setShowReceiptModal] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState(null);
   const [questionsExam, setQuestionsExam] = useState([]);
-  console.log("🚀 ~ StudentExam ~ questionsExam:", questionsExam);
-  console.log("🚀 ~ StudentExam ~ timeRemaining:", timeRemaining);
   const navigate = useNavigate();
   const isRTL = useRTL();
   const { id } = useParams();
   const queryClient = useQueryClient();
+
+  // useEffect(() => {
+  //     navigate(`/student/exam/${id}`, { replace: true });
+  // }, [navigate, id]);
 
   const fetchStudentQuestionExam = async () => {
     const response = await customFetch(`/examQuestion/${id}?per_page=10000`);
@@ -38,22 +41,35 @@ const StudentExam = () => {
     queryFn: fetchStudentQuestionExam,
   });
 
-  const studentQuestionExam = data && data?.data?.data?.examQuestion;
-  console.log("🚀 ~ StudentExam ~ studentQuestionExam:", studentQuestionExam);
+  const studentQuestionExam = data?.data?.data?.examQuestion;
+  const examCourseName = studentQuestionExam?.[0]?.exam?.course.course_name;
+  const examDuration = studentQuestionExam?.[0]?.exam?.duration;
+  const examStartTime = studentQuestionExam?.[0]?.exam?.start_time;
 
-  const examCourseName =
-    studentQuestionExam?.length &&
-    studentQuestionExam[0]?.exam?.course.course_name;
-
-  const examDuration =
-    studentQuestionExam?.length && studentQuestionExam[0]?.exam?.duration;
+  // const rondomExamQuestoin = (array) => {
+  //   let rondomQuestion = array?.slice(); // Copy the array to avoid modifying the original one
+  //   for (let i = rondomQuestion?.length - 1; i > 0; i--) {
+  //     const j = Math.floor(Math.random() * (i + 1));
+  //     [rondomQuestion[i], rondomQuestion[j]] = [
+  //       rondomQuestion[j],
+  //       rondomQuestion[i],
+  //     ];
+  //   }
+  //   return rondomQuestion;
+  // };
 
   const examDetails = {
     exam_name: examCourseName,
-    exam_duration: `${examDuration}:00`,
+    exam_duration: examDuration,
     exam_questions: studentQuestionExam,
+    start_time: examStartTime,
   };
-  console.log("🚀 ~ StudentExam ~ examDetails:", examDetails);
+
+  useEffect(() => {
+    if (examDetails?.exam_duration) {
+      setTimeRemaining(examDetails?.exam_duration * 60);
+    }
+  }, [examDetails?.exam_duration]);
 
   const handleAnswerChange = (questionId, answer) => {
     setAnswers((prevAnswers) => ({
@@ -62,31 +78,8 @@ const StudentExam = () => {
     }));
   };
 
-  // const getStatusClass = (questionId, index) => {
-  //   if (index < questionNumber && answers[questionId]) {
-  //     return "bg-[#369252]";
-  //   } else if (index < questionNumber && !answers[questionId]) {
-  //     return "bg-mainRed";
-  //   } else {
-  //     return "bg-[#DDDDDD]";
-  //   }
-  // };
-
-  const convertDurationToSeconds = (duration) => {
-    const [minutes, seconds] = duration.split(":").map(Number);
-    return minutes * 60 + seconds;
-  };
-
-  useEffect(() => {
-    if (examDetails?.exam_duration) {
-      const initialTime = convertDurationToSeconds(examDetails?.exam_duration);
-      setTimeRemaining(initialTime);
-    }
-  }, [examDetails?.exam_duration]);
-
   // useEffect(() => {
   //   let timerInterval;
-
   //   const startTimer = () => {
   //     const timerInterval = setInterval(() => {
   //       setTimeRemaining((prev) => {
@@ -99,32 +92,57 @@ const StudentExam = () => {
   //       });
   //     }, 1000);
   //   };
-
-  //   const timerTimeout = setTimeout(startTimer, 1000);
-
+  //   const timerTimeout = setTimeout(startTimer, 1000);z
   //   return () => {
   //     clearTimeout(timerTimeout);
   //     clearInterval(timerInterval);
   //   };
-  // }, []);
+  // }, [timeRemaining]);
 
-  const formatTime = (seconds) => {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
-  };
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'PrintScreen') {
+        e.preventDefault();
+        alert('Screenshots are disabled on this page.');
+      }
 
-  const currentQuestion =
-    examDetails?.exam_questions?.length &&
-    examDetails?.exam_questions[questionNumber];
-  console.log("🚀 ~ StudentExam ~ currentQuestion:", currentQuestion);
+      if (e.keyCode === 123 || 
+          (e.ctrlKey && e.shiftKey && (e.keyCode === 'I'.charCodeAt(0) || e.keyCode === 'J'.charCodeAt(0))) || 
+          (e.ctrlKey && e.keyCode === 'U'.charCodeAt(0))) {
+        e.preventDefault();
+        return false;
+      }
+    }; 
 
+    const handleContextMenu = (e) => {
+      e.preventDefault();
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('contextmenu', handleContextMenu);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('contextmenu', handleContextMenu);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (timeRemaining === 0) {
+      mutate({
+        exam_id: id,
+        questions: questionsExam,
+      });
+      toast.success(t("the test was successfully passed."));
+      navigate("/student/exams/result", { state: id, replace: true });
+    }
+  }, [timeRemaining === 0]);
+
+  const currentQuestion = examDetails?.exam_questions?.[questionNumber];
   const numberOfAnswer = Object.keys(answers).length;
 
   const unansweredQuestions =
     examDetails?.exam_questions?.length - numberOfAnswer;
-
-  const initialValues = {};
 
   const handleNextQuestion = () => {
     setQuestionNumber((prevIndex) => prevIndex + 1);
@@ -168,7 +186,7 @@ const StudentExam = () => {
     onSuccess: (data) => {
       queryClient.invalidateQueries("question");
       toast.success(t("the test was successfully passed."));
-      navigate("/student/exams/result", { state: id });
+      navigate("/student/exams/result", { state: id, replace: true });
     },
     onError: (error) => {
       const errorMessage = error?.response?.data?.error[0];
@@ -179,27 +197,29 @@ const StudentExam = () => {
   if (isFetching || isRefetching || isLoading) return <Loading />;
 
   return (
-    <Formik initialValues={initialValues} onSubmit={(values) => {}}>
+    <Formik initialValues={{}} onSubmit={(values) => {}}>
       <Form>
         <div className="bg-[#D9D9D9] flex flex-col sm:flex-row gap-5 px-5 py-12 min-h-screen">
           <div className="w-full lg:w-[25%] md:w-[33%] sm:w-[40%] bg-white main_shadow pt-4 pb-8 rounded-xl h-fit px-5">
-            <h2 className="bg-mainColor text-white font-semibold text-xl text-center rounded-xl py-5">
+            <h2 className="py-5 text-xl font-semibold text-center text-white bg-mainColor rounded-xl">
               {t("lectures")} <span>{examDetails.exam_name}</span>
             </h2>
 
             <h1 className="text-[#369252] font-bold text-6xl opacity-100 my-6">
+              {/* {timeRemaining} */}
               {formatTime(timeRemaining)}
+              {/* {convertMinutesToHHMMSS(timeRemaining)} */}
             </h1>
 
-            <div className="flex gap-2 items-center">
-              <div className="w-5 h-5 bg-mainRed rounded-full"></div>
+            <div className="flex items-center gap-2">
+              <div className="w-5 h-5 rounded-full bg-mainRed"></div>
               <p>{t("an unanswered question")}</p>
             </div>
-            <div className="flex gap-2 items-center my-2">
+            <div className="flex items-center gap-2 my-2">
               <div className="w-5 h-5 bg-[#369252] rounded-full"></div>
               <p>{t("question answered")}</p>
             </div>
-            <div className="flex gap-2 items-center">
+            <div className="flex items-center gap-2">
               <div className="w-5 h-5 bg-[#DDDDDD] rounded-full"></div>
               <p>{t("question not displayed")}</p>
             </div>
@@ -264,7 +284,7 @@ const StudentExam = () => {
                         {t("grades")}
                       </p>
                     </div>
-                    <p className="px-4 pt-10 pb-5 text-[#222222bf] font-medium">
+                    <p className="px-4 pt-10 pb-5 text-[#222222bf] font-medium no-copy">
                       {currentQuestion?.question}
                     </p>
                   </div>
@@ -273,7 +293,7 @@ const StudentExam = () => {
                       return (
                         <li
                           key={i}
-                          className="bg-white px-4 py-3 rounded-xl flex gap-1 items-center cursor-pointer"
+                          className="flex items-center gap-1 px-4 py-3 bg-white cursor-pointer rounded-xl"
                           onClick={() =>
                             handleAnswerChange(currentQuestion.id, ans)
                           }
@@ -285,7 +305,7 @@ const StudentExam = () => {
                             checked={answers[currentQuestion.id] === ans}
                             readOnly
                           />{" "}
-                          <span className="text-[#222222bf] font-medium">
+                          <span className="text-[#222222bf] font-medium no-copy">
                             {ans?.answer}
                           </span>
                         </li>
@@ -302,7 +322,7 @@ const StudentExam = () => {
                 className="bg-white"
               >
                 <div className="text-center">
-                  <p className="font-semibold text-lg my-6 text-black">
+                  <p className="my-6 text-lg font-semibold text-black">
                     {t("there are unanswered questions")}
                   </p>
 
@@ -322,7 +342,7 @@ const StudentExam = () => {
                     {t("questions answered:")} <span>{numberOfAnswer}</span>
                   </p>
 
-                  <p className="text-mainRed font-medium text-lg my-6">
+                  <p className="my-6 text-lg font-medium text-mainRed">
                     {t("unanswered questions:")}{" "}
                     <span>{unansweredQuestions}</span>
                   </p>

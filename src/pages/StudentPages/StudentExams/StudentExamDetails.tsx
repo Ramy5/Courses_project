@@ -21,7 +21,6 @@ const StudentExamDetails = () => {
   });
 
   const studentExamData = data && data?.data?.data?.exam;
-  console.log("🚀 ~ StudentExamDetails ~ studentExamData:", studentExamData);
 
   const examDetails = {
     id: studentExamData?.id,
@@ -103,7 +102,7 @@ const StudentExamDetails = () => {
       </div>
 
       <div className="flex justify-end gap-4 mt-8">
-        <Button bordered action={() => navigate(-1)}>
+        <Button bordered action={() => navigate("/student/exams")}>
           {t("retreat")}
         </Button>
         <Button action={() => navigate(`/student/exam/${examDetails.id}`)}>

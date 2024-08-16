@@ -2,15 +2,15 @@ import { t } from "i18next";
 import { Button } from "../../../components";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import customFetch from "../../../utils/axios";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "../../../components/UI/Loading";
+import { useEffect, useState } from "react";
 
 const StudentExamResults = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  console.log("🚀 ~ StudentExamResults ~ location:", location);
 
   const fetchStudentExamResult = async () => {
     const response = await customFetch(`/getExamDetails/${location.state}`);
@@ -23,10 +23,6 @@ const StudentExamResults = () => {
   });
 
   const studentExamResult = data && data?.data?.data;
-  console.log(
-    "🚀 ~ StudentExamResults ~ studentExamResult:",
-    studentExamResult
-  );
 
   const examResults = {
     totalQuestions: studentExamResult?.totalQuestions,
@@ -36,11 +32,9 @@ const StudentExamResults = () => {
     totalDegree: studentExamResult?.totalDegree,
     studentDegree: studentExamResult?.degree,
   };
-  console.log("🚀 ~ StudentExamResults ~ examResults:", examResults);
 
   const percentage =
     (examResults?.studentDegree / examResults?.totalDegree) * 100;
-  console.log("🚀 ~ StudentExamResults ~ percentage:", percentage);
 
   if (isFetching || isRefetching || isLoading) return <Loading />;
 
@@ -93,7 +87,7 @@ const StudentExamResults = () => {
           <div className="flex justify-center my-5">
             <Button
               className="bg-[#369252]"
-              action={() => navigate("/student/exams", { replace: true })}
+              action={() => navigate("/student/exams")}
             >
               {t("finish")}
             </Button>

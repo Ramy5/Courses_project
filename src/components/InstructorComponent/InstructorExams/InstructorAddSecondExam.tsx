@@ -13,7 +13,6 @@ const InstructorAddSecondExam = ({
   questionExam,
   editExamData,
 }: any) => {
-  console.log("🚀 ~ grades:", grades);
   const [currentIndex, setCurrentIndex] = useState(0);
   const questionsPerPage = 2;
 
@@ -58,7 +57,6 @@ const InstructorAddSecondExam = ({
     currentIndex,
     currentIndex + 2
   );
-  console.log("🚀 ~ currentQuestions:", currentQuestions);
 
   const currentPage = Math.floor(currentIndex / questionsPerPage) + 1;
 
@@ -93,12 +91,10 @@ const InstructorAddSecondExam = ({
   };
 
   const getGradeValue = (itemId) => {
-    console.log("🚀 ~ getGradeValue ~ itemId:", itemId);
     const grade = grades?.find((grade) => {
       return grade.id == itemId;
     });
-    console.log("🚀 ~ getGradeValue ~ grade:", grade);
-    return grade ? "" : grade?.grade;
+    return grade ? grade?.grade : " ";
   };
 
   // useEffect(() => {
@@ -152,7 +148,6 @@ const InstructorAddSecondExam = ({
 
       <div className="my-4">
         {currentQuestions?.map((item, i) => {
-          console.log("🚀 ~ {currentQuestions?.map ~ item:", item);
           return (
             <div
               key={i}
@@ -171,7 +166,6 @@ const InstructorAddSecondExam = ({
                 </div>
                 {item.answers && item.answers.length > 0 ? (
                   item.answers.map((answer, index) => {
-                    console.log("🚀 ~ item.answers.map ~ answer:", answer);
                     if (!answer.answer) {
                       return null;
                     }
@@ -200,6 +194,7 @@ const InstructorAddSecondExam = ({
                   <p>No answers available</p>
                 )}
               </div>
+
               <div className="flex flex-row items-center justify-between gap-2 sm:flex-col">
                 <div className="flex items-center ">
                   <label htmlFor="grade" className="font-semibold me-3">
@@ -210,7 +205,7 @@ const InstructorAddSecondExam = ({
                     id={`grades-${item.id}`}
                     type="number"
                     className="w-full text-lg py-2 bg-[#2222220d] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
-                    placeholder={`grades-${item.id}`}
+                    placeholder={t("grade")}
                     labelProps="!font-semibold"
                     value={getGradeValue(item.id)}
                     onChange={(e) => handleGradeChange(e, item.id)}

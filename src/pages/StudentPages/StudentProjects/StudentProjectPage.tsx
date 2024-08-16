@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import Loading from "../../../components/UI/Loading";
 
 const getProject = async (id: number | string) => {
-  const { data } = await customFetch(`projects/${id}`);
+  const { data } = await customFetch(`showProjectStudent/${id}`);
   return data.data;
 };
 
@@ -44,7 +44,6 @@ const StudentProjectPage = () => {
   });
 
   if (isLoading || isFetching || isRefetching) return <Loading />;
-  console.log("🚀 ~ StudentProjectPage ~ data:", data);
 
   return (
     <div className="p-6 space-y-6 bg-white border rounded-3xl">

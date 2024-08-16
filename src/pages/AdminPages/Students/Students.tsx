@@ -21,7 +21,7 @@ const Students = () => {
   const navigate = useNavigate();
   const [page, setPage] = useState<number>(1);
   const [search, setSearch] = useState<string>("");
-  const debounceSearchTerm = useDebounce(search, 400);
+  const debounceSearchTerm = useDebounce(search, 1000);
 
   const {
     data: studentsData,
@@ -137,20 +137,21 @@ const Students = () => {
       <div className="p-6 bg-white rounded-xl">
         {/* HEADER */}
         <div className="flex flex-wrap items-center justify-between">
-          <p className="flex items-center gap-2">
+          {/* <p className="flex items-center gap-2">
             <span>
               <FaFilter size={24} className="text-mainColor" />
             </span>
             <span className="text-xl text-gray-700">{t("filter")}</span>
-          </p>
+          </p> */}
+          <SearchInput
+            name="studentSearch"
+            value={search}
+            autoFocus
+            className="w-64"
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder={t("search about student")}
+          />
           <div className="flex flex-wrap items-center gap-6 mt-4 lg:gap-12 lg:mt-0">
-            <SearchInput
-              name="studentSearch"
-              value={search}
-              className="w-64"
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder={t("search about student")}
-            />
             <Button
               type="button"
               className="text-xl font-medium"
@@ -166,14 +167,20 @@ const Students = () => {
 
         {/* TABLE */}
         <div className="mt-6">
-          <Table
-            data={studentsData?.students || []}
-            columns={studentsColumns}
-            showNavigation={true}
-            totalPages={studentsData?.totalPages}
-            currentPage={studentsData?.currentPage}
-            setPage={setPage}
-          />
+          {studentsData?.students?.length > 0 ? (
+            <Table
+              data={studentsData?.students || []}
+              columns={studentsColumns}
+              showNavigation={true}
+              totalPages={studentsData?.totalPages}
+              currentPage={studentsData?.currentPage}
+              setPage={setPage}
+            />
+          ) : (
+            <p className="text-xl font-bold text-center text-mainColor">
+              {t("there is no students yet")}
+            </p>
+          )}
         </div>
       </div>
     </div>
