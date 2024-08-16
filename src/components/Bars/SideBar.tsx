@@ -281,6 +281,7 @@ const SideBar: React.FC<SideBarProps> = ({
       setToggleSideBar(false);
     } else if (isDirty) {
       setDialogOpen(true);
+      setLocationRoute(link);
     } else {
       navigate(link);
     }
@@ -288,7 +289,7 @@ const SideBar: React.FC<SideBarProps> = ({
 
   const getCurrentPathName = (path: string) => {
     const segments = path.split("/").filter(Boolean);
-    console.log("🚀 ~ getCurrentPathName ~ segments:", segments)
+    console.log("🚀 ~ getCurrentPathName ~ segments:", segments);
 
     const segmentsType =
       userData !== "admin" && segments.length > 0
@@ -299,7 +300,7 @@ const SideBar: React.FC<SideBarProps> = ({
   };
 
   const currentPathtName = getCurrentPathName(location.pathname);
-  console.log("🚀 ~ currentPathtName:", currentPathtName)
+  console.log("🚀 ~ currentPathtName:", currentPathtName);
 
   return (
     <aside
@@ -381,10 +382,17 @@ const SideBar: React.FC<SideBarProps> = ({
       </nav>
 
       {isDialogOpen && (
-        <MainPopup onClose={() => setDialogOpen(false)} className="bg-white w-[90vw] sm:w-[60vw] lg:w-[50vw] xl:w-[50vw]">
+        <MainPopup
+          onClose={() => setDialogOpen(false)}
+          className="bg-white w-[90vw] sm:w-[60vw] lg:w-[50vw] xl:w-[50vw]"
+        >
           <div className="text-center text-mainColor">
-            <h2 className="text-2xl font-semibold">{t("Data is not completed")}</h2>
-            <p className="text-xl font-medium my-8">{t("Are you sure you want to leave this page?")}</p>
+            <h2 className="text-2xl font-semibold">
+              {t("Data is not completed")}
+            </h2>
+            <p className="text-xl font-medium my-8">
+              {t("Are you sure you want to leave this page?")}
+            </p>
           </div>
           <div className="flex justify-center gap-4 mt-12">
             <Button
@@ -396,7 +404,9 @@ const SideBar: React.FC<SideBarProps> = ({
             >
               {t("confirm")}
             </Button>
-            <Button action={() => setDialogOpen(false)} bordered>{t("cancel")}</Button>
+            <Button action={() => setDialogOpen(false)} bordered>
+              {t("cancel")}
+            </Button>
           </div>
         </MainPopup>
       )}

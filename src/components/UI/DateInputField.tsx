@@ -2,6 +2,7 @@ import { useFormikContext } from "formik";
 import { ReactNode } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import BaseInput from "./BaseInput";
 
 export const DateInputField = ({
   label,
@@ -43,7 +44,7 @@ export const DateInputField = ({
         >
           {label}
         </label>
-        <DatePicker
+        {/* <DatePicker
           selected={values[name]}
           onChange={(date: Date) => {
             setFieldValue(name, date);
@@ -53,7 +54,6 @@ export const DateInputField = ({
           onBlur={handleBlur(name)}
           className={`${className} w-full text-lg text-center py-2 px-4 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none`}
           dateFormat="dd/MM/yyyy"
-          name={name}
           autoComplete="off"
           maxDate={maxDate}
           minDate={minDate}
@@ -62,6 +62,11 @@ export const DateInputField = ({
           //     ? values[name]?.toLocaleDateString()
           //     : value?.toLocaleDateString()
           // }
+        /> */}
+        <BaseInput
+          name={name}
+          type="date"
+          className="w-full text-lg py-[3px] !border-2 !border-black rounded-lg"
         />
       </div>
       {/* <FormikError name={name} className="absolute whitespace-nowrap" /> */}

@@ -13,6 +13,8 @@ import AddNewCertificatesInput from "./AddNewCertificatesInput";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { BASE_URL } from "../../../utils/constants";
+import { useAppDispatch } from "../../../hooks/reduxHooks";
+import { changeSidebarRoute } from "../../../features/dirty/dirtySlice";
 interface AddInstructorQualification_TP {
   general_specialization: string;
   specialization: string;
@@ -66,10 +68,11 @@ const InstructorQualificationData = ({
   instructorID,
   dataReceived,
 }: InstructorAddQualificationData_TP) => {
-  console.log("🚀 ~ editObj:", editObj)
+  console.log("🚀 ~ editObj:", editObj);
   const [file, setFile] = useState(editObj?.file || null);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const [addNewCertificates, setAddNewCertificates] = useState(false);
   const [newCertificates, setNewCertificates] = useState(
@@ -77,7 +80,7 @@ const InstructorQualificationData = ({
   );
 
   const [editCertificateData, setEditCertificateData] = useState({});
-  console.log("🚀 ~ editCertificateData:", editCertificateData)
+  console.log("🚀 ~ editCertificateData:", editCertificateData);
 
   const initialValues: AddInstructorQualification_TP = {
     general_specialization: editObj?.general_specialization || "",
@@ -199,7 +202,10 @@ const InstructorQualificationData = ({
       initialValues={initialValues}
       onSubmit={(values) => handleAddQualification(values)}
     >
-      {({ values }) => {
+      {({ dirty, isSubmitting }) => {
+        useEffect(() => {
+          dispatch(changeSidebarRoute(dirty && !isSubmitting));
+        }, [dirty]);
         return (
           <Form>
             <div className="flex flex-col w-full gap-5 px-8 md:w-3/4 md:px-16">

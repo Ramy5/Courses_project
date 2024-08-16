@@ -7,6 +7,9 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Form, Formik } from "formik";
 import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
+import { useEffect } from "react";
+import { changeSidebarRoute } from "../../../features/dirty/dirtySlice";
+import { useAppDispatch } from "../../../hooks/reduxHooks";
 
 interface AddStudentLogin_TP {
   email_login: string;
@@ -40,6 +43,7 @@ const StudentAddLoginData = ({
 }: StudentAddLoginData_TP) => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const initialValues = {
     email_login: editObj?.email_login || "",
@@ -105,7 +109,10 @@ const StudentAddLoginData = ({
       initialValues={initialValues}
       onSubmit={(values) => handleAddStudent(values)}
     >
-      {({ values, setFieldValue }) => {
+      {({ values, setFieldValue, dirty, isSubmitting }) => {
+        useEffect(() => {
+          dispatch(changeSidebarRoute(dirty && !isSubmitting));
+        }, [dirty]);
         return (
           <Form className="flex flex-col w-full gap-5 px-4 lg:px-16 md:w-3/4">
             <BaseInput

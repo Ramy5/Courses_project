@@ -65,7 +65,7 @@ const Grades = ({ studentGrade, title }: Grades_TP) => {
             </p>
           </div>
           <div className="flex flex-col gap-4 px-5 py-8">
-            {studentGrade.assignments.map((assignment) => (
+            {studentGrade?.assignments?.map((assignment) => (
               <div className="flex justify-between items-center bg-[#F9F9F9] rounded-xl py-8 px-5 flex-col sm:flex-row gap-y-5">
                 <div className="flex flex-col items-center md:items-center sm:items-start md:flex-row gap-y-4">
                   <h2 className="text-[#073051] font-medium text-lg border-e-0 md:border-e-2 pe-2">

@@ -13,6 +13,8 @@ import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../../../utils/constants";
 import axios from "axios";
 import Cookies from "js-cookie";
+import { useAppDispatch } from "../../../hooks/reduxHooks";
+import { changeSidebarRoute } from "../../../features/dirty/dirtySlice";
 
 const postStudentPersonal = async (newStudent: any) => {
   const token = Cookies.get("token");
@@ -71,6 +73,7 @@ const StudentAddPersonalData = ({
 }: StudentAddPersonalData) => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const initialValues = {
     // PERSONAL DATA
@@ -182,7 +185,10 @@ const StudentAddPersonalData = ({
       initialValues={initialValues}
       onSubmit={(values) => handleAddStudent(values)}
     >
-      {({ values, setFieldValue }) => {
+      {({ values, setFieldValue, dirty, isSubmitting }) => {
+        useEffect(() => {
+          dispatch(changeSidebarRoute(dirty && !isSubmitting));
+        }, [dirty]);
         return (
           <Form className="flex flex-col gap-5 px-4 lg:px-16 ">
             <div className="flex flex-col-reverse justify-between gap-8 md:flex-row">

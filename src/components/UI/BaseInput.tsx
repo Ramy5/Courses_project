@@ -13,6 +13,8 @@ export type BaseInput_TP = {
   name: string;
   placeholder?: string;
   ref?: any;
+  disabled: boolean;
+  autoFocus: any;
   type?:
     | "text"
     | "number"
@@ -110,7 +112,7 @@ const BaseInput = ({
           disabled={disabled}
         />
       </div>
-      {/* <FormikError name={props.name} className="absolute whitespace-nowrap" /> */}
+      <FormikError name={props.name} className="absolute whitespace-nowrap" />
     </div>
   );
 };

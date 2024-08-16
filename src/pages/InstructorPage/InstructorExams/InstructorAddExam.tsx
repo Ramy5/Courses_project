@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import  { Fragment, useEffect, useState } from "react";
 import { GiCheckMark } from "react-icons/gi";
 import InstructorAddFirstExam from "../../../components/InstructorComponent/InstructorExams/InstructorAddFirstExam";
 import InstructorAddSecondExam from "../../../components/InstructorComponent/InstructorExams/InstructorAddSecondExam";
@@ -6,11 +6,12 @@ import { Form, Formik } from "formik";
 import { t } from "i18next";
 import InstructorAddLastExam from "../../../components/InstructorComponent/InstructorExams/InstructorAddLastExam";
 import ConvertNumberToWord from "../../../components/UI/ConvertNumberToWord";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import customFetch from "../../../utils/axios";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import Loading from "../../../components/UI/Loading";
-import { toast } from "react-toastify";
+import { changeSidebarRoute } from "../../../features/dirty/dirtySlice";
+import { useAppDispatch } from "../../../hooks/reduxHooks";
 
 const getExam = async (id) => {
   const response = await customFetch(`exams/${id}`);
@@ -25,6 +26,7 @@ const InstructorAddExam = () => {
   const [file, setFile] = useState();
   const location = useLocation();
   const locationID = location?.state;
+  const dispatch = useAppDispatch();
 
   const stepsOption = [
     { id: 1, label: "exam information", border: true },
@@ -32,7 +34,7 @@ const InstructorAddExam = () => {
     { id: 3, label: "save exam", border: false },
   ];
 
-  const { data, isLoading, error, isFetching, isSuccess } = useQuery({
+  const { data, isLoading, isFetching, isSuccess } = useQuery({
     queryKey: ["edit_exam"],
     queryFn: () => getExam(locationID),
     enabled: !!locationID,
@@ -134,40 +136,47 @@ const InstructorAddExam = () => {
       </div>
 
       <Formik initialValues={initialValues} onSubmit={(values) => {}}>
-        <Form>
-          {steps === 1 && (
-            <InstructorAddFirstExam
-              setSteps={setSteps}
-              fileExam={fileExam}
-              setFileExam={setFileExam}
-              file={file}
-              setFile={setFile}
-              editExamData={editExamData}
-            />
-          )}
+        {({ dirty, isSubmitting }) => {
+          useEffect(() => {
+            dispatch(changeSidebarRoute(dirty && !isSubmitting));
+          }, [dirty]);
+          return (
+            <Form>
+              {steps === 1 && (
+                <InstructorAddFirstExam
+                  setSteps={setSteps}
+                  fileExam={fileExam}
+                  setFileExam={setFileExam}
+                  file={file}
+                  setFile={setFile}
+                  editExamData={editExamData}
+                />
+              )}
 
-          {steps === 2 && (
-            <InstructorAddSecondExam
-              setSteps={setSteps}
-              grades={grades}
-              setGrades={setGrades}
-              fileExam={fileExam}
-              questionExam={questionExam}
-              editExamData={editExamData}
-            />
-          )}
+              {steps === 2 && (
+                <InstructorAddSecondExam
+                  setSteps={setSteps}
+                  grades={grades}
+                  setGrades={setGrades}
+                  fileExam={fileExam}
+                  questionExam={questionExam}
+                  editExamData={editExamData}
+                />
+              )}
 
-          {steps === 3 && (
-            <InstructorAddLastExam
-              setSteps={setSteps}
-              fileExam={fileExam}
-              questionExam={questionExam}
-              file={file}
-              editExamData={editExamData}
-              grades={grades}
-            />
-          )}
-        </Form>
+              {steps === 3 && (
+                <InstructorAddLastExam
+                  setSteps={setSteps}
+                  fileExam={fileExam}
+                  questionExam={questionExam}
+                  file={file}
+                  editExamData={editExamData}
+                  grades={grades}
+                />
+              )}
+            </Form>
+          );
+        }}
       </Formik>
     </div>
   );

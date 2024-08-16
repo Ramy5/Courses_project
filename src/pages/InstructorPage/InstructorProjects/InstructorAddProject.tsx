@@ -15,6 +15,8 @@ import selectStyle from "../../../utils/selectStyle";
 import { AiOutlineCloudUpload } from "react-icons/ai";
 import { HiMiniFolderArrowDown } from "react-icons/hi2";
 import { RiDeleteBin5Line } from "react-icons/ri";
+import { useAppDispatch } from "../../../hooks/reduxHooks";
+import { changeSidebarRoute } from "../../../features/dirty/dirtySlice";
 
 interface initialValues_TP {
   titleProject: string;
@@ -66,6 +68,7 @@ const InstructorAddProject = ({ editObj }: { editObj?: editObj_TP }) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { id: projectId } = useParams();
+  const dispatch = useAppDispatch();
 
   const initialValues: initialValues_TP = {
     titleProject: editObj?.titleProject || "",
@@ -159,7 +162,10 @@ const InstructorAddProject = ({ editObj }: { editObj?: editObj_TP }) => {
       initialValues={initialValues}
       onSubmit={(values: initialValues_TP) => handleSubmit(values)}
     >
-      {({ values, setFieldValue }) => {
+      {({ values, setFieldValue, dirty, isSubmitting }) => {
+        useEffect(() => {
+          dispatch(changeSidebarRoute(dirty && !isSubmitting));
+        }, [dirty]);
         return (
           <Form className="p-6 space-y-8 bg-white rounded-xl">
             <h2 className="mb-6 text-2xl font-bold text-mainColor">
