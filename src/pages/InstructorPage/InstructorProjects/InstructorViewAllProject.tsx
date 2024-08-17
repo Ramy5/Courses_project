@@ -3,52 +3,35 @@ import { Button, Table, TitlePage } from "../../../components";
 import { t } from "i18next";
 import { useMemo } from "react";
 import { ColumnDef } from "@tanstack/react-table";
+import customFetch from "../../../utils/axios";
+import { useQuery } from "@tanstack/react-query";
+import Loading from "../../../components/UI/Loading";
+
+const getStudentsProjectAnswers = async () => {
+  const { data } = await customFetch("");
+  return data.data.answers;
+};
 
 const InstructorViewAllProject = () => {
-  const allHomeworksData = [
-    {
-      id: 1,
-      studentName: "محمد احمد يوسف",
-      studentCode: "١٢٣٤٥٦٧٨٨٧٧",
-      submissionDate: "٢٥/رجب/١٤٤٢",
-      grade: "١٠",
-    },
-    {
-      id: 2,
-      studentName: "محمد احمد يوسف",
-      studentCode: "١٢٣٤٥٦٧٨٨٧٧",
-      submissionDate: "٢٥/رجب/١٤٤٢",
-      grade: "١٠",
-    },
-    {
-      id: 3,
-      studentName: "محمد احمد يوسف",
-      studentCode: "١٢٣٤٥٦٧٨٨٧٧",
-      submissionDate: "٢٥/رجب/١٤٤٢",
-      grade: ".......",
-    },
-    {
-      id: 4,
-      studentName: "محمد احمد يوسف",
-      studentCode: "١٢٣٤٥٦٧٨٨٧٧",
-      submissionDate: "٢٥/رجب/١٤٤٢",
-      grade: "١٨٠",
-    },
-    {
-      id: 5,
-      studentName: "محمد احمد يوسف",
-      studentCode: "١٢٣٤٥٦٧٨٨٧٧",
-      submissionDate: "٢٥/رجب/١٤٤٢",
-      grade: ".......",
-    },
-    {
-      id: 6,
-      studentName: "محمد احمد يوسف",
-      studentCode: "١٢٣٤٥٦٧٨٨٧٧",
-      submissionDate: "٢٥/رجب/١٤٤٢",
-      grade: "١٨٠",
-    },
-  ];
+  const {
+    data: projectsDataAnswer,
+    isLoading,
+    isFetching,
+    isRefetching,
+  } = useQuery({
+    queryKey: ["projectsDataAnswerData"],
+    queryFn: getStudentsProjectAnswers,
+  });
+
+  const allProjectsData = projectsDataAnswer?.map((data: any) => {
+    return {
+      id: data?.id,
+      studentName: data?.student?.full_name,
+      studentCode: data?.student?.academicData?.Academic_code,
+      submissionDate: data?.delivered_date,
+      grade: data?.degree,
+    };
+  });
 
   const allHomeworksColumns = useMemo<ColumnDef<[]>[]>(
     () => [
@@ -92,12 +75,14 @@ const InstructorViewAllProject = () => {
     []
   );
 
+  if (isLoading || isFetching || isRefetching) return <Loading />;
+
   return (
     <div>
       <TitlePage mainLink="/instructor/viewHomework" mainTitle="homeworks" />
 
       <div>
-        <Table data={allHomeworksData} columns={allHomeworksColumns} />
+        <Table data={allProjectsData || []} columns={allHomeworksColumns} />
       </div>
     </div>
   );

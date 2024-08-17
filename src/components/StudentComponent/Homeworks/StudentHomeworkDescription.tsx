@@ -182,9 +182,13 @@ const StudentHomeworkDescription = (props: StudentHomeworkDescription_TP) => {
           {isInstructotHomework && <span>{t("view students homework")}</span>}
           {!isInstructotHomework && (
             <span>
-              {!isProject || !isInstructorProject
-                ? t("add homework")
-                : t("add project")}
+              {isProject ? (
+                t("add project")
+              ) : isInstructorProject ? (
+                <span>{t("view students project")}</span>
+              ) : (
+                t("add homework")
+              )}
             </span>
           )}
           <GoArrowLeft />

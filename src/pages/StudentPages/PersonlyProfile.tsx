@@ -25,6 +25,8 @@ const PersonlyProfile = () => {
     queryFn: getStudentProfile,
   });
 
+  console.log(data);
+
   const studentProfileData = {
     id: 1,
     profileCover: studentProfileCover,
@@ -73,7 +75,7 @@ const PersonlyProfile = () => {
 
   return (
     <div>
-      {!studentProfileData ? (
+      {Object.keys(data).length > 0 ? (
         <div className="pb-2 bg-white rounded-2xl">
           <ProfileIntroduction
             personalData={studentProfileData}
@@ -83,17 +85,17 @@ const PersonlyProfile = () => {
           <div className="flex flex-col gap-10 p-4 pt-0 mt-24 lg:p-8">
             {/* PERSONAL DETAILS */}
             <div className="p-6 lg:p-10 bg-mainColor/15 rounded-xl">
-              <div className="grid items-center gap-8 md:grid-cols-2 lg:grid-cols-3 lg:gap-14">
+              <div className="grid items-center gap-8 md:grid-cols-2 lg:grid-cols-2 lg:gap-14">
                 <StudentPersonalContact
                   contactTitle={t("address")}
                   contactValue={studentProfileData.address}
                   icon={<PiMapPinLight size={30} />}
                 />
-                <StudentPersonalContact
+                {/* <StudentPersonalContact
                   contactTitle={t("phone")}
                   contactValue={studentProfileData.phoneNumber}
                   icon={<IoMdPhonePortrait size={30} />}
-                />
+                /> */}
                 <StudentPersonalContact
                   contactTitle={t("email")}
                   contactValue={studentProfileData.email}
@@ -157,8 +159,8 @@ const PersonlyProfile = () => {
           </div>
         </div>
       ) : (
-        <div className="p-5 bg-white rounded-3xl my-8">
-          <p className="text-center font-semibold text-xl text-mainColor py-8">
+        <div className="p-5 my-8 bg-white rounded-3xl">
+          <p className="py-8 text-xl font-semibold text-center text-mainColor">
             {t("No data has been added to the profile yet")}
           </p>
         </div>

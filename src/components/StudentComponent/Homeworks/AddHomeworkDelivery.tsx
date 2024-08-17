@@ -15,6 +15,7 @@ import { toast } from "react-toastify";
 import Cookies from "js-cookie";
 import axios from "axios";
 import { BASE_URL } from "../../../utils/constants";
+import { convertTimeToDaysHoursMinutes } from "../../../utils/helpers";
 
 const addNewHomework = async (homeworkData: any) => {
   const token = Cookies.get("token");
@@ -43,7 +44,28 @@ const addNewProject = async (projectData: any) => {
 };
 
 const AddHomeworkDelivery = (props) => {
-  const { startDate, startTime, endDate, endTime, isProject } = props;
+  const {
+    startDate,
+    startTime,
+    endDate,
+    endTime,
+    isProject,
+    dayValue,
+    timeLeft,
+  } = props;
+  console.log("🚀 ~ AddHomeworkDelivery ~ timeLeft:", timeLeft);
+
+  const [timeLeftData, setTimeLeftData] = useState({});
+  console.log("🚀 ~ AddHomeworkDelivery ~ timeLeftData:", timeLeftData);
+
+  useEffect(() => {
+    if (timeLeft) {
+      const { days, hours, minutes, seconds } =
+        convertTimeToDaysHoursMinutes(timeLeft);
+      setTimeLeftData({ days, hours, minutes, seconds });
+    }
+  }, [timeLeft]);
+
   const { setFieldValue, values } = useFormikContext();
   const [files, setFiles] = useState(null);
   const navigate = useNavigate();
@@ -54,10 +76,10 @@ const AddHomeworkDelivery = (props) => {
     daysInWeek: 7,
     hoursInDay: 24,
     totalSecondsInDay: 24 * 3600, // 24 * 60 * 60
-    daysCompleted: 3,
-    hoursCompleted: 3,
-    minutesCompleted: 30,
-    secondsCompleted: 30,
+    daysCompleted: timeLeftData?.days,
+    hoursCompleted: timeLeftData?.hours,
+    minutesCompleted: timeLeftData?.minutes,
+    secondsCompleted: timeLeftData?.seconds,
   });
 
   useEffect(() => {
