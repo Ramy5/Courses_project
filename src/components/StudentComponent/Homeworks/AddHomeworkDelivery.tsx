@@ -15,7 +15,11 @@ import { toast } from "react-toastify";
 import Cookies from "js-cookie";
 import axios from "axios";
 import { BASE_URL } from "../../../utils/constants";
-import { convertTimeToDaysHoursMinutes } from "../../../utils/helpers";
+import {
+  convertTimeToDaysHoursMinutes,
+  formatDeliveryTime,
+  timeStringToSeconds,
+} from "../../../utils/helpers";
 
 const addNewHomework = async (homeworkData: any) => {
   const token = Cookies.get("token");
@@ -53,18 +57,19 @@ const AddHomeworkDelivery = (props) => {
     dayValue,
     timeLeft,
   } = props;
-  console.log("🚀 ~ AddHomeworkDelivery ~ timeLeft:", timeLeft);
-
-  const [timeLeftData, setTimeLeftData] = useState({});
-  console.log("🚀 ~ AddHomeworkDelivery ~ timeLeftData:", timeLeftData);
+  const [timeLeftData, setTimeLeftData] = useState(
+    timeStringToSeconds(timeLeft)
+  );
 
   useEffect(() => {
-    if (timeLeft) {
-      const { days, hours, minutes, seconds } =
-        convertTimeToDaysHoursMinutes(timeLeft);
-      setTimeLeftData({ days, hours, minutes, seconds });
-    }
-  }, [timeLeft]);
+    const interval = setInterval(() => {
+      setTimeLeftData((prevTime) => (prevTime > 0 ? prevTime - 1 : 0));
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const { days, hours, minutes, seconds } = formatDeliveryTime(timeLeftData);
 
   const { setFieldValue, values } = useFormikContext();
   const [files, setFiles] = useState(null);
@@ -72,60 +77,13 @@ const AddHomeworkDelivery = (props) => {
   const queryClient = useQueryClient();
   const { id } = useParams();
 
-  const [timeData, setTimeData] = useState({
-    daysInWeek: 7,
-    hoursInDay: 24,
-    totalSecondsInDay: 24 * 3600, // 24 * 60 * 60
-    daysCompleted: timeLeftData?.days,
-    hoursCompleted: timeLeftData?.hours,
-    minutesCompleted: timeLeftData?.minutes,
-    secondsCompleted: timeLeftData?.seconds,
-  });
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTimeData((prevData) => {
-        const newSeconds =
-          prevData.secondsCompleted > 0 ? prevData.secondsCompleted - 1 : 59;
-        const newMinutes =
-          newSeconds === 59
-            ? prevData.minutesCompleted > 0
-              ? prevData.minutesCompleted - 1
-              : 59
-            : prevData.minutesCompleted;
-        const newHours =
-          newMinutes === 59 && newSeconds === 59
-            ? prevData.hoursCompleted > 0
-              ? prevData.hoursCompleted - 1
-              : 23
-            : prevData.hoursCompleted;
-        const newDays =
-          newHours === 23 && newMinutes === 59 && newSeconds === 59
-            ? prevData.daysCompleted > 0
-              ? prevData.daysCompleted - 1
-              : prevData.daysInWeek - 1
-            : prevData.daysCompleted;
-
-        return {
-          ...prevData,
-          daysCompleted: newDays,
-          hoursCompleted: newHours,
-          minutesCompleted: newMinutes,
-          secondsCompleted: newSeconds,
-        };
-      });
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  const percentageDays = (timeData.daysCompleted / timeData.daysInWeek) * 100;
-  const totalSecondsCompleted =
-    timeData.hoursCompleted * 3600 +
-    timeData.minutesCompleted * 60 +
-    timeData.secondsCompleted;
-  const percentageTime =
-    (totalSecondsCompleted / timeData.totalSecondsInDay) * 100;
+  // const percentageDays = (timeData.daysCompleted / timeData.daysInWeek) * 100;
+  // const totalSecondsCompleted =
+  //   timeData.hoursCompleted * 3600 +
+  //   timeData.minutesCompleted * 60 +
+  //   timeData.secondsCompleted;
+  // const percentageTime =
+  //   (totalSecondsCompleted / timeData.totalSecondsInDay) * 100;
 
   const { mutate, isPending } = useMutation({
     mutationKey: ["add-student-homework"],
@@ -221,8 +179,8 @@ const AddHomeworkDelivery = (props) => {
           <div className="grid items-center justify-center grid-cols-2">
             <CircularProgressbar
               className="text-lg w-28 lg:w-32 lg:text-xl"
-              value={percentageDays}
-              text={`${timeData.daysCompleted} ${t("days")}`}
+              // value={percentageDays}
+              text={`${days} ${t("days")}`}
               strokeWidth={9}
               styles={buildStyles({
                 textColor: "#000",
@@ -232,8 +190,8 @@ const AddHomeworkDelivery = (props) => {
             />
             <CircularProgressbar
               className="text-lg w-28 lg:w-32 lg:text-xl"
-              value={percentageTime}
-              text={`${timeData.hoursCompleted}:${timeData.minutesCompleted}:${timeData.secondsCompleted}`}
+              // value={percentageTime}
+              text={`${hours}:${minutes}:${seconds}`}
               strokeWidth={9}
               styles={buildStyles({
                 textColor: "#000",
