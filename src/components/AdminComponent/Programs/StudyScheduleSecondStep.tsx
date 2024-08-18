@@ -6,6 +6,7 @@ import Schedule from "./Schedule";
 import { Button } from "../..";
 import { useState, useEffect } from "react";
 import Loading from "../../UI/Loading";
+import BaseSelect from "../../UI/BaseSelect";
 
 const StudyScheduleSecondStep = ({ setSteps, scheduleData }: any) => {
   const [levelSelect, setLevelSelect] = useState(1);
@@ -59,20 +60,17 @@ const StudyScheduleSecondStep = ({ setSteps, scheduleData }: any) => {
             {({ setFieldValue }) => {
               return (
                 <Form className="flex items-center justify-center gap-4">
-                  <label htmlFor="program_academic" className="font-bold">
-                    {t("educational level")}
-                  </label>
-                  <Select
+                  <BaseSelect
                     className="lg:w-[15vw] mt-2 z-50"
                     id="program_academic"
                     name="program_academic"
                     options={levelsOption}
+                    label={t("educational level")}
                     placeholder="1"
                     onChange={(e) => {
                       setFieldValue("educational_level", e.value);
                       setLevelSelect(e.id);
                     }}
-                    styles={selectStyle}
                   />
                 </Form>
               );

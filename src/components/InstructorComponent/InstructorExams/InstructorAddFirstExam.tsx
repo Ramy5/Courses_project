@@ -14,6 +14,7 @@ import Select from "react-select";
 import selectStyle from "../../../utils/selectStyle";
 import LoadingIndicator from "../../UI/LoadingIndicator";
 import { useNavigate } from "react-router-dom";
+import BaseSelect from "../../UI/BaseSelect";
 
 const InstructorAddFirstExam = ({
   setSteps,
@@ -123,14 +124,12 @@ const InstructorAddFirstExam = ({
   return (
     <div className="flex gap-y-5 flex-col mt-8">
       <div>
-        <label htmlFor="course_id" className="font-bold block mb-2">
-          {t("course")}
-        </label>
-        <Select
-          styles={selectStyle}
+        <BaseSelect
           id="course_id"
           name="course_id"
           placeholder={t("courses")}
+          label={t("courses")}
+          className="w-full md:w-1/2"
           options={courseOption}
           value={coursesSelect}
           onChange={(e) => {
@@ -146,7 +145,6 @@ const InstructorAddFirstExam = ({
           }}
           isLoading={isLoading}
           isDisabled={!isSuccess}
-          components={{ LoadingIndicator }}
         />
       </div>
       <div>
@@ -188,14 +186,11 @@ const InstructorAddFirstExam = ({
       </div>
       <div>
         <div>
-          <label htmlFor="exam_type" className="font-bold block mb-2">
-            {t("exam type")}
-          </label>
-          <Select
-            styles={selectStyle}
+          <BaseSelect
             id="exam_type"
             name="exam_type"
             placeholder={t("exam type")}
+            label={t("exam type")}
             options={examTypeOption}
             value={examTypeSelect}
             onChange={(e) => {
@@ -208,7 +203,6 @@ const InstructorAddFirstExam = ({
             }}
             isLoading={isLoading}
             isDisabled={!isSuccess}
-            components={{ LoadingIndicator }}
           />
         </div>
       </div>

@@ -17,6 +17,7 @@ import { HiMiniFolderArrowDown } from "react-icons/hi2";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import { useAppDispatch } from "../../../hooks/reduxHooks";
 import { changeSidebarRoute } from "../../../features/dirty/dirtySlice";
+import BaseSelect from "../../../components/UI/BaseSelect";
 
 interface initialValues_TP {
   titleProject: string;
@@ -177,7 +178,7 @@ const InstructorAddProject = ({ editObj }: { editObj?: editObj_TP }) => {
             <h2 className="mb-6 text-2xl font-bold text-mainColor">
               {editObj ? t("edit project") : t("add project")}
             </h2>
-            <Select
+            <BaseSelect
               onChange={(e) => {
                 setFieldValue("course_id", e!.value);
                 setCourseSelect({
@@ -188,7 +189,6 @@ const InstructorAddProject = ({ editObj }: { editObj?: editObj_TP }) => {
               }}
               options={coursesOption}
               name="course_id"
-              styles={selectStyle}
               value={courseSelect}
               isDisabled={
                 coursesOptionIsFetching ||
@@ -197,6 +197,7 @@ const InstructorAddProject = ({ editObj }: { editObj?: editObj_TP }) => {
               }
               isLoading={coursesOptionIsLoading}
               id="course_id"
+              label={editObj ? t("edit project") : t("add project")}
               placeholder={t("course")}
               className="w-96"
             />

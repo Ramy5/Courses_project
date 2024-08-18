@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import * as Yup from "yup";
 import { FormikError } from "../../UI/FormikError";
 import SuggestedReferences from "./SuggestedReferences";
+import BaseSelect from "../../UI/BaseSelect";
 
 const validationSchema = Yup.object().shape({
   course_name: Yup.string().required("Course name is required"),
@@ -343,11 +344,8 @@ const CreateCoursesInputs = ({
                           }
                         />
                         <div className="relative">
-                          <label htmlFor="level" className="font-semibold">
-                            {t("level")}
-                          </label>
                           <div className="w-full mt-1">
-                            <Select
+                            <BaseSelect
                               id="level"
                               name="level"
                               value={level}
@@ -357,15 +355,11 @@ const CreateCoursesInputs = ({
                                 setLevel(option);
                               }}
                               placeholder={t("level")}
-                              styles={selectStyle}
+                              label={t("level")}
                               isDisabled={
                                 Object.keys(editFinishedCoursesData).length !==
                                 0
                               }
-                            />
-                            <FormikError
-                              name="level"
-                              className="absolute whitespace-nowrap"
                             />
                           </div>
                         </div>
@@ -694,12 +688,9 @@ const CreateCoursesInputs = ({
                   </div>
 
                   <div className="w-full my-12 md:w-3/4 relative">
-                    <label htmlFor="instructors_name" className="font-semibold">
-                      {t("instructor name")}
-                    </label>
                     <div className="flex flex-col items-center justify-between mt-2 sm:flex-row gap-x-12 gap-y-6">
                       <div className="w-full sm:w-3/4">
-                        <Select
+                        <BaseSelect
                           id="course_teachers"
                           name="course_teachers"
                           isMulti
@@ -716,7 +707,7 @@ const CreateCoursesInputs = ({
                           }}
                           options={teachersOption}
                           placeholder={t("instructor name")}
-                          styles={customStyles}
+                          label={t("instructor name")}
                         />
                       </div>
                     </div>

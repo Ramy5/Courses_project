@@ -9,6 +9,7 @@ import useDebounce from "../../../hooks/useDebounce";
 import { useQuery } from "@tanstack/react-query";
 import customFetch from "../../../utils/axios";
 import Loading from "../../../components/UI/Loading";
+import BaseSelect from "../../../components/UI/BaseSelect";
 
 type reportsFilter = "program" | "level" | "course";
 
@@ -216,12 +217,10 @@ const Reports = () => {
               </h3>
               <div className="grid items-center gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 <div className="w-52">
-                  <label className="font-bold" htmlFor="program">
-                    {t("program")}
-                  </label>
-                  <Select
+                  <BaseSelect
                     id="program"
                     name="program"
+                    label={t("program")}
                     placeholder={t("select a program")}
                     options={programsOptions}
                     isLoading={
@@ -237,12 +236,10 @@ const Reports = () => {
                   />
                 </div>
                 <div className="w-52">
-                  <label className="font-bold" htmlFor="course">
-                    {t("course")}
-                  </label>
-                  <Select
+                  <BaseSelect
                     id="course"
                     name="course"
+                    label={t("course")}
                     placeholder={t("select a course")}
                     options={coursesOptions}
                     value={courseSelect}
@@ -263,12 +260,10 @@ const Reports = () => {
                   />
                 </div>
                 <div className="w-52">
-                  <label className="font-bold" htmlFor="level">
-                    {t("level")}
-                  </label>
-                  <Select
+                  <BaseSelect
                     id="level"
                     name="level"
+                    label={t("level")}
                     placeholder={t("select the level")}
                     options={levelsOption}
                     value={levelSelect}

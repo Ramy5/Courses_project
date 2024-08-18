@@ -14,6 +14,7 @@ import Loading from "../../components/UI/Loading";
 import { formatDate } from "../../utils/helpers";
 import DatePicker from "react-datepicker";
 import { toast } from "react-toastify";
+import BaseSelect from "../../components/UI/BaseSelect";
 
 const postAttendance = async (newAttendance: any) => {
   const data = customFetch.post("/courseAttendance", newAttendance);
@@ -23,7 +24,7 @@ const postAttendance = async (newAttendance: any) => {
 const RecordAttendance = () => {
   const [page, setPage] = useState<number>(1);
   const [selectedRows, setSelectedRows] = useState<any>([]);
-  const [coursesSelect, setCoursesSelect] = useState({});
+  const [coursesSelect, setCoursesSelect] = useState(null);
   const [dateSelect, setDateSelect] = useState(null);
   const formatDates = formatDate(dateSelect);
   const queryClient = useQueryClient();
@@ -226,14 +227,11 @@ const RecordAttendance = () => {
             return (
               <Form className="grid grid-cols-1 gap-8 md:grid-cols-3 sm:grid-cols-2">
                 <div>
-                  <label htmlFor="course" className="block mb-2 font-bold">
-                    {t("course")}
-                  </label>
-                  <Select
-                    styles={selectStyle}
+                  <BaseSelect
                     id="course_id"
                     name="course_id"
                     placeholder={t("course")}
+                    label={t("course")}
                     options={courseOption}
                     value={coursesSelect}
                     onChange={(e) => {
@@ -241,7 +239,7 @@ const RecordAttendance = () => {
                       setFieldValue("course_name", e.value);
                       setCoursesSelect({
                         id: e.id,
-                        label: e.value,
+                        label: e.value || `${t("course")}`,
                         value: e.value,
                       });
                     }}
@@ -249,7 +247,6 @@ const RecordAttendance = () => {
                       isFetchingCourses || isRefetchingCourses || isLoading
                     }
                     isDisabled={!isSuccess}
-                    components={{ LoadingIndicator }}
                   />
                 </div>
                 <div className="flex flex-col">

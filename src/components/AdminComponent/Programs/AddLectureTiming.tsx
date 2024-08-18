@@ -11,6 +11,7 @@ import LoadingIndicator from "../../UI/LoadingIndicator";
 import { toast } from "react-toastify";
 import * as Yup from "yup";
 import { FormikError } from "../../UI/FormikError";
+import BaseSelect from "../../UI/BaseSelect";
 
 const validationSchema = Yup.object().shape({
   day_id: Yup.number().required("Day is required").positive().integer(),
@@ -191,14 +192,11 @@ const AddLectureTiming = ({
                   disabled={true}
                 />
                 <div className="my-5">
-                  <label htmlFor="course" className="font-bold">
-                    {t("course")}
-                  </label>
-                  <Select
-                    styles={selectStyle}
+                  <BaseSelect
                     id="course_id"
                     name="course_id"
                     placeholder={t("course")}
+                    label={t("course")}
                     options={courseOption}
                     value={coursesSelect}
                     onChange={(e) => {
@@ -211,22 +209,14 @@ const AddLectureTiming = ({
                       });
                     }}
                     isLoading={isLoading || isFetching}
-                    components={{ LoadingIndicator }}
-                  />
-                  <FormikError
-                    name="course_name"
-                    className="whitespace-nowrap"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="section" className="font-bold">
-                    {t("branch")}
-                  </label>
-                  <Select
-                    styles={selectStyle}
+                  <BaseSelect
                     id="group"
                     name="group"
+                    label={t("branch")}
                     placeholder={t("branch")}
                     options={groupNumberOption}
                     value={groupSelect}
@@ -240,21 +230,16 @@ const AddLectureTiming = ({
                       });
                     }}
                     isLoading={isLoading || isFetching}
-                    components={{ LoadingIndicator }}
                   />
-                  <FormikError name="group" className="whitespace-nowrap" />
                 </div>
 
                 <div className="flex flex-col justify-between mt-5 sm:flex-row gap-y-4">
                   <div className="w-full sm:w-3/5">
-                    <label htmlFor="section" className="font-bold">
-                      {t("lecturer")}
-                    </label>
-                    <Select
-                      styles={selectStyle}
+                    <BaseSelect
                       id="teacher_id"
                       name="teacher_id"
                       placeholder={t("lecturer")}
+                      label={t("lecturer")}
                       options={teachersOption}
                       value={teacherSelect}
                       onChange={(e) => {
@@ -267,22 +252,14 @@ const AddLectureTiming = ({
                         });
                       }}
                       isLoading={isLoading || isFetching}
-                      components={{ LoadingIndicator }}
-                    />
-                    <FormikError
-                      name="teacher_name"
-                      className="whitespace-nowrap"
                     />
                   </div>
                   <div className="w-full sm:w-[30%]">
-                    <label htmlFor="section" className="font-bold">
-                      {t("level")}
-                    </label>
-                    <Select
-                      styles={selectStyle}
+                    <BaseSelect
                       id="level"
                       name="level"
                       placeholder={t("level")}
+                      label={t("level")}
                       options={levelsOption}
                       value={levelSelect}
                       onChange={(e) => {
@@ -294,9 +271,7 @@ const AddLectureTiming = ({
                         });
                       }}
                       isLoading={isLoading || isFetching}
-                      components={{ LoadingIndicator }}
                     />
-                    <FormikError name="level" className="whitespace-nowrap" />
                   </div>
                 </div>
 
