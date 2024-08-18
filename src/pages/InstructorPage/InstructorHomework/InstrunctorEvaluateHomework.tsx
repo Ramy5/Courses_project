@@ -46,10 +46,6 @@ const InstrunctorEvaluateHomework = () => {
     queryKey: ["get-homework-student-answers"],
     queryFn: () => getStudentsHomeworkEvaluate(id),
   });
-  console.log(
-    "🚀 ~ InstrunctorEvaluateHomework ~ homeworksDataAnswer:",
-    homeworksDataAnswer
-  );
 
   const { mutate, isPending } = useMutation({
     mutationKey: ["add-student-degree"],

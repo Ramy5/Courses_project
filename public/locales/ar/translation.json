@@ -564,5 +564,7 @@
   "start delivery time": "بداية وقت التسليم",
   "end delivery time": "نهاية وقت التسليم",
   "student degree has successfully added": "تم اضافة درجة الطالب بنجاح",
-  "view students project": "عرض مشاريع الطلاب"
+  "view students project": "عرض مشاريع الطلاب",
+  "there is no answers right now": "لا يوجد اجابات حتي الان",
+  "view project": "عرض المشروع"
 }
