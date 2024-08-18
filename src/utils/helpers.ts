@@ -102,3 +102,20 @@ export function calculateTime(time1, time2) {
 
   return `${pad(totalHours)}:${pad(totalMinutes)}:${pad(totalSeconds)}`;
 }
+
+export const convertTimeToDaysHoursMinutes = (timeStr) => {
+  const [hoursStr, minutesStr, secondsStr] = timeStr.split(":");
+  const hours = parseInt(hoursStr, 10);
+  const minutes = parseInt(minutesStr, 10);
+  const seconds = parseInt(secondsStr, 10);
+
+  const days = Math.floor(hours / 24);
+  const remainingHours = hours % 24;
+
+  return {
+    days,
+    hours: remainingHours,
+    minutes,
+    seconds,
+  };
+};

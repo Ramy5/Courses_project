@@ -29,7 +29,10 @@ const postStudentParent = async (newStudent: any) => {
   return data;
 };
 
-const updateStudentParent = async (editStudent: any, id: number = null) => {
+const updateStudentParent = async (
+  editStudent: any,
+  id: number | string = null
+) => {
   const data = customFetch.post(`updateParentDetails/${id}`, editStudent);
   return data;
 };
@@ -83,7 +86,7 @@ const StudentAddFatherData = ({
   const { mutate: updateMutate, isPending: editIsPending } = useMutation({
     mutationKey: ["update-student-father"],
     mutationFn: (updateStudet: any) =>
-      updateStudentParent(updateStudet, editObj?.id),
+      updateStudentParent(updateStudet, studentIDParam),
     onSuccess: (data: any) => {
       queryClient.invalidateQueries("students");
       toast.success(

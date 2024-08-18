@@ -19,7 +19,7 @@ const getReport = async (
   courseID: string = ""
 ) => {
   const { data } = await customFetch(
-    `getProgramCoursesLevel?level=${levelID}&course_id=${courseID}`
+    `getProgramCoursesLevel?level=${levelID}&course_id=${courseID}&page=${page}&search=${search}`
   );
   return data.data;
 };
@@ -36,11 +36,11 @@ const getAllCourses = async (programId: number) => {
 
 const Reports = () => {
   const [page, setPage] = useState<number>(1);
-  const [search, setSearch] = useState<string>("");
-  const debounceSearchTerm = useDebounce(search, 400);
   const [programSelect, setProgramSelect] = useState(null);
   const [levelSelect, setLevelSelect] = useState(null);
   const [courseSelect, setCourseSelect] = useState(null);
+  const [search, setSearch] = useState<string>("");
+  const debounceSearchTerm = useDebounce(search, 1000);
 
   const initialValues: Record<reportsFilter, string> = {
     course: "",
@@ -118,72 +118,6 @@ const Reports = () => {
       label: `${t("level")} 4`,
       value: "level 4",
       id: 4,
-    },
-  ];
-
-  const studentsData = [
-    {
-      index: 1,
-      studentNumber: "12545454",
-      studentName: "Mohamed Youssef Ahmed",
-      section: "Group 2",
-      grade: 60,
-      percentage: "60%",
-      status: "accepted",
-    },
-    {
-      index: 2,
-      studentNumber: "12545455",
-      studentName: "Ali Hassan Mohamed",
-      section: "Group 2",
-      grade: 60,
-      percentage: "60%",
-      status: "accepted",
-    },
-    {
-      index: 3,
-      studentNumber: "12545456",
-      studentName: "Sara Ali Ahmed",
-      section: "Group 2",
-      grade: 60,
-      percentage: "60%",
-      status: "accepted",
-    },
-    {
-      index: 4,
-      studentNumber: "12545457",
-      studentName: "Ahmed Mohamed Salah",
-      section: "Group 2",
-      grade: 60,
-      percentage: "60%",
-      status: "accepted",
-    },
-    {
-      index: 5,
-      studentNumber: "12545458",
-      studentName: "Laila Mahmoud Youssef",
-      section: "Group 2",
-      grade: 60,
-      percentage: "60%",
-      status: "accepted",
-    },
-    {
-      index: 6,
-      studentNumber: "12545459",
-      studentName: "Khaled Ibrahim Ali",
-      section: "Group 2",
-      grade: 60,
-      percentage: "60%",
-      status: "accepted",
-    },
-    {
-      index: 7,
-      studentNumber: "12545460",
-      studentName: "Fatima Omar Youssef",
-      section: "Group 2",
-      grade: 60,
-      percentage: "60%",
-      status: "accepted",
     },
   ];
 
@@ -348,6 +282,7 @@ const Reports = () => {
                 <div className="flex items-center self-end gap-8 ">
                   <SearchInput
                     name="reportSearch"
+                    autoFocus
                     value={search}
                     className="w-44"
                     onChange={(e) => setSearch(e.target.value)}

@@ -289,7 +289,7 @@ const StudentAddAcademicData = ({
               />
             </div>
 
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2 lg:w-[35vw]">
               <DateInputField
                 label={`${t("joining date")}`}
                 placeholder={`${t("joining date")}`}

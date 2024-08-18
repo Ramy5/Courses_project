@@ -559,6 +559,10 @@
   "file is required": "الملف مطلوب",
   "End delivery date is required": "تاريخ التسليم النهائي مطلوب",
   "Start delivery date is required": "تاريخ التسليم الأولي مطلوب",
-  "Grade is required":"الدرجة مطلوبة",
-  "Teacher name is required": "اسم المعلم مطلوب"
+  "Grade is required": "الدرجة مطلوبة",
+  "Teacher name is required": "اسم المعلم مطلوب",
+  "start delivery time": "بداية وقت التسليم",
+  "end delivery time": "نهاية وقت التسليم",
+  "student degree has successfully added": "تم اضافة درجة الطالب بنجاح",
+  "view students project": "عرض مشاريع الطلاب"
 }

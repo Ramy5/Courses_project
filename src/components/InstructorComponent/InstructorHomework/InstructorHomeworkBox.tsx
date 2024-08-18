@@ -25,6 +25,10 @@ interface InstructorHomeworkBox_TP {
   performancePercentage: number;
   id: number;
   homeworkIsFinished: boolean;
+  delivered_homework_count: number;
+  remaining_homework_count: number;
+  status: string;
+  progress: string | number;
 }
 
 const InstructorHomeworkBox = (props: InstructorHomeworkBox_TP) => {
@@ -33,11 +37,11 @@ const InstructorHomeworkBox = (props: InstructorHomeworkBox_TP) => {
     title: homeworkMaterial,
     start_date: homeworkStartShow,
     end_date: homeworkEndShow,
-    countOfHomeworkDeployed = 0, // TODO:
-    countOfRestHomework = 0, // TODO:
-    performancePercentage = 0, // TODO:
+    delivered_homework_count: countOfHomeworkDeployed,
+    remaining_homework_count: countOfRestHomework,
+    progress: performancePercentage,
     id: homeworkId,
-    homeworkIsFinished, // TODO:
+    status: homeworkIsFinished,
   } = props;
 
   const [openRow, setOpenRow] = useState<number | null>(null);
@@ -62,7 +66,7 @@ const InstructorHomeworkBox = (props: InstructorHomeworkBox_TP) => {
   return (
     <div
       className={`border-s-[15px] rounded-xl bg-white shadow-sm ${
-        homeworkIsFinished ? "border-mainRed" : "border-green-600"
+        homeworkIsFinished === "منتهي" ? "border-mainRed" : "border-green-600"
       }`}
     >
       <div className="p-4 border-b border-gray-400">
@@ -124,10 +128,10 @@ const InstructorHomeworkBox = (props: InstructorHomeworkBox_TP) => {
       <div className="flex items-center justify-between p-4">
         <p
           className={`text-xl font-bold ${
-            homeworkIsFinished ? "text-mainRed" : "text-green-600"
+            homeworkIsFinished === "منتهي" ? "text-mainRed" : "text-green-600"
           }`}
         >
-          {homeworkIsFinished ? t("finished") : t("current")}
+          {homeworkIsFinished === "منتهي" ? t("finished") : t("current")}
         </p>
         <Button
           action={() => navigate(`/instructor/homeworks/view/${homeworkId}`)}

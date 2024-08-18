@@ -9,12 +9,12 @@ export type BaseInput_TP = {
   noMb?: boolean;
   required?: boolean;
   className?: string;
-  labelProps?: String;
+  labelProps?: string;
   name: string;
   placeholder?: string;
   ref?: any;
-  disabled: boolean;
-  autoFocus: any;
+  disabled?: boolean;
+  autoFocus?: any;
   type?:
     | "text"
     | "number"

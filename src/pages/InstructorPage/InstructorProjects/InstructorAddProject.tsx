@@ -27,6 +27,8 @@ interface initialValues_TP {
   instructionsEn: string;
   start_delivery: string | Date;
   end_delivery: string | Date;
+  start_delivery_time: string;
+  end_delivery_time: string;
   grade: string;
 }
 
@@ -79,6 +81,8 @@ const InstructorAddProject = ({ editObj }: { editObj?: editObj_TP }) => {
     instructionsEn: editObj?.instructionsEn || "",
     start_delivery: editObj?.start_delivery || "",
     end_delivery: editObj?.end_delivery || "",
+    start_delivery_time: editObj?.start_delivery_time || "",
+    end_delivery_time: editObj?.end_delivery_time || "",
     grade: editObj?.grade || "",
   };
 
@@ -135,6 +139,8 @@ const InstructorAddProject = ({ editObj }: { editObj?: editObj_TP }) => {
       score: values.grade,
       start_date: formatDate(values.start_delivery),
       end_date: formatDate(values.end_delivery),
+      start_delivery_time: values.start_delivery_time,
+      end_delivery_time: values.end_delivery_time,
     };
 
     editObj
@@ -344,6 +350,24 @@ const InstructorAddProject = ({ editObj }: { editObj?: editObj_TP }) => {
                 name="end_delivery"
                 className="w-44"
                 labelProps={{ className: "mb-2" }}
+              />
+              <BaseInput
+                name="start_delivery_time"
+                id="start_delivery_time"
+                type="time"
+                className="w-44 text-lg py-2 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                placeholder={t("start delivery time")}
+                label={t("start delivery time")}
+                labelProps="!font-semibold"
+              />
+              <BaseInput
+                name="end_delivery_time"
+                id="end_delivery_time"
+                type="time"
+                className="w-44 text-lg py-2 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                placeholder={t("end delivery time")}
+                label={t("end delivery time")}
+                labelProps="!font-semibold"
               />
             </div>
 

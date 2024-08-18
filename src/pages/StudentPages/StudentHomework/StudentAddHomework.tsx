@@ -21,14 +21,16 @@ const StudentAddHomework = () => {
     queryKey: ["get-all-homeworks"],
     queryFn: () => getHomework(id),
   });
+  console.log(data);
 
   const customData = {
     startDate: data?.start_date,
     endDate: data?.end_date,
     title: data?.title,
-    startTime: "١٢ مساء",
-    endTime: "١٢ مساء",
-    dayValue: 3,
+    startTime: data?.start_delivery_time,
+    endTime: data?.end_delivery_time,
+    dayValue: data?.days_left,
+    timeLeft: data?.time_left,
   };
 
   if (isLoading || isFetching || isRefetching) return <Loading />;

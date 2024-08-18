@@ -4,52 +4,35 @@ import { useMemo } from "react";
 import { Button, Table, TitlePage } from "../../../components";
 import { Link } from "react-router-dom";
 import Back from "../../../components/UI/Back";
+import customFetch from "../../../utils/axios";
+import { useQuery } from "@tanstack/react-query";
+import Loading from "../../../components/UI/Loading";
+
+const getStudentsHomeworkAnswers = async () => {
+  const { data } = await customFetch("getStudentHomeWorkAnswer");
+  return data.data.answers;
+};
 
 const InstructorViewAllHomeworks = () => {
-  const allHomeworksData = [
-    {
-      id: 1,
-      studentName: "محمد احمد يوسف",
-      studentCode: "١٢٣٤٥٦٧٨٨٧٧",
-      submissionDate: "٢٥/رجب/١٤٤٢",
-      grade: "١٠",
-    },
-    {
-      id: 2,
-      studentName: "محمد احمد يوسف",
-      studentCode: "١٢٣٤٥٦٧٨٨٧٧",
-      submissionDate: "٢٥/رجب/١٤٤٢",
-      grade: "١٠",
-    },
-    {
-      id: 3,
-      studentName: "محمد احمد يوسف",
-      studentCode: "١٢٣٤٥٦٧٨٨٧٧",
-      submissionDate: "٢٥/رجب/١٤٤٢",
-      grade: ".......",
-    },
-    {
-      id: 4,
-      studentName: "محمد احمد يوسف",
-      studentCode: "١٢٣٤٥٦٧٨٨٧٧",
-      submissionDate: "٢٥/رجب/١٤٤٢",
-      grade: "١٨٠",
-    },
-    {
-      id: 5,
-      studentName: "محمد احمد يوسف",
-      studentCode: "١٢٣٤٥٦٧٨٨٧٧",
-      submissionDate: "٢٥/رجب/١٤٤٢",
-      grade: ".......",
-    },
-    {
-      id: 6,
-      studentName: "محمد احمد يوسف",
-      studentCode: "١٢٣٤٥٦٧٨٨٧٧",
-      submissionDate: "٢٥/رجب/١٤٤٢",
-      grade: "١٨٠",
-    },
-  ];
+  const {
+    data: homeworksDataAnswer,
+    isLoading,
+    isFetching,
+    isRefetching,
+  } = useQuery({
+    queryKey: ["homeworksDataAnswerData"],
+    queryFn: getStudentsHomeworkAnswers,
+  });
+
+  const allHomeworksData = homeworksDataAnswer?.map((data: any) => {
+    return {
+      id: data?.id,
+      studentName: data?.student?.full_name,
+      studentCode: data?.student?.academicData?.Academic_code,
+      submissionDate: data?.delivered_date,
+      grade: data?.degree,
+    };
+  });
 
   const allHomeworksColumns = useMemo<ColumnDef<[]>[]>(
     () => [
@@ -83,7 +66,7 @@ const InstructorViewAllHomeworks = () => {
         accessorKey: "evaluate",
         cell: ({ row }) => (
           <Button className="text-white">
-            <Link to={`/instructor/projects/evaluate/${row.original.id}`}>
+            <Link to={`/instructor/homeworks/evaluate/${row.original.id}`}>
               {t("evaluate")}
             </Link>
           </Button>
@@ -92,6 +75,8 @@ const InstructorViewAllHomeworks = () => {
     ],
     []
   );
+
+  if (isLoading || isFetching || isRefetching) return <Loading />;
 
   return (
     <div>
