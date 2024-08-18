@@ -119,3 +119,35 @@ export const convertTimeToDaysHoursMinutes = (timeStr) => {
     seconds,
   };
 };
+
+// homework and project delivery time
+// convert it to days, hours, minutes and seconds
+export const timeStringToSeconds = (timeString: string): number => {
+  const timeParts = timeString.split(":");
+
+  if (timeParts.length !== 3) {
+    console.error("Invalid time format. Expected HHH:MM:SS");
+    return 0;
+  }
+
+  const hours = parseInt(timeParts[0], 10);
+  const minutes = parseInt(timeParts[1], 10);
+  const seconds = parseInt(timeParts[2], 10);
+
+  if (isNaN(hours) || isNaN(minutes) || isNaN(seconds)) {
+    console.error("Invalid time parts. Parsing to numbers failed.");
+    return 0;
+  }
+
+  return hours * 3600 + minutes * 60 + seconds;
+};
+
+export const formatDeliveryTime = (
+  totalSeconds: number
+): { days: number; hours: number; minutes: number; seconds: number } => {
+  const days = Math.floor(totalSeconds / (3600 * 24));
+  const hours = Math.floor((totalSeconds % (3600 * 24)) / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  return { days, hours, minutes, seconds };
+};

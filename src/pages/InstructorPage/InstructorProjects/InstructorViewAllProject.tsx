@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Button, Table, TitlePage } from "../../../components";
 import { t } from "i18next";
 import { useMemo } from "react";
@@ -7,12 +7,14 @@ import customFetch from "../../../utils/axios";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "../../../components/UI/Loading";
 
-const getStudentsProjectAnswers = async () => {
-  const { data } = await customFetch("");
-  return data.data.answers;
+const getStudentsProjectsAnswers = async (id: number | string) => {
+  const { data } = await customFetch(`getStudentProjectAnswers/${id}`);
+  return data.data;
 };
 
 const InstructorViewAllProject = () => {
+  const { id: studentId } = useParams();
+
   const {
     data: projectsDataAnswer,
     isLoading,
@@ -20,16 +22,22 @@ const InstructorViewAllProject = () => {
     isRefetching,
   } = useQuery({
     queryKey: ["projectsDataAnswerData"],
-    queryFn: getStudentsProjectAnswers,
+    queryFn: () => getStudentsProjectsAnswers(studentId),
   });
+  console.log(
+    "🚀 ~ InstructorViewAllProject ~ projectsDataAnswer:",
+    projectsDataAnswer
+  );
 
   const allProjectsData = projectsDataAnswer?.map((data: any) => {
     return {
-      id: data?.id,
-      studentName: data?.student?.full_name,
-      studentCode: data?.student?.academicData?.Academic_code,
+      answerId: data?.answer_id,
+      projectId: data?.project_id,
+      studentId: data?.student_id,
+      studentName: data?.full_name,
+      studentCode: data?.code,
       submissionDate: data?.delivered_date,
-      grade: data?.degree,
+      grade: data?.degree?.degree,
     };
   });
 
@@ -65,7 +73,7 @@ const InstructorViewAllProject = () => {
         accessorKey: "evaluate",
         cell: ({ row }) => (
           <Button className="text-white">
-            <Link to={`/instructor/homeworks/evaluate/${row.original.id}`}>
+            <Link to={`/instructor/projects/evaluate/${row.original.answerId}`}>
               {t("evaluate")}
             </Link>
           </Button>
@@ -79,10 +87,18 @@ const InstructorViewAllProject = () => {
 
   return (
     <div>
-      <TitlePage mainLink="/instructor/viewHomework" mainTitle="homeworks" />
+      <TitlePage mainLink="/instructor/projects" mainTitle="projects" />
 
       <div>
-        <Table data={allProjectsData || []} columns={allHomeworksColumns} />
+        <div>
+          {allProjectsData?.length > 0 ? (
+            <Table data={allProjectsData || []} columns={allHomeworksColumns} />
+          ) : (
+            <h2 className="text-xl font-bold text-center text-mainColor">
+              {t("there is no answers right now")}
+            </h2>
+          )}
+        </div>
       </div>
     </div>
   );

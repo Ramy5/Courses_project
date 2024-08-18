@@ -69,7 +69,7 @@ const ProjectsTabs = () => {
               navigate(`/students/viewProjects/${info.getValue().id}`)
             }
           >
-            {t("view assignment")}
+            {t("view project")}
           </Button>
         ),
       },
