@@ -82,6 +82,8 @@ const StudentInformationPanel = () => {
     },
   ];
 
+  console.log(latestNewsData);
+
   const progressData = [
     { title: "tests", percentage: 77 },
     { title: "projects", percentage: 33 },
@@ -114,7 +116,7 @@ const StudentInformationPanel = () => {
             <LatestNews
               key={index}
               titleHead={latestNew.titleHead}
-              data={latestNew.data}
+              data={latestNew.data.slice(0, 3)}
             />
           );
         })}
