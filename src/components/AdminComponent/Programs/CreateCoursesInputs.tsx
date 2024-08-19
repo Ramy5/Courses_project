@@ -688,9 +688,12 @@ const CreateCoursesInputs = ({
                   </div>
 
                   <div className="w-full my-12 md:w-3/4 relative">
+                    <label htmlFor="instructors_name" className="font-semibold">
+                      {t("instructor name")}
+                    </label>
                     <div className="flex flex-col items-center justify-between mt-2 sm:flex-row gap-x-12 gap-y-6">
                       <div className="w-full sm:w-3/4">
-                        <BaseSelect
+                        <Select
                           id="course_teachers"
                           name="course_teachers"
                           isMulti
@@ -707,7 +710,7 @@ const CreateCoursesInputs = ({
                           }}
                           options={teachersOption}
                           placeholder={t("instructor name")}
-                          label={t("instructor name")}
+                          styles={customStyles}
                         />
                       </div>
                     </div>

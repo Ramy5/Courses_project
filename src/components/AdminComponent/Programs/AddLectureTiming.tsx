@@ -32,6 +32,7 @@ const AddLectureTiming = ({
   editStudySchedule,
   setEditStudySchedule,
 }) => {
+  console.log("🚀 ~ scheduleData:", scheduleData)
   const [coursesSelect, setCoursesSelect] = useState(null);
   const [groupSelect, setGroupSelect] = useState(null);
   const [teacherSelect, setTeacherSelect] = useState(null);
@@ -308,14 +309,14 @@ const AddLectureTiming = ({
                   action={() => {
                     const isAppointmentBooked =
                       scheduleData?.lecture_time?.some((lecture) => {
-                        const { day_id, start_time, end_time } = lecture;
+                        const { day_id, start_time, end_time, level } = lecture;
                         const valueStartTime = values.start_time;
                         const valueEndTime = values.end_time;
 
                         return (
                           valueStartTime < end_time &&
                           valueEndTime > start_time &&
-                          day_id == values.day_id
+                          day_id == values.day_id && level == values.level
                         );
                       });
 
