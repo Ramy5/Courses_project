@@ -116,7 +116,7 @@ const StudentInformationPanel = () => {
             <LatestNews
               key={index}
               titleHead={latestNew.titleHead}
-              data={latestNew.data.slice(0, 3)}
+              data={latestNew?.data?.slice(0, 3)}
             />
           );
         })}
