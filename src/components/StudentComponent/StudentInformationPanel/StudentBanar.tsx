@@ -16,7 +16,7 @@ const StudentBanar: React.FC<StudentBanar_TP> = ({ userName }) => {
       </div>
       <div>
         <h2 className="mb-3 text-4xl font-bold text-white">
-          {t(`hello, ${user?.name}`)}
+          {t(`${user?.name}`)}
         </h2>
         <p className="font-bold text-white">
           {t(
