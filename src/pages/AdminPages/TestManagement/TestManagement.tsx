@@ -9,6 +9,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import customFetch from "../../../utils/axios";
 import Loading from "../../../components/UI/Loading";
+import BaseSelect from "../../../components/UI/BaseSelect";
 
 type testFilter = "program" | "level";
 
@@ -248,14 +249,12 @@ const TestManagement = () => {
             <div className="bg-white rounded-2xl">
               <div className="flex flex-wrap items-center gap-10 px-4 py-6">
                 <div>
-                  <label className="font-bold" htmlFor="program">
-                    {t("program")}
-                  </label>
-                  <Select
+                  <BaseSelect
                     id="program"
                     name="program"
                     className="w-56 mt-1"
                     placeholder={t("select a program")}
+                    label={t("program")}
                     options={programsOptions}
                     isLoading={
                       programIsLoading ||
@@ -270,12 +269,10 @@ const TestManagement = () => {
                   />
                 </div>
                 <div>
-                  <label className="font-bold" htmlFor="level">
-                    {t("level")}
-                  </label>
-                  <Select
+                  <BaseSelect
                     id="level"
                     name="level"
+                    label={t("level")}
                     className="w-56 mt-1"
                     placeholder={t("select the level")}
                     options={levelsOption}

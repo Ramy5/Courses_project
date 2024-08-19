@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import selectStyle from "../../../utils/selectStyle";
 import { useAppDispatch } from "../../../hooks/reduxHooks";
 import { changeSidebarRoute } from "../../../features/dirty/dirtySlice";
+import BaseSelect from "../../UI/BaseSelect";
 
 interface AddStudentAcademic_TP {
   number_academic: string;
@@ -230,16 +231,13 @@ const StudentAddAcademicData = ({
             />
 
             <div>
-              <label htmlFor="program_academic" className="font-bold">
-                {t("program")}
-              </label>
-              <Select
+              <BaseSelect
                 className="lg:w-[35vw] mt-2"
                 id="program_academic"
                 name="program_academic"
                 placeholder={t("select a program")}
+                label={t("program")}
                 options={programsOptions}
-                styles={selectStyle}
                 isLoading={
                   programIsLoading || programIsFetching || programIsRefetching
                 }
@@ -252,16 +250,13 @@ const StudentAddAcademicData = ({
             </div>
 
             <div>
-              <label htmlFor="level_academic" className="font-bold">
-                {t("level")}
-              </label>
-              <Select
+              <BaseSelect
                 className="lg:w-[35vw] mt-2"
                 id="level_academic"
                 name="level_academic"
+                label={t("level")}
                 placeholder={t("select the level")}
                 options={levelsOption}
-                styles={selectStyle}
                 value={levelSelect}
                 onChange={(e) => {
                   setLevelSelect(e);
@@ -271,16 +266,13 @@ const StudentAddAcademicData = ({
             </div>
 
             <div>
-              <label htmlFor="division_number_academic" className="font-bold">
-                {t("division number")}
-              </label>
-              <Select
+              <BaseSelect
                 className="lg:w-[35vw] mt-2"
                 id="division_number_academic"
                 name="division_number_academic"
                 placeholder={t("select group number")}
                 options={groupNumberOption}
-                styles={selectStyle}
+                label={t("division number")}
                 value={groupSelect}
                 onChange={(e) => {
                   setGroupSelect(e);

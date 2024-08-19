@@ -11,6 +11,7 @@ import { customStyles } from "../../../utils/selectStyles";
 import Loading from "../../../components/UI/Loading";
 import Pagination from "../../../components/UI/Pagination";
 import { toast } from "react-toastify";
+import BaseSelect from "../../../components/UI/BaseSelect";
 
 const getLectureManagement = async (
   page: number,
@@ -460,14 +461,12 @@ const LectureManagement = () => {
                   {t("lecture management")}
                 </h2>
 
-                <div>
-                  <label htmlFor="instructor" className="font-bold">
-                    {t("instructor")}
-                  </label>
-                  <Select
-                    className="lg:w-[25vw] mt-2"
+                <div className="lg:w-[25vw] ">
+                  <BaseSelect
+                    className="mt-1"
                     id="instructor"
                     name="instructor"
+                    label={t("instructor")}
                     options={instructorsOption}
                     styles={customStyles}
                     placeholder={t("filter by instructor...")}

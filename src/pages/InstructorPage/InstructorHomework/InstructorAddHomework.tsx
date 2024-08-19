@@ -19,6 +19,7 @@ import { changeSidebarRoute } from "../../../features/dirty/dirtySlice";
 import { useAppDispatch } from "../../../hooks/reduxHooks";
 import * as Yup from "yup";
 import { FormikError } from "../../../components/UI/FormikError";
+import BaseSelect from "../../../components/UI/BaseSelect";
 
 const validationSchema = Yup.object().shape({
   course_id: Yup.string().required("Course is required"),
@@ -214,10 +215,7 @@ const InstructorAddHomework = ({ editObj }: { editObj?: editObj_TP }) => {
               {editObj ? t("edit homework") : t("add homework")}
             </h2>
             <div className="relative">
-              <label htmlFor="course_id" className="text-base font-semibold">
-                {t("course")}
-              </label>
-              <Select
+              <BaseSelect
                 onChange={(e) => {
                   setFieldValue("course_id", e!.value);
                   setCourseSelect({
@@ -228,7 +226,6 @@ const InstructorAddHomework = ({ editObj }: { editObj?: editObj_TP }) => {
                 }}
                 options={coursesOption}
                 name="course_id"
-                styles={selectStyle}
                 value={courseSelect}
                 isDisabled={
                   coursesOptionIsFetching ||
@@ -238,11 +235,8 @@ const InstructorAddHomework = ({ editObj }: { editObj?: editObj_TP }) => {
                 isLoading={coursesOptionIsLoading}
                 id="course_id"
                 placeholder={t("course")}
+                label={t("course")}
                 className="mt-1 w-96"
-              />
-              <FormikError
-                name="course_id"
-                className="absolute whitespace-nowrap"
               />
             </div>
             <div className="grid items-center grid-cols-1 gap-6 lg:grid-cols-2">

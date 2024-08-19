@@ -42,27 +42,27 @@ const AddNewCertificatesInput = ({
   dataReceived,
   setEditCertificateData,
 }: AddNewCertificatesInput_TP) => {
+  console.log("🚀 ~ newCertificates:", newCertificates)
   // const editCertificate = editObj?.newCertificate && editObj?.newCertificate[0];
   const [editCertificate, setEditCertificate] = useState({});
   const { id: instructorParamID } = useParams();
 
-  // const initialValues: Certificate = {
-  //   type_certificate: editCertificate?.type_certificate || "",
-  //   certificate_name: editCertificate?.certificate_name || "",
-  //   donor: editCertificate?.donor || "",
-  //   date_acquisition: editCertificate?.date_acquisition || "",
-  //   specialization: editCertificate?.specialization || "",
-  //   appreciation: editCertificate?.appreciation || "",
-  // };
-
   const initialValues: Certificate = {
-    type_certificate: "",
-    certificate_name: "",
-    donor: "",
-    date_acquisition: "",
-    specialization: "",
-    appreciation: "",
+    type_certificate: editCertificate?.type_certificate || "",
+    certificate_name: editCertificate?.certificate_name || "",
+    donor: editCertificate?.donor || "",
+    date_acquisition: editCertificate?.date_acquisition || "",
+    specialization: editCertificate?.specialization || "",
+    appreciation: editCertificate?.appreciation || "",
   };
+
+  const [formValues, setFormValues] = useState(initialValues);
+
+  useEffect(() => {
+    if (editCertificate?.id) {
+      setFormValues(editCertificate);
+    }
+  }, [editCertificate]);
 
   const certificatesColumnsFee = useMemo<ColumnDef<any>[]>(
     () => [
@@ -149,15 +149,16 @@ const AddNewCertificatesInput = ({
   });
 
   return (
-    <Formik initialValues={initialValues} onSubmit={() => {}}>
+    <Formik initialValues={initialValues} enableReinitialize={true} onSubmit={() => {}}>
       {({ values, resetForm, setFieldValue }) => {
-        useEffect(() => {
-          if (editCertificate?.id) {
-            Object.keys(values).map((key) => {
-              return setFieldValue(key, editCertificate[key]);
-            });
-          }
-        }, [editCertificate]);
+        console.log("🚀 ~ values:", values)
+        // useEffect(() => {
+        //   if (editCertificate?.id) {
+        //     Object.keys(values).map((key) => {
+        //       return setFieldValue(key, editCertificate[key]);
+        //     });
+        //   }
+        // }, [editCertificate]);
         return (
           <Form>
             <table className="min-w-full text-center">
