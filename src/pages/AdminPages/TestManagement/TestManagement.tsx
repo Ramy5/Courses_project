@@ -238,7 +238,7 @@ const TestManagement = () => {
 
   return (
     <Formik initialValues={initialValues} onSubmit={(values) => {}}>
-      {({ values, setFieldValue }) => {
+      {({ setFieldValue }) => {
         return (
           <Form>
             <TitlePage

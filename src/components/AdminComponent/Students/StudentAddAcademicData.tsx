@@ -1,17 +1,13 @@
 import { t } from "i18next";
 import BaseInput from "../../UI/BaseInput";
 import { Button, DateInputField } from "../..";
-import Select from "react-select";
-import { Form, Formik, useFormikContext } from "formik";
+import { Form, Formik } from "formik";
 import customFetch from "../../../utils/axios";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { formatDate } from "../../../utils/helpers";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import selectStyle from "../../../utils/selectStyle";
-import { useAppDispatch } from "../../../hooks/reduxHooks";
-import { changeSidebarRoute } from "../../../features/dirty/dirtySlice";
 import BaseSelect from "../../UI/BaseSelect";
 
 interface AddStudentAcademic_TP {
@@ -52,7 +48,6 @@ const StudentAddAcademicData = ({
   const [programSelect, setProgramSelect] = useState(null);
   const [groupSelect, setGroupSelect] = useState(null);
   const [levelSelect, setLevelSelect] = useState(null);
-  const dispatch = useAppDispatch();
 
   const initialValues: AddStudentAcademic_TP = {
     number_academic: editObj?.number_academic || "",
@@ -214,17 +209,14 @@ const StudentAddAcademicData = ({
       initialValues={initialValues}
       onSubmit={(values) => handleAddStudent(values)}
     >
-      {({ setFieldValue, dirty, isSubmitting }) => {
-        useEffect(() => {
-          dispatch(changeSidebarRoute(dirty && !isSubmitting));
-        }, [dirty]);
+      {({ setFieldValue }) => {
         return (
-          <Form className="flex flex-col w-full gap-5 px-4 lg:px-16 md:w-3/4">
+          <Form className="flex flex-col w-full gap-5 px-8 md:w-3/4 md:px-16 mx-auto">
             <BaseInput
               name="number_academic"
               id="number_academic"
               type="text"
-              className="lg:w-[35vw] text-lg py-2 bg-[#E6EAEE] rounded-lg main_shadow text-slate-800 focus-within:outline-none"
+              className="w-full text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
               placeholder={t("academic number")}
               label={t("academic number")}
               labelProps="!font-semibold"
@@ -232,7 +224,7 @@ const StudentAddAcademicData = ({
 
             <div>
               <BaseSelect
-                className="lg:w-[35vw] mt-2"
+                className="w-full"
                 id="program_academic"
                 name="program_academic"
                 placeholder={t("select a program")}
@@ -251,7 +243,7 @@ const StudentAddAcademicData = ({
 
             <div>
               <BaseSelect
-                className="lg:w-[35vw] mt-2"
+                className="w-full"
                 id="level_academic"
                 name="level_academic"
                 label={t("level")}
@@ -267,7 +259,7 @@ const StudentAddAcademicData = ({
 
             <div>
               <BaseSelect
-                className="lg:w-[35vw] mt-2"
+                className="w-full"
                 id="division_number_academic"
                 name="division_number_academic"
                 placeholder={t("select group number")}
@@ -281,17 +273,17 @@ const StudentAddAcademicData = ({
               />
             </div>
 
-            <div className="flex flex-col gap-2 lg:w-[35vw]">
+            <div className="flex flex-col gap-2">
               <DateInputField
                 label={`${t("joining date")}`}
                 placeholder={`${t("joining date")}`}
                 name="join_date_academic"
-                className="w-full md:w-1/2"
+                className="w-full"
                 labelProps={{ className: "mb-2  !font-bold" }}
               />
             </div>
 
-            <div className="mt-8">
+            <div className="mt-8 mx-auto">
               <Button
                 loading={isPending || editIsPending}
                 type="submit"
@@ -301,7 +293,7 @@ const StudentAddAcademicData = ({
               </Button>
               <Button
                 action={() => navigate(-1)}
-                className="bg-[#E6EAEE] text-mainColor"
+                className="bg-lightGray text-mainColor"
               >
                 {t("cancel")}
               </Button>

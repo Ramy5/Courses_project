@@ -187,7 +187,7 @@ const AddLectureTiming = ({
                   value={scheduleData?.day?.day}
                   type="text"
                   label={t("day")}
-                  className="w-full text-lg py-1 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                  className="w-full text-lg py-1 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
                   placeholder={t("day")}
                   labelProps="font-semibold text-base"
                   disabled={true}
@@ -286,7 +286,7 @@ const AddLectureTiming = ({
                       id="start_time"
                       type="time"
                       label={t("start")}
-                      className="w-full text-lg py-1 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                      className="w-full text-lg py-1 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
                       placeholder={t("")}
                       labelProps="font-semibold text-base"
                     />
@@ -295,7 +295,7 @@ const AddLectureTiming = ({
                       id="end_time"
                       type="time"
                       label={t("end")}
-                      className="w-full text-lg py-1 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                      className="w-full text-lg py-1 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
                       placeholder={t("")}
                       labelProps="font-semibold text-base"
                     />

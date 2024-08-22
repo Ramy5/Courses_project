@@ -152,7 +152,7 @@ const InstructorAddFirstExam = ({
           name="course_code"
           id="course_code"
           type="text"
-          className="w-full text-lg py-2 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+          className="w-full text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
           placeholder={t("course code")}
           label={t("course code")}
           value={coursesSelect?.course_code}
@@ -166,7 +166,7 @@ const InstructorAddFirstExam = ({
             name="title_ar"
             id="title_ar"
             type="text"
-            className="w-full text-lg py-2 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+            className="w-full text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
             placeholder={t("exam title")}
             label={`${t("exam title")} (${t("arabic")})`}
             labelProps="!font-semibold"
@@ -177,7 +177,7 @@ const InstructorAddFirstExam = ({
             name="title_en"
             id="title_en"
             type="text"
-            className="w-full text-lg py-2 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+            className="w-full text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
             placeholder={t("exam title")}
             label={`${t("exam title")} (${t("english")})`}
             labelProps="!font-semibold"
@@ -214,7 +214,7 @@ const InstructorAddFirstExam = ({
           <textarea
             name="instructions_ar"
             id="instructions_ar"
-            className="w-full text-lg py-2 px-4 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+            className="w-full text-lg py-2 px-4 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
             placeholder={t("instructions")}
             value={values?.instructions_ar}
             onChange={(e) => {
@@ -229,7 +229,7 @@ const InstructorAddFirstExam = ({
           <textarea
             name="instructions_en"
             id="instructions_en"
-            className="w-full text-lg py-2 px-4 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+            className="w-full text-lg py-2 px-4 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
             placeholder={t("instructions")}
             value={values?.instructions_en}
             onChange={(e) => {
@@ -254,7 +254,7 @@ const InstructorAddFirstExam = ({
             id="start_time"
             type="time"
             label={t("start")}
-            className="w-full text-lg py-1 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+            className="w-full text-lg py-1 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
             placeholder={t("")}
             labelProps="font-semibold text-base"
           />
@@ -266,7 +266,7 @@ const InstructorAddFirstExam = ({
             name="score"
             id="score"
             type="number"
-            className="w-full text-lg py-2 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+            className="w-full text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
             placeholder={t("final score")}
             label={t("final score")}
             labelProps="!font-semibold"
@@ -277,7 +277,7 @@ const InstructorAddFirstExam = ({
             name="passing_score"
             id="passing_score"
             type="number"
-            className="w-full text-lg py-2 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+            className="w-full text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
             placeholder={t("degree of success")}
             label={t("degree of success")}
             labelProps="!font-semibold"
@@ -290,7 +290,7 @@ const InstructorAddFirstExam = ({
             name="duration"
             id="duration"
             type="number"
-            className="w-full text-lg py-2 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+            className="w-full text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
             placeholder={t("duration")}
             label={t("duration")}
             labelProps="!font-semibold"
@@ -319,7 +319,7 @@ const InstructorAddFirstExam = ({
                   className="absolute top-0 bottom-0 left-0 right-0 w-full h-full cursor-pointer"
                 ></label>
                 <div className="bg-mainColor rounded-full w-20 h-20 flex justify-center items-center m-auto mb-3">
-                  <AiOutlineCloudUpload className="fill-[#E6EAEE] w-12 h-12" />
+                  <AiOutlineCloudUpload className="fill-lightGray w-12 h-12" />
                 </div>
                 <p>{t("drag or click to add a file")}</p>
               </div>

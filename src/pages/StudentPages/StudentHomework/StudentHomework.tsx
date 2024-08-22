@@ -8,19 +8,15 @@ const StudentHomework = () => {
 
   return (
     <Formik initialValues={initialValues} onSubmit={(values) => {}}>
-      {({ values }) => {
-        return (
-          <Form>
-            <TitlePage
-              mainTitle={t("homeworks")}
-              icon={<SlBookOpen className="text-xl text-mainColor" />}
-            />
+      <Form>
+        <TitlePage
+          mainTitle={t("homeworks")}
+          icon={<SlBookOpen className="text-xl text-mainColor" />}
+        />
 
-            {/* TABS */}
-            <HomeworksTabs />
-          </Form>
-        );
-      }}
+        {/* TABS */}
+        <HomeworksTabs />
+      </Form>
     </Formik>
   );
 };

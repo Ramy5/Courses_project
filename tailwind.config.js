@@ -12,6 +12,7 @@ export default {
         mainRed: "#D42828",
         mainBg: "#E9E6FC",
         mainGray: "#545454",
+        lightGray: "#E6EAEE",
       },
       gridTemplateColumns: {
         view: "max-content 1fr",

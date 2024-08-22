@@ -42,7 +42,7 @@ const AddNewCertificatesInput = ({
   dataReceived,
   setEditCertificateData,
 }: AddNewCertificatesInput_TP) => {
-  console.log("🚀 ~ newCertificates:", newCertificates)
+  console.log("🚀 ~ newCertificates:", newCertificates);
   // const editCertificate = editObj?.newCertificate && editObj?.newCertificate[0];
   const [editCertificate, setEditCertificate] = useState({});
   const { id: instructorParamID } = useParams();
@@ -149,16 +149,12 @@ const AddNewCertificatesInput = ({
   });
 
   return (
-    <Formik initialValues={initialValues} enableReinitialize={true} onSubmit={() => {}}>
+    <Formik
+      initialValues={initialValues}
+      enableReinitialize={true}
+      onSubmit={() => {}}
+    >
       {({ values, resetForm, setFieldValue }) => {
-        console.log("🚀 ~ values:", values)
-        // useEffect(() => {
-        //   if (editCertificate?.id) {
-        //     Object.keys(values).map((key) => {
-        //       return setFieldValue(key, editCertificate[key]);
-        //     });
-        //   }
-        // }, [editCertificate]);
         return (
           <Form>
             <table className="min-w-full text-center">

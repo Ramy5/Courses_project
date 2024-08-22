@@ -5,26 +5,12 @@ import { Button, MainRadio } from "../..";
 import { DateInputField } from "../../UI/DateInputField";
 import User from "../../../assets/instructors/user 1.svg";
 import { useEffect, useState } from "react";
-import customFetch from "../../../utils/axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { formatDate } from "../../../utils/helpers";
 import { BASE_URL } from "../../../utils/constants";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { changeSidebarRoute } from "../../../features/dirty/dirtySlice";
-import { useAppDispatch } from "../../../hooks/reduxHooks";
-
-// const postInstructorPersonal = async (newStudent: any) => {
-//   const data = customFetch.post("addPersonalData", newStudent);
-//   return data;
-// };
-
-// const editInstructorPersonal = async (editInstructor: any) => {
-//   const data = customFetch.post(`addPersonalData`, editInstructor);
-//   return data;
-// };
 
 const postInstructorPersonal = async (newStudent: any) => {
   const token = Cookies.get("token");
@@ -78,7 +64,6 @@ const InstructorPersonalData = ({
   const [selectedImage, setSelectedImage] = useState();
   const [imagePreview, setImagePreview] = useState(null);
   const queryClient = useQueryClient();
-  const dispatch = useAppDispatch();
 
   const initialValues = {
     // PERSONAL DATA
@@ -182,10 +167,7 @@ const InstructorPersonalData = ({
         initialValues={initialValues}
         onSubmit={(values) => handleAddInstructor(values)}
       >
-        {({ setFieldValue, values, dirty, isSubmitting }) => {
-          useEffect(() => {
-            dispatch(changeSidebarRoute(dirty && !isSubmitting));
-          }, [dirty]);
+        {({ setFieldValue, values }) => {
           return (
             <Form className="flex flex-col gap-5 px-8 md:px-16 ">
               <div className="flex flex-col-reverse justify-between gap-8 md:flex-row">
@@ -195,7 +177,7 @@ const InstructorPersonalData = ({
                       name="nationality"
                       id="nationality"
                       type="text"
-                      className="w-full text-lg py-2 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                      className="w-full text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
                       placeholder={t("nationality")}
                       label={t("nationality")}
                       labelProps="!font-semibold"
@@ -206,7 +188,7 @@ const InstructorPersonalData = ({
                       name="id_number"
                       id="id_number"
                       type="text"
-                      className="w-full text-lg py-2 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                      className="w-full text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
                       placeholder={t("id number / Location")}
                       label={t("id number / Location")}
                       labelProps="!font-semibold"
@@ -217,7 +199,7 @@ const InstructorPersonalData = ({
                       name="country_residence"
                       id="country_residence"
                       type="text"
-                      className="w-full text-lg py-2 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                      className="w-full text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
                       placeholder={t("country residence")}
                       label={t("country residence")}
                       labelProps="!font-semibold"
@@ -230,7 +212,7 @@ const InstructorPersonalData = ({
                     <textarea
                       name="address"
                       id="address"
-                      className="w-full text-lg py-2 px-4 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                      className="w-full text-lg py-2 px-4 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
                       placeholder={t("address")}
                       value={values?.address}
                       onChange={(e) => {
@@ -325,7 +307,7 @@ const InstructorPersonalData = ({
                 <Button type="submit" className="me-5" loading={isPending}>
                   {editObj ? t("edit") : t("confirm")}
                 </Button>
-                <Button type="button" className="bg-[#E6EAEE] text-mainColor">
+                <Button type="button" className="bg-lightGray text-mainColor">
                   {t("cancel")}
                 </Button>
               </div>

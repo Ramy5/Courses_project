@@ -8,14 +8,14 @@ import {
 } from "../../../components";
 
 const AddStudent = () => {
-  const [activeTab, setActiveTab] = useState<string>("login");
+  const [activeTab, setActiveTab] = useState<string>("login data");
   const [studentID, setStudentID] = useState<number | null>(null);
 
   const tabs = [
-    { id: 0, title: "login" },
-    { id: 1, title: "personal" },
-    { id: 2, title: "father" },
-    { id: 3, title: "academic" },
+    { id: 0, title: "login data" },
+    { id: 1, title: "personal data" },
+    { id: 2, title: "guardian data" },
+    { id: 3, title: "academy data" },
   ];
 
   return (
@@ -36,25 +36,25 @@ const AddStudent = () => {
         </ul>
       </div>
       <div className="py-8 bg-white rounded-br-2xl rounded-bl-2xl">
-        {activeTab === "login" && (
+        {activeTab === "login data" && (
           <StudentAddLoginData
             setStudentID={setStudentID}
             setActiveTab={setActiveTab}
           />
         )}
-        {activeTab === "personal" && (
+        {activeTab === "personal data" && (
           <StudentAddPersonalData
             studentID={studentID}
             setActiveTab={setActiveTab}
           />
         )}
-        {activeTab === "father" && (
+        {activeTab === "guardian data" && (
           <StudentAddFatherData
             studentID={studentID}
             setActiveTab={setActiveTab}
           />
         )}
-        {activeTab === "academic" && (
+        {activeTab === "academy data" && (
           <StudentAddAcademicData studentID={studentID} />
         )}
       </div>

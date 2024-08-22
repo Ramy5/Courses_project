@@ -221,7 +221,7 @@ const RecordAttendance = () => {
     <div>
       <div className="bg-[#F9F9F9] rounded-3xl py-5 px-8 main_shadow mb-5">
         <Formik initialValues={initialValues} onSubmit={() => {}}>
-          {({ setFieldValue, values }) => {
+          {({ setFieldValue }) => {
             return (
               <Form className="grid grid-cols-1 gap-8 md:grid-cols-3 sm:grid-cols-2">
                 <div>

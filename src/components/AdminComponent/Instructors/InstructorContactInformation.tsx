@@ -4,11 +4,7 @@ import { Button } from "../..";
 import { t } from "i18next";
 import customFetch from "../../../utils/axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useEffect } from "react";
-import { useAppDispatch } from "../../../hooks/reduxHooks";
-import { changeSidebarRoute } from "../../../features/dirty/dirtySlice";
 
 interface AddInstructorParent_TP {
   phone: string;
@@ -40,7 +36,6 @@ const InstructorContactInformation = ({
   setActiveTab,
 }: instructorAddParentData_TP) => {
   const queryClient = useQueryClient();
-  const dispatch = useAppDispatch();
 
   const initialValues: AddInstructorParent_TP = {
     phone: editObj?.phone || "",
@@ -109,84 +104,85 @@ const InstructorContactInformation = ({
     editObj ? await editMutate(editInstructor) : await mutate(newInstructor);
   };
 
+  const validate = (values) => {
+    console.log("🚀 ~ validate ~ values:", values);
+    const errors = {};
+
+    return errors;
+  };
+
   return (
     <Formik
+      validate={validate}
       initialValues={initialValues}
       onSubmit={(values) => handleAddInstructorContact(values)}
     >
-      {({ dirty, isSubmitting }) => {
-        useEffect(() => {
-          dispatch(changeSidebarRoute(dirty && !isSubmitting));
-        }, [dirty]);
-        return (
-          <Form className="flex flex-col w-full gap-5 px-8 md:w-3/4 md:px-16 ">
-            <div>
-              <BaseInput
-                name="phone"
-                id="phone"
-                type="text"
-                className="w-full text-lg py-2 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
-                placeholder={t("phone")}
-                label={t("phone")}
-                labelProps="!font-semibold"
-              />
-            </div>
-            <div>
-              <BaseInput
-                name="facebook"
-                id="facebook"
-                type="text"
-                className="w-full text-lg py-2 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
-                placeholder={t("facebook")}
-                label={t("facebook")}
-                labelProps="!font-semibold"
-              />
-            </div>
-            <div>
-              <BaseInput
-                name="whatsApp"
-                id="whatsApp"
-                type="text"
-                className="w-full text-lg py-2 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
-                placeholder={t("whats app")}
-                label={t("whats app")}
-                labelProps="!font-semibold"
-              />
-            </div>
-            <div>
-              <BaseInput
-                name="linkedIn"
-                id="linkedIn"
-                type="text"
-                className="w-full text-lg py-2 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
-                placeholder={t("linked in")}
-                label={t("linked in")}
-                labelProps="!font-semibold"
-              />
-            </div>
-            <div>
-              <BaseInput
-                name="twitter"
-                id="twitter"
-                type="text"
-                className="w-full text-lg py-2 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
-                placeholder={t("twitter")}
-                label={t("twitter")}
-                labelProps="!font-semibold"
-              />
-            </div>
+      <Form className="flex flex-col w-full gap-5 px-8 md:w-3/4 md:px-16 m-auto">
+        <div>
+          <BaseInput
+            name="phone"
+            id="phone"
+            type="text"
+            className="w-full text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+            placeholder={t("phone")}
+            label={t("phone")}
+            labelProps="!font-semibold"
+          />
+        </div>
+        <div>
+          <BaseInput
+            name="facebook"
+            id="facebook"
+            type="text"
+            className="w-full text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+            placeholder={t("facebook")}
+            label={t("facebook")}
+            labelProps="!font-semibold"
+          />
+        </div>
+        <div>
+          <BaseInput
+            name="whatsApp"
+            id="whatsApp"
+            type="text"
+            className="w-full text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+            placeholder={t("whats app")}
+            label={t("whats app")}
+            labelProps="!font-semibold"
+          />
+        </div>
+        <div>
+          <BaseInput
+            name="linkedIn"
+            id="linkedIn"
+            type="text"
+            className="w-full text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+            placeholder={t("linked in")}
+            label={t("linked in")}
+            labelProps="!font-semibold"
+          />
+        </div>
+        <div>
+          <BaseInput
+            name="twitter"
+            id="twitter"
+            type="text"
+            className="w-full text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+            placeholder={t("twitter")}
+            label={t("twitter")}
+            labelProps="!font-semibold"
+          />
+        </div>
 
-            <div className="flex justify-end mt-5">
-              <Button type="submit" className="me-5" loading={isPending}>
-                {editObj ? t("edit") : t("confirm")}
-              </Button>
-              <Button type="button" className="bg-[#E6EAEE] text-mainColor">
-                {t("cancel")}
-              </Button>
-            </div>
-          </Form>
-        );
-      }}
+        <div className="flex justify-end mt-5 m-auto">
+          <Button type="submit" className="me-5" loading={isPending}>
+            {editObj ? t("edit") : t("confirm")}
+          </Button>
+          <Button type="button" className="bg-lightGray text-mainColor">
+            {t("cancel")}
+          </Button>
+        </div>
+      </Form>
     </Formik>
   );
 };

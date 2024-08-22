@@ -9,8 +9,6 @@ import { IoEye } from "react-icons/io5";
 import customFetch from "../../utils/axios";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-import { changeSidebarRoute } from "../../features/dirty/dirtySlice";
-import { useAppDispatch } from "../../hooks/reduxHooks";
 
 const changePassword = async (newPassword: any) => {
   const data = customFetch.post("changeTeacherPassword", newPassword);
@@ -21,7 +19,6 @@ const InstructorSetting = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState(true);
   const isRTL = useRTL();
-  const dispatch = useAppDispatch();
 
   const handleShowPassword = () => setShowPassword((prev) => !prev);
 
@@ -85,93 +82,86 @@ const InstructorSetting = () => {
             initialValues={initialValues}
             onSubmit={(values) => handleChangePassword(values)}
           >
-            {({ dirty, isSubmitting }) => {
-              useEffect(() => {
-                dispatch(changeSidebarRoute(dirty && !isSubmitting));
-              }, [dirty]);
-              return (
-                <Form className="px-5 pt-8">
-                  <div className="relative">
-                    <BaseInput
-                      name="current_password"
-                      label={t("current password")}
-                      id="current_password"
-                      className="w-full text-lg py-2 rounded-lg bg-[#E6EAEE] main_shadow text-slate-800 focus-within:outline-none"
-                      placeholder={t("current password")}
-                      type={showPassword ? "text" : "password"}
-                      labelProps="!font-semibold"
-                    />
-                    {isRTL && showPassword ? (
-                      <IoMdEyeOff
-                        size={28}
-                        className="absolute cursor-pointer text-mainColor top-1/2 end-5"
-                        onClick={handleShowPassword}
-                      />
-                    ) : (
-                      <IoEye
-                        size={28}
-                        className="absolute cursor-pointer text-mainColor top-1/2 end-5"
-                        onClick={handleShowPassword}
-                      />
-                    )}
-                  </div>
-                  <div className="relative my-7">
-                    <BaseInput
-                      name="new_password"
-                      label={t("new password")}
-                      id="new_password"
-                      className="w-full text-lg py-2 rounded-lg bg-[#E6EAEE] main_shadow text-slate-800 focus-within:outline-none"
-                      placeholder={t("new password")}
-                      type={showPassword ? "text" : "password"}
-                      labelProps="!font-semibold"
-                    />
-                    {isRTL && showPassword ? (
-                      <IoMdEyeOff
-                        size={28}
-                        className="absolute cursor-pointer text-mainColor top-1/2 end-5"
-                        onClick={handleShowPassword}
-                      />
-                    ) : (
-                      <IoEye
-                        size={28}
-                        className="absolute cursor-pointer text-mainColor top-1/2 end-5"
-                        onClick={handleShowPassword}
-                      />
-                    )}
-                  </div>
-                  <div className="relative">
-                    <BaseInput
-                      name="confirm_new_password"
-                      label={t("confirm new password")}
-                      id="confirm_new_password"
-                      className="w-full text-lg py-2 rounded-lg bg-[#E6EAEE] main_shadow text-slate-800 focus-within:outline-none"
-                      placeholder={t("confirm new password")}
-                      type={showPassword ? "text" : "password"}
-                      labelProps="!font-semibold"
-                    />
-                    {isRTL && showPassword ? (
-                      <IoMdEyeOff
-                        size={28}
-                        className="absolute cursor-pointer text-mainColor top-1/2 end-5"
-                        onClick={handleShowPassword}
-                      />
-                    ) : (
-                      <IoEye
-                        size={28}
-                        className="absolute cursor-pointer text-mainColor top-1/2 end-5"
-                        onClick={handleShowPassword}
-                      />
-                    )}
-                  </div>
+            <Form className="px-5 pt-8">
+              <div className="relative">
+                <BaseInput
+                  name="current_password"
+                  label={t("current password")}
+                  id="current_password"
+                  className="w-full text-lg py-2 rounded-lg bg-lightGray main_shadow text-slate-800 focus-within:outline-none"
+                  placeholder={t("current password")}
+                  type={showPassword ? "text" : "password"}
+                  labelProps="!font-semibold"
+                />
+                {isRTL && showPassword ? (
+                  <IoMdEyeOff
+                    size={28}
+                    className="absolute cursor-pointer text-mainColor top-1/2 end-5"
+                    onClick={handleShowPassword}
+                  />
+                ) : (
+                  <IoEye
+                    size={28}
+                    className="absolute cursor-pointer text-mainColor top-1/2 end-5"
+                    onClick={handleShowPassword}
+                  />
+                )}
+              </div>
+              <div className="relative my-7">
+                <BaseInput
+                  name="new_password"
+                  label={t("new password")}
+                  id="new_password"
+                  className="w-full text-lg py-2 rounded-lg bg-lightGray main_shadow text-slate-800 focus-within:outline-none"
+                  placeholder={t("new password")}
+                  type={showPassword ? "text" : "password"}
+                  labelProps="!font-semibold"
+                />
+                {isRTL && showPassword ? (
+                  <IoMdEyeOff
+                    size={28}
+                    className="absolute cursor-pointer text-mainColor top-1/2 end-5"
+                    onClick={handleShowPassword}
+                  />
+                ) : (
+                  <IoEye
+                    size={28}
+                    className="absolute cursor-pointer text-mainColor top-1/2 end-5"
+                    onClick={handleShowPassword}
+                  />
+                )}
+              </div>
+              <div className="relative">
+                <BaseInput
+                  name="confirm_new_password"
+                  label={t("confirm new password")}
+                  id="confirm_new_password"
+                  className="w-full text-lg py-2 rounded-lg bg-lightGray main_shadow text-slate-800 focus-within:outline-none"
+                  placeholder={t("confirm new password")}
+                  type={showPassword ? "text" : "password"}
+                  labelProps="!font-semibold"
+                />
+                {isRTL && showPassword ? (
+                  <IoMdEyeOff
+                    size={28}
+                    className="absolute cursor-pointer text-mainColor top-1/2 end-5"
+                    onClick={handleShowPassword}
+                  />
+                ) : (
+                  <IoEye
+                    size={28}
+                    className="absolute cursor-pointer text-mainColor top-1/2 end-5"
+                    onClick={handleShowPassword}
+                  />
+                )}
+              </div>
 
-                  <div className="flex items-center justify-end my-8">
-                    <Button loading={isPending} type="submit">
-                      {t("submit")}
-                    </Button>
-                  </div>
-                </Form>
-              );
-            }}
+              <div className="flex items-center justify-end my-8">
+                <Button loading={isPending} type="submit">
+                  {t("submit")}
+                </Button>
+              </div>
+            </Form>
           </Formik>
         </div>
       </div>

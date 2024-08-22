@@ -2,6 +2,9 @@ import { useFormikContext } from "formik";
 import { t } from "i18next";
 import { tv } from "tailwind-variants";
 import { FormikError } from "./FormikError";
+import { useEffect } from "react";
+import { changeSidebarRoute } from "../../features/dirty/dirtySlice";
+import { useAppDispatch } from "../../hooks/reduxHooks";
 
 export type BaseInput_TP = {
   label?: string;
@@ -24,6 +27,8 @@ export type BaseInput_TP = {
     | "text"
     | "date"
     | "time";
+    min?: number;
+    max?: number;
 };
 
 const BaseInput = ({
@@ -37,12 +42,27 @@ const BaseInput = ({
   ref,
   disabled,
   autoFocus,
+  min, 
+  max,
   ...props
 }: BaseInput_TP) => {
-  const { setFieldValue, setFieldTouched, errors, touched, values } =
-    useFormikContext<{
-      [key: string]: any;
-    }>();
+  const dispatch = useAppDispatch();
+
+  const {
+    setFieldValue,
+    setFieldTouched,
+    errors,
+    touched,
+    values,
+    dirty,
+    isSubmitting,
+  } = useFormikContext<{
+    [key: string]: any;
+  }>();
+
+  useEffect(() => {
+    dispatch(changeSidebarRoute(dirty && !isSubmitting));
+  }, [dirty]);
 
   const GeneralInputClass: string =
     "form-input px-4 py-[.30rem] w-full shadows";
@@ -110,6 +130,8 @@ const BaseInput = ({
           })}
           ref={ref}
           disabled={disabled}
+          min={min}
+          max={max}
         />
       </div>
       <FormikError name={props.name} className="absolute whitespace-nowrap" />

@@ -19,7 +19,7 @@ const OrganizationSettingData = ({
           name="organization_name"
           id="organization_name"
           type="text"
-          className="lg:w-[35vw] text-lg py-2 bg-[#E6EAEE] rounded-lg main_shadow text-slate-800 focus-within:outline-none"
+          className="lg:w-[35vw] text-lg py-2 bg-lightGray rounded-lg main_shadow text-slate-800 focus-within:outline-none"
           placeholder={t("organization name")}
           label={t("organization name")}
           labelProps="!font-semibold"
@@ -29,7 +29,7 @@ const OrganizationSettingData = ({
           name="organization_email"
           id="organization_email"
           type="text"
-          className="lg:w-[35vw] text-lg py-2 bg-[#E6EAEE] rounded-lg main_shadow text-slate-800 focus-within:outline-none"
+          className="lg:w-[35vw] text-lg py-2 bg-lightGray rounded-lg main_shadow text-slate-800 focus-within:outline-none"
           placeholder={t("organization email")}
           label={t("organization email")}
           labelProps="!font-semibold"
@@ -42,7 +42,7 @@ const OrganizationSettingData = ({
           <textarea
             name="organization_vision"
             id="organization_vision"
-            className=" text-lg lg:w-[35vw] py-2 px-4 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+            className=" text-lg lg:w-[35vw] py-2 px-4 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
             value={values?.organization_vision}
             placeholder={t("organization vision")}
             onChange={(e) => {
@@ -58,7 +58,7 @@ const OrganizationSettingData = ({
           <textarea
             name="organization_mission"
             id="organization_mission"
-            className=" text-lg lg:w-[35vw] py-2 px-4 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+            className=" text-lg lg:w-[35vw] py-2 px-4 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
             value={values?.organization_mission}
             placeholder={t("organization mission")}
             onChange={(e) => {
