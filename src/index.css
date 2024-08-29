@@ -18,6 +18,21 @@ body {
   background-image: url("./assets/studentInformationPanel/studentInformationPanel_banar.svg");
 }
 
+input[type="date"]::-webkit-calendar-picker-indicator {
+  /* background: url('./assets/login/LoginStepImg.gif') no-repeat center; */
+  color: red !important;
+  fill: green;
+  width: 30px;
+  height: 28px;
+  cursor: pointer;
+}
+
+@layer components {
+  .shadow-button {
+    box-shadow: rgba(83, 109, 254, 0.3) 0 4px 8px, rgba(83, 109, 254, 0.2) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
+  }
+}
+
 .no-copy {
   user-select: none;
   -webkit-user-select: none;

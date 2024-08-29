@@ -452,7 +452,7 @@ const LectureManagement = () => {
 
   return (
     <Formik initialValues={initialValues} onSubmit={(values) => {}}>
-      {({ setFieldValue, values }) => {
+      {({ setFieldValue }) => {
         return (
           <Form>
             <div className="bg-white rounded-2xl">

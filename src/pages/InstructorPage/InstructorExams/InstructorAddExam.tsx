@@ -1,4 +1,4 @@
-import  { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { GiCheckMark } from "react-icons/gi";
 import InstructorAddFirstExam from "../../../components/InstructorComponent/InstructorExams/InstructorAddFirstExam";
 import InstructorAddSecondExam from "../../../components/InstructorComponent/InstructorExams/InstructorAddSecondExam";
@@ -10,8 +10,6 @@ import { useQuery } from "@tanstack/react-query";
 import customFetch from "../../../utils/axios";
 import { useLocation } from "react-router-dom";
 import Loading from "../../../components/UI/Loading";
-import { changeSidebarRoute } from "../../../features/dirty/dirtySlice";
-import { useAppDispatch } from "../../../hooks/reduxHooks";
 
 const getExam = async (id) => {
   const response = await customFetch(`exams/${id}`);
@@ -26,7 +24,6 @@ const InstructorAddExam = () => {
   const [file, setFile] = useState();
   const location = useLocation();
   const locationID = location?.state;
-  const dispatch = useAppDispatch();
 
   const stepsOption = [
     { id: 1, label: "exam information", border: true },
@@ -127,7 +124,7 @@ const InstructorAddExam = () => {
                   (steps === 2 && index === 0) ||
                   (steps === 3 && (index === 0 || index === 1))
                     ? "border-mainColor"
-                    : "border-[#E6EAEE]"
+                    : "border-lightGray"
                 } flex-auto border-t-2 transition duration-500 ease-in-out`}
               ></div>
             )}
@@ -136,47 +133,40 @@ const InstructorAddExam = () => {
       </div>
 
       <Formik initialValues={initialValues} onSubmit={(values) => {}}>
-        {({ dirty, isSubmitting }) => {
-          useEffect(() => {
-            dispatch(changeSidebarRoute(dirty && !isSubmitting));
-          }, [dirty]);
-          return (
-            <Form>
-              {steps === 1 && (
-                <InstructorAddFirstExam
-                  setSteps={setSteps}
-                  fileExam={fileExam}
-                  setFileExam={setFileExam}
-                  file={file}
-                  setFile={setFile}
-                  editExamData={editExamData}
-                />
-              )}
+        <Form>
+          {steps === 1 && (
+            <InstructorAddFirstExam
+              setSteps={setSteps}
+              fileExam={fileExam}
+              setFileExam={setFileExam}
+              file={file}
+              setFile={setFile}
+              editExamData={editExamData}
+            />
+          )}
 
-              {steps === 2 && (
-                <InstructorAddSecondExam
-                  setSteps={setSteps}
-                  grades={grades}
-                  setGrades={setGrades}
-                  fileExam={fileExam}
-                  questionExam={questionExam}
-                  editExamData={editExamData}
-                />
-              )}
+          {steps === 2 && (
+            <InstructorAddSecondExam
+              setSteps={setSteps}
+              grades={grades}
+              setGrades={setGrades}
+              fileExam={fileExam}
+              questionExam={questionExam}
+              editExamData={editExamData}
+            />
+          )}
 
-              {steps === 3 && (
-                <InstructorAddLastExam
-                  setSteps={setSteps}
-                  fileExam={fileExam}
-                  questionExam={questionExam}
-                  file={file}
-                  editExamData={editExamData}
-                  grades={grades}
-                />
-              )}
-            </Form>
-          );
-        }}
+          {steps === 3 && (
+            <InstructorAddLastExam
+              setSteps={setSteps}
+              fileExam={fileExam}
+              questionExam={questionExam}
+              file={file}
+              editExamData={editExamData}
+              grades={grades}
+            />
+          )}
+        </Form>
       </Formik>
     </div>
   );

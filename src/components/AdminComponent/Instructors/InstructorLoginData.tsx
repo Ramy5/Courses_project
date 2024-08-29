@@ -1,5 +1,5 @@
 import { Form, Formik } from "formik";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import BaseInput from "../../UI/BaseInput";
 import { useRTL } from "../../../hooks/useRTL";
 import { t } from "i18next";
@@ -10,8 +10,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import customFetch from "../../../utils/axios";
 import { useNavigate } from "react-router-dom";
-import { useAppDispatch } from "../../../hooks/reduxHooks";
-import { changeSidebarRoute } from "../../../features/dirty/dirtySlice";
 
 interface AddInstructorLogin_TP {
   full_name: string;
@@ -46,7 +44,6 @@ const InstructorLoginData = ({
   const isRTL = useRTL();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
 
   const handleShowPassword = () => setShowPassword((prev) => !prev);
   const handleShowConfirmPassword = () =>
@@ -122,98 +119,91 @@ const InstructorLoginData = ({
         initialValues={initialValues}
         onSubmit={(values) => handleAddInstructor(values)}
       >
-        {({ dirty, isSubmitting }) => {
-          useEffect(() => {
-            dispatch(changeSidebarRoute(dirty && !isSubmitting));
-          }, [dirty]);
-          return (
-            <Form className="flex flex-col w-full gap-5 px-8 md:w-3/4 md:px-16">
-              <div>
-                <BaseInput
-                  name="full_name"
-                  id="full_name"
-                  type="text"
-                  className="w-full text-lg py-2 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
-                  placeholder={t("name quadrilateral")}
-                  label={t("name quadrilateral")}
-                  labelProps="!font-semibold"
-                />
-              </div>
-              <div>
-                <BaseInput
-                  name="email"
-                  id="email"
-                  type="text"
-                  className="w-full text-lg py-2 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
-                  placeholder={t("email")}
-                  label={t("email")}
-                  labelProps="!font-semibold"
-                />
-              </div>
-              <div className="relative">
-                <BaseInput
-                  name="password"
-                  label={t("password")}
-                  id="password"
-                  className="w-full text-lg py-2 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
-                  placeholder={t("password")}
-                  type={showPassword ? "text" : "password"}
-                  labelProps="!font-semibold"
-                />
-                {isRTL && showPassword ? (
-                  <IoMdEyeOff
-                    size={28}
-                    className="absolute cursor-pointer text-mainColor top-1/2 end-5"
-                    onClick={handleShowPassword}
-                  />
-                ) : (
-                  <IoEye
-                    size={28}
-                    className="absolute cursor-pointer text-mainColor top-1/2 end-5"
-                    onClick={handleShowPassword}
-                  />
-                )}
-              </div>
-              <div className="relative">
-                <BaseInput
-                  name="password_confirmation"
-                  id="password_confirmation"
-                  className="w-full text-lg py-2 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
-                  placeholder={t("confirm password")}
-                  label={t("confirm password")}
-                  type={showConfirmPassword ? "text" : "password"}
-                  labelProps="!font-semibold"
-                />
-                {isRTL && showConfirmPassword ? (
-                  <IoMdEyeOff
-                    size={28}
-                    className="cursor-pointer text-[#393D94] absolute top-1/2 end-5"
-                    onClick={handleShowConfirmPassword}
-                  />
-                ) : (
-                  <IoEye
-                    size={28}
-                    className="cursor-pointer text-[#393D94] absolute top-1/2 end-5"
-                    onClick={handleShowConfirmPassword}
-                  />
-                )}
-              </div>
+        <Form className="flex flex-col w-full gap-5 px-8 md:w-3/4 md:px-16 m-auto">
+          <div>
+            <BaseInput
+              name="full_name"
+              id="full_name"
+              type="text"
+              className="w-full text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+              placeholder={t("name quadrilateral")}
+              label={t("name quadrilateral")}
+              labelProps="!font-semibold"
+            />
+          </div>
+          <div>
+            <BaseInput
+              name="email"
+              id="email"
+              type="text"
+              className="w-full text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+              placeholder={t("email")}
+              label={t("email")}
+              labelProps="!font-semibold"
+            />
+          </div>
+          <div className="relative">
+            <BaseInput
+              name="password"
+              label={t("password")}
+              id="password"
+              className="w-full text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+              placeholder={t("password")}
+              type={showPassword ? "text" : "password"}
+              labelProps="!font-semibold"
+            />
+            {isRTL && showPassword ? (
+              <IoMdEyeOff
+                size={28}
+                className="absolute cursor-pointer text-mainColor top-1/2 end-5"
+                onClick={handleShowPassword}
+              />
+            ) : (
+              <IoEye
+                size={28}
+                className="absolute cursor-pointer text-mainColor top-1/2 end-5"
+                onClick={handleShowPassword}
+              />
+            )}
+          </div>
+          <div className="relative">
+            <BaseInput
+              name="password_confirmation"
+              id="password_confirmation"
+              className="w-full text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+              placeholder={t("confirm password")}
+              label={t("confirm password")}
+              type={showConfirmPassword ? "text" : "password"}
+              labelProps="!font-semibold"
+            />
+            {isRTL && showConfirmPassword ? (
+              <IoMdEyeOff
+                size={28}
+                className="cursor-pointer text-[#393D94] absolute top-1/2 end-5"
+                onClick={handleShowConfirmPassword}
+              />
+            ) : (
+              <IoEye
+                size={28}
+                className="cursor-pointer text-[#393D94] absolute top-1/2 end-5"
+                onClick={handleShowConfirmPassword}
+              />
+            )}
+          </div>
 
-              <div className="flex justify-end mt-5">
-                <Button type="submit" className="me-5" loading={isPending}>
-                  {editObj ? t("edit") : t("confirm")}
-                </Button>
-                <Button
-                  type="button"
-                  action={() => navigate(-1)}
-                  className="bg-[#E6EAEE] text-mainColor"
-                >
-                  {t("cancel")}
-                </Button>
-              </div>
-            </Form>
-          );
-        }}
+          <div className="flex justify-end mt-5 mx-auto">
+            <Button type="submit" className="me-5" loading={isPending}>
+              {editObj ? t("edit") : t("confirm")}
+            </Button>
+            <Button
+              type="button"
+              action={() => navigate(-1)}
+              className="bg-lightGray text-mainColor"
+            >
+              {t("cancel")}
+            </Button>
+          </div>
+        </Form>
       </Formik>
     </div>
   );

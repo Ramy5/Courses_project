@@ -97,10 +97,10 @@ const Programs = () => {
             {programData?.map((program, index) => (
               <div
                 key={index}
-                className="p-4 text-center bg-white rounded-2xl border-[3.4px] border-[#025464]"
+                className="p-4 text-center bg-white rounded-2xl border-[3.4px] border-mainColor"
               >
                 <div className="flex items-center justify-between w-full">
-                  <h2 className="font-semibold text-xl text-[#025464]">
+                  <h2 className="font-semibold text-xl text-mainColor">
                     {program.program_name}
                   </h2>
                   <DotsDropDown
@@ -144,7 +144,7 @@ const Programs = () => {
                 </div>
                 <div className="text-mainGray opacity-55"></div>
                 <Button
-                  className="border border-[#404B52] text-black font-medium mt-3"
+                  className="border-2 border-mainColor text-mainColor font-semibold mt-3 transition-transform transform hover:translate-y-[-1px] hover:shadow-button"
                   bordered
                   action={() => handleStudySchedule(program.id)}
                 >

@@ -2,7 +2,6 @@ import { Form, Formik } from "formik";
 import { t } from "i18next";
 import { useEffect, useState } from "react";
 import { BaseInput, Button, DateInputField } from "../../../components";
-import Select from "react-select";
 import { useNavigate, useParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import customFetch from "../../../utils/axios";
@@ -13,10 +12,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { BASE_URL } from "../../../utils/constants";
 import { formatDate } from "../../../utils/helpers";
-import selectStyle from "../../../utils/selectStyle";
 import { toast } from "react-toastify";
-import { changeSidebarRoute } from "../../../features/dirty/dirtySlice";
-import { useAppDispatch } from "../../../hooks/reduxHooks";
 import * as Yup from "yup";
 import { FormikError } from "../../../components/UI/FormikError";
 import BaseSelect from "../../../components/UI/BaseSelect";
@@ -38,7 +34,6 @@ const validationSchema = Yup.object().shape({
     .positive("Grade must be positive")
     .integer("Grade must be an integer"),
 });
-
 interface initialValues_TP {
   course_id: string;
   titleHomework: string;
@@ -95,7 +90,6 @@ const InstructorAddHomework = ({ editObj }: { editObj?: editObj_TP }) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { id: homeworkId } = useParams();
-  const dispatch = useAppDispatch();
 
   const initialValues: initialValues_TP = {
     course_id: editObj?.course_id || "",
@@ -153,15 +147,6 @@ const InstructorAddHomework = ({ editObj }: { editObj?: editObj_TP }) => {
     });
 
   const handleSubmit = async (values: initialValues_TP) => {
-    console.log("🚀 ~ handleSubmit ~ values:", values);
-    // if (!courseSelect?.id && !editObj) {
-    //   toast.info("file is required");
-    //   return;
-    // }
-    // if (!files && !editObj) {
-    //   toast.info("file is required");
-    //   return;
-    // }
     const formattedValues: any = {
       title_ar: values.titleHomework,
       title_en: values.titleHomeworkEn,
@@ -177,7 +162,6 @@ const InstructorAddHomework = ({ editObj }: { editObj?: editObj_TP }) => {
       start_delivery_time: values.start_delivery_time,
       end_delivery_time: values.end_delivery_time,
     };
-    console.log("🚀 ~ handleSubmit ~ formattedValues:", formattedValues);
 
     editObj
       ? await editHomeworkMutate(formattedValues)
@@ -204,11 +188,7 @@ const InstructorAddHomework = ({ editObj }: { editObj?: editObj_TP }) => {
       validationSchema={validationSchema}
       onSubmit={(values) => handleSubmit(values)}
     >
-      {({ values, setFieldValue, dirty, isSubmitting }) => {
-        console.log("🚀 ~ InstructorAddHomework ~ values:", values);
-        useEffect(() => {
-          dispatch(changeSidebarRoute(dirty && !isSubmitting));
-        }, [dirty]);
+      {({ values, setFieldValue }) => {
         return (
           <Form className="p-6 space-y-8 bg-white rounded-xl">
             <h2 className="mb-6 text-2xl font-bold text-mainColor">
@@ -244,7 +224,7 @@ const InstructorAddHomework = ({ editObj }: { editObj?: editObj_TP }) => {
                 name="titleHomework"
                 id="titleHomework"
                 type="text"
-                className="text-lg py-2 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                className="text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
                 placeholder={t("title homework")}
                 label={t("title homework")}
                 labelProps="!font-semibold"
@@ -253,7 +233,7 @@ const InstructorAddHomework = ({ editObj }: { editObj?: editObj_TP }) => {
                 name="titleHomeworkEn"
                 id="titleHomeworkEn"
                 type="text"
-                className="text-lg py-2 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                className="text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
                 placeholder={t("title homework in english")}
                 label={t("title homework in english")}
                 labelProps="!font-semibold"
@@ -267,7 +247,7 @@ const InstructorAddHomework = ({ editObj }: { editObj?: editObj_TP }) => {
                 <textarea
                   name="description"
                   id="description"
-                  className="w-full text-lg py-2 px-4 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                  className="w-full text-lg py-2 px-4 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
                   placeholder={t("description")}
                   value={values.description}
                   onChange={(e) => {
@@ -286,7 +266,7 @@ const InstructorAddHomework = ({ editObj }: { editObj?: editObj_TP }) => {
                 <textarea
                   name="descriptionEn"
                   id="descriptionEn"
-                  className="w-full text-lg py-2 px-4 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                  className="w-full text-lg py-2 px-4 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
                   placeholder={t("description in english")}
                   value={values.descriptionEn}
                   onChange={(e) => {
@@ -307,7 +287,7 @@ const InstructorAddHomework = ({ editObj }: { editObj?: editObj_TP }) => {
                 <textarea
                   name="instructions"
                   id="instructions"
-                  className="w-full text-lg py-2 px-4 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                  className="w-full text-lg py-2 px-4 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
                   placeholder={t("instructions")}
                   value={values.instructions}
                   onChange={(e) => {
@@ -326,7 +306,7 @@ const InstructorAddHomework = ({ editObj }: { editObj?: editObj_TP }) => {
                 <textarea
                   name="instructionsEn"
                   id="instructionsEn"
-                  className="w-full text-lg py-2 px-4 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                  className="w-full text-lg py-2 px-4 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
                   placeholder={t("instructions in english")}
                   value={values.instructionsEn}
                   onChange={(e) => {
@@ -368,7 +348,6 @@ const InstructorAddHomework = ({ editObj }: { editObj?: editObj_TP }) => {
                       </span>
                       <div className="relative p-1 rounded-md bg-mainBg">
                         <div
-                          // onClick={() => setManyPdfsOpen(true)}
                           className="flex items-center justify-center p-2 cursor-pointer "
                         >
                           <span className="absolute flex items-center justify-center w-6 h-6 text-sm font-medium text-white rounded-full -top-1 -right-3 bg-mainColor">
@@ -410,7 +389,7 @@ const InstructorAddHomework = ({ editObj }: { editObj?: editObj_TP }) => {
                 name="start_delivery_time"
                 id="start_delivery_time"
                 type="time"
-                className="w-44 text-lg py-2 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                className="w-44 text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
                 placeholder={t("start delivery time")}
                 label={t("start delivery time")}
                 labelProps="!font-semibold"
@@ -419,7 +398,7 @@ const InstructorAddHomework = ({ editObj }: { editObj?: editObj_TP }) => {
                 name="end_delivery_time"
                 id="end_delivery_time"
                 type="time"
-                className="w-44 text-lg py-2 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                className="w-44 text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
                 placeholder={t("end delivery time")}
                 label={t("end delivery time")}
                 labelProps="!font-semibold"
@@ -431,7 +410,7 @@ const InstructorAddHomework = ({ editObj }: { editObj?: editObj_TP }) => {
                 name="grade"
                 id="grade"
                 type="number"
-                className="w-96 text-lg py-2 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                className="w-96 text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
                 placeholder={t("grade")}
                 label={t("grade")}
                 labelProps="!font-semibold"

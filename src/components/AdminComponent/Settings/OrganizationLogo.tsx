@@ -44,7 +44,7 @@ const OrganizationLogo: React.FC<OrganizationLogo_TP> = ({
       </div>
       <div className="flex justify-end gap-6 mx-8">
         <Button
-          className="bg-[#E6EAEE] text-mainColor"
+          className="bg-lightGray text-mainColor"
           action={() => setActiveTab("organization data")}
         >
           {t("previous")}

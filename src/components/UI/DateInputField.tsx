@@ -40,7 +40,7 @@ export const DateInputField = ({
           htmlFor={name}
           required={required}
           {...labelProps}
-          className="text-base"
+          className="text-base font-semibold text-black"
         >
           {label}
         </label>
@@ -66,10 +66,9 @@ export const DateInputField = ({
         <BaseInput
           name={name}
           type="date"
-          className="w-full text-lg py-[3px] !border-2 !border-black rounded-lg"
+          className="w-full text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
         />
       </div>
-      {/* <FormikError name={name} className="absolute whitespace-nowrap" /> */}
     </div>
   );
 };

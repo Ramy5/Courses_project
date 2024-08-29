@@ -3,20 +3,16 @@ import { t } from "i18next";
 import { useEffect, useState } from "react";
 import { BaseInput, Button, DateInputField } from "../../../components";
 import { useNavigate, useParams } from "react-router-dom";
-import Select from "react-select";
 import { BASE_URL } from "../../../utils/constants";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import customFetch from "../../../utils/axios";
 import { toast } from "react-toastify";
 import { formatDate } from "../../../utils/helpers";
-import selectStyle from "../../../utils/selectStyle";
 import { AiOutlineCloudUpload } from "react-icons/ai";
 import { HiMiniFolderArrowDown } from "react-icons/hi2";
 import { RiDeleteBin5Line } from "react-icons/ri";
-import { useAppDispatch } from "../../../hooks/reduxHooks";
-import { changeSidebarRoute } from "../../../features/dirty/dirtySlice";
 import BaseSelect from "../../../components/UI/BaseSelect";
 
 interface initialValues_TP {
@@ -69,9 +65,7 @@ const InstructorAddProject = ({ editObj }: { editObj?: editObj_TP }) => {
   const [files, setFiles] = useState<File[] | null>(null);
   const [courseSelect, setCourseSelect] = useState(null);
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
   const { id: projectId } = useParams();
-  const dispatch = useAppDispatch();
 
   const initialValues: initialValues_TP = {
     titleProject: editObj?.titleProject || "",
@@ -110,7 +104,6 @@ const InstructorAddProject = ({ editObj }: { editObj?: editObj_TP }) => {
     mutationFn: addNewProject,
     onSuccess: (data) => {
       navigate(-1);
-      // queryClient.invalidateQueries(["all-projects"]);
       toast.success(t("project has added successfully"));
     },
   });
@@ -122,7 +115,6 @@ const InstructorAddProject = ({ editObj }: { editObj?: editObj_TP }) => {
         editProject(projectData, projectId),
       onSuccess: (data) => {
         navigate(-1);
-        // queryClient.invalidateQueries(["all-projects"]);
         toast.success(t("project has updated successfully"));
       },
     });
@@ -169,10 +161,7 @@ const InstructorAddProject = ({ editObj }: { editObj?: editObj_TP }) => {
       initialValues={initialValues}
       onSubmit={(values: initialValues_TP) => handleSubmit(values)}
     >
-      {({ values, setFieldValue, dirty, isSubmitting }) => {
-        useEffect(() => {
-          dispatch(changeSidebarRoute(dirty && !isSubmitting));
-        }, [dirty]);
+      {({ values, setFieldValue }) => {
         return (
           <Form className="p-6 space-y-8 bg-white rounded-xl">
             <h2 className="mb-6 text-2xl font-bold text-mainColor">
@@ -206,7 +195,7 @@ const InstructorAddProject = ({ editObj }: { editObj?: editObj_TP }) => {
                 name="titleProject"
                 id="titleProject"
                 type="text"
-                className="text-lg py-2 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                className="text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
                 placeholder={t("title project")}
                 label={t("title project")}
                 labelProps="!font-semibold"
@@ -215,7 +204,7 @@ const InstructorAddProject = ({ editObj }: { editObj?: editObj_TP }) => {
                 name="titleProjectEn"
                 id="titleProjectEn"
                 type="text"
-                className="text-lg py-2 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                className="text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
                 placeholder={t("title project in english")}
                 label={t("title project in english")}
                 labelProps="!font-semibold"
@@ -229,7 +218,7 @@ const InstructorAddProject = ({ editObj }: { editObj?: editObj_TP }) => {
                 <textarea
                   name="description"
                   id="description"
-                  className="w-full text-lg py-2 px-4 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                  className="w-full text-lg py-2 px-4 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
                   placeholder={t("description")}
                   value={values.description}
                   onChange={(e) => {
@@ -244,7 +233,7 @@ const InstructorAddProject = ({ editObj }: { editObj?: editObj_TP }) => {
                 <textarea
                   name="descriptionEn"
                   id="descriptionEn"
-                  className="w-full text-lg py-2 px-4 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                  className="w-full text-lg py-2 px-4 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
                   placeholder={t("description in english")}
                   value={values.descriptionEn}
                   onChange={(e) => {
@@ -261,7 +250,7 @@ const InstructorAddProject = ({ editObj }: { editObj?: editObj_TP }) => {
                 <textarea
                   name="instructions"
                   id="instructions"
-                  className="w-full text-lg py-2 px-4 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                  className="w-full text-lg py-2 px-4 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
                   placeholder={t("instructions")}
                   value={values.instructions}
                   onChange={(e) => {
@@ -276,7 +265,7 @@ const InstructorAddProject = ({ editObj }: { editObj?: editObj_TP }) => {
                 <textarea
                   name="instructionsEn"
                   id="instructionsEn"
-                  className="w-full text-lg py-2 px-4 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                  className="w-full text-lg py-2 px-4 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
                   placeholder={t("instructions in english")}
                   value={values.instructionsEn}
                   onChange={(e) => {
@@ -356,7 +345,7 @@ const InstructorAddProject = ({ editObj }: { editObj?: editObj_TP }) => {
                 name="start_delivery_time"
                 id="start_delivery_time"
                 type="time"
-                className="w-44 text-lg py-2 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                className="w-44 text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
                 placeholder={t("start delivery time")}
                 label={t("start delivery time")}
                 labelProps="!font-semibold"
@@ -365,7 +354,7 @@ const InstructorAddProject = ({ editObj }: { editObj?: editObj_TP }) => {
                 name="end_delivery_time"
                 id="end_delivery_time"
                 type="time"
-                className="w-44 text-lg py-2 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                className="w-44 text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
                 placeholder={t("end delivery time")}
                 label={t("end delivery time")}
                 labelProps="!font-semibold"
@@ -377,7 +366,7 @@ const InstructorAddProject = ({ editObj }: { editObj?: editObj_TP }) => {
                 name="grade"
                 id="grade"
                 type="number"
-                className="w-96 text-lg py-2 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                className="w-96 text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
                 placeholder={t("grade")}
                 label={t("grade")}
                 labelProps="!font-semibold"

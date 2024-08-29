@@ -208,7 +208,7 @@ const Reports = () => {
 
   return (
     <Formik initialValues={initialValues} onSubmit={(values) => {}}>
-      {({ values, setFieldValue }) => {
+      {({ setFieldValue }) => {
         return (
           <Form className="bg-white rounded-xl">
             <div className="p-6">

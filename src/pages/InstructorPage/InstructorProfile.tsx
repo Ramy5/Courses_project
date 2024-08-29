@@ -170,7 +170,7 @@ const InstructorProfile = () => {
 
           <InstructorSocialInformation personalData={instructorPersonalData} />
 
-          <div className="bg-[#E6EAEE] rounded-2xl my-7 mx-5 py-6">
+          <div className="bg-lightGray rounded-2xl my-7 mx-5 py-6">
             <h2 className="mb-5 text-2xl font-semibold text-center ms-5 sm:text-start">
               {t("scientific certificates")}
             </h2>
