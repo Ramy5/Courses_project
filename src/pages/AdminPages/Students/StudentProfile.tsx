@@ -94,7 +94,6 @@ const StudentProfile = () => {
     mutationKey: ["block-student"],
     mutationFn: (blockStatus) => blockStudent(studentProfileId, blockStatus),
     onSuccess: (data: any) => {
-      console.log("🚀 ~ StudentProfile ~ data:", data);
       queryClient.invalidateQueries("show-student");
     },
     onError: (error) => {

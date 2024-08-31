@@ -11,12 +11,13 @@ import customFetch from "../../../utils/axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { useAppSelector } from "../../../hooks/reduxHooks";
+import { t } from "i18next";
 
 const blockInstructor = async (
   instructorId: string,
   blockStatus: { blocked_status: number }
 ) => {
-  const data = customFetch.post(`student/${instructorId}/status`, blockStatus);
+  const data = customFetch.post(`teacher/${instructorId}/status`, blockStatus);
   return data;
 };
 
@@ -50,6 +51,11 @@ const ProfileIntroduction = ({
     mutationFn: (blockStatus) => blockInstructor(personalData?.id, blockStatus),
     onSuccess: (data: any) => {
       queryClient.invalidateQueries("show-instructor");
+      if (data?.data?.data?.teacher?.blocked_status === 0) {
+        toast.success(t("instructor has unblocked successfully"));
+      } else {
+        toast.success(t("instructor has blocked successfully"));
+      }
     },
     onError: (error) => {
       toast.error(error);
