@@ -1,5 +1,5 @@
 import { t } from "i18next";
-import { DotsDropDown, Table, TitlePage } from "../../../components";
+import { Button, DotsDropDown, Table, TitlePage } from "../../../components";
 import { FaFolder, FaUserAlt } from "react-icons/fa";
 import { CgNotes } from "react-icons/cg";
 import { PiStudentBold } from "react-icons/pi";
@@ -100,8 +100,8 @@ const ProgramInformation = () => {
         icon={<FaFolder size={28} className="fill-mainColor" />}
       />
 
-      <div className="bg-white p-5 rounded-2xl">
-        <div className="bg-lightGray rounded-2xl p-5">
+      <div className="p-5 bg-white rounded-2xl">
+        <div className="p-5 bg-lightGray rounded-2xl">
           <div className="w-full mb-6 text-center">
             <span className="font-medium">{t("training program")}</span>
             <h2 className="text-3xl font-semibold text-mainColor">
@@ -210,10 +210,15 @@ const ProgramInformation = () => {
           </div>
         </div>
 
-        <div className="bg-lightGray rounded-2xl mt-7 py-6">
-          <h2 className="mb-5 text-2xl font-semibold text-center ms-5 sm:text-start">
-            {t("Courses")}
-          </h2>
+        <div className="py-6 bg-lightGray rounded-2xl mt-7">
+          <div className="flex items-center justify-between px-5 mb-6">
+            <h2 className="text-2xl font-semibold text-center sm:text-start">
+              {t("Courses")}
+            </h2>
+            <Button action={() => navigate("/programs/create", { state: {} })}>
+              {t("add")}
+            </Button>
+          </div>
           <Table
             data={programData?.courses}
             columns={coursesColumnsFee}

@@ -576,5 +576,6 @@
   "Grade cannot exceed 100": "الدرجة لا يمكن أن تتجاوز 100",
   "Grade cannot exceed 89": "الدرجة لا يمكن أن تتجاوز 89",
   "Grade cannot exceed 79": "الدرجة لا يمكن أن تتجاوز 79",
-  "Grade cannot exceed 64": "الدرجة لا يمكن أن تتجاوز 64"
+  "Grade cannot exceed 64": "الدرجة لا يمكن أن تتجاوز 64",
+  "do you really want to leave the page?": "هل تريد بالفعل مغادرة الصفحة؟"
 }

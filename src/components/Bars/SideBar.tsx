@@ -37,7 +37,7 @@ const SideBar: React.FC<SideBarProps> = ({
   const location = useLocation();
   const { sidebarColor } = useAppSelector((state) => state.global);
   const { isDirty } = useAppSelector((state) => state.dirty);
-  console.log("🚀 ~ isDirty:", isDirty)
+  console.log("🚀 ~ isDirty:", isDirty);
   const dispatch = useAppDispatch();
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 640);
   const [isDialogOpen, setDialogOpen] = useState(false);
@@ -56,12 +56,12 @@ const SideBar: React.FC<SideBarProps> = ({
     if (isSmallScreen) {
       setToggleSideBar(false);
     } else {
-      setToggleSideBar(true); 
+      setToggleSideBar(true);
     }
   }, [isSmallScreen]);
 
   const { role: userData } = useAppSelector((state) => state.user);
-  console.log("🚀 ~ userData:", userData)
+  console.log("🚀 ~ userData:", userData);
 
   const sideBarItemsOfAdmin = [
     {
@@ -364,8 +364,8 @@ const SideBar: React.FC<SideBarProps> = ({
             <h2 className="text-2xl font-semibold">
               {t("Data is not completed")}
             </h2>
-            <p className="text-xl font-medium my-8">
-              {t("Are you sure you want to leave this page?")}
+            <p className="my-8 text-xl font-medium">
+              {t("do you really want to leave the page?")}
             </p>
           </div>
           <div className="flex justify-center gap-4 mt-12">
