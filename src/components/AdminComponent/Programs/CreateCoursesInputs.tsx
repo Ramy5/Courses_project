@@ -81,7 +81,9 @@ const CreateCoursesInputs = ({
       "",
     course_teachers: editCoursesData?.course_teachers || courseTeacherID || [],
     course_code:
-      editCoursesData?.course_code || editFinishedCoursesData?.course_code || "",
+      editCoursesData?.course_code ||
+      editFinishedCoursesData?.course_code ||
+      "",
     level: editCoursesData?.level || editFinishedCoursesData?.level || "",
     course_objectives:
       editCoursesData?.course_objectives ||
@@ -317,7 +319,7 @@ const CreateCoursesInputs = ({
                         name="course_name"
                         id="course_name"
                         type="text"
-                        className="w-full text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                        className="w-full py-2 text-lg rounded-lg bg-lightGray main_shadow text-slate-800 focus-within:outline-none"
                         placeholder={t("course name")}
                         label={t("course name")}
                         labelProps="!font-semibold"
@@ -330,7 +332,7 @@ const CreateCoursesInputs = ({
                           name="course_code"
                           id="course_code"
                           type="text"
-                          className="w-full text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                          className="w-full py-2 text-lg rounded-lg bg-lightGray main_shadow text-slate-800 focus-within:outline-none"
                           placeholder={t("course code")}
                           label={t("course code")}
                           labelProps="!font-semibold"
@@ -368,7 +370,7 @@ const CreateCoursesInputs = ({
                       {/* <textarea
                         name="course_objectives"
                         id="course_objectives"
-                        className="w-full h-full mt-1  text-lg py-2 px-4 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                        className="w-full h-full px-4 py-2 mt-1 text-lg rounded-lg bg-lightGray main_shadow text-slate-800 focus-within:outline-none"
                         placeholder={t("course objectives")}
                         value={values.course_objectives}
                         onChange={(e) => {
@@ -379,7 +381,7 @@ const CreateCoursesInputs = ({
                       <textarea
                         name="course_objectives"
                         id="course_objectives"
-                        className="w-full h-full mt-1  text-lg py-2 px-4 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                        className="w-full h-full px-4 py-2 mt-1 text-lg rounded-lg bg-lightGray main_shadow text-slate-800 focus-within:outline-none"
                         placeholder={t("course objectives")}
                         value={courseObjectives?.join("\n") || ["1- "]}
                         onChange={(e) => {
@@ -421,7 +423,7 @@ const CreateCoursesInputs = ({
                       <textarea
                         name="information_concepts"
                         id="information_concepts"
-                        className="w-full h-36 text-lg py-2 px-4 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                        className="w-full px-4 py-2 text-lg rounded-lg h-36 bg-lightGray main_shadow text-slate-800 focus-within:outline-none"
                         placeholder={t("information and concepts")}
                         value={informationConceptsSteps?.join("\n") || ["1- "]}
                         onChange={(e) => {
@@ -457,7 +459,7 @@ const CreateCoursesInputs = ({
                       <textarea
                         name="mental_skills"
                         id="mental_skills"
-                        className="w-full h-36 text-lg py-2 px-4 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                        className="w-full px-4 py-2 text-lg rounded-lg h-36 bg-lightGray main_shadow text-slate-800 focus-within:outline-none"
                         placeholder={t("mental skills")}
                         value={mentalSkillsSteps?.join("\n") || ["1- "]}
                         onChange={(e) => {
@@ -496,7 +498,7 @@ const CreateCoursesInputs = ({
                       <textarea
                         name="professional_skills"
                         id="professional_skills"
-                        className="w-full h-36 text-lg py-2 px-4 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                        className="w-full px-4 py-2 text-lg rounded-lg h-36 bg-lightGray main_shadow text-slate-800 focus-within:outline-none"
                         placeholder={t("professional skills")}
                         value={professionalSkillsSteps?.join("\n") || ["1- "]}
                         onChange={(e) => {
@@ -532,7 +534,7 @@ const CreateCoursesInputs = ({
                       <textarea
                         name="general_skills"
                         id="general_skills"
-                        className="w-full h-36 text-lg py-2 px-4 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                        className="w-full px-4 py-2 text-lg rounded-lg h-36 bg-lightGray main_shadow text-slate-800 focus-within:outline-none"
                         placeholder={t("general skills")}
                         value={generalSkillsSteps?.join("\n") || ["1- "]}
                         onChange={(e) => {
@@ -683,7 +685,7 @@ const CreateCoursesInputs = ({
                     />
                   </div>
 
-                  <div className="w-full my-12 md:w-3/4 relative">
+                  <div className="relative w-full my-12 md:w-3/4">
                     <label htmlFor="instructors_name" className="font-semibold">
                       {t("instructor name")}
                     </label>
