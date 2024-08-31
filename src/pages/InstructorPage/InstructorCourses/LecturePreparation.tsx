@@ -1,6 +1,6 @@
 import { Form, Formik } from "formik";
 import { t } from "i18next";
-import {  useState } from "react";
+import { useState } from "react";
 import { BaseInput, Button } from "../../../components";
 import { AiOutlineCloudUpload } from "react-icons/ai";
 import { RiDeleteBin5Line } from "react-icons/ri";
@@ -113,7 +113,7 @@ const LecturePreparation = () => {
       instructions_ar: values.instructions_ar,
       instructions_en: values.instructions_en,
       links: links,
-      attachments: files?.map((file) => ({ file: file })),
+      lecture_attachments: files?.map((file) => ({ file: file })),
     };
 
     await mutate(newLecturePreparation);
@@ -183,7 +183,7 @@ const LecturePreparation = () => {
                 </div>
               </div>
               <div className="flex gap-12 ">
-                <div className="w-full relative">
+                <div className="relative w-full">
                   <label htmlFor="address" className="font-semibold">
                     {`${t("instructions")} (${t("arabic")})`}
                   </label>
@@ -201,7 +201,7 @@ const LecturePreparation = () => {
                     className="absolute whitespace-nowrap"
                   />
                 </div>
-                <div className="w-full relative">
+                <div className="relative w-full">
                   <label htmlFor="address" className="font-semibold">
                     {`${t("instructions")} (${t("english")})`}
                   </label>
