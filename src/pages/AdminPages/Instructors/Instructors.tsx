@@ -151,7 +151,7 @@ const Instructors = () => {
             </div>
             <div className="text-mainGray opacity-55">
               <p className="text-black">{instructor.full_name}</p>
-              <p>{instructor?.qualifications?.[0].job_title}</p>
+              <p>{instructor?.qualifications?.length ? instructor?.qualifications?.[0].job_title : "-------"}</p>
             </div>
             <Button
               className="border-2 border-mainColor text-mainColor font-semibold text-[15px] mt-4 transition-transform transform hover:translate-y-[-1px] hover:shadow-button"

@@ -35,6 +35,7 @@ const BaseSelect = ({
   disabled,
   ...props
 }: BaseSelect_TP) => {
+  console.log("🚀 ~ disabled:", disabled)
 
   return (
     <div>
@@ -51,7 +52,8 @@ const BaseSelect = ({
         value={props.value}
         onChange={onChange}
         isLoading={isLoading}
-        disabled={disabled}
+        // disabled={disabled}
+        isDisabled={disabled}
         components={{ LoadingIndicator }}
       />
       <FormikError name="course_name" className="whitespace-nowrap" />

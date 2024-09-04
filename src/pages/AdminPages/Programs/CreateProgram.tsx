@@ -58,9 +58,11 @@ const postInstructorLogin = async (newProgram: any) => {
 const CreateProgram = () => {
   const [step, setStep] = useState<number>(1);
   const [coursesData, setCoursesData] = useState([]);
-  console.log("🚀 ~ CreateProgram ~ coursesData:", coursesData);
+  console.log("🚀 ~ CreateProgram ~ coursesData:", coursesData)
   const [editCoursesData, setEditCoursesData] = useState({});
   const [editFinishedCoursesData, setEditFinishedCoursesData] = useState({});
+  console.log("🚀 ~ CreateProgram ~ editFinishedCoursesData:", editFinishedCoursesData)
+  const [addNewCourse, setAddNewCourse] = useState()
   const queryClient = useQueryClient();
   const nanigate = useNavigate();
   const location = useLocation();
@@ -147,7 +149,7 @@ const CreateProgram = () => {
     <div>
       <Formik
         initialValues={initialValues}
-        validationSchema={validationSchema}
+        validationSchema={!editFinishedCoursesData ? validationSchema : ""}
         onSubmit={(values, { resetForm }) => {
           handleAddProgram(values);
           resetForm();
