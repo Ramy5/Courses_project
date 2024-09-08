@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 import NavBar from "../components/Bars/NavBar";
 import SideBar from "../components/Bars/SideBar";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const StructurePage = () => {
   const [toggleSideBar, setToggleSideBar] = useState<boolean>(true);

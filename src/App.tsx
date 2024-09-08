@@ -71,6 +71,18 @@ import AddInstructor from "./components/AdminComponent/Instructors/AddInstructor
 import EditInstructor from "./components/AdminComponent/Instructors/EditInstructor";
 import ViewInstructorSchedule from "./pages/AdminPages/Instructors/ViewInstructorSchedule";
 import InstructorEditHomework from "./pages/InstructorPage/InstructorHomework/InstructorEditHomework";
+import Meeting from "./pages/Meeting";
+
+const payload = {
+  meetingNumber: "",
+  role: 0,
+  sdkKey: "yourSDKKey",
+  sdkSecret: "yourSDKSecret",
+  userName: "John Doe",
+  userEmail: "johndoe@example.com",
+  passWord: "yourMeetingPassword",
+  leaveUrl: "https://yourapp.com/leave",
+};
 
 function App() {
   const isRTL = useRTL();
@@ -298,10 +310,7 @@ function App() {
           />
 
           {/* INSTRUCTOR PROJECT */}
-          <Route
-            path="/instructor/projects"
-            element={<InstructorProjects />}
-          />
+          <Route path="/instructor/projects" element={<InstructorProjects />} />
           <Route
             path="/instructor/projects/view/:id"
             element={<InstructorViewProject />}
@@ -330,6 +339,9 @@ function App() {
 
           {/* INSTRUCTOR GRADES */}
           <Route path="/instructor/setting" element={<InstructorSetting />} />
+
+          {/* MEETING */}
+          <Route path="/meeting" element={<Meeting payload={payload} />} />
         </Route>
 
         {/* STUDENT EXAMS */}
