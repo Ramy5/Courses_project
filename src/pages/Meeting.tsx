@@ -1,16 +1,5 @@
 import React, { useEffect } from "react";
 
-const payload = {
-  meetingNumber: "123456789", // The Zoom meeting number
-  role: 0, // 0 for attendee, 1 for host
-  sdkKey: "yourSDKKey", // Your Zoom SDK Key
-  sdkSecret: "yourSDKSecret", // Your Zoom SDK Secret
-  userName: "John Doe", // The name of the user joining the meeting
-  userEmail: "johndoe@example.com", // The email of the user (optional)
-  passWord: "yourMeetingPassword", // The password for the Zoom meeting (if any)
-  leaveUrl: "https://yourapp.com/leave", // URL to redirect to when the meeting is left
-};
-
 const Meeting = ({ payload }) => {
   useEffect(() => {
     const startMeeting = async () => {
