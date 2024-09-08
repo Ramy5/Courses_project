@@ -1,0 +1,112 @@
+import React, { useEffect } from "react";
+
+const payload = {
+  meetingNumber: "123456789", // The Zoom meeting number
+  role: 0, // 0 for attendee, 1 for host
+  sdkKey: "yourSDKKey", // Your Zoom SDK Key
+  sdkSecret: "yourSDKSecret", // Your Zoom SDK Secret
+  userName: "John Doe", // The name of the user joining the meeting
+  userEmail: "johndoe@example.com", // The email of the user (optional)
+  passWord: "yourMeetingPassword", // The password for the Zoom meeting (if any)
+  leaveUrl: "https://yourapp.com/leave", // URL to redirect to when the meeting is left
+};
+
+const Meeting = ({ payload }) => {
+  useEffect(() => {
+    const startMeeting = async () => {
+      const { ZoomMtg } = await import("@zoomus/websdk");
+
+      // Set up the necessary Zoom Web SDK configurations
+      ZoomMtg.setZoomJSLib("https://source.zoom.us/2.7.0/lib", "/av"); // Ensure the correct path
+      ZoomMtg.preLoadWasm();
+      ZoomMtg.prepareJssdk();
+
+      // Generate the signature to authenticate
+      ZoomMtg.generateSDKSignature({
+        meetingNumber: payload.meetingNumber,
+        role: payload.role, // 1 for host, 0 for attendee
+        sdkKey: payload.sdkKey,
+        sdkSecret: payload.sdkSecret,
+        success: function (res) {
+          console.log("Signature Generated", res.result);
+          ZoomMtg.init({
+            leaveUrl: payload.leaveUrl,
+            success: function () {
+              // Join the meeting once init is successful
+              ZoomMtg.join({
+                meetingNumber: payload.meetingNumber,
+                signature: res.result,
+                sdkKey: payload.sdkKey,
+                userName: payload.userName,
+                userEmail: payload.userEmail,
+                passWord: payload.passWord, // If the meeting has a password
+                tk: "", // Optional token for registered meetings
+                success: function () {
+                  console.log("Joined Meeting Successfully");
+                },
+                error: function (error) {
+                  console.log("Join Error", error);
+                },
+              });
+            },
+            error: function (error) {
+              console.log("Init Error", error);
+            },
+          });
+        },
+        error: function (error) {
+          console.log("Signature Generation Error", error);
+        },
+      });
+    };
+
+    // Call the async function to start the meeting
+    startMeeting();
+  }, [payload]);
+
+  return <div>Meeting</div>;
+};
+
+export default Meeting;
+
+// useEffect(async () => {
+//   const { zoomMtg } = await import("@zoomus/websdk");
+
+//   zoomMtg.setZoomJsLib("https://source.zoom.us/lib");
+
+//   zoomMtg.preLoadWasm();
+//   zoomMtg.prepareWebSDK();
+
+//   zoomMtg.generateSDKSignature({
+//     meetingNumber: payload.meetingNumber,
+//     role: payload.role,
+//     sdkKey: payload.sdkKey,
+//     sdkSecret: payload.sdkSecret,
+//     success: function (signature) {
+//       ZoomMtg.init({
+//         leaveUrl: payload.leaveUrl,
+//         success: function (data) {
+//           ZoomMtg.join({
+//             meetingNumber: payload.meetingNumber,
+//             signature: signature.result,
+//             userName: payload.userName,
+//             userEmail: payload.userEmail,
+//             passWord: payload.passWord,
+//             tk: "",
+//             success: function () {
+//               console.log("joined");
+//             },
+//           });
+//         },
+//         error: function (error) {
+//           console.log(error);
+//         },
+//       });
+//     },
+//     error: function (error) {
+//       console.log(error);
+//     },
+//   });
+// }, []);
+
+// return <div>Meeting</div>;
