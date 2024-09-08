@@ -32,6 +32,11 @@ const validationSchema = Yup.object().shape({
   ),
 });
 
+const addnewCourse = async (addCourse: any) => {
+  const data = await customFetch.post(`storeCourse`, addCourse);
+  return data;
+};
+
 const editProgramCourse = async (editCourses: any, id: number) => {
   const data = await customFetch.post(`updateCourse/${id}`, editCourses);
   return data;
@@ -44,6 +49,12 @@ const CreateCoursesInputs = ({
   setEditCoursesData,
   editFinishedCoursesData,
 }: any) => {
+  console.log("🚀 ~ editFinishedCoursesData:", editFinishedCoursesData);
+  console.log("🚀 ~ editCoursesData:", editCoursesData);
+  console.log(
+    "🚀 ~ Object.keys(editFinishedCoursesData).length:",
+    Object.keys(editFinishedCoursesData).length !== 0
+  );
   const [suggestedReferences, setSuggestedReferences] = useState(
     editCoursesData?.references || editFinishedCoursesData?.references || []
   );
@@ -160,6 +171,22 @@ const CreateCoursesInputs = ({
     { id: 3, value: 3, label: 3 },
     { id: 4, value: 4, label: 4 },
   ];
+
+  const { mutate: addNewCourseMutate, isPending: addNewCourseIsPending } =
+    useMutation({
+      mutationKey: ["add_newCourse"],
+      mutationFn: (addCourse: any) => addnewCourse(addCourse),
+      onSuccess: (data) => {
+        queryClient.invalidateQueries("courses");
+        toast.success(
+          t("the course description has been successfully modified")
+        );
+      },
+      onError: (error) => {
+        const errorMessage = error?.response?.data?.error[0];
+        toast.error(errorMessage);
+      },
+    });
 
   const { mutate, isPending } = useMutation({
     mutationKey: ["edit_courses"],
@@ -297,6 +324,11 @@ const CreateCoursesInputs = ({
     setTeachingLearningMethods(newSelectedMethods);
   };
 
+  console.log(
+    "🚀 ~ !!editFinishedCoursesData?.program_id:",
+    !editFinishedCoursesData?.program_id
+  );
+
   return (
     <div>
       <Formik
@@ -324,7 +356,8 @@ const CreateCoursesInputs = ({
                         label={t("course name")}
                         labelProps="!font-semibold"
                         disabled={
-                          Object.keys(editFinishedCoursesData).length !== 0
+                          Object.keys(editFinishedCoursesData).length !== 0 &&
+                          !editFinishedCoursesData?.program_id
                         }
                       />
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
@@ -337,8 +370,8 @@ const CreateCoursesInputs = ({
                           label={t("course code")}
                           labelProps="!font-semibold"
                           disabled={
-                            Object.keys(editFinishedCoursesData).length !== 0 ||
-                            Object.keys(editCoursesData).length !== 0
+                            Object.keys(editFinishedCoursesData).length !== 0 &&
+                            !editFinishedCoursesData?.program_id
                           }
                         />
                         <div className="relative">
@@ -354,9 +387,9 @@ const CreateCoursesInputs = ({
                               }}
                               placeholder={t("level")}
                               label={t("level")}
-                              isDisabled={
+                              disabled={
                                 Object.keys(editFinishedCoursesData).length !==
-                                0
+                                  0 && !editFinishedCoursesData?.program_id
                               }
                             />
                           </div>
@@ -367,17 +400,6 @@ const CreateCoursesInputs = ({
                       <label htmlFor="vision" className="font-semibold">
                         {t("course objectives")}
                       </label>
-                      {/* <textarea
-                        name="course_objectives"
-                        id="course_objectives"
-                        className="w-full h-full px-4 py-2 mt-1 text-lg rounded-lg bg-lightGray main_shadow text-slate-800 focus-within:outline-none"
-                        placeholder={t("course objectives")}
-                        value={values.course_objectives}
-                        onChange={(e) => {
-                          setFieldValue("course_objectives", e.target.value);
-                        }}
-                      /> */}
-
                       <textarea
                         name="course_objectives"
                         id="course_objectives"
@@ -731,12 +753,11 @@ const CreateCoursesInputs = ({
                     loading={isPending}
                     action={async () => {
                       const errors = await validateForm();
-                      setTouched(errors); // Mark all fields as touched to display validation errors
+                      setTouched(errors);
 
                       if (Object.keys(errors).length === 0) {
                         if (
-                          Object.keys(editFinishedCoursesData).length === 0 ||
-                          Object.keys(editCoursesData).length === 0
+                          Object.keys(editFinishedCoursesData)?.length === 0
                         ) {
                           setCoursesData((prev) => {
                             const existingIndex = prev.findIndex(
@@ -770,11 +791,27 @@ const CreateCoursesInputs = ({
                           resetForm();
                           setStep(1);
                         } else {
-                          mutate({
-                            ...values,
-                            references: suggestedReferences,
-                          });
-                          navigate(-1);
+                          if (editFinishedCoursesData?.program_id) {
+                            const { id, ...data } = values;
+                            addNewCourseMutate({
+                              program_id: editFinishedCoursesData?.program_id,
+                              ...data,
+                              references: suggestedReferences?.map(({ id, ...referenceRest }) => ({
+                                ...referenceRest,
+                              })),
+                            });
+                            setTimeout(() => {
+                              resetForm();
+                              navigate(-1);
+                            });
+                          } else {
+                            mutate({
+                              ...values,
+                              references: suggestedReferences,
+                            });
+                            resetForm();
+                            navigate(-1);
+                          }
                         }
                       } else {
                         console.log("Validation failed:", errors);

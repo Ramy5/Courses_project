@@ -34,6 +34,7 @@ const ProgramInformation = () => {
   });
 
   const programData = data?.data.data || {};
+  console.log("🚀 ~ ProgramInformation ~ programData:", programData)
 
   useEffect(() => {
     if (error) {
@@ -60,10 +61,12 @@ const ProgramInformation = () => {
       },
       {
         header: () => <span>{t("")}</span>,
-        accessorKey: "action",
+        accessorKey: "action", 
         cell: (info) => {
           const rowIndex = info.row.index;
           const totalRows = info.table.getCoreRowModel().rows.length;
+          const editData = {...info.row.original, programData}
+          console.log("🚀 ~ ProgramInformation ~ editData:", editData)
           return (
             <DotsDropDown
               instructorRoute="/programs/courseDescription"
@@ -215,7 +218,7 @@ const ProgramInformation = () => {
             <h2 className="text-2xl font-semibold text-center sm:text-start">
               {t("Courses")}
             </h2>
-            <Button action={() => navigate("/programs/create", { state: {} })}>
+            <Button action={() => navigate("/programs/create", { state: {program_id: programData?.id} })}>
               {t("add")}
             </Button>
           </div>
