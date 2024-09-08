@@ -315,7 +315,7 @@ const InformationPanel = () => {
           modules={[Navigation, Autoplay]}
           className="mySwiper"
         >
-          {programsData.map((program, index) => (
+          {programsData?.map((program, index) => (
             <SwiperSlide key={index}>
               <ProgramBox
                 key={index}
@@ -362,7 +362,7 @@ const InformationPanel = () => {
             modules={[Navigation]}
             className="mySwiper"
           >
-            {personData.map((item, index) => (
+            {personData?.map((item, index) => (
               <SwiperSlide key={index}>
                 <PersonView img={item.img} desc={item.desc} />
               </SwiperSlide>
@@ -372,7 +372,7 @@ const InformationPanel = () => {
 
         {/* DATA COUNT */}
         <div className="grid items-center grid-cols-2 col-span-2 gap-6 lg:grid-cols-3">
-          {dataCounts.map((data, index) => (
+          {dataCounts?.map((data, index) => (
             <DataCount
               key={index}
               dataTitle={data.dataTitle}
