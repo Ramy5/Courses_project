@@ -102,7 +102,7 @@ const ViewHomeworkTable = ({ data, isInstructor, setEvaluateHomeworkFile }) => {
             <span className="col-span-3 px-6 py-8 text-lg border-gray-800 border-s">
               <BaseInput
                 type="number"
-                className="w-44 text-lg py-2 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                className="w-44 text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
                 name="evaluate"
                 id="evaluate"
               />

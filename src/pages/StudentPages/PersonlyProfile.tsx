@@ -31,7 +31,7 @@ const PersonlyProfile = () => {
     id: 1,
     profileCover: studentProfileCover,
     personalImage: data?.personal_image || studentProfileImg,
-    name: data?.full_name,
+    full_name: data?.full_name,
     phoneNumber: "",
     email: data?.email,
     address: data?.address,
@@ -91,11 +91,6 @@ const PersonlyProfile = () => {
                   contactValue={studentProfileData.address}
                   icon={<PiMapPinLight size={30} />}
                 />
-                {/* <StudentPersonalContact
-                  contactTitle={t("phone")}
-                  contactValue={studentProfileData.phoneNumber}
-                  icon={<IoMdPhonePortrait size={30} />}
-                /> */}
                 <StudentPersonalContact
                   contactTitle={t("email")}
                   contactValue={studentProfileData.email}
@@ -120,7 +115,7 @@ const PersonlyProfile = () => {
             </div>
 
             {/* ACADEMIC DETAILS */}
-            <div className="p-6 lg:p-10 bg-mainColor/15 rounded-xl">
+            <div className="p-6 lg:p-10 bg-lightGray rounded-xl">
               <h2 className="mb-10 text-2xl font-bold">{t("academic data")}</h2>
 
               <div className="grid items-center gap-8 md:grid-cols-2 lg:grid-cols-3 lg:gap-14">
@@ -135,7 +130,7 @@ const PersonlyProfile = () => {
             </div>
 
             {/* FATHER  DETAILS */}
-            <div className="p-6 lg:p-10 bg-mainColor/15 rounded-xl">
+            <div className="p-6 lg:p-10 bg-lightGray rounded-xl">
               <h2 className="mb-10 text-2xl font-bold">{t("father data")}</h2>
 
               <div className="grid items-center gap-8 md:grid-cols-2 lg:grid-cols-3 lg:gap-14">

@@ -16,10 +16,7 @@ import BaseSelect from "../../UI/BaseSelect";
 const validationSchema = Yup.object().shape({
   course_name: Yup.string().required("Course name is required"),
   course_teachers: Yup.array().min(1, "At least one teacher is required"),
-  course_code: Yup.number()
-    .required("Course code is required")
-    .positive()
-    .integer(),
+  course_code: Yup.string().required("Course code is required"),
   level: Yup.string().required("Level is required"),
   course_objectives: Yup.string().required("Course objectives are required"),
   information_concepts: Yup.string().required(
@@ -35,6 +32,11 @@ const validationSchema = Yup.object().shape({
   ),
 });
 
+const addnewCourse = async (addCourse: any) => {
+  const data = await customFetch.post(`storeCourse`, addCourse);
+  return data;
+};
+
 const editProgramCourse = async (editCourses: any, id: number) => {
   const data = await customFetch.post(`updateCourse/${id}`, editCourses);
   return data;
@@ -47,6 +49,12 @@ const CreateCoursesInputs = ({
   setEditCoursesData,
   editFinishedCoursesData,
 }: any) => {
+  console.log("🚀 ~ editFinishedCoursesData:", editFinishedCoursesData);
+  console.log("🚀 ~ editCoursesData:", editCoursesData);
+  console.log(
+    "🚀 ~ Object.keys(editFinishedCoursesData).length:",
+    Object.keys(editFinishedCoursesData).length !== 0
+  );
   const [suggestedReferences, setSuggestedReferences] = useState(
     editCoursesData?.references || editFinishedCoursesData?.references || []
   );
@@ -84,7 +92,9 @@ const CreateCoursesInputs = ({
       "",
     course_teachers: editCoursesData?.course_teachers || courseTeacherID || [],
     course_code:
-      editCoursesData?.course_code || editFinishedCoursesData?.course_code || 0,
+      editCoursesData?.course_code ||
+      editFinishedCoursesData?.course_code ||
+      "",
     level: editCoursesData?.level || editFinishedCoursesData?.level || "",
     course_objectives:
       editCoursesData?.course_objectives ||
@@ -161,6 +171,22 @@ const CreateCoursesInputs = ({
     { id: 3, value: 3, label: 3 },
     { id: 4, value: 4, label: 4 },
   ];
+
+  const { mutate: addNewCourseMutate, isPending: addNewCourseIsPending } =
+    useMutation({
+      mutationKey: ["add_newCourse"],
+      mutationFn: (addCourse: any) => addnewCourse(addCourse),
+      onSuccess: (data) => {
+        queryClient.invalidateQueries("courses");
+        toast.success(
+          t("the course description has been successfully modified")
+        );
+      },
+      onError: (error) => {
+        const errorMessage = error?.response?.data?.error[0];
+        toast.error(errorMessage);
+      },
+    });
 
   const { mutate, isPending } = useMutation({
     mutationKey: ["edit_courses"],
@@ -298,6 +324,11 @@ const CreateCoursesInputs = ({
     setTeachingLearningMethods(newSelectedMethods);
   };
 
+  console.log(
+    "🚀 ~ !!editFinishedCoursesData?.program_id:",
+    !editFinishedCoursesData?.program_id
+  );
+
   return (
     <div>
       <Formik
@@ -306,11 +337,10 @@ const CreateCoursesInputs = ({
         onSubmit={(values) => {}}
       >
         {({ setFieldValue, values, resetForm, setTouched, validateForm }) => {
-          console.log("🚀 ~ values:", values);
           return (
             <Form>
               <div className="pb-8 bg-white rounded-3xl">
-                <h2 className="py-4 px-7 !m-0 border-b-4 border-[#E6EAEE] font-semibold text-xl">
+                <h2 className="py-4 px-7 !m-0 border-b-4 border-lightGray font-semibold text-xl">
                   {t("add a course")} /{" "}
                   <span>{t("edit course description")}</span>
                 </h2>
@@ -321,26 +351,27 @@ const CreateCoursesInputs = ({
                         name="course_name"
                         id="course_name"
                         type="text"
-                        className="w-full text-lg py-2 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                        className="w-full py-2 text-lg rounded-lg bg-lightGray main_shadow text-slate-800 focus-within:outline-none"
                         placeholder={t("course name")}
                         label={t("course name")}
                         labelProps="!font-semibold"
                         disabled={
-                          Object.keys(editFinishedCoursesData).length !== 0
+                          Object.keys(editFinishedCoursesData).length !== 0 &&
+                          !editFinishedCoursesData?.program_id
                         }
                       />
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
                         <BaseInput
                           name="course_code"
                           id="course_code"
-                          type="number"
-                          className="w-full text-lg py-2 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                          type="text"
+                          className="w-full py-2 text-lg rounded-lg bg-lightGray main_shadow text-slate-800 focus-within:outline-none"
                           placeholder={t("course code")}
                           label={t("course code")}
                           labelProps="!font-semibold"
                           disabled={
-                            Object.keys(editFinishedCoursesData).length !== 0 ||
-                            Object.keys(editCoursesData).length !== 0
+                            Object.keys(editFinishedCoursesData).length !== 0 &&
+                            !editFinishedCoursesData?.program_id
                           }
                         />
                         <div className="relative">
@@ -356,9 +387,9 @@ const CreateCoursesInputs = ({
                               }}
                               placeholder={t("level")}
                               label={t("level")}
-                              isDisabled={
+                              disabled={
                                 Object.keys(editFinishedCoursesData).length !==
-                                0
+                                  0 && !editFinishedCoursesData?.program_id
                               }
                             />
                           </div>
@@ -369,21 +400,10 @@ const CreateCoursesInputs = ({
                       <label htmlFor="vision" className="font-semibold">
                         {t("course objectives")}
                       </label>
-                      {/* <textarea
-                        name="course_objectives"
-                        id="course_objectives"
-                        className="w-full h-full mt-1  text-lg py-2 px-4 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
-                        placeholder={t("course objectives")}
-                        value={values.course_objectives}
-                        onChange={(e) => {
-                          setFieldValue("course_objectives", e.target.value);
-                        }}
-                      /> */}
-
                       <textarea
                         name="course_objectives"
                         id="course_objectives"
-                        className="w-full h-full mt-1  text-lg py-2 px-4 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                        className="w-full h-full px-4 py-2 mt-1 text-lg rounded-lg bg-lightGray main_shadow text-slate-800 focus-within:outline-none"
                         placeholder={t("course objectives")}
                         value={courseObjectives?.join("\n") || ["1- "]}
                         onChange={(e) => {
@@ -425,7 +445,7 @@ const CreateCoursesInputs = ({
                       <textarea
                         name="information_concepts"
                         id="information_concepts"
-                        className="w-full h-36 text-lg py-2 px-4 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                        className="w-full px-4 py-2 text-lg rounded-lg h-36 bg-lightGray main_shadow text-slate-800 focus-within:outline-none"
                         placeholder={t("information and concepts")}
                         value={informationConceptsSteps?.join("\n") || ["1- "]}
                         onChange={(e) => {
@@ -461,7 +481,7 @@ const CreateCoursesInputs = ({
                       <textarea
                         name="mental_skills"
                         id="mental_skills"
-                        className="w-full h-36 text-lg py-2 px-4 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                        className="w-full px-4 py-2 text-lg rounded-lg h-36 bg-lightGray main_shadow text-slate-800 focus-within:outline-none"
                         placeholder={t("mental skills")}
                         value={mentalSkillsSteps?.join("\n") || ["1- "]}
                         onChange={(e) => {
@@ -500,7 +520,7 @@ const CreateCoursesInputs = ({
                       <textarea
                         name="professional_skills"
                         id="professional_skills"
-                        className="w-full h-36 text-lg py-2 px-4 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                        className="w-full px-4 py-2 text-lg rounded-lg h-36 bg-lightGray main_shadow text-slate-800 focus-within:outline-none"
                         placeholder={t("professional skills")}
                         value={professionalSkillsSteps?.join("\n") || ["1- "]}
                         onChange={(e) => {
@@ -536,7 +556,7 @@ const CreateCoursesInputs = ({
                       <textarea
                         name="general_skills"
                         id="general_skills"
-                        className="w-full h-36 text-lg py-2 px-4 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                        className="w-full px-4 py-2 text-lg rounded-lg h-36 bg-lightGray main_shadow text-slate-800 focus-within:outline-none"
                         placeholder={t("general skills")}
                         value={generalSkillsSteps?.join("\n") || ["1- "]}
                         onChange={(e) => {
@@ -733,12 +753,11 @@ const CreateCoursesInputs = ({
                     loading={isPending}
                     action={async () => {
                       const errors = await validateForm();
-                      setTouched(errors); // Mark all fields as touched to display validation errors
+                      setTouched(errors);
 
                       if (Object.keys(errors).length === 0) {
                         if (
-                          Object.keys(editFinishedCoursesData).length === 0 ||
-                          Object.keys(editCoursesData).length === 0
+                          Object.keys(editFinishedCoursesData)?.length === 0
                         ) {
                           setCoursesData((prev) => {
                             const existingIndex = prev.findIndex(
@@ -772,11 +791,27 @@ const CreateCoursesInputs = ({
                           resetForm();
                           setStep(1);
                         } else {
-                          mutate({
-                            ...values,
-                            references: suggestedReferences,
-                          });
-                          navigate(-1);
+                          if (editFinishedCoursesData?.program_id) {
+                            const { id, ...data } = values;
+                            addNewCourseMutate({
+                              program_id: editFinishedCoursesData?.program_id,
+                              ...data,
+                              references: suggestedReferences?.map(({ id, ...referenceRest }) => ({
+                                ...referenceRest,
+                              })),
+                            });
+                            setTimeout(() => {
+                              resetForm();
+                              navigate(-1);
+                            });
+                          } else {
+                            mutate({
+                              ...values,
+                              references: suggestedReferences,
+                            });
+                            resetForm();
+                            navigate(-1);
+                          }
                         }
                       } else {
                         console.log("Validation failed:", errors);
@@ -787,7 +822,7 @@ const CreateCoursesInputs = ({
                   </Button>
                   <Button
                     type="button"
-                    className="bg-[#E6EAEE] text-mainColor"
+                    className="bg-lightGray text-mainColor"
                     action={() => {
                       if (Object.keys(editFinishedCoursesData).length !== 0) {
                         navigate(-1);

@@ -102,15 +102,15 @@ const SuggestedReferences = ({
     <Formik initialValues={initialValues} onSubmit={() => {}}>
       {({ setFieldValue, values }) => {
         useEffect(() => {
-            if (editSuggestedReferences?.id) {
-              Object.keys(values).map((key) => {
-                return setFieldValue(key, editSuggestedReferences[key]);
-              });
-            }
-          }, [editSuggestedReferences]);
+          if (editSuggestedReferences?.id) {
+            Object.keys(values).map((key) => {
+              return setFieldValue(key, editSuggestedReferences[key]);
+            });
+          }
+        }, [editSuggestedReferences]);
         return (
           <Form>
-            <div className="bg-[#EEEDED]">
+            <div className="bg-lightGray">
               <h2 className="p-6 text-2xl font-medium">
                 {t("suggested references")}
               </h2>

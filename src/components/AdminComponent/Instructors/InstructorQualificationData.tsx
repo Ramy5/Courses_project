@@ -13,8 +13,6 @@ import AddNewCertificatesInput from "./AddNewCertificatesInput";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { BASE_URL } from "../../../utils/constants";
-import { useAppDispatch } from "../../../hooks/reduxHooks";
-import { changeSidebarRoute } from "../../../features/dirty/dirtySlice";
 interface AddInstructorQualification_TP {
   general_specialization: string;
   specialization: string;
@@ -72,7 +70,6 @@ const InstructorQualificationData = ({
   const [file, setFile] = useState(editObj?.file || null);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
 
   const [addNewCertificates, setAddNewCertificates] = useState(false);
   const [newCertificates, setNewCertificates] = useState(
@@ -202,162 +199,155 @@ const InstructorQualificationData = ({
       initialValues={initialValues}
       onSubmit={(values) => handleAddQualification(values)}
     >
-      {({ dirty, isSubmitting }) => {
-        useEffect(() => {
-          dispatch(changeSidebarRoute(dirty && !isSubmitting));
-        }, [dirty]);
-        return (
-          <Form>
-            <div className="flex flex-col w-full gap-5 px-8 md:w-3/4 md:px-16">
-              <div>
-                <BaseInput
-                  name="general_specialization"
-                  id="general_specialization"
-                  type="text"
-                  className="w-full text-lg py-2 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
-                  placeholder={t("general specialization")}
-                  label={t("general specialization")}
-                  labelProps="!font-semibold"
-                />
-              </div>
-              <div>
-                <BaseInput
-                  name="specialization"
-                  id="specialization"
-                  type="text"
-                  className="w-full text-lg py-2 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
-                  placeholder={t("Specialization")}
-                  label={t("Specialization")}
-                  labelProps="!font-semibold"
-                />
-              </div>
-              <div>
-                <BaseInput
-                  name="degree"
-                  id="degree"
-                  type="text"
-                  className="w-full text-lg py-2 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
-                  placeholder={t("degree")}
-                  label={t("degree")}
-                  labelProps="!font-semibold"
-                />
-              </div>
-              <div>
-                <BaseInput
-                  name="year_acquisition"
-                  id="year_acquisition"
-                  type="text"
-                  className="w-full text-lg py-2 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
-                  placeholder={t("year acquisition")}
-                  label={t("year acquisition")}
-                  labelProps="!font-semibold"
-                />
-              </div>
-              <div>
-                <BaseInput
-                  name="job_title"
-                  id="job_title"
-                  type="text"
-                  className="w-full text-lg py-2 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
-                  placeholder={t("job title")}
-                  label={t("job title")}
-                  labelProps="!font-semibold"
-                />
-              </div>
+      <Form>
+        <div className="flex flex-col w-full gap-5 px-8 md:w-3/4 md:px-16">
+          <div>
+            <BaseInput
+              name="general_specialization"
+              id="general_specialization"
+              type="text"
+              className="w-full text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+              placeholder={t("general specialization")}
+              label={t("general specialization")}
+              labelProps="!font-semibold"
+            />
+          </div>
+          <div>
+            <BaseInput
+              name="specialization"
+              id="specialization"
+              type="text"
+              className="w-full text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+              placeholder={t("Specialization")}
+              label={t("Specialization")}
+              labelProps="!font-semibold"
+            />
+          </div>
+          <div>
+            <BaseInput
+              name="degree"
+              id="degree"
+              type="text"
+              className="w-full text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+              placeholder={t("degree")}
+              label={t("degree")}
+              labelProps="!font-semibold"
+            />
+          </div>
+          <div>
+            <BaseInput
+              name="year_acquisition"
+              id="year_acquisition"
+              type="text"
+              className="w-full text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+              placeholder={t("year acquisition")}
+              label={t("year acquisition")}
+              labelProps="!font-semibold"
+            />
+          </div>
+          <div>
+            <BaseInput
+              name="job_title"
+              id="job_title"
+              type="text"
+              className="w-full text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+              placeholder={t("job title")}
+              label={t("job title")}
+              labelProps="!font-semibold"
+            />
+          </div>
 
-              <div>
-                <h2 className="mb-3 font-semibold">{t("CV file")}</h2>
-                <div className="flex flex-col items-center gap-8 sm:flex-row">
-                  <input
-                    type="file"
-                    onChange={handleFileChange}
-                    className="hidden"
-                    id="file-upload"
-                  />
-                  <div className="relative px-12 py-6 text-center border-2 border-dashed cursor-pointer border-mainColor">
-                    <label
-                      htmlFor="file-upload"
-                      className="absolute top-0 bottom-0 left-0 right-0 w-full h-full cursor-pointer"
-                    ></label>
-                    <AiOutlineCloudUpload
-                      size={150}
-                      className="fill-[#E6EAEE] m-auto"
-                    />
-                    <p>{t("drag or click to add a file")}</p>
-                  </div>
-                  {file && (
-                    <div className="flex items-center gap-5">
-                      <div className="flex flex-col justify-center gap-1">
-                        <span className="text-sm font-medium text-center text-gray-700">
-                          الملفات
+          <div>
+            <h2 className="mb-3 font-semibold">{t("CV file")}</h2>
+            <div className="flex flex-col items-center gap-8 sm:flex-row">
+              <input
+                type="file"
+                onChange={handleFileChange}
+                className="hidden"
+                id="file-upload"
+              />
+              <div className="relative px-12 py-6 text-center border-2 border-dashed cursor-pointer border-mainColor">
+                <label
+                  htmlFor="file-upload"
+                  className="absolute top-0 bottom-0 left-0 right-0 w-full h-full cursor-pointer"
+                ></label>
+                <AiOutlineCloudUpload
+                  size={150}
+                  className="fill-lightGray m-auto"
+                />
+                <p>{t("drag or click to add a file")}</p>
+              </div>
+              {file && (
+                <div className="flex items-center gap-5">
+                  <div className="flex flex-col justify-center gap-1">
+                    <span className="text-sm font-medium text-center text-gray-700">
+                      الملفات
+                    </span>
+                    <div className="relative p-1 rounded-md bg-mainBg">
+                      <div
+                        // onClick={() => setManyPdfsOpen(true)}
+                        className="flex items-center justify-center p-2 cursor-pointer "
+                      >
+                        <span className="absolute flex items-center justify-center w-6 h-6 text-sm font-medium text-white rounded-full -top-1 -right-3 bg-mainColor">
+                          1
                         </span>
-                        <div className="relative p-1 rounded-md bg-mainBg">
-                          <div
-                            // onClick={() => setManyPdfsOpen(true)}
-                            className="flex items-center justify-center p-2 cursor-pointer "
-                          >
-                            <span className="absolute flex items-center justify-center w-6 h-6 text-sm font-medium text-white rounded-full -top-1 -right-3 bg-mainColor">
-                              1
-                            </span>
-                            <HiMiniFolderArrowDown
-                              className="fill-mainColor"
-                              size={35}
-                            />
-                          </div>
-                        </div>
+                        <HiMiniFolderArrowDown
+                          className="fill-mainColor"
+                          size={35}
+                        />
                       </div>
-                      <RiDeleteBin5Line
-                        size={35}
-                        className="cursor-pointer fill-mainRed"
-                        onClick={handleFileDelete}
-                      />
                     </div>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-8">
-              <div className="flex items-center justify-between mx-8 mb-5">
-                <h2 className="text-2xl font-semibold">
-                  {t("scientific certificates")}
-                </h2>
-                <Button action={() => setAddNewCertificates(true)}>
-                  {t("add")}
-                </Button>
-              </div>
-              <div className="overflow-auto">
-                {(addNewCertificates || editObj?.newCertificate) && (
-                  <AddNewCertificatesInput
-                    setNewCertificates={setNewCertificates}
-                    editObj={editObj}
-                    newCertificates={newCertificates}
-                    setEditCertificateData={setEditCertificateData}
-                    dataReceived={dataReceived}
+                  </div>
+                  <RiDeleteBin5Line
+                    size={35}
+                    className="cursor-pointer fill-mainRed"
+                    onClick={handleFileDelete}
                   />
-                )}
-              </div>
+                </div>
+              )}
             </div>
+          </div>
+        </div>
 
-            <div className="flex justify-end px-8 mt-12">
-              <Button
-                type="submit"
-                className="me-5"
-                loading={isPending || editCertificateIsPending || editIsPending}
-              >
-                {editObj ? t("edit") : t("confirm")}
-              </Button>
-              <Button
-                type="button"
-                className="bg-[#E6EAEE] text-mainColor"
-                action={() => navigate(-1)}
-              >
-                {t("cancel")}
-              </Button>
-            </div>
-          </Form>
-        );
-      }}
+        <div className="mt-8">
+          <div className="flex items-center justify-between mx-8 mb-5">
+            <h2 className="text-2xl font-semibold">
+              {t("scientific certificates")}
+            </h2>
+            <Button action={() => setAddNewCertificates(true)}>
+              {t("add")}
+            </Button>
+          </div>
+          <div className="overflow-auto">
+            {(addNewCertificates || editObj?.newCertificate) && (
+              <AddNewCertificatesInput
+                setNewCertificates={setNewCertificates}
+                editObj={editObj}
+                newCertificates={newCertificates}
+                setEditCertificateData={setEditCertificateData}
+                dataReceived={dataReceived}
+              />
+            )}
+          </div>
+        </div>
+
+        <div className="flex justify-end px-8 mt-12">
+          <Button
+            type="submit"
+            className="me-5"
+            loading={isPending || editCertificateIsPending || editIsPending}
+          >
+            {editObj ? t("edit") : t("confirm")}
+          </Button>
+          <Button
+            type="button"
+            className="bg-lightGray text-mainColor"
+            action={() => navigate(-1)}
+          >
+            {t("cancel")}
+          </Button>
+        </div>
+      </Form>
     </Formik>
   );
 };

@@ -36,13 +36,9 @@ const StudentAddProject = () => {
 
   return (
     <Formik initialValues={initialValues} onSubmit={(values) => {}}>
-      {({ values }) => {
-        return (
-          <Form className="">
-            <AddHomeworkDelivery isProject {...customData} />
-          </Form>
-        );
-      }}
+      <Form className="">
+        <AddHomeworkDelivery isProject {...customData} />
+      </Form>
     </Formik>
   );
 };

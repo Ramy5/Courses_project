@@ -2,17 +2,13 @@ import { useEffect, useMemo, useState } from "react";
 import { t } from "i18next";
 import { ColumnDef } from "@tanstack/react-table";
 import { Button, Table } from "../../components";
-import Select from "react-select";
 import { Form, Formik } from "formik";
-import selectStyle from "../../utils/selectStyle";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import customFetch from "../../utils/axios";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import LoadingIndicator from "../../components/UI/LoadingIndicator";
 import Loading from "../../components/UI/Loading";
 import { formatDate } from "../../utils/helpers";
-import DatePicker from "react-datepicker";
 import { toast } from "react-toastify";
 import BaseSelect from "../../components/UI/BaseSelect";
 
@@ -25,28 +21,16 @@ const RecordAttendance = () => {
   const [page, setPage] = useState<number>(1);
   const [selectedRows, setSelectedRows] = useState<any>([]);
   const [coursesSelect, setCoursesSelect] = useState(null);
+  console.log("🚀 ~ RecordAttendance ~ coursesSelect:", coursesSelect);
   const [dateSelect, setDateSelect] = useState(null);
-  const formatDates = formatDate(dateSelect);
+  console.log("🚀 ~ RecordAttendance ~ dateSelect:", dateSelect)
+  // const formatDates = formatDate(dateSelect);
   const queryClient = useQueryClient();
 
   const initialValues = {
     Courses: "",
     lecture_date: "",
   };
-
-  // const handleCheckboxChange = (event: any, selectedRow: any) => {
-  //   const checkboxId = event.target.id;
-  //   if (event.target.checked) {
-  //     setSelectedRows((prevSelectedItems: any) => [
-  //       ...prevSelectedItems,
-  //       selectedRow.row.original,
-  //     ]);
-  //   } else {
-  //     setSelectedRows((prevSelectedItems: any) =>
-  //       prevSelectedItems.filter((item: any) => item.id !== Number(checkboxId))
-  //     );
-  //   }
-  // };
 
   const handleCheckboxChange = (event, selectedRow) => {
     const checkboxId = selectedRow.row.original.id;
@@ -78,6 +62,7 @@ const RecordAttendance = () => {
     isSuccess,
     isFetching: isFetchingCourses,
     isRefetching: isRefetchingCourses,
+    refetch: refetchCourses,
   } = useQuery({
     queryKey: ["coueses_attendance"],
     queryFn: fetchCoursesData,
@@ -102,17 +87,25 @@ const RecordAttendance = () => {
   });
 
   const lectureDateData = lectureDate && lectureDate?.data?.data;
+  console.log("🚀 ~ RecordAttendance ~ lectureDateData:", lectureDateData);
   const filterLectureDate = lectureDateData?.filter(
-    (date) => date.date == formatDates
+    (item) => item.id == dateSelect?.id
   );
+
+  const lectureDateOptions = lectureDateData?.map((date) => ({
+    id: date.id,
+    value: date.date,
+    label: date.date || `${t("level")}`,
+  }));
 
   const fetchRecordAttendance = async () => {
     const course_id = coursesSelect?.id;
-    const date = filterLectureDate[0]?.id;
+    const lecture_id = dateSelect?.value;
+    console.log("🚀 ~ fetchRecordAttendance ~ lecture_id:", lecture_id);
     const response = await customFetch(
-      `studentsInCourse?course_id=${course_id || 0}&date=${date || 0}?page=${
-        page || 0
-      }`
+      `studentsInCourse?course_id=${course_id || 0}&date=${
+        lecture_id || 0
+      }?page=${page || 0}`
     );
     return response;
   };
@@ -149,8 +142,9 @@ const RecordAttendance = () => {
         header: () => <span>{t("absence rate")}</span>,
         accessorKey: "attend_percentage",
         cell: (info) => {
+          console.log("🚀 ~ RecordAttendance ~ info:", info.getValue())
           const attendPercentage = Number(
-            info.getValue() ? info.getValue()?.replace("%", "").trim() : 10
+            info.getValue() 
           );
           const colorAbsence =
             Number(attendPercentage) <= 15
@@ -216,14 +210,18 @@ const RecordAttendance = () => {
 
   useEffect(() => {
     refetch();
-  }, [page, !!coursesSelect?.id && !!filterLectureDate?.length]);
+  }, [page, !!coursesSelect?.id]);
+
+  useEffect(() => {
+    refetchCourses();
+  }, [page, !!coursesSelect?.id]);
 
   if (isFetching || isRefetching) return <Loading />;
   return (
     <div>
       <div className="bg-[#F9F9F9] rounded-3xl py-5 px-8 main_shadow mb-5">
         <Formik initialValues={initialValues} onSubmit={() => {}}>
-          {({ setFieldValue, values }) => {
+          {({ setFieldValue }) => {
             return (
               <Form className="grid grid-cols-1 gap-8 md:grid-cols-3 sm:grid-cols-2">
                 <div>
@@ -249,7 +247,53 @@ const RecordAttendance = () => {
                     isDisabled={!isSuccess}
                   />
                 </div>
-                <div className="flex flex-col">
+                {/* <div>
+                  <BaseSelect
+                    id="level"
+                    name="level"
+                    placeholder={t("level")}
+                    label={t("level")}
+                    options={lectureLevelOptions}
+                    value={levelSelect}
+                    onChange={(e) => {
+                      setFieldValue("level", e.id);
+                      setLevelSelect({
+                        id: e.id,
+                        label: e.value || `${t("course")}`,
+                        value: e.value,
+                      });
+                    }}
+                    isLoading={
+                      isFetchingCourses || isRefetchingCourses || isLoading
+                    }
+                    isDisabled={!isSuccess}
+                  />
+                </div> */}
+                <div>
+                  <BaseSelect
+                    id="level"
+                    name="level"
+                    placeholder={t("lecture date")}
+                    label={t("lecture date")}
+                    options={lectureDateOptions}
+                    value={dateSelect}
+                    onChange={(e) => {
+                      console.log("🚀 ~ RecordAttendance ~ e:", e);
+                      // const formattedDate = e?.toISOString().split("T")[0]; // Convert to YYYY-MM-DD
+                      // setFieldValue("lecture_date", formattedDate);
+                      setDateSelect({
+                        id: e.id,
+                        label: e.value || `${t("course")}`,
+                        value: e.value,
+                      });
+                    }}
+                    isLoading={
+                      isFetchingCourses || isRefetchingCourses || isLoading
+                    }
+                    isDisabled={!isSuccess}
+                  />
+                </div>
+                {/* <div className="flex flex-col">
                   <label htmlFor="lecture_date" className="mb-2 font-bold">
                     {t("lecture date")}
                   </label>
@@ -265,7 +309,7 @@ const RecordAttendance = () => {
                     dateFormat="dd/MM/yyyy"
                     className="w-full text-lg py-2 px-8 !border-2 rounded-lg bg-[#E6EAEE] main_shadow text-slate-800 focus-within:outline-none"
                   />
-                </div>
+                </div> */}
               </Form>
             );
           }}

@@ -5,21 +5,22 @@ import DateImg from "../../assets/navBar/date.svg";
 import Notification from "../../assets/navBar/notification.svg";
 import { useRTL } from "../../hooks/useRTL";
 import Button from "../UI/Button";
-import SearchInput from "../UI/SearchInput";
-import { RxCross2 } from "react-icons/rx";
 import { HiBars3CenterLeft } from "react-icons/hi2";
 import { SideBarProps } from "./SideBar";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import { t } from "i18next";
 import { logoutUser } from "../../features/user/userSlice";
 import { useNavigate } from "react-router-dom";
+import EducationLogo from "../../assets/educationLogo.jpg"
 
 const NavBar: React.FC<SideBarProps> = ({
   setToggleSideBar,
   toggleSideBar,
 }) => {
   const [currentDate, setCurrentDate] = useState<string>("");
-  const { user, isLoading } = useAppSelector((store) => store.user);
+  const { user, isLoading, role } = useAppSelector((store) => store.user);
+  console.log("🚀 ~ role:", role)
+  console.log("🚀 ~ user:", user)
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -49,7 +50,7 @@ const NavBar: React.FC<SideBarProps> = ({
   }, []);
 
   return (
-    <div className="flex items-center justify-between h-16 px-4 w-100">
+    <div className="flex items-center justify-between h-16 px-4 w-100 overflow-hidden">
       <div className="flex items-center">
         <Button
           action={() => setToggleSideBar((curr) => !curr)}
@@ -57,15 +58,22 @@ const NavBar: React.FC<SideBarProps> = ({
         >
           <HiBars3CenterLeft size={24} className="fill-white" />
         </Button>
-        <div className="items-center hidden gap-2 px-4 py-6 w-100 sm:flex">
+        {/* <div className="items-center hidden gap-2 px-4 py-6 w-100 sm:flex">
           <img src={DateImg} alt="date" />
           <p>{currentDate}</p>
+        </div> */}
+        <div>
+          <img src={EducationLogo} className="w-20 h-20" />
         </div>
       </div>
       <div className="flex items-center gap-4 me-2">
         <div className="flex items-center justify-center gap-3">
-          <div className="hidden me-6 lg:block">
-            <SearchInput />
+          <div className="hidden me-2 lg:block">
+            <div className="items-center hidden gap-2 w-100 sm:flex">
+              <img src={DateImg} alt="date" />
+              <p>{currentDate}</p>
+            </div>
+            {/* <SearchInput /> */}
           </div>
           <img src={Notification} alt="Notification" />
           <div className="flex items-center gap-1">

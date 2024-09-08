@@ -7,8 +7,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { t } from "i18next";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useAppDispatch } from "../../../hooks/reduxHooks";
-import { changeSidebarRoute } from "../../../features/dirty/dirtySlice";
 import * as Yup from "yup";
 interface AddProgram_TP {
   program_name: string;
@@ -34,10 +32,22 @@ const validationSchema = Yup.object({
   number_classes: Yup.string().required("number of classes is required"),
   vision: Yup.string().required("vision is required"),
   message: Yup.string().required("message is required"),
-  excellence: Yup.string().required("grade is required"),
-  very_good: Yup.string().required("grade is required"),
-  good: Yup.string().required("grade is required"),
-  acceptable: Yup.string().required("grade is required"),
+  excellence: Yup.number()
+    .required("Grade is required")
+    .min(90, "Grade must be at least 90")
+    .max(100, "Grade cannot exceed 100"),
+  very_good: Yup.number()
+    .required("Grade is required")
+    .min(80, "Grade must be at least 80")
+    .max(89, "Grade cannot exceed 89"),
+  good: Yup.number()
+    .required("Grade is required")
+    .min(65, "Grade must be at least 65")
+    .max(79, "Grade cannot exceed 79"),
+  acceptable: Yup.number()
+    .required("Grade is required")
+    .min(50, "Grade must be at least 50")
+    .max(64, "Grade cannot exceed 64"),
 });
 
 const postInstructorLogin = async (newProgram: any) => {
@@ -51,11 +61,12 @@ const CreateProgram = () => {
   console.log("🚀 ~ CreateProgram ~ coursesData:", coursesData)
   const [editCoursesData, setEditCoursesData] = useState({});
   const [editFinishedCoursesData, setEditFinishedCoursesData] = useState({});
+  console.log("🚀 ~ CreateProgram ~ editFinishedCoursesData:", editFinishedCoursesData)
+  const [addNewCourse, setAddNewCourse] = useState()
   const queryClient = useQueryClient();
   const nanigate = useNavigate();
   const location = useLocation();
   const dataReceived = location.state;
-  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (dataReceived) {
@@ -93,7 +104,28 @@ const CreateProgram = () => {
     },
   });
 
+  const updatedCoursesData = coursesData?.map(
+    ({ id, references, ...rest }) => ({
+      ...rest,
+      references: references?.map(({ id, ...referenceRest }) => ({
+        ...referenceRest,
+      })),
+    })
+  );
+  console.log(
+    "🚀 ~ updatedCoursesData ~ updatedCoursesData:",
+    updatedCoursesData
+  );
+
   const handleAddProgram = async (values: AddProgram_TP) => {
+    const updatedCoursesData = coursesData?.map(
+      ({ id, references, ...rest }) => ({
+        ...rest,
+        references: references?.map(({ id, ...referenceRest }) => ({
+          ...referenceRest,
+        })),
+      })
+    );
     const newProgram = {
       program_name: values.program_name,
       program_type: values.program_type,
@@ -107,7 +139,7 @@ const CreateProgram = () => {
       very_good: values.very_good,
       good: values.good,
       acceptable: values.acceptable,
-      courses: coursesData,
+      courses: updatedCoursesData,
     };
 
     await mutate(newProgram);
@@ -117,38 +149,34 @@ const CreateProgram = () => {
     <div>
       <Formik
         initialValues={initialValues}
-        validationSchema={validationSchema}
-        onSubmit={(values) => handleAddProgram(values)}
-      >
-        {({ dirty, isSubmitting }) => {
-          useEffect(() => {
-            dispatch(changeSidebarRoute(dirty && !isSubmitting));
-          }, [dirty]);
-          return (
-            <Form>
-              {step === 1 && (
-                <CreateProgramInputs
-                  setStep={setStep}
-                  coursesData={coursesData}
-                  setCoursesData={setCoursesData}
-                  setEditCoursesData={setEditCoursesData}
-                  isPending={isPending}
-                />
-              )}
-              {step === 2 && (
-                <CreateCoursesInputs
-                  setStep={setStep}
-                  setCoursesData={setCoursesData}
-                  coursesData={coursesData}
-                  editCoursesData={editCoursesData}
-                  setEditCoursesData={setEditCoursesData}
-                  editFinishedCoursesData={editFinishedCoursesData}
-                  setEditFinishedCoursesData={setEditFinishedCoursesData}
-                />
-              )}
-            </Form>
-          );
+        validationSchema={!editFinishedCoursesData ? validationSchema : ""}
+        onSubmit={(values, { resetForm }) => {
+          handleAddProgram(values);
+          resetForm();
         }}
+      >
+        <Form>
+          {step === 1 && (
+            <CreateProgramInputs
+              setStep={setStep}
+              coursesData={coursesData}
+              setCoursesData={setCoursesData}
+              setEditCoursesData={setEditCoursesData}
+              isPending={isPending}
+            />
+          )}
+          {step === 2 && (
+            <CreateCoursesInputs
+              setStep={setStep}
+              setCoursesData={setCoursesData}
+              coursesData={coursesData}
+              editCoursesData={editCoursesData}
+              setEditCoursesData={setEditCoursesData}
+              editFinishedCoursesData={editFinishedCoursesData}
+              setEditFinishedCoursesData={setEditFinishedCoursesData}
+            />
+          )}
+        </Form>
       </Formik>
     </div>
   );

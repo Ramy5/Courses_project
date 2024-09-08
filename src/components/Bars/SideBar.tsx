@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { CiGrid41 } from "react-icons/ci";
 import { FaFolder } from "react-icons/fa6";
 import { FaRegEdit, FaUserAlt } from "react-icons/fa";
@@ -11,13 +11,7 @@ import { CgPlayButtonR } from "react-icons/cg";
 import { HiBars3CenterLeft } from "react-icons/hi2";
 import { RxCross2 } from "react-icons/rx";
 import { t } from "i18next";
-import {
-  Link,
-  useBeforeUnload,
-  useBlocker,
-  useLocation,
-  useNavigate,
-} from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import SearchInput from "../UI/SearchInput";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import { FiCalendar } from "react-icons/fi";
@@ -26,9 +20,6 @@ import { TbFileText } from "react-icons/tb";
 import { MdInsertChartOutlined } from "react-icons/md";
 import { LiaBookReaderSolid } from "react-icons/lia";
 import { SlBookOpen } from "react-icons/sl";
-import customFetch from "../../utils/axios";
-import { useQuery } from "@tanstack/react-query";
-import { changeSidebarColor } from "../../features/global/globalSlice";
 import MainPopup from "../UI/MainPopup";
 import { Button } from "..";
 import { changeSidebarRoute } from "../../features/dirty/dirtySlice";
@@ -51,7 +42,6 @@ const SideBar: React.FC<SideBarProps> = ({
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 640);
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [locationRoute, setLocationRoute] = useState<string>("");
-  console.log("🚀 ~ locationRoute:", locationRoute);
 
   const handleResize = () => {
     setIsSmallScreen(window.innerWidth < 640);
@@ -70,21 +60,8 @@ const SideBar: React.FC<SideBarProps> = ({
     }
   }, [isSmallScreen]);
 
-  // const getOrganizationSetting = async () => {
-  //   const { data } = await customFetch.get("setting/1");
-  //   return data.data.setting;
-  // };
-
-  // const { data } = useQuery({
-  //   queryKey: ["get-setting-data"],
-  //   queryFn: getOrganizationSetting,
-  // });
-
-  // useEffect(() => {
-  //   dispatch(changeSidebarColor(data?.color));
-  // }, [data?.color, dispatch]);
-
   const { role: userData } = useAppSelector((state) => state.user);
+  console.log("🚀 ~ userData:", userData);
 
   const sideBarItemsOfAdmin = [
     {
@@ -289,8 +266,6 @@ const SideBar: React.FC<SideBarProps> = ({
 
   const getCurrentPathName = (path: string) => {
     const segments = path.split("/").filter(Boolean);
-    console.log("🚀 ~ getCurrentPathName ~ segments:", segments);
-
     const segmentsType =
       userData !== "admin" && segments.length > 0
         ? `/${segments[0]}/${segments[1]}`
@@ -300,7 +275,6 @@ const SideBar: React.FC<SideBarProps> = ({
   };
 
   const currentPathtName = getCurrentPathName(location.pathname);
-  console.log("🚀 ~ currentPathtName:", currentPathtName);
 
   return (
     <aside
@@ -390,8 +364,8 @@ const SideBar: React.FC<SideBarProps> = ({
             <h2 className="text-2xl font-semibold">
               {t("Data is not completed")}
             </h2>
-            <p className="text-xl font-medium my-8">
-              {t("Are you sure you want to leave this page?")}
+            <p className="my-8 text-xl font-medium">
+              {t("do you really want to leave the page?")}
             </p>
           </div>
           <div className="flex justify-center gap-4 mt-12">

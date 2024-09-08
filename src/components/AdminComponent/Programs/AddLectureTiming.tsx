@@ -32,6 +32,7 @@ const AddLectureTiming = ({
   editStudySchedule,
   setEditStudySchedule,
 }) => {
+  console.log("🚀 ~ scheduleData:", scheduleData)
   const [coursesSelect, setCoursesSelect] = useState(null);
   const [groupSelect, setGroupSelect] = useState(null);
   const [teacherSelect, setTeacherSelect] = useState(null);
@@ -186,7 +187,7 @@ const AddLectureTiming = ({
                   value={scheduleData?.day?.day}
                   type="text"
                   label={t("day")}
-                  className="w-full text-lg py-1 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                  className="w-full text-lg py-1 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
                   placeholder={t("day")}
                   labelProps="font-semibold text-base"
                   disabled={true}
@@ -285,7 +286,7 @@ const AddLectureTiming = ({
                       id="start_time"
                       type="time"
                       label={t("start")}
-                      className="w-full text-lg py-1 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                      className="w-full text-lg py-1 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
                       placeholder={t("")}
                       labelProps="font-semibold text-base"
                     />
@@ -294,7 +295,7 @@ const AddLectureTiming = ({
                       id="end_time"
                       type="time"
                       label={t("end")}
-                      className="w-full text-lg py-1 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                      className="w-full text-lg py-1 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
                       placeholder={t("")}
                       labelProps="font-semibold text-base"
                     />
@@ -308,14 +309,14 @@ const AddLectureTiming = ({
                   action={() => {
                     const isAppointmentBooked =
                       scheduleData?.lecture_time?.some((lecture) => {
-                        const { day_id, start_time, end_time } = lecture;
+                        const { day_id, start_time, end_time, level } = lecture;
                         const valueStartTime = values.start_time;
                         const valueEndTime = values.end_time;
 
                         return (
                           valueStartTime < end_time &&
                           valueEndTime > start_time &&
-                          day_id == values.day_id
+                          day_id == values.day_id && level == values.level
                         );
                       });
 

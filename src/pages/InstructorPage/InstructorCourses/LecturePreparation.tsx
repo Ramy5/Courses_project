@@ -1,6 +1,6 @@
 import { Form, Formik } from "formik";
 import { t } from "i18next";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { BaseInput, Button } from "../../../components";
 import { AiOutlineCloudUpload } from "react-icons/ai";
 import { RiDeleteBin5Line } from "react-icons/ri";
@@ -12,8 +12,6 @@ import Cookies from "js-cookie";
 import { BASE_URL } from "../../../utils/constants";
 import * as Yup from "yup";
 import { FormikError } from "../../../components/UI/FormikError";
-import { changeSidebarRoute } from "../../../features/dirty/dirtySlice";
-import { useAppDispatch } from "../../../hooks/reduxHooks";
 
 const validationSchema = Yup.object().shape({
   title_ar: Yup.string().required("Title in Arabic is required"),
@@ -53,7 +51,6 @@ const LecturePreparation = () => {
   const queryClient = useQueryClient();
   const location = useLocation();
   const editObj = location.state;
-  const dispatch = useAppDispatch();
 
   const initialValues = {
     title_ar: editObj?.title || "",
@@ -116,7 +113,7 @@ const LecturePreparation = () => {
       instructions_ar: values.instructions_ar,
       instructions_en: values.instructions_en,
       links: links,
-      attachments: files?.map((file) => ({ file: file })),
+      lecture_attachments: files?.map((file) => ({ file: file })),
     };
 
     await mutate(newLecturePreparation);
@@ -134,10 +131,7 @@ const LecturePreparation = () => {
           handleAddLecturePreparation(values);
         }}
       >
-        {({ setFieldValue, values, dirty, isSubmitting }) => {
-                  useEffect(() => {
-                    dispatch(changeSidebarRoute(dirty && !isSubmitting));
-                  }, [dirty]);
+        {({ setFieldValue, values }) => {
           return (
             <Form>
               <div className="flex gap-12">
@@ -189,7 +183,7 @@ const LecturePreparation = () => {
                 </div>
               </div>
               <div className="flex gap-12 ">
-                <div className="w-full relative">
+                <div className="relative w-full">
                   <label htmlFor="address" className="font-semibold">
                     {`${t("instructions")} (${t("arabic")})`}
                   </label>
@@ -207,7 +201,7 @@ const LecturePreparation = () => {
                     className="absolute whitespace-nowrap"
                   />
                 </div>
-                <div className="w-full relative">
+                <div className="relative w-full">
                   <label htmlFor="address" className="font-semibold">
                     {`${t("instructions")} (${t("english")})`}
                   </label>

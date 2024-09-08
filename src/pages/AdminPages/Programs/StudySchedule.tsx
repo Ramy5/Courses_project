@@ -186,7 +186,7 @@ const StudySchedule = () => {
                       (steps === 2 && index === 0) ||
                       (steps === 3 && (index === 0 || index === 1))
                         ? "border-mainColor"
-                        : "border-[#E6EAEE]"
+                        : "border-lightGray"
                     } flex-auto border-t-2 transition duration-500 ease-in-out`}
                   ></div>
                 )}

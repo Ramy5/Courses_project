@@ -5,32 +5,38 @@ import { useRTL } from "../../hooks/useRTL";
 
 type DotsDropDown_TP = {
   firstName?: string;
-  firstIcon?: any;
   secondName?: string;
-  secondIcon?: any;
   anotherName?: string;
+  blockedName?: string;
+  firstIcon?: any;
+  secondIcon?: any;
   anotherIcon?: any;
+  blockedIcon?: any;
   isOpen: boolean;
   isLastRow?: boolean;
   onToggle?: () => void;
   onFirstClick?: () => void;
   onSecondClick?: () => void;
   onAnotherClick?: () => void;
+  onBlockedClick?: () => void;
 };
 
 const DotsDropDown = ({
   firstName,
-  firstIcon,
   secondName,
-  secondIcon,
   anotherName,
+  blockedName,
+  firstIcon,
+  secondIcon,
   anotherIcon,
+  blockedIcon,
   isOpen,
   isLastRow,
   onToggle,
   onFirstClick,
   onSecondClick,
   onAnotherClick,
+  onBlockedClick
 }: DotsDropDown_TP) => {
   const isRTL = useRTL();
 
@@ -79,6 +85,19 @@ const DotsDropDown = ({
             <p className="text-base font-medium">{t(`${firstName}`)}</p>
           </div>
         </li>
+
+        {blockedName && (
+          <li
+            className="py-1 cursor-pointer"
+            role="none"
+            onClick={onBlockedClick}
+          >
+            <div className="flex items-center gap-2 px-4 py-2 text-mainColor">
+              {blockedIcon}
+              <p className="text-base font-medium">{t(`${blockedName}`)}</p>
+            </div>
+          </li>
+        )}
 
         <li className="py-1 cursor-pointer" role="none" onClick={onSecondClick}>
           <div

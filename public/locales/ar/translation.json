@@ -455,7 +455,9 @@
   "the program will be deleted as well as all academic data associated with the program": "سيتم حذف البرنامج وكذلك جميع البيانات الدراسية المرتبطة بالبرنامج",
   "student has deleted successfully": "تم حذف الطالب بنجاح",
   "student has blocked successfully": "تم حجب الطالب بنجاح",
+  "instructor has blocked successfully": "تم حجب المحاضر بنجاح",
   "student has unblocked successfully": "تم الغاء حجب الطالب بنجاح",
+  "instructor has unblocked successfully": "تم الغاء حجب المحاضر بنجاح",
   "lecture zoom link has updated successfully": "تم تحديث لينك الزوم بنجاح",
   "arabic": "عربي",
   "english": "إنجليزي",
@@ -566,5 +568,16 @@
   "student degree has successfully added": "تم اضافة درجة الطالب بنجاح",
   "view students project": "عرض مشاريع الطلاب",
   "there is no answers right now": "لا يوجد اجابات حتي الان",
-  "view project": "عرض المشروع"
+  "guardian data": "بيانات ولي الامر",
+  "academy data": "بيانات الاكاديميه",
+  "view project": "عرض المشروع",
+  "Grade must be at least 90": "الدرجة يجب أن تكون على الأقل 90",
+  "Grade must be at least 80": "الدرجة يجب أن تكون على الأقل 80",
+  "Grade must be at least 65": "الدرجة يجب أن تكون على الأقل 65",
+  "Grade must be at least 50": "الدرجة يجب أن تكون على الأقل 50",
+  "Grade cannot exceed 100": "الدرجة لا يمكن أن تتجاوز 100",
+  "Grade cannot exceed 89": "الدرجة لا يمكن أن تتجاوز 89",
+  "Grade cannot exceed 79": "الدرجة لا يمكن أن تتجاوز 79",
+  "Grade cannot exceed 64": "الدرجة لا يمكن أن تتجاوز 64",
+  "do you really want to leave the page?": "هل تريد بالفعل مغادرة الصفحة؟"
 }

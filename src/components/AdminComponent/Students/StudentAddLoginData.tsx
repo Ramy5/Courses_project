@@ -6,10 +6,7 @@ import customFetch from "../../../utils/axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Form, Formik } from "formik";
 import { toast } from "react-toastify";
-import { useNavigate, useParams } from "react-router-dom";
-import { useEffect } from "react";
-import { changeSidebarRoute } from "../../../features/dirty/dirtySlice";
-import { useAppDispatch } from "../../../hooks/reduxHooks";
+import { useNavigate } from "react-router-dom";
 
 interface AddStudentLogin_TP {
   email_login: string;
@@ -43,7 +40,6 @@ const StudentAddLoginData = ({
 }: StudentAddLoginData_TP) => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
 
   const initialValues = {
     email_login: editObj?.email_login || "",
@@ -58,7 +54,7 @@ const StudentAddLoginData = ({
       setStudentID(data?.data?.data?.student?.id);
       queryClient.invalidateQueries("students");
       toast.success(t("student login information has been added successfully"));
-      setActiveTab("personal");
+      setActiveTab("personal data");
     },
     onError: (error) => {
       const errorMessage =
@@ -77,7 +73,7 @@ const StudentAddLoginData = ({
       toast.success(
         t("student login information has been edited successfully")
       );
-      setActiveTab("personal");
+      setActiveTab("personal data");
     },
     onError: (error) => {
       const errorMessage =
@@ -109,17 +105,14 @@ const StudentAddLoginData = ({
       initialValues={initialValues}
       onSubmit={(values) => handleAddStudent(values)}
     >
-      {({ values, setFieldValue, dirty, isSubmitting }) => {
-        useEffect(() => {
-          dispatch(changeSidebarRoute(dirty && !isSubmitting));
-        }, [dirty]);
+      {({ values, setFieldValue }) => {
         return (
-          <Form className="flex flex-col w-full gap-5 px-4 lg:px-16 md:w-3/4">
+          <Form className="flex flex-col w-full gap-5 px-8 md:w-3/4 md:px-16 m-auto">
             <BaseInput
               name="email_login"
               id="email_login"
               type="text"
-              className="lg:w-[35vw] text-lg py-2 bg-[#E6EAEE] rounded-lg main_shadow text-slate-800 focus-within:outline-none"
+              className="w-full text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
               placeholder={t("email")}
               value={values?.email_login}
               onChange={(e) => {
@@ -135,7 +128,7 @@ const StudentAddLoginData = ({
               </label>
               <PasswordInput
                 name="password_login"
-                parentClass="lg:w-[35vw] rounded-lg main_shadow"
+                parentClass="w-full text-lg py-1 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
                 placeholder={t("password")}
                 value={values?.password_login}
                 className="!text-lg !py-2"
@@ -151,7 +144,7 @@ const StudentAddLoginData = ({
               </label>
               <PasswordInput
                 name="confirm_password_login"
-                parentClass="lg:w-[35vw] rounded-lg main_shadow"
+                parentClass="w-full text-lg py-1 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
                 placeholder={t("confirm password")}
                 className="!text-lg !py-2"
                 value={values?.confirm_password_login}
@@ -161,7 +154,7 @@ const StudentAddLoginData = ({
               />
             </div>
 
-            <div className="mt-8">
+            <div className="mt-8 mx-auto">
               <Button
                 loading={isPending || editIsPending}
                 className="me-5"
@@ -171,7 +164,7 @@ const StudentAddLoginData = ({
               </Button>
               <Button
                 action={() => navigate(-1)}
-                className="bg-[#E6EAEE] text-mainColor"
+                className="bg-lightGray text-mainColor"
               >
                 {t("cancel")}
               </Button>

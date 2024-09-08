@@ -13,8 +13,6 @@ import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../../../utils/constants";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { useAppDispatch } from "../../../hooks/reduxHooks";
-import { changeSidebarRoute } from "../../../features/dirty/dirtySlice";
 
 const postStudentPersonal = async (newStudent: any) => {
   const token = Cookies.get("token");
@@ -73,7 +71,6 @@ const StudentAddPersonalData = ({
 }: StudentAddPersonalData) => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
 
   const initialValues = {
     // PERSONAL DATA
@@ -106,14 +103,6 @@ const StudentAddPersonalData = ({
     const file = event?.target?.files[0];
     setSelectedViewImage(URL.createObjectURL(file));
     setSelectedImage(file);
-
-    // if (file) {
-    //   const reader = new FileReader();
-    //   reader.onloadend = () => {
-    //     setSelectedImage(reader.result);
-    //   };
-    //   reader.readAsDataURL(file);
-    // }
   };
 
   const handleDeleteImage = () => {
@@ -129,7 +118,7 @@ const StudentAddPersonalData = ({
       toast.success(
         t("student personal information has been added successfully")
       );
-      setActiveTab("father");
+      setActiveTab("guardian data");
     },
     onError: (error) => {
       const errorMessage = errorFields
@@ -148,7 +137,7 @@ const StudentAddPersonalData = ({
       toast.success(
         t("student personal information has been edited successfully")
       );
-      setActiveTab("father");
+      setActiveTab("guardian data");
     },
     onError: (error) => {
       const errorMessage = errorFields
@@ -185,10 +174,7 @@ const StudentAddPersonalData = ({
       initialValues={initialValues}
       onSubmit={(values) => handleAddStudent(values)}
     >
-      {({ values, setFieldValue, dirty, isSubmitting }) => {
-        useEffect(() => {
-          dispatch(changeSidebarRoute(dirty && !isSubmitting));
-        }, [dirty]);
+      {({ values, setFieldValue }) => {
         return (
           <Form className="flex flex-col gap-5 px-4 lg:px-16 ">
             <div className="flex flex-col-reverse justify-between gap-8 md:flex-row">
@@ -198,7 +184,7 @@ const StudentAddPersonalData = ({
                     name="fullName_personal"
                     id="fullName_personal"
                     type="text"
-                    className="w-full text-lg py-2 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                    className="w-full text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
                     placeholder={t("full name")}
                     label={t("full name")}
                     labelProps="!font-semibold"
@@ -209,7 +195,7 @@ const StudentAddPersonalData = ({
                     name="nationality_personal"
                     id="nationality_personal"
                     type="text"
-                    className="w-full text-lg py-2 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                    className="w-full text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
                     placeholder={t("nationality")}
                     label={t("nationality")}
                     labelProps="!font-semibold"
@@ -220,7 +206,7 @@ const StudentAddPersonalData = ({
                     name="id_number_personal"
                     id="id_number_personal"
                     type="text"
-                    className="w-full text-lg py-2 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                    className="w-full text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
                     placeholder={t("id number / Location")}
                     label={t("id number / Location")}
                     labelProps="!font-semibold"
@@ -231,7 +217,7 @@ const StudentAddPersonalData = ({
                     name="country_residence_personal"
                     id="country_residence_personal"
                     type="text"
-                    className="w-full text-lg py-2 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                    className="w-full text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
                     placeholder={t("country residence")}
                     label={t("country residence")}
                     labelProps="!font-semibold"
@@ -242,7 +228,7 @@ const StudentAddPersonalData = ({
                     name="educational_qualification_personal"
                     id="educational_qualification_personal"
                     type="text"
-                    className="w-full text-lg py-2 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                    className="w-full text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
                     placeholder={t("educational qualification")}
                     label={t("educational qualification")}
                     labelProps="!font-semibold"
@@ -255,7 +241,7 @@ const StudentAddPersonalData = ({
                   <textarea
                     name="address_personal"
                     id="address_personal"
-                    className="w-full text-lg py-2 px-4 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                    className="w-full text-lg py-2 px-4 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
                     placeholder={t("address")}
                     value={values.address_personal}
                     onChange={(e) => {
@@ -322,7 +308,6 @@ const StudentAddPersonalData = ({
                     id="image_upload_personal"
                     className="hidden"
                     name="personal_image"
-                    // value={values.image_upload_personal[0]}
                     onChange={(e) => {
                       handleImageChange(e);
                       setFieldValue("image_upload_personal", e.target.value);
@@ -360,7 +345,7 @@ const StudentAddPersonalData = ({
               </Button>
               <Button
                 action={() => navigate(-1)}
-                className="bg-[#E6EAEE] text-mainColor"
+                className="bg-lightGray text-mainColor"
               >
                 {t("cancel")}
               </Button>

@@ -27,6 +27,8 @@ import customFetch from "../../../utils/axios";
 import { toast } from "react-toastify";
 import { formatDate } from "../../../utils/helpers";
 import Loading from "../../../components/UI/Loading";
+import { TbLock, TbLockOpen2 } from "react-icons/tb";
+import { useAppSelector } from "../../../hooks/reduxHooks";
 
 const getStudentProfile = async (id: string) => {
   const response = await customFetch(`student/${id}`);
@@ -63,6 +65,7 @@ const StudentProfile = () => {
   const { id: studentProfileId } = useParams();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const { role: userData } = useAppSelector((state) => state.user);
 
   const { data, isLoading, isFetching, isRefetching } = useQuery({
     queryKey: ["show-student"],
@@ -122,6 +125,8 @@ const StudentProfile = () => {
     receipts = [],
     blocked_status = 0,
   } = data?.data?.student || {};
+
+  console.log("🚀 ~ StudentProfile ~ blocked_status:", blocked_status);
 
   const studentProfileData = {
     id: 1,
@@ -248,7 +253,7 @@ const StudentProfile = () => {
                       </p>
                     </div>
                     <div className="flex items-center gap-24">
-                      <MainCheckBox
+                      {/* <MainCheckBox
                         id="student_block"
                         name="student_block"
                         label="block student"
@@ -266,7 +271,7 @@ const StudentProfile = () => {
                             );
                           }
                         }}
-                      />
+                      /> */}
                       <div className="translate-y-2">
                         <DotsDropDown
                           firstName="edit"
@@ -284,6 +289,25 @@ const StudentProfile = () => {
                               className="fill-mainRed"
                             />
                           }
+                          blockedName={`${userData === "admin" ? "block student" : ""}`}
+                          blockedIcon={
+                            blocked_status === 0 ? (
+                              <TbLockOpen2
+                                size={22}
+                                className="text-mainColor"
+                              />
+                            ) : (
+                              <TbLock size={22} className="text-mainColor" />
+                            )
+                          }
+                          onBlockedClick={() => {
+                            const blockedStatus =
+                              blocked_status === 0
+                                ? handleBlockStudent(1)
+                                : handleBlockStudent(0);
+
+                            return blockedStatus;
+                          }}
                           isOpen={openRow == studentProfileId}
                           onToggle={() =>
                             handleToggleDropDown(studentProfileId)
@@ -335,7 +359,7 @@ const StudentProfile = () => {
                 </div>
 
                 {/* ACADEMIC DETAILS */}
-                <div className="p-6 lg:p-10 bg-mainColor/15 rounded-xl">
+                <div className="p-6 lg:p-10 bg-lightGray rounded-xl">
                   <h2 className="mb-10 text-2xl font-bold">
                     {t("academic data")}
                   </h2>
@@ -352,7 +376,7 @@ const StudentProfile = () => {
                 </div>
 
                 {/* FATHER  DETAILS */}
-                <div className="p-6 lg:p-10 bg-mainColor/15 rounded-xl">
+                <div className="p-6 lg:p-10 bg-lightGray rounded-xl">
                   <h2 className="mb-10 text-2xl font-bold">
                     {t("father data")}
                   </h2>
@@ -377,7 +401,7 @@ const StudentProfile = () => {
                 </div>
 
                 {/* ADD A RECEIPT */}
-                <div className="flex flex-col p-10 bg-mainColor/15 rounded-xl">
+                <div className="flex flex-col p-10 bg-lightGray rounded-xl">
                   <Button
                     action={() => setShowReceiptModal(true)}
                     className="self-end mb-6"

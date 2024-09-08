@@ -24,7 +24,7 @@ const CreateProgramInputs = ({
   const [openRow, setOpenRow] = useState<number | null>(null);
   const navigate = useNavigate();
 
-  const { values, setFieldValue } = useFormikContext();
+  const { values, setFieldValue, resetForm } = useFormikContext();
   console.log("🚀 ~ values:", values);
 
   const CoursesColumns = useMemo<ColumnDef<any>[]>(
@@ -91,7 +91,7 @@ const CreateProgramInputs = ({
   return (
     <div>
       <div className="bg-white rounded-3xl pb-8">
-        <h2 className="py-4 px-7 !m-0 border-b-4 border-[#E6EAEE] font-semibold text-xl">
+        <h2 className="py-4 px-7 !m-0 border-b-4 border-lightGray font-semibold text-xl">
           {t("create program")}
         </h2>
         <div className="py-5 px-7">
@@ -100,7 +100,7 @@ const CreateProgramInputs = ({
               name="program_name"
               id="program_name"
               type="text"
-              className="w-full text-lg py-2 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+              className="w-full text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
               placeholder={t("program name")}
               label={t("program name")}
               labelProps="!font-semibold"
@@ -141,8 +141,8 @@ const CreateProgramInputs = ({
             <BaseInput
               name="program_code"
               id="program_code"
-              type="number"
-              className="w-full text-lg py-2 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+              type="text"
+              className="w-full text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
               placeholder={t("program code")}
               label={t("program code")}
               labelProps="!font-semibold"
@@ -151,7 +151,7 @@ const CreateProgramInputs = ({
               name="specialization"
               id="specialization"
               type="text"
-              className="w-full text-lg py-2 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+              className="w-full text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
               placeholder={t("specialization")}
               label={t("specialization")}
               labelProps="!font-semibold"
@@ -162,7 +162,7 @@ const CreateProgramInputs = ({
               name="academic_levels"
               id="academic_levels"
               type="number"
-              className="w-full sm:w-1/2 text-lg py-2 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+              className="w-full sm:w-1/2 text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
               placeholder={t("number academic levels")}
               label={t("number academic levels")}
               labelProps="!font-semibold"
@@ -171,7 +171,7 @@ const CreateProgramInputs = ({
               name="number_classes"
               id="number_classes"
               type="number"
-              className="w-full sm:w-1/2 text-lg py-2 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+              className="w-full sm:w-1/2 text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
               placeholder={t("number classes")}
               label={t("number classes")}
               labelProps="!font-semibold"
@@ -185,7 +185,7 @@ const CreateProgramInputs = ({
               <textarea
                 name="vision"
                 id="vision"
-                className="w-full text-lg py-2 px-4 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                className="w-full text-lg py-2 px-4 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
                 placeholder={t("vision")}
                 value={values.vision}
                 onChange={(e) => {
@@ -201,7 +201,7 @@ const CreateProgramInputs = ({
               <textarea
                 name="message"
                 id="message"
-                className="w-full text-lg py-2 px-4 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                className="w-full text-lg py-2 px-4 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
                 placeholder={t("message")}
                 value={values.message}
                 onChange={(e) => {
@@ -212,47 +212,57 @@ const CreateProgramInputs = ({
             </div>
           </div>
 
+          <div className="border-[1.59px] mt-8 mb-6"></div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-12 gap-y-5 my-4">
             <BaseInput
               name="excellence"
               id="excellence"
               type="number"
-              className="w-full text-lg py-2 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+              className="w-full text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
               placeholder={t("excellence")}
               label={t("excellence")}
               labelProps="!font-semibold"
+              max={100}
+              min={90}
             />
             <BaseInput
               name="very_good"
               id="very_good"
               type="number"
-              className="w-full text-lg py-2 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+              className="w-full text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
               placeholder={t("very good")}
               label={t("very good")}
               labelProps="!font-semibold"
+              max={89}
+              min={80}
             />
             <BaseInput
               name="good"
               id="good"
               type="number"
-              className="w-full text-lg py-2 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+              className="w-full text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
               placeholder={t("good")}
               label={t("good")}
               labelProps="!font-semibold"
+              max={79}
+              min={65}
             />
             <BaseInput
               name="acceptable"
               id="acceptable"
               type="number"
-              className="w-full text-lg py-2 bg-[#E6EAEE] main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+              className="w-full text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
               placeholder={t("acceptable")}
               label={t("acceptable")}
               labelProps="!font-semibold"
+              max={64}
+              min={50}
             />
           </div>
         </div>
 
-        <div className="bg-[#D7DFE7] rounded-2xl my-7 py-6">
+        <div className="bg-lightGray rounded-2xl my-7 py-6">
           <div
             className={`${
               coursesData?.length !== 0 ? "mb-6" : " mb-0"
@@ -280,7 +290,7 @@ const CreateProgramInputs = ({
           </Button>
           <Button
             type="button"
-            className="bg-[#E6EAEE] text-mainColor"
+            className="bg-lightGray text-mainColor"
             action={() => navigate("/programs")}
           >
             {t("cancel")}

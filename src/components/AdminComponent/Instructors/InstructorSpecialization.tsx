@@ -3,7 +3,7 @@ import React from "react";
 
 const InstructorSpecialization = ({ personalData }: any) => {
   return (
-    <div className="bg-[#E6EAEE] rounded-2xl my-7 mx-5 py-6 px-8">
+    <div className="bg-lightGray rounded-2xl my-7 mx-5 py-6 px-8">
       <h2 className="text-2xl font-semibold text-center sm:text-start">
         {t("specialization")}
       </h2>

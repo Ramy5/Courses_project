@@ -6,6 +6,20 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FiCalendar } from "react-icons/fi";
 import studentProfileImg from "../../../assets/students/studentProfileImg.svg";
+import { TbLock, TbLockOpen2 } from "react-icons/tb";
+import customFetch from "../../../utils/axios";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "react-toastify";
+import { useAppSelector } from "../../../hooks/reduxHooks";
+import { t } from "i18next";
+
+const blockInstructor = async (
+  instructorId: string,
+  blockStatus: { blocked_status: number }
+) => {
+  const data = customFetch.post(`teacher/${instructorId}/status`, blockStatus);
+  return data;
+};
 
 interface PersonlyProfile {
   personalData: any;
@@ -16,12 +30,14 @@ interface PersonlyProfile {
 
 const ProfileIntroduction = ({
   personalData,
-  blocking,
   navigation,
   deleteInstructor,
 }: PersonlyProfile) => {
+  console.log("🚀 ~ personalData:", personalData);
   const [openRow, setOpenRow] = useState<number | null>(null);
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const { role: userData } = useAppSelector((state) => state.user);
 
   const handleToggleDropDown = (id: number) => {
     setOpenRow((prevOpenRow) => (prevOpenRow == id ? null : id));
@@ -29,6 +45,30 @@ const ProfileIntroduction = ({
 
   const jobTitle =
     personalData?.qualifications && personalData?.qualifications[0]?.job_title;
+
+  const { mutate: blockMutate } = useMutation({
+    mutationKey: ["block-instructor"],
+    mutationFn: (blockStatus) => blockInstructor(personalData?.id, blockStatus),
+    onSuccess: (data: any) => {
+      queryClient.invalidateQueries("show-instructor");
+      if (data?.data?.data?.teacher?.blocked_status === 0) {
+        toast.success(t("instructor has unblocked successfully"));
+      } else {
+        toast.success(t("instructor has blocked successfully"));
+      }
+    },
+    onError: (error) => {
+      toast.error(error);
+    },
+  });
+
+  const handleBlockInstructor = async (blockStudent: number) => {
+    const status = {
+      blocked_status: blockStudent,
+    };
+
+    await blockMutate(status);
+  };
 
   return (
     <div className="relative">
@@ -48,42 +88,44 @@ const ProfileIntroduction = ({
           </div>
         </div>
 
-        {blocking && (
-          <>
-            <div className="md:mb-3 mb-[14px]">
-              <MainCheckBox
-                id="instructor_block"
-                name="instructor_block"
-                label="blocking instructor"
-                labelClassName="!md:text-lg !text-sm"
-              />
-            </div>
-            <div>
-              <DotsDropDown
-                firstName="edit"
-                firstIcon={<FaRegEdit size={22} className="fill-mainColor" />}
-                secondName="delete"
-                secondIcon={
-                  <RiDeleteBin5Line size={22} className="fill-mainRed" />
-                }
-                anotherName="school schedule"
-                anotherIcon={<FiCalendar size={24} />}
-                isOpen={openRow == personalData.id}
-                onToggle={() => handleToggleDropDown(personalData.id)}
-                onFirstClick={() => {
-                  navigate(`${navigation}${personalData.id}`);
-                }}
-                onSecondClick={() => {
-                  deleteInstructor();
-                  navigate(-1);
-                }}
-                onAnotherClick={() => {
-                  navigate(`/instructors/schedule/${personalData.id}`);
-                }}
-              />
-            </div>
-          </>
-        )}
+        <div>
+          <DotsDropDown
+            firstName="edit"
+            firstIcon={<FaRegEdit size={22} className="fill-mainColor" />}
+            secondName="delete"
+            secondIcon={<RiDeleteBin5Line size={22} className="fill-mainRed" />}
+            anotherName="school schedule"
+            anotherIcon={<FiCalendar size={24} />}
+            isOpen={openRow == personalData.id}
+            onToggle={() => handleToggleDropDown(personalData.id)}
+            onFirstClick={() => {
+              navigate(`${navigation}${personalData.id}`);
+            }}
+            onSecondClick={() => {
+              deleteInstructor();
+              navigate(-1);
+            }}
+            onAnotherClick={() => {
+              navigate(`/instructors/schedule/${personalData.id}`);
+            }}
+            blockedName={`${userData === "admin" ? "blocking instructor" : ""}`}
+            blockedIcon={
+              personalData?.blocked_status === 0 ? (
+                <TbLockOpen2 size={22} className="text-mainColor" />
+              ) : (
+                <TbLock size={22} className="text-mainColor" />
+              )
+            }
+            onBlockedClick={() => {
+              const blockedStatus =
+                personalData?.blocked_status === 0
+                  ? handleBlockInstructor(1)
+                  : handleBlockInstructor(0);
+
+              return blockedStatus;
+            }}
+          />
+        </div>
       </div>
     </div>
   );

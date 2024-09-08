@@ -58,6 +58,7 @@ const Instructors = () => {
   });
 
   const instructorData = data?.data.data.teachers || {};
+  console.log("🚀 ~ Instructors ~ instructorData:", instructorData)
   const instructorPagination = data?.data.data || {};
 
   useEffect(() => {
@@ -98,8 +99,6 @@ const Instructors = () => {
       </div>
 
       <div className="flex items-center justify-between p-4 bg-white rounded-2xl">
-        {/* <Select options={options} placeholder="short by" /> */}
-
         <SearchInput
           name="instructorSearch"
           value={search}
@@ -147,15 +146,15 @@ const Instructors = () => {
               <img
                 src={instructor.personal_image}
                 alt={instructor.name}
-                className="rounded-full  m-auto w-[135px] h-[135px]"
+                className="rounded-full  m-auto w-[135px] h-[135px] mb-3"
               />
             </div>
             <div className="text-mainGray opacity-55">
-              <p>{instructor.full_name}</p>
-              <p>{instructor.job_title}</p>
+              <p className="text-black">{instructor.full_name}</p>
+              <p>{instructor?.qualifications?.length ? instructor?.qualifications?.[0].job_title : "-------"}</p>
             </div>
             <Button
-              className="border border-[#404B52] text-black font-medium mt-3"
+              className="border-2 border-mainColor text-mainColor font-semibold text-[15px] mt-4 transition-transform transform hover:translate-y-[-1px] hover:shadow-button"
               bordered
               action={() => handleProfileClick(instructor.id)}
             >
