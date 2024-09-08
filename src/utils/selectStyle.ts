@@ -1,6 +1,4 @@
-import { StylesConfig, GroupBase, components } from "react-select";
-import { IconProps } from "react-toastify";
-import { FaSpinner } from "react-icons/fa";
+import { StylesConfig, GroupBase } from "react-select";
 
 interface CustomOption {
   label: string;
