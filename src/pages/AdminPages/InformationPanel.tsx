@@ -41,6 +41,11 @@ const getCount = async () => {
   return data.data;
 };
 
+const getTeacherSlides = async () => {
+  const { data } = await customFetch("allInstructorsWithCounts");
+  return data.data;
+};
+
 const InformationPanel = () => {
   const isRTL = useRTL();
   const [startDate, setStartDate] = useState(new Date());
@@ -56,6 +61,11 @@ const InformationPanel = () => {
   } = useQuery({
     queryKey: ["get-counts"],
     queryFn: getCount,
+  });
+
+  const { data: slidesData } = useQuery({
+    queryKey: ["get-slides"],
+    queryFn: getTeacherSlides,
   });
 
   const {
@@ -119,20 +129,13 @@ const InformationPanel = () => {
     },
   ];
 
-  const personData = [
-    {
-      img: "https://media.istockphoto.com/id/1386479313/photo/happy-millennial-afro-american-business-woman-posing-isolated-on-white.jpg?s=612x612&w=0&k=20&c=8ssXDNTp1XAPan8Bg6mJRwG7EXHshFO5o0v9SIj96nY=",
-      desc: "Lorem ipsum dolor sit amet consectetur.",
-    },
-    {
-      img: "https://via.placeholder.com/150",
-      desc: "Sed do eiusmod tempor incididunt ut labore.",
-    },
-    {
-      img: "https://via.placeholder.com/150",
-      desc: "Ut enim ad minim veniam, quis nostrud.",
-    },
-  ];
+  const personData = slidesData?.map((slide) => {
+    return {
+      id: slide.id,
+      img: slide.personal_image,
+      desc: slide.name,
+    };
+  });
 
   const studentsDataFee = [
     {
@@ -315,7 +318,7 @@ const InformationPanel = () => {
           modules={[Navigation, Autoplay]}
           className="mySwiper"
         >
-          {programsData.map((program, index) => (
+          {programsData?.map((program, index) => (
             <SwiperSlide key={index}>
               <ProgramBox
                 key={index}
@@ -362,7 +365,7 @@ const InformationPanel = () => {
             modules={[Navigation]}
             className="mySwiper"
           >
-            {personData.map((item, index) => (
+            {personData?.map((item, index) => (
               <SwiperSlide key={index}>
                 <PersonView img={item.img} desc={item.desc} />
               </SwiperSlide>
@@ -372,7 +375,7 @@ const InformationPanel = () => {
 
         {/* DATA COUNT */}
         <div className="grid items-center grid-cols-2 col-span-2 gap-6 lg:grid-cols-3">
-          {dataCounts.map((data, index) => (
+          {dataCounts?.map((data, index) => (
             <DataCount
               key={index}
               dataTitle={data.dataTitle}
