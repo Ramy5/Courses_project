@@ -158,7 +158,7 @@ const RecordAttendance = () => {
             <CircularProgressbar
               className="w-12 font-bold m-auto"
               value={attendPercentage}
-              text={`${attendPercentage}%`}
+              text={`${attendPercentage || 0}%`}
               strokeWidth={11}
               styles={buildStyles({
                 textColor: colorAbsence,

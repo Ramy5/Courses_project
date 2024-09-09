@@ -115,7 +115,10 @@ const InstructorContactInformation = ({
     <Formik
       validate={validate}
       initialValues={initialValues}
-      onSubmit={(values) => handleAddInstructorContact(values)}
+      onSubmit={(values, { resetForm }) => {
+        handleAddInstructorContact(values)
+        resetForm();
+      }}
     >
       <Form className="flex flex-col w-full gap-5 px-8 md:w-3/4 md:px-16 m-auto">
         <div>

@@ -165,7 +165,10 @@ const InstructorPersonalData = ({
     <div>
       <Formik
         initialValues={initialValues}
-        onSubmit={(values) => handleAddInstructor(values)}
+        onSubmit={(values, { resetForm }) => {
+          handleAddInstructor(values)
+          resetForm();
+        }}
       >
         {({ setFieldValue, values }) => {
           return (

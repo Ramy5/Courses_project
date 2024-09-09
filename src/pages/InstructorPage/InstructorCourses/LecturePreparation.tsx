@@ -1,6 +1,6 @@
 import { Form, Formik } from "formik";
 import { t } from "i18next";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BaseInput, Button } from "../../../components";
 import { AiOutlineCloudUpload } from "react-icons/ai";
 import { RiDeleteBin5Line } from "react-icons/ri";
@@ -45,12 +45,16 @@ const postInstructorQualification = async (
 
 const LecturePreparation = () => {
   const { id } = useParams();
-  const [files, setFiles] = useState([]);
-  const [links, setLinks] = useState([]);
-  const navigate = useNavigate();
-  const queryClient = useQueryClient();
   const location = useLocation();
   const editObj = location.state;
+  const updateLinkss = editObj?.links?.map((item) => ({ value: item.link}))
+  const [files, setFiles] = useState([]);
+  console.log("🚀 ~ LecturePreparation ~ files:", files)
+  const [links, setLinks] = useState(updateLinkss || []);
+  console.log("🚀 ~ LecturePreparation ~ links:", links)
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  console.log("🚀 ~ LecturePreparation ~ editObj:", editObj)
 
   const initialValues = {
     title_ar: editObj?.title || "",
@@ -73,7 +77,7 @@ const LecturePreparation = () => {
   };
 
   const handleDeleteLink = (index: string) => {
-    const instructorFileFilter = links.filter(
+    const instructorFileFilter = links?.filter(
       (link: any, i: any) => i !== index
     );
     setLinks(instructorFileFilter);
@@ -94,6 +98,11 @@ const LecturePreparation = () => {
     },
   });
 
+  
+  const updateLinks = links.map((item) => item);
+  console.log("🚀 ~ handleAddLecturePreparation ~ updateLinks:", updateLinks)
+
+
   const handleAddLecturePreparation = async (values) => {
     if (!files?.length) {
       toast.info("file is required");
@@ -104,6 +113,7 @@ const LecturePreparation = () => {
       toast.info("links are required");
       return;
     }
+
 
     const newLecturePreparation = {
       title_ar: values.title_ar,
@@ -127,11 +137,15 @@ const LecturePreparation = () => {
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
-        onSubmit={(values) => {
+        onSubmit={(values, { resetForm }) => {
+          console.log("🚀 ~ LecturePreparation ~ values:", values)
+          
           handleAddLecturePreparation(values);
+          resetForm();
         }}
       >
         {({ setFieldValue, values }) => {
+          console.log("🚀 ~ LecturePreparation ~ values:", values)
           return (
             <Form>
               <div className="flex gap-12">
@@ -192,6 +206,7 @@ const LecturePreparation = () => {
                     id="instructions_ar"
                     className="w-full px-4 py-2 text-lg rounded-lg main_shadow text-slate-800 focus-within:outline-none"
                     placeholder={t("instructions")}
+                    value={values.desc_ar}
                     onChange={(e) => {
                       setFieldValue("instructions_ar", e.target.value);
                     }}
@@ -210,6 +225,7 @@ const LecturePreparation = () => {
                     id="instructions_en"
                     className="w-full px-4 py-2 text-lg rounded-lg main_shadow text-slate-800 focus-within:outline-none"
                     placeholder={t("instructions")}
+                    value={values.desc_en}
                     onChange={(e) => {
                       setFieldValue("instructions_en", e.target.value);
                     }}
@@ -243,7 +259,7 @@ const LecturePreparation = () => {
                     </div>
                   </div>
                   <div className="w-full md:w-2/4 ">
-                    {files.length ? (
+                    {files?.length ? (
                       <>
                         <h2 className="mb-3 font-semibold">
                           {t("files included")}
@@ -253,7 +269,7 @@ const LecturePreparation = () => {
                             {t("file name")}
                           </div>
                           <div>
-                            {files.map((file: any) => (
+                            {files?.map((file: any) => (
                               <div className="flex items-center justify-between px-6 py-3 border-t-2 border-mainGray">
                                 <p className="font-semibold">{file.name}</p>
                                 <RiDeleteBin5Line
@@ -320,7 +336,7 @@ const LecturePreparation = () => {
                   <div>
                     {links.map((link: any, index) => (
                       <div className="flex items-center justify-between px-6 py-3 border-t-2 border-mainGray">
-                        <p className="font-semibold">{link.value}</p>
+                        <p className="font-semibold">{link.value || link.link}</p>
                         <RiDeleteBin5Line
                           size={30}
                           className="cursor-pointer fill-mainRed"

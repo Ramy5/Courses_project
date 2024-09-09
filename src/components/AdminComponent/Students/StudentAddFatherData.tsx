@@ -115,7 +115,10 @@ const StudentAddFatherData = ({
   return (
     <Formik
       initialValues={initialValues}
-      onSubmit={(values) => handleAddStudent(values)}
+      onSubmit={(values, { resetForm }) => {
+        handleAddStudent(values);
+        resetForm();
+      }}
     >
       {({ values, setFieldValue }) => {
         return (
