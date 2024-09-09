@@ -142,7 +142,7 @@ const Instructors = () => {
                 }}
               />
             </div>
-            <div className="w-full my-2">
+            <div className="w-full my-2 ">
               <img
                 src={instructor.personal_image}
                 alt={instructor.name}

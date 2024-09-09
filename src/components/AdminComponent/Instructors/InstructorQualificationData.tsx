@@ -197,7 +197,10 @@ const InstructorQualificationData = ({
   return (
     <Formik
       initialValues={initialValues}
-      onSubmit={(values) => handleAddQualification(values)}
+      onSubmit={(values, { resetForm }) =>{ 
+        handleAddQualification(values)
+        resetForm();
+      }}
     >
       <Form>
         <div className="flex flex-col w-full gap-5 px-8 md:w-3/4 md:px-16">

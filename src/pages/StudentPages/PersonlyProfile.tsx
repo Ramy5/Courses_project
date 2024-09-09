@@ -28,7 +28,7 @@ const PersonlyProfile = () => {
   console.log(data);
 
   const studentProfileData = {
-    id: 1,
+    id: data?.id,
     profileCover: studentProfileCover,
     personalImage: data?.personal_image || studentProfileImg,
     full_name: data?.full_name,
@@ -82,7 +82,7 @@ const PersonlyProfile = () => {
             blocking={false}
           />
 
-          <div className="flex flex-col gap-10 p-4 pt-0 mt-24 lg:p-8">
+          <div className="flex flex-col gap-10 p-4 pt-0 mt-24 lg:p-8 ">
             {/* PERSONAL DETAILS */}
             <div className="p-6 lg:p-10 bg-mainColor/15 rounded-xl">
               <div className="grid items-center gap-8 md:grid-cols-2 lg:grid-cols-2 lg:gap-14">

@@ -796,18 +796,27 @@ const CreateCoursesInputs = ({
                             addNewCourseMutate({
                               program_id: editFinishedCoursesData?.program_id,
                               ...data,
-                              references: suggestedReferences?.map(({ id, ...referenceRest }) => ({
-                                ...referenceRest,
-                              })),
+                              references: suggestedReferences?.map(
+                                ({ id, ...referenceRest }) => ({
+                                  ...referenceRest,
+                                })
+                              ),
                             });
                             setTimeout(() => {
                               resetForm();
                               navigate(-1);
                             });
                           } else {
+                            const { id, ...data } = values;
+                            const updateSuggestedReferences =
+                              suggestedReferences?.map(
+                                ({ id, ...referenceRest }) => ({
+                                  ...referenceRest,
+                                })
+                              );
                             mutate({
-                              ...values,
-                              references: suggestedReferences,
+                              ...data,
+                              references: updateSuggestedReferences,
                             });
                             resetForm();
                             navigate(-1);
