@@ -207,7 +207,10 @@ const StudentAddAcademicData = ({
   return (
     <Formik
       initialValues={initialValues}
-      onSubmit={(values) => handleAddStudent(values)}
+      onSubmit={(values, { resetForm }) => {
+        handleAddStudent(values);
+        resetForm();
+      }}
     >
       {({ setFieldValue }) => {
         return (

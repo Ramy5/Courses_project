@@ -1,4 +1,4 @@
-import DotsDropDown from "../../UI/DotsDropDown";
+import MainCheckBox from "../../UI/MainCheckBox";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import { FaRegEdit } from "react-icons/fa";
 import { useState } from "react";
@@ -11,27 +11,26 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { useAppSelector } from "../../../hooks/reduxHooks";
 import { t } from "i18next";
-import DefaultProfileCover from "../../../assets/instructors/profile-cover.svg"
+import defaultProfileCover from "../../../assets/instructors/profile-cover.svg";
+import { DotsDropDown } from "../../../components";
 
-const blockInstructor = async (
+const blockStudent = async (
   instructorId: string,
   blockStatus: { blocked_status: number }
 ) => {
-  const data = customFetch.post(`teacher/${instructorId}/status`, blockStatus);
+  const data = customFetch.post(`student/${instructorId}/status`, blockStatus);
   return data;
 };
 
 interface PersonlyProfile {
   personalData: any;
   blocking?: boolean;
-  navigation?: string;
-  deleteInstructor?: () => void;
+  deleteStudent?: () => void;
 }
 
-const ProfileIntroduction = ({
+const ProfileStudent = ({
   personalData,
-  navigation,
-  deleteInstructor,
+  deleteStudent,
 }: PersonlyProfile) => {
   console.log("🚀 ~ personalData:", personalData);
   const [openRow, setOpenRow] = useState<number | null>(null);
@@ -43,18 +42,15 @@ const ProfileIntroduction = ({
     setOpenRow((prevOpenRow) => (prevOpenRow == id ? null : id));
   };
 
-  const jobTitle =
-    personalData?.qualifications && personalData?.qualifications[0]?.job_title;
-
   const { mutate: blockMutate } = useMutation({
-    mutationKey: ["block-instructor"],
-    mutationFn: (blockStatus) => blockInstructor(personalData?.id, blockStatus),
+    mutationKey: ["block-student"],
+    mutationFn: (blockStatus) => blockStudent(personalData?.id, blockStatus),
     onSuccess: (data: any) => {
-      queryClient.invalidateQueries("show-instructor");
+      queryClient.invalidateQueries("show-student");
       if (data?.data?.data?.teacher?.blocked_status === 0) {
-        toast.success(t("instructor has unblocked successfully"));
+        toast.success(t("student has unblocked successfully"));
       } else {
-        toast.success(t("instructor has blocked successfully"));
+        toast.success(t("student has blocked successfully"));
       }
     },
     onError: (error) => {
@@ -62,7 +58,7 @@ const ProfileIntroduction = ({
     },
   });
 
-  const handleBlockInstructor = async (blockStudent: number) => {
+  const handleBlockStudent = async (blockStudent: number) => {
     const status = {
       blocked_status: blockStudent,
     };
@@ -72,7 +68,11 @@ const ProfileIntroduction = ({
 
   return (
     <div className="relative">
-      <img src={DefaultProfileCover} alt="profile" className="bg-center bg-cover bg-no-repeat h-[200px] rounded-2xl object-cover"/>
+      <img
+        src={personalData?.profileCover || defaultProfileCover}
+        alt="profile"
+        className="bg-center bg-cover bg-no-repeat h-[200px] rounded-2xl object-cover"
+      />
       <div className="absolute flex items-end justify-between w-full md:px-12 px-5 md:top-32 top-[155px]">
         <div className="flex items-end gap-3">
           <img
@@ -81,10 +81,9 @@ const ProfileIntroduction = ({
             className="border-[3px] border-[#393D94] rounded-full md:w-[134px] w-24 md:h-[134px] h-24"
           />
           <div className="text-black">
-            <h2 className={`text-lg font-semibold md:text-xl ${!jobTitle && "-mt-12"}`}>
+            <h2 className="text-lg font-semibold md:text-xl -mt-12">
               {personalData.full_name}
             </h2>
-            <p className="text-sm font-medium md:text-base">{jobTitle}</p>
           </div>
         </div>
 
@@ -94,21 +93,16 @@ const ProfileIntroduction = ({
             firstIcon={<FaRegEdit size={22} className="fill-mainColor" />}
             secondName="delete"
             secondIcon={<RiDeleteBin5Line size={22} className="fill-mainRed" />}
-            anotherName="school schedule"
-            anotherIcon={<FiCalendar size={24} />}
             isOpen={openRow == personalData.id}
             onToggle={() => handleToggleDropDown(personalData.id)}
             onFirstClick={() => {
-              navigate(`${navigation}${personalData.id}`);
+              navigate(`/students/${personalData.id}`);
             }}
             onSecondClick={() => {
-              deleteInstructor();
+              deleteStudent();
               navigate(-1);
             }}
-            onAnotherClick={() => {
-              navigate(`/instructors/schedule/${personalData.id}`);
-            }}
-            blockedName={`${userData === "admin" ? "blocking instructor" : ""}`}
+            blockedName={`${userData === "admin" ? "block student" : ""}`}
             blockedIcon={
               personalData?.blocked_status === 0 ? (
                 <TbLockOpen2 size={22} className="text-mainColor" />
@@ -119,8 +113,8 @@ const ProfileIntroduction = ({
             onBlockedClick={() => {
               const blockedStatus =
                 personalData?.blocked_status === 0
-                  ? handleBlockInstructor(1)
-                  : handleBlockInstructor(0);
+                  ? handleBlockStudent(1)
+                  : handleBlockStudent(0);
 
               return blockedStatus;
             }}
@@ -131,4 +125,4 @@ const ProfileIntroduction = ({
   );
 };
 
-export default ProfileIntroduction;
+export default ProfileStudent;

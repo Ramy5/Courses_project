@@ -85,9 +85,17 @@ const VirtualClasses = () => {
           info.row.original?.status === "completed" ? (
             "---"
           ) : (
-            <a href={info.getValue()} target="_blank" rel="noopener noreferrer">
-              {info.getValue()}
-            </a>
+            <div className="overflow-hidden text-ellipsis max-w-52 px-2" dir="ltr">
+              <a
+                href={info.getValue()}
+                target="_blank"
+                rel="noopener noreferrer"
+                className=""
+                title={info.getValue()}
+              >
+                {info.getValue()}
+              </a>
+            </div>
           ),
       },
     ],
