@@ -23,6 +23,7 @@ import { SlBookOpen } from "react-icons/sl";
 import MainPopup from "../UI/MainPopup";
 import { Button } from "..";
 import { changeSidebarRoute } from "../../features/dirty/dirtySlice";
+import EducationLogo from "../../assets/sidebarIcon.png";
 
 export type SideBarProps = {
   setToggleSideBar: (value: boolean) => void;
@@ -297,6 +298,14 @@ const SideBar: React.FC<SideBarProps> = ({
               <HiBars3CenterLeft size={24} className="fill-mainColor" />
             )}
           </button>
+          {toggleSideBar && (
+            <div>
+              <img
+                src={EducationLogo}
+                className="w-[100px] animate_scale h-12"
+              />
+            </div>
+          )}
         </div>
 
         <ul className="flex-1 mt-6 ps-2">

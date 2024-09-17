@@ -11,16 +11,15 @@ import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import { t } from "i18next";
 import { logoutUser } from "../../features/user/userSlice";
 import { useNavigate } from "react-router-dom";
-import EducationLogo from "../../assets/educationLogo.jpg"
+import EducationLogo from "../../assets/fullLogo.png";
 
 const NavBar: React.FC<SideBarProps> = ({
   setToggleSideBar,
   toggleSideBar,
 }) => {
+  console.log("🚀 ~ toggleSideBar:", toggleSideBar);
   const [currentDate, setCurrentDate] = useState<string>("");
   const { user, isLoading, role } = useAppSelector((store) => store.user);
-  console.log("🚀 ~ role:", role)
-  console.log("🚀 ~ user:", user)
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -50,7 +49,7 @@ const NavBar: React.FC<SideBarProps> = ({
   }, []);
 
   return (
-    <div className="flex items-center justify-between h-16 px-4 w-100 overflow-hidden">
+    <div className="flex items-center justify-between h-16 px-4 overflow-hidden w-100">
       <div className="flex items-center">
         <Button
           action={() => setToggleSideBar((curr) => !curr)}
@@ -62,9 +61,11 @@ const NavBar: React.FC<SideBarProps> = ({
           <img src={DateImg} alt="date" />
           <p>{currentDate}</p>
         </div> */}
-        <div>
-          <img src={EducationLogo} className="w-20 h-20" />
-        </div>
+        {!toggleSideBar && (
+          <div>
+            <img src={EducationLogo} className="w-[320px] animate_scale h-16" />
+          </div>
+        )}
       </div>
       <div className="flex items-center gap-4 me-2">
         <div className="flex items-center justify-center gap-3">
