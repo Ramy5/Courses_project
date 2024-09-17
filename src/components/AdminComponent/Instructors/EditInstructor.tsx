@@ -35,6 +35,7 @@ const EditInstructor = () => {
     });
 
   const instructorData = data?.data?.teacher;
+  console.log("🚀 ~ EditInstructor ~ instructorData:", instructorData)
   const contactInfo =
     data?.data?.teacher?.contactInfo && data?.data?.teacher?.contactInfo[0];
   const qualifications =
@@ -44,7 +45,7 @@ const EditInstructor = () => {
   useEffect(() => {
     if (isSuccess && data) {
       setLoginEditData({
-        id: instructorParamID,
+        id: instructorData?.id,
         full_name: instructorData?.full_name,
         email: instructorData?.email,
         password: instructorData?.password,
@@ -52,7 +53,7 @@ const EditInstructor = () => {
       });
 
       setPersonalEditData({
-        id: instructorParamID,
+        id: instructorData?.id,
         nationality: instructorData?.nationality,
         id_number: instructorData?.id_number,
         country_residence: instructorData?.country_residence,
@@ -74,7 +75,7 @@ const EditInstructor = () => {
       });
 
       setQualificationEditData({
-        id: qualifications.id,
+        id: qualifications?.id,
         general_specialization: qualifications?.general_specialization,
         specialization: qualifications?.specialization,
         degree: qualifications?.degree,

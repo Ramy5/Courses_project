@@ -34,7 +34,7 @@ const ProgramInformation = () => {
   });
 
   const programData = data?.data.data || {};
-  console.log("🚀 ~ ProgramInformation ~ programData:", programData)
+  console.log("🚀 ~ ProgramInformation ~ programData:", programData);
 
   useEffect(() => {
     if (error) {
@@ -61,12 +61,12 @@ const ProgramInformation = () => {
       },
       {
         header: () => <span>{t("")}</span>,
-        accessorKey: "action", 
+        accessorKey: "action",
         cell: (info) => {
           const rowIndex = info.row.index;
           const totalRows = info.table.getCoreRowModel().rows.length;
-          const editData = {...info.row.original, programData}
-          console.log("🚀 ~ ProgramInformation ~ editData:", editData)
+          const editData = { ...info.row.original, programData };
+          console.log("🚀 ~ ProgramInformation ~ editData:", editData);
           return (
             <DotsDropDown
               instructorRoute="/programs/courseDescription"
@@ -99,7 +99,7 @@ const ProgramInformation = () => {
       <TitlePage
         mainTitle="Programs"
         mainLink="/programs"
-        supTitle="computer science program"
+        supTitle={`${t("Program")} ${programData.program_name}`}
         icon={<FaFolder size={28} className="fill-mainColor" />}
       />
 
@@ -112,8 +112,8 @@ const ProgramInformation = () => {
             </h2>
             <span className="font-medium">{programData.program_code}</span>
             <p className="font-medium">
-              {t("time period :")} {programData.strat_Period} -{" "}
-              {programData.end_Period}
+              {t("time period :")} {programData.start_date} -{" "}
+              {programData.end_date}
             </p>
           </div>
 
@@ -167,27 +167,33 @@ const ProgramInformation = () => {
                 </li>
               </ul>
             </div>
-            <div className="mb-5 text-center">
+            <div className="mb-5 mx-auto">
               <h2 className="text-2xl font-semibold text-mainColor">
                 {t("statistics")}
               </h2>
-              <div className="flex items-center justify-center gap-3 mt-5">
-                <CgNotes size={25} className=" text-mainColor" />
+              <div className="flex items-center gap-3 mt-5">
+                <div className="w-8">
+                  <CgNotes size={25} className=" text-mainColor" />
+                </div>
                 <p className="text-xl font-medium">
-                  {programData.statistics_courses} <span>{t("Course")}</span>
+                  {programData.courses_count} <span>{t("Course")}</span>
                 </p>
               </div>
-              <div className="flex items-center justify-center gap-3 my-3 ms-5">
-                <FaUserAlt size={25} className="fill-mainColor" />
+              <div className="flex items-center gap-3 my-4">
+                <div className="w-8">
+                  <FaUserAlt size={25} className="fill-mainColor" />
+                </div>
                 <p className="text-xl font-medium">
-                  {programData.statistics_Instructors}{" "}
+                  {programData.course_teachers_count}{" "}
                   <span>{t("instructor")}</span>
                 </p>
               </div>
-              <div className="flex items-center justify-center gap-3 ms-11">
-                <PiStudentBold size={25} className="fill-mainColor" />
+              <div className="flex items-center gap-3">
+                <div className="w-8">
+                  <PiStudentBold size={28} className="fill-mainColor" />
+                </div>
                 <p className="text-xl font-medium">
-                  {programData.statistics_students} <span>{t("student")}</span>
+                  {programData.students_count} <span>{t("student")}</span>
                 </p>
               </div>
             </div>
@@ -218,7 +224,13 @@ const ProgramInformation = () => {
             <h2 className="text-2xl font-semibold text-center sm:text-start">
               {t("Courses")}
             </h2>
-            <Button action={() => navigate("/programs/create", { state: {program_id: programData?.id} })}>
+            <Button
+              action={() =>
+                navigate("/programs/create", {
+                  state: { program_id: programData?.id },
+                })
+              }
+            >
               {t("add")}
             </Button>
           </div>

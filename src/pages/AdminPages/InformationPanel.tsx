@@ -52,6 +52,7 @@ const InformationPanel = () => {
   // const [searchTerm, setSearchTerm] = useState("");
   const [sortOption, setSortOption] = useState(null);
   const { user } = useAppSelector((slice) => slice.user);
+  const [search, setSearch] = useState("");
 
   const {
     data: countData,
@@ -399,7 +400,14 @@ const InformationPanel = () => {
               placeholder={t("sort by : none")}
               className="w-52"
             />
-            <SearchInput />
+            <SearchInput
+              name="instructorSearch"
+              value={search}
+              className="w-64"
+              autoFocus
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder={t("search about instructor")}
+            />
           </div>
         </div>
 

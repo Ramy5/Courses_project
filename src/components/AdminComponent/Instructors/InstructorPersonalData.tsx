@@ -11,6 +11,7 @@ import { formatDate } from "../../../utils/helpers";
 import { BASE_URL } from "../../../utils/constants";
 import axios from "axios";
 import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
 
 const postInstructorPersonal = async (newStudent: any) => {
   const token = Cookies.get("token");
@@ -64,6 +65,7 @@ const InstructorPersonalData = ({
   const [selectedImage, setSelectedImage] = useState();
   const [imagePreview, setImagePreview] = useState(null);
   const queryClient = useQueryClient();
+  const navigate = useNavigate()
 
   const initialValues = {
     // PERSONAL DATA
@@ -113,9 +115,9 @@ const InstructorPersonalData = ({
     onSuccess: (data: any) => {
       queryClient.invalidateQueries("instructor");
       toast.success(
-        t("instructor personal information has been added successfully")
+        t("instructor personal information has been edited successfully")
       );
-      setInstructorID();
+      setInstructorID(null);
       setActiveTab("contact information");
     },
     onError: (error) => {
@@ -310,7 +312,7 @@ const InstructorPersonalData = ({
                 <Button type="submit" className="me-5" loading={isPending}>
                   {editObj ? t("edit") : t("confirm")}
                 </Button>
-                <Button type="button" className="bg-lightGray text-mainColor">
+                <Button type="button" className="bg-lightGray text-mainColor" action={() => navigate(-1)}>
                   {t("cancel")}
                 </Button>
               </div>

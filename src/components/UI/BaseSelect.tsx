@@ -32,7 +32,6 @@ const BaseSelect = ({
   disabled,
   ...props
 }: BaseSelect_TP) => {
-  console.log("🚀 ~ disabled:", disabled)
 
   return (
     <div>
@@ -49,7 +48,6 @@ const BaseSelect = ({
         value={props.value}
         onChange={onChange}
         isLoading={isLoading}
-        // disabled={disabled}
         isDisabled={disabled}
         components={{ LoadingIndicator }}
       />
