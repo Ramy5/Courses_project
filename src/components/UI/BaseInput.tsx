@@ -46,7 +46,7 @@ const BaseInput = ({
   max,
   ...props
 }: BaseInput_TP) => {
-  console.log("🚀 ~ disabled:", disabled)
+
   const dispatch = useAppDispatch();
 
   const {

@@ -1,6 +1,3 @@
-import { useFormikContext } from "formik";
-import { t } from "i18next";
-import { tv } from "tailwind-variants";
 import { FormikError } from "./FormikError";
 import Select from "react-select";
 import selectStyle from "../../utils/selectStyle";
@@ -35,7 +32,6 @@ const BaseSelect = ({
   disabled,
   ...props
 }: BaseSelect_TP) => {
-  console.log("🚀 ~ disabled:", disabled)
 
   return (
     <div>
@@ -52,7 +48,6 @@ const BaseSelect = ({
         value={props.value}
         onChange={onChange}
         isLoading={isLoading}
-        // disabled={disabled}
         isDisabled={disabled}
         components={{ LoadingIndicator }}
       />

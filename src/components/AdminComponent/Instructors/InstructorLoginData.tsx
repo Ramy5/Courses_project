@@ -82,7 +82,7 @@ const InstructorLoginData = ({
     onSuccess: (data) => {
       queryClient.invalidateQueries("instructors");
       toast.success(
-        t("instructor login information has been added successfully")
+        t("instructor login information has been edited successfully")
       );
       setActiveTab("personal data");
     },
@@ -121,6 +121,7 @@ const InstructorLoginData = ({
           handleAddInstructor(values);
           resetForm();
         }}
+        enableReinitialize={true}
       >
         <Form className="flex flex-col w-full gap-5 px-8 md:w-3/4 md:px-16 m-auto">
           <div>

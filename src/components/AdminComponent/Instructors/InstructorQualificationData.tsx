@@ -94,7 +94,7 @@ const InstructorQualificationData = ({
     onSuccess: (data) => {
       queryClient.invalidateQueries("instructors");
       toast.success(
-        t("instructor login information has been added successfully")
+        t("instructor login information has been edited successfully")
       );
       navigate("/instructors");
     },
@@ -197,8 +197,8 @@ const InstructorQualificationData = ({
   return (
     <Formik
       initialValues={initialValues}
-      onSubmit={(values, { resetForm }) =>{ 
-        handleAddQualification(values)
+      onSubmit={(values, { resetForm }) => {
+        handleAddQualification(values);
         resetForm();
       }}
     >

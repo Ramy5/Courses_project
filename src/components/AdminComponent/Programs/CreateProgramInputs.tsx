@@ -24,8 +24,7 @@ const CreateProgramInputs = ({
   const [openRow, setOpenRow] = useState<number | null>(null);
   const navigate = useNavigate();
 
-  const { values, setFieldValue, resetForm } = useFormikContext();
-  console.log("🚀 ~ values:", values);
+  const { values, setFieldValue } = useFormikContext();
 
   const CoursesColumns = useMemo<ColumnDef<any>[]>(
     () => [
