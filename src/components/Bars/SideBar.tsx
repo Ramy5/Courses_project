@@ -73,7 +73,6 @@ const SideBar: React.FC<SideBarProps> = ({
   }, [isSmallScreen]);
 
   const { role: userData, setting } = useAppSelector((state) => state.user);
-  console.log("🚀 ~ setting:", setting);
 
   const sideBarItemsOfAdmin = [
     {

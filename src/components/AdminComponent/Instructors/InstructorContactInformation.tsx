@@ -5,6 +5,7 @@ import { t } from "i18next";
 import customFetch from "../../../utils/axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 interface AddInstructorParent_TP {
   phone: string;
@@ -36,6 +37,7 @@ const InstructorContactInformation = ({
   setActiveTab,
 }: instructorAddParentData_TP) => {
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const initialValues: AddInstructorParent_TP = {
     phone: editObj?.phone || "",
@@ -51,7 +53,7 @@ const InstructorContactInformation = ({
     onSuccess: (data) => {
       queryClient.invalidateQueries("instructors");
       toast.success(
-        t("instructor login information has been added successfully")
+        t("instructor login information has been edited successfully")
       );
       setActiveTab("qualification data");
     },
@@ -116,7 +118,7 @@ const InstructorContactInformation = ({
       validate={validate}
       initialValues={initialValues}
       onSubmit={(values, { resetForm }) => {
-        handleAddInstructorContact(values)
+        handleAddInstructorContact(values);
         resetForm();
       }}
     >
@@ -181,7 +183,11 @@ const InstructorContactInformation = ({
           <Button type="submit" className="me-5" loading={isPending}>
             {editObj ? t("edit") : t("confirm")}
           </Button>
-          <Button type="button" className="bg-lightGray text-mainColor">
+          <Button
+            action={() => navigate(-1)}
+            type="button"
+            className="bg-lightGray text-mainColor"
+          >
             {t("cancel")}
           </Button>
         </div>

@@ -325,7 +325,7 @@ const LectureManagement = () => {
             );
           } else if (info.row.original.status === "setup") {
             return (
-              <div className="flex items-center justify-center w-56 gap-1">
+              <div className={`flex items-center ${info.getValue() ? "justify-center" : "justify-end"} w-56 gap-1`}>
                 {lecturesZoomEditId === info.row.original.id ? (
                   <>
                     <input

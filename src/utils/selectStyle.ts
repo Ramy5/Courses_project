@@ -53,13 +53,6 @@ const selectStyle: StylesConfig<
     boxShadow: "0px 4px 4px 0px #00000040",
     backgroundColor: "#E6EAEE",
   }),
-  // loadingMessage: (provided) => ({
-  //   ...provided,
-  //   color: "black",
-  //   fontWeight: "500",
-  //   textAlign: "center",
-  //   padding: "10px 0",
-  // }),
   loadingIndicator: (provided) => ({
     ...provided,
     color: "#393D94",

@@ -173,13 +173,18 @@ const SuggestedReferences = ({
                         <Button
                           type="button"
                           action={() => {
-                            if (
-                              (!values.reference_title && !values.author) ||
-                              !values.date ||
-                              !values.link
-                            ) {
-                              toast.info("complete data must be added");
+                            if (!values.reference_title) {
+                              toast.info("reference title must be added.");
                               return;
+                            }
+
+                            if (values.link) {
+                              try {
+                                new URL(values.link);
+                              } catch (_) {
+                                toast.error("Please enter a valid link");
+                                return;
+                              }
                             }
 
                             setSuggestedReferences((prev: any) => [

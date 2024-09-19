@@ -3,8 +3,7 @@ import { BaseInput, Button, MainRadio } from "../../../components";
 import { t } from "i18next";
 import Select from "react-select";
 import { useEffect, useState } from "react";
-import selectStyle from "../../../utils/selectStyle";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import customFetch from "../../../utils/axios";
 import { toast } from "react-toastify";
@@ -12,6 +11,7 @@ import * as Yup from "yup";
 import { FormikError } from "../../UI/FormikError";
 import SuggestedReferences from "./SuggestedReferences";
 import BaseSelect from "../../UI/BaseSelect";
+import Loading from "../../UI/Loading";
 
 const validationSchema = Yup.object().shape({
   course_name: Yup.string().required("Course name is required"),
@@ -44,21 +44,19 @@ const editProgramCourse = async (editCourses: any, id: number) => {
 
 const CreateCoursesInputs = ({
   setCoursesData,
+  step,
   setStep,
   editCoursesData,
   setEditCoursesData,
   editFinishedCoursesData,
 }: any) => {
+  console.log("🚀 ~ step:", step);
   console.log("🚀 ~ editFinishedCoursesData:", editFinishedCoursesData);
   console.log("🚀 ~ editCoursesData:", editCoursesData);
-  console.log(
-    "🚀 ~ Object.keys(editFinishedCoursesData).length:",
-    Object.keys(editFinishedCoursesData).length !== 0
-  );
+
   const [suggestedReferences, setSuggestedReferences] = useState(
     editCoursesData?.references || editFinishedCoursesData?.references || []
   );
-  console.log("🚀 ~ suggestedReferences:", suggestedReferences);
 
   const [level, setLevel] = useState();
   const navigate = useNavigate();
@@ -172,21 +170,18 @@ const CreateCoursesInputs = ({
     { id: 4, value: 4, label: 4 },
   ];
 
-  const { mutate: addNewCourseMutate, isPending: addNewCourseIsPending } =
-    useMutation({
-      mutationKey: ["add_newCourse"],
-      mutationFn: (addCourse: any) => addnewCourse(addCourse),
-      onSuccess: (data) => {
-        queryClient.invalidateQueries("courses");
-        toast.success(
-          t("the course description has been successfully modified")
-        );
-      },
-      onError: (error) => {
-        const errorMessage = error?.response?.data?.error[0];
-        toast.error(errorMessage);
-      },
-    });
+  const { mutate: addNewCourseMutate } = useMutation({
+    mutationKey: ["add_newCourse"],
+    mutationFn: (addCourse: any) => addnewCourse(addCourse),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries("courses");
+      toast.success(t("the course description has been successfully modified"));
+    },
+    onError: (error) => {
+      const errorMessage = error?.response?.data?.error[0];
+      toast.error(errorMessage);
+    },
+  });
 
   const { mutate, isPending } = useMutation({
     mutationKey: ["edit_courses"],
@@ -318,22 +313,23 @@ const CreateCoursesInputs = ({
 
   const handleCheckboxChange = (method) => {
     const newSelectedMethods = teachingLearningMethods.includes(method)
-      ? teachingLearningMethods.filter((item) => item !== method) // Remove if already selected
-      : [...teachingLearningMethods, method]; // Add if not selected
+      ? teachingLearningMethods.filter((item) => item !== method)
+      : [...teachingLearningMethods, method];
 
     setTeachingLearningMethods(newSelectedMethods);
   };
 
-  console.log(
-    "🚀 ~ !!editFinishedCoursesData?.program_id:",
-    !editFinishedCoursesData?.program_id
-  );
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []); //
 
   return (
     <div>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
+        enableReinitialize={true}
         onSubmit={(values) => {}}
       >
         {({ setFieldValue, values, resetForm, setTouched, validateForm }) => {
