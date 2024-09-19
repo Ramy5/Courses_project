@@ -23,11 +23,17 @@ import { SlBookOpen } from "react-icons/sl";
 import MainPopup from "../UI/MainPopup";
 import { Button } from "..";
 import { changeSidebarRoute } from "../../features/dirty/dirtySlice";
-import EducationLogo from "../../assets/sidebarIcon.png";
+import customFetch from "../../utils/axios";
+import { useQuery } from "@tanstack/react-query";
 
 export type SideBarProps = {
   setToggleSideBar: (value: boolean) => void;
   toggleSideBar: boolean;
+};
+
+const getOrganizationSetting = async () => {
+  const { data } = await customFetch.get("setting/1");
+  return data.data.setting;
 };
 
 const SideBar: React.FC<SideBarProps> = ({
@@ -43,10 +49,16 @@ const SideBar: React.FC<SideBarProps> = ({
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [locationRoute, setLocationRoute] = useState<string>("");
 
+  const { data } = useQuery({
+    queryKey: ["get-setting-data"],
+    queryFn: getOrganizationSetting,
+  });
+
   const handleResize = () => {
     setIsSmallScreen(window.innerWidth < 640);
   };
 
+  console.log("🚀 ~ data:", data);
   useEffect(() => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
@@ -60,7 +72,7 @@ const SideBar: React.FC<SideBarProps> = ({
     }
   }, [isSmallScreen]);
 
-  const { role: userData } = useAppSelector((state) => state.user);
+  const { role: userData, setting } = useAppSelector((state) => state.user);
 
   const sideBarItemsOfAdmin = [
     {
@@ -299,7 +311,7 @@ const SideBar: React.FC<SideBarProps> = ({
           {toggleSideBar && (
             <div>
               <img
-                src={EducationLogo}
+                src={data?.organization_logo}
                 className="w-[100px] animate_scale h-12"
               />
             </div>

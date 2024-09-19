@@ -21,5 +21,8 @@ export const getFromCookies = () => {
 export const clearCookies = () => {
   if (typeof window !== "undefined") {
     Cookies.remove("user");
+    Cookies.remove("role");
+    Cookies.remove("token");
+    Cookies.remove("setting");
   }
 };
