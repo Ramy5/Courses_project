@@ -51,7 +51,6 @@ const InformationPanel = () => {
   const [startDate, setStartDate] = useState(new Date());
   // const [searchTerm, setSearchTerm] = useState("");
   const [sortOption, setSortOption] = useState(null);
-  const { user } = useAppSelector((slice) => slice.user);
 
   const {
     data: countData,
@@ -80,6 +79,7 @@ const InformationPanel = () => {
 
   const programsData = programData?.map((program: any) => {
     return {
+      id: program?.id,
       programTitle: program?.program_name,
       programColor: generateRandomColor(),
       numOfCourses: program?.course_count,
@@ -318,10 +318,11 @@ const InformationPanel = () => {
           modules={[Navigation, Autoplay]}
           className="mySwiper"
         >
-          {programsData?.map((program, index) => (
-            <SwiperSlide key={index}>
+          {programsData?.map((program) => (
+            <SwiperSlide key={program?.id}>
               <ProgramBox
-                key={index}
+                key={program?.id}
+                id={program?.id}
                 programTitle={program.programTitle}
                 programColor={program.programColor}
                 numOfCourses={program.numOfCourses}

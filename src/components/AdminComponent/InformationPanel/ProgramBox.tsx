@@ -3,6 +3,7 @@ import { FiFileText } from "react-icons/fi";
 import { IoBookOutline } from "react-icons/io5";
 import { MdPerson } from "react-icons/md";
 import { PiStudent } from "react-icons/pi";
+import { Link } from "react-router-dom";
 
 interface ProgramBox_TP {
   programTitle: string;
@@ -10,6 +11,7 @@ interface ProgramBox_TP {
   numOfCourses: number;
   numOfStudents: number;
   numOfInstructor: number;
+  id: number;
 }
 
 const ProgramBox = (props: ProgramBox_TP) => {
@@ -19,6 +21,7 @@ const ProgramBox = (props: ProgramBox_TP) => {
     numOfCourses,
     numOfStudents,
     numOfInstructor,
+    id,
   } = props;
 
   return (
@@ -30,9 +33,12 @@ const ProgramBox = (props: ProgramBox_TP) => {
         <span>
           <IoBookOutline color={programColor} size={30} />
         </span>
-        <span className="text-2xl font-bold truncate">
+        <Link
+          to={`/programs/programInfo/${id}`}
+          className={`text-2xl text-[#333] font-bold underline truncate`}
+        >
           {t(`${programTitle}`)}
-        </span>
+        </Link>
       </h2>
 
       <div className="flex items-center justify-between gap-2">

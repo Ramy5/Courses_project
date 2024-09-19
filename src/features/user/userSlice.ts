@@ -7,7 +7,6 @@ import {
   getFromCookies,
 } from "../../utils/cookies";
 import Cookies from "js-cookie";
-import { useLocation, useNavigate } from "react-router-dom";
 
 export interface User_TP {
   email: string;
@@ -15,11 +14,23 @@ export interface User_TP {
   loginType: string;
 }
 
+export interface setting_TP {
+  id: number;
+  organization_name: string;
+  organization_email: string;
+  organization_vision: string;
+  organization_mission: string;
+  organization_logo: string;
+  organization_cover: string;
+  color: string;
+}
+
 interface initialState_TP {
   isLoading: boolean;
   user: null | User_TP;
   role: null | string;
   token: null | string;
+  setting: null | setting_TP;
 }
 
 const initialState: initialState_TP = {
@@ -27,6 +38,7 @@ const initialState: initialState_TP = {
   user: getFromCookies(),
   role: Cookies.get("role") || null,
   token: Cookies.get("token") || null,
+  setting: Cookies.get("setting") || null,
 };
 
 export const loginUser = createAsyncThunk(
@@ -48,8 +60,6 @@ const userSlice = createSlice({
     logoutUser: (state, action) => {
       state.user = null;
       clearCookies();
-      Cookies.remove("role");
-      Cookies.remove("token");
 
       if (action.payload) {
         toast.success(action.payload);
@@ -63,13 +73,18 @@ const userSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, { payload }) => {
         state.isLoading = false;
-        const { user, loginType, token } = payload;
+        const { user, loginType, token, setting } = payload;
+
         state.user = user;
         state.role = loginType;
         state.token = token;
+        state.setting = setting;
+
         addToCookies(user);
+        Cookies.set("setting", setting);
         Cookies.set("role", loginType);
         Cookies.set("token", token);
+
         toast.success(`Welcome back ${user?.name}`);
       })
       .addCase(loginUser.rejected, (state, { payload }) => {
