@@ -197,7 +197,7 @@ const InstructorLoginData = ({
 
           <div className="flex justify-end mt-5 mx-auto">
             <Button type="submit" className="me-5" loading={isPending}>
-              {editObj ? t("edit") : t("confirm")}
+              {editObj ? t("edit login data") : t("save login data")}
             </Button>
             <Button
               type="button"

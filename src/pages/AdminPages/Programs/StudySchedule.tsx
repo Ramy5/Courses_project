@@ -74,14 +74,6 @@ const StudySchedule = () => {
   });
 
   const instructorScheduleData = data?.data?.data || [];
-  console.log(
-    "🚀 ~ StudySchedule ~ instructorScheduleData:",
-    instructorScheduleData
-  );
-
-  // const filterScheduleData = instructorScheduleData?.filter(
-  //   (schedule) => schedule.day.id === day?.id
-  // );
 
   const lectureTimeData = instructorScheduleData?.map((schedule) => ({
     id: schedule.id,
@@ -98,13 +90,13 @@ const StudySchedule = () => {
     teacher_id: schedule.teacher?.id,
     teacher_name: schedule.teacher?.full_name,
   }));
-  
+
   useEffect(() => {
     if (data) {
       setScheduleData({
-        day: day,
-        start_date: instructorScheduleData[0]?.program?.start_date,
-        end_date: instructorScheduleData[0]?.program?.end_date,
+        day: day || {},
+        start_date: instructorScheduleData[0]?.program?.start_date || "",
+        end_date: instructorScheduleData[0]?.program?.end_date || "",
         lecture_time: lectureTimeData || [],
       });
     }
@@ -145,7 +137,6 @@ const StudySchedule = () => {
       lecture_times: values.lecture_time,
       start_date: values.start_date,
     };
-    console.log("🚀 ~ handleAddSchedule ~ newSchedule:", newSchedule);
 
     instructorScheduleData?.length
       ? await editMutate(newSchedule)
@@ -225,7 +216,7 @@ const StudySchedule = () => {
                   className="py-3 mt-20 text-xl font-semibold rounded-2xl"
                   action={() => {
                     handleAddSchedule(scheduleData);
-                    localStorage.removeItem("day")
+                    localStorage.removeItem("day");
                   }}
                   loading={isPending || editIsPending}
                 >

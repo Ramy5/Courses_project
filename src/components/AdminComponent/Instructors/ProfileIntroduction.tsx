@@ -11,7 +11,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { useAppSelector } from "../../../hooks/reduxHooks";
 import { t } from "i18next";
-import DefaultProfileCover from "../../../assets/instructors/profile-cover.svg"
+import DefaultProfileCover from "../../../assets/instructors/profile-cover.svg";
 
 const blockInstructor = async (
   instructorId: string,
@@ -33,7 +33,6 @@ const ProfileIntroduction = ({
   navigation,
   deleteInstructor,
 }: PersonlyProfile) => {
-  console.log("🚀 ~ personalData:", personalData);
   const [openRow, setOpenRow] = useState<number | null>(null);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -72,7 +71,11 @@ const ProfileIntroduction = ({
 
   return (
     <div className="relative">
-      <img src={DefaultProfileCover} alt="profile" className="bg-center bg-cover bg-no-repeat h-[200px] rounded-2xl object-cover"/>
+      <img
+        src={DefaultProfileCover}
+        alt="profile"
+        className="bg-center bg-cover bg-no-repeat h-[200px] rounded-2xl object-cover"
+      />
       <div className="absolute flex items-end justify-between w-full md:px-12 px-5 md:top-32 top-[155px]">
         <div className="flex items-end gap-3">
           <img
@@ -81,7 +84,11 @@ const ProfileIntroduction = ({
             className="border-[3px] border-[#393D94] rounded-full md:w-[134px] w-24 md:h-[134px] h-24"
           />
           <div className="text-black">
-            <h2 className={`text-lg font-semibold md:text-xl ${!jobTitle && "-mt-12"}`}>
+            <h2
+              className={`text-lg font-semibold md:text-xl ${
+                !jobTitle && "-mt-12"
+              }`}
+            >
               {personalData.full_name}
             </h2>
             <p className="text-sm font-medium md:text-base">{jobTitle}</p>
@@ -108,7 +115,13 @@ const ProfileIntroduction = ({
             onAnotherClick={() => {
               navigate(`/instructors/schedule/${personalData.id}`);
             }}
-            blockedName={`${userData === "admin" ? "blocking instructor" : ""}`}
+            blockedName={`${
+              userData === "admin"
+                ? personalData?.blocked_status === 0
+                  ? "blocking instructor"
+                  : "Unblock"
+                : ""
+            }`}
             blockedIcon={
               personalData?.blocked_status === 0 ? (
                 <TbLockOpen2 size={22} className="text-mainColor" />

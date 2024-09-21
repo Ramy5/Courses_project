@@ -185,7 +185,7 @@ const StudentAddFatherData = ({
                 type="submit"
                 className="me-5"
               >
-                {t("confirm")}
+                {t("save guardian data")}
               </Button>
               <Button
                 action={() => navigate(-1)}

@@ -7,12 +7,21 @@ import {
   Table,
 } from "../../../components";
 import { t } from "i18next";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { FaRegEdit } from "react-icons/fa";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 import { FormikError } from "../../UI/FormikError";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import customFetch from "../../../utils/axios";
+import { toast } from "react-toastify";
+import BaseSelect from "../../UI/BaseSelect";
+
+const postProgramCode = async (programCode: any) => {
+  const data = customFetch.post("/searchProgramsCode", programCode);
+  return data;
+};
 
 const CreateProgramInputs = ({
   setStep,
@@ -20,11 +29,29 @@ const CreateProgramInputs = ({
   setEditCoursesData,
   setCoursesData,
   isPending,
+  editFinishedProgramData,
 }: any) => {
   const [openRow, setOpenRow] = useState<number | null>(null);
+  const [excellenceSelect, setExcellenceSelect] = useState(null);
+  const [veryGoodSelect, setVeryGoodSelect] = useState(null);
+  const [goodSelect, setGoodSelect] = useState(null);
+  const [acceptableSelect, setAcceptableSelect] = useState(null);
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const { values, setFieldValue } = useFormikContext();
+
+  const { mutate, error } = useMutation({
+    mutationKey: ["add-instructor-contact"],
+    mutationFn: postProgramCode,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries("isProgram_code");
+    },
+    onError: (error) => {
+      const errorMessage = error?.response?.data?.message;
+      toast.error(errorMessage);
+    },
+  });
 
   const CoursesColumns = useMemo<ColumnDef<any>[]>(
     () => [
@@ -87,6 +114,91 @@ const CreateProgramInputs = ({
     setOpenRow((prevOpenRow) => (prevOpenRow == index ? null : index));
   };
 
+  const excellenceOption = [
+    {
+      id: 1,
+      value: 90,
+      label: 90,
+    },
+    {
+      id: 2,
+      value: 95,
+      label: 95,
+    },
+  ];
+
+  const veryGoodOption = [
+    {
+      id: 1,
+      value: 80,
+      label: 80,
+    },
+    {
+      id: 2,
+      value: 85,
+      label: 85,
+    },
+  ];
+
+  const goodOption = [
+    {
+      id: 1,
+      value: 70,
+      label: 70,
+    },
+    {
+      id: 2,
+      value: 75,
+      label: 75,
+    },
+  ];
+
+  const acceptableOption = [
+    {
+      id: 1,
+      value: 50,
+      label: 50,
+    },
+    {
+      id: 2,
+      value: 60,
+      label: 60,
+    },
+  ];
+
+  useEffect(() => {
+    if (editFinishedProgramData) {
+      const editExcellence = {
+        id: editFinishedProgramData?.excellence || "",
+        label: editFinishedProgramData?.excellence || "",
+        value: editFinishedProgramData?.excellence || "",
+      };
+
+      const editVeryGood = {
+        id: editFinishedProgramData?.very_good || "",
+        label: editFinishedProgramData?.very_good || "",
+        value: editFinishedProgramData?.very_good || "",
+      };
+
+      const editGood = {
+        id: editFinishedProgramData?.good || "",
+        label: editFinishedProgramData?.good || "",
+        value: editFinishedProgramData?.good || "",
+      };
+
+      const editAcceptable = {
+        id: editFinishedProgramData?.acceptable || "",
+        label: editFinishedProgramData?.acceptable || "",
+        value: editFinishedProgramData?.acceptable || "",
+      };
+
+      setExcellenceSelect(editExcellence);
+      setVeryGoodSelect(editVeryGood);
+      setGoodSelect(editGood);
+      setAcceptableSelect(editAcceptable);
+    }
+  }, [editFinishedProgramData]);
+
   return (
     <div>
       <div className="bg-white rounded-3xl pb-8">
@@ -137,15 +249,23 @@ const CreateProgramInputs = ({
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-5 my-5">
-            <BaseInput
-              name="program_code"
-              id="program_code"
-              type="text"
-              className="w-full text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
-              placeholder={t("program code")}
-              label={t("program code")}
-              labelProps="!font-semibold"
-            />
+            <div>
+              <BaseInput
+                name="program_code"
+                id="program_code"
+                type="text"
+                className="w-full text-lg py-2 mb-1 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                placeholder={t("program code")}
+                label={t("program code")}
+                labelProps="!font-semibold"
+                onChange={(e) => mutate({ program_code: e.target.value })}
+              />
+              {error?.response?.data?.message === "هذا الكود موجود بالفعل" && (
+                <span className="text-mainRed">
+                  {error?.response?.data?.message}
+                </span>
+              )}
+            </div>
             <BaseInput
               name="specialization"
               id="specialization"
@@ -214,50 +334,81 @@ const CreateProgramInputs = ({
           <div className="border-[1.59px] mt-8 mb-6"></div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-12 gap-y-5 my-4">
-            <BaseInput
-              name="excellence"
-              id="excellence"
-              type="number"
-              className="w-full text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
-              placeholder={t("excellence")}
-              label={t("excellence")}
-              labelProps="!font-semibold"
-              max={100}
-              min={90}
-            />
-            <BaseInput
-              name="very_good"
-              id="very_good"
-              type="number"
-              className="w-full text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
-              placeholder={t("very good")}
-              label={t("very good")}
-              labelProps="!font-semibold"
-              max={89}
-              min={80}
-            />
-            <BaseInput
-              name="good"
-              id="good"
-              type="number"
-              className="w-full text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
-              placeholder={t("good")}
-              label={t("good")}
-              labelProps="!font-semibold"
-              max={79}
-              min={65}
-            />
-            <BaseInput
-              name="acceptable"
-              id="acceptable"
-              type="number"
-              className="w-full text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
-              placeholder={t("acceptable")}
-              label={t("acceptable")}
-              labelProps="!font-semibold"
-              max={64}
-              min={50}
-            />
+            <div className="w-full">
+              <BaseSelect
+                id="excellence"
+                name="excellence"
+                placeholder={t("excellence")}
+                label={t("excellence")}
+                options={excellenceOption}
+                value={excellenceSelect}
+                onChange={(e) => {
+                  setFieldValue("excellence", e.id);
+                  setFieldValue("excellence", e.value);
+                  setExcellenceSelect({
+                    id: e.id,
+                    label: e.value,
+                    value: e.value,
+                  });
+                }}
+              />
+            </div>
+            <div className="w-full">
+              <BaseSelect
+                id="very_good"
+                name="very_good"
+                placeholder={t("very good")}
+                label={t("very good")}
+                options={veryGoodOption}
+                value={veryGoodSelect}
+                onChange={(e) => {
+                  setFieldValue("very_good", e.id);
+                  setFieldValue("very_good", e.value);
+                  setVeryGoodSelect({
+                    id: e.id,
+                    label: e.value,
+                    value: e.value,
+                  });
+                }}
+              />
+            </div>
+
+            <div className="w-full">
+              <BaseSelect
+                id="good"
+                name="good"
+                placeholder={t("good")}
+                label={t("good")}
+                options={goodOption}
+                value={goodSelect}
+                onChange={(e) => {
+                  setFieldValue("good", e.value);
+                  setGoodSelect({
+                    id: e.id,
+                    label: e.value,
+                    value: e.value,
+                  });
+                }}
+              />
+            </div>
+            <div className="w-full">
+              <BaseSelect
+                id="acceptable"
+                name="acceptable"
+                placeholder={t("acceptable")}
+                label={t("acceptable")}
+                options={acceptableOption}
+                value={acceptableSelect}
+                onChange={(e) => {
+                  setFieldValue("acceptable", e.value);
+                  setAcceptableSelect({
+                    id: e.id,
+                    label: e.value,
+                    value: e.value,
+                  });
+                }}
+              />
+            </div>
           </div>
         </div>
 
@@ -285,7 +436,9 @@ const CreateProgramInputs = ({
 
         <div className="mt-8 px-8 flex justify-end">
           <Button type="submit" className="me-5" loading={isPending}>
-            {t("create program")}
+            {!!Object.keys(editFinishedProgramData).length
+              ? `${t("edit program")}`
+              : `${t("create program")}`}
           </Button>
           <Button
             type="button"

@@ -1,16 +1,12 @@
 import { Form, Formik } from "formik";
 import BaseInput from "../../UI/BaseInput";
 import { t } from "i18next";
-import selectStyle from "../../../utils/selectStyle";
 import { Button } from "../..";
-import Select from "react-select";
 import customFetch from "../../../utils/axios";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import LoadingIndicator from "../../UI/LoadingIndicator";
 import { toast } from "react-toastify";
 import * as Yup from "yup";
-import { FormikError } from "../../UI/FormikError";
 import BaseSelect from "../../UI/BaseSelect";
 
 const validationSchema = Yup.object().shape({
@@ -32,8 +28,9 @@ const AddLectureTiming = ({
   editStudySchedule,
   setEditStudySchedule,
 }) => {
-  console.log("🚀 ~ scheduleData:", scheduleData)
+  console.log("🚀 ~ editStudySchedule:", editStudySchedule);
   const [coursesSelect, setCoursesSelect] = useState(null);
+  console.log("🚀 ~ coursesSelect:", coursesSelect);
   const [groupSelect, setGroupSelect] = useState(null);
   const [teacherSelect, setTeacherSelect] = useState(null);
   const [levelSelect, setLevelSelect] = useState(null);
@@ -45,16 +42,17 @@ const AddLectureTiming = ({
       0,
     program_id: editStudySchedule?.program_id || scheduleId,
     id: editStudySchedule?.id || crypto.randomUUID(),
-    course_id: editStudySchedule?.course_id || 0,
-    course_name: editStudySchedule?.course_name || "",
+    course_id: editStudySchedule?.course_id || coursesSelect?.id,
+    course_name: editStudySchedule?.course_name || coursesSelect?.value,
     start_time: editStudySchedule?.start_time || "",
     end_time: editStudySchedule?.end_time || "",
-    group: editStudySchedule?.group || "",
-    group_name: editStudySchedule?.group_name || "",
-    teacher_id: editStudySchedule?.teacher_id || 0,
-    teacher_name: editStudySchedule?.teacher_name || "",
-    level: editStudySchedule?.level || "",
+    group: editStudySchedule?.group || groupSelect?.id,
+    group_name: editStudySchedule?.group_name || groupSelect?.value,
+    teacher_id: editStudySchedule?.teacher_id || teacherSelect?.id,
+    teacher_name: editStudySchedule?.teacher_name || teacherSelect?.value,
+    level: editStudySchedule?.level || levelSelect?.id,
   };
+  console.log("🚀 ~ initialValues:", initialValues);
 
   const fetchCoursesData = async () => {
     const response = await customFetch(`/courses?per_page=10000`);
@@ -82,7 +80,7 @@ const AddLectureTiming = ({
   };
 
   const { data, refetch, isLoading, isFetching } = useQuery({
-    queryKey: ["teacher_data"],
+    queryKey: ["lecture_teacher_data"],
     queryFn: fetchTeacherData,
   });
 
@@ -96,23 +94,23 @@ const AddLectureTiming = ({
 
   const levelsOption = [
     {
-      label: `${t("level")} 1`,
-      value: "level 1",
+      label: 1,
+      value: 1,
       id: 1,
     },
     {
-      label: `${t("level")} 2`,
-      value: "level 2",
+      label: 2,
+      value: 2,
       id: 2,
     },
     {
-      label: `${t("level")} 3`,
-      value: "level 3",
+      label: 3,
+      value: 3,
       id: 3,
     },
     {
-      label: `${t("level")} 4`,
-      value: "level 4",
+      label: 4,
+      value: 4,
       id: 4,
     },
   ];
@@ -131,7 +129,7 @@ const AddLectureTiming = ({
   ];
 
   useEffect(() => {
-    if (editStudySchedule) {
+    if (Object.keys(editStudySchedule).length) {
       const editLevel = {
         id: editStudySchedule?.level || "",
         label: editStudySchedule?.level || t("level"),
@@ -161,7 +159,7 @@ const AddLectureTiming = ({
       setTeacherSelect(editTeacher);
       setCoursesSelect(editCourses);
     }
-  }, [editStudySchedule]);
+  }, [Object.keys(editStudySchedule).length]);
 
   useEffect(() => {
     refetch();
@@ -173,8 +171,10 @@ const AddLectureTiming = ({
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={() => {}}
+        enableReinitialize={true}
       >
         {({ values, setFieldValue }) => {
+          console.log("🚀 ~ values:", values);
           return (
             <Form>
               <div className="w-full md:w-4/5">
@@ -200,13 +200,14 @@ const AddLectureTiming = ({
                     label={t("course")}
                     options={courseOption}
                     value={coursesSelect}
-                    onChange={(e) => {
-                      setFieldValue("course_id", e.id);
-                      setFieldValue("course_name", e.value);
+                    onChange={(option) => {
+                      console.log("🚀 ~ option:", option)
+                      setFieldValue("course_id", option!.id);
+                      setFieldValue("course_name", option!.value);
                       setCoursesSelect({
-                        id: e.id,
-                        label: e.value,
-                        value: e.value,
+                        id: option!.id,
+                        label: option!.value,
+                        value: option!.value,
                       });
                     }}
                     isLoading={isLoading || isFetching}
@@ -221,13 +222,13 @@ const AddLectureTiming = ({
                     placeholder={t("branch")}
                     options={groupNumberOption}
                     value={groupSelect}
-                    onChange={(e) => {
-                      setFieldValue("group", e.id);
-                      setFieldValue("group_name", e.value);
+                    onChange={(option) => {
+                      setFieldValue("group", option!.id);
+                      setFieldValue("group_name", option!.value);
                       setGroupSelect({
-                        id: e.id,
-                        label: e.value,
-                        value: e.value,
+                        id: option!.id,
+                        label: option!.value,
+                        value: option!.value,
                       });
                     }}
                     isLoading={isLoading || isFetching}
@@ -243,13 +244,13 @@ const AddLectureTiming = ({
                       label={t("lecturer")}
                       options={teachersOption}
                       value={teacherSelect}
-                      onChange={(e) => {
-                        setFieldValue("teacher_id", e.id);
-                        setFieldValue("teacher_name", e.value);
+                      onChange={(option) => {
+                        setFieldValue("teacher_id", option!.id);
+                        setFieldValue("teacher_name", option!.value);
                         setTeacherSelect({
-                          id: e.id,
-                          label: e.value,
-                          value: e.value,
+                          id: option!.id,
+                          label: option!.value,
+                          value: option!.value,
                         });
                       }}
                       isLoading={isLoading || isFetching}
@@ -263,12 +264,12 @@ const AddLectureTiming = ({
                       label={t("level")}
                       options={levelsOption}
                       value={levelSelect}
-                      onChange={(e) => {
-                        setFieldValue("level", e.id);
+                      onChange={(option) => {
+                        setFieldValue("level", option!.id);
                         setLevelSelect({
-                          id: e.id,
-                          label: e.value,
-                          value: e.value,
+                          id: option!.id,
+                          label: option!.value,
+                          value: option!.value,
                         });
                       }}
                       isLoading={isLoading || isFetching}
@@ -316,7 +317,8 @@ const AddLectureTiming = ({
                         return (
                           valueStartTime < end_time &&
                           valueEndTime > start_time &&
-                          day_id == values.day_id && level == values.level
+                          day_id == values.day_id &&
+                          level == values.level
                         );
                       });
 
@@ -401,6 +403,7 @@ export default AddLectureTiming;
 //       return false;
 //     } else {
 //       return {
+
 //         ...prevState,
 //         lecture_time: [...prevState.lecture_time, values],
 //       };

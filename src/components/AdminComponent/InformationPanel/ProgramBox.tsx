@@ -3,8 +3,10 @@ import { FiFileText } from "react-icons/fi";
 import { IoBookOutline } from "react-icons/io5";
 import { MdPerson } from "react-icons/md";
 import { PiStudent } from "react-icons/pi";
+import { useNavigate } from "react-router-dom";
 
 interface ProgramBox_TP {
+  programID: number;
   programTitle: string;
   programColor: string;
   numOfCourses: number;
@@ -13,7 +15,9 @@ interface ProgramBox_TP {
 }
 
 const ProgramBox = (props: ProgramBox_TP) => {
+  const navigate = useNavigate()
   const {
+    programID,
     programTitle,
     programColor,
     numOfCourses,
@@ -21,10 +25,15 @@ const ProgramBox = (props: ProgramBox_TP) => {
     numOfInstructor,
   } = props;
 
+  const handleStudySchedule = (id: number) => {
+    navigate(`/programs/programInfo/${id}`);
+  };
+
   return (
     <div
-      className={`rounded-xl border-s-8 bg-white p-4`}
+      className={`rounded-xl border-s-8 bg-white p-4 cursor-pointer`}
       style={{ borderColor: programColor }}
+      onClick={() => handleStudySchedule(programID)}
     >
       <h2 className="flex items-end gap-2 mb-6">
         <span>

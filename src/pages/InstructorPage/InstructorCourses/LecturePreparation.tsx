@@ -47,14 +47,11 @@ const LecturePreparation = () => {
   const { id } = useParams();
   const location = useLocation();
   const editObj = location.state;
-  const updateLinkss = editObj?.links?.map((item) => ({ value: item.link}))
+  const updateLinkss = editObj?.links?.map((item) => ({ value: item.link }));
   const [files, setFiles] = useState([]);
-  console.log("🚀 ~ LecturePreparation ~ files:", files)
   const [links, setLinks] = useState(updateLinkss || []);
-  console.log("🚀 ~ LecturePreparation ~ links:", links)
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  console.log("🚀 ~ LecturePreparation ~ editObj:", editObj)
 
   const initialValues = {
     title_ar: editObj?.title || "",
@@ -98,11 +95,6 @@ const LecturePreparation = () => {
     },
   });
 
-  
-  const updateLinks = links.map((item) => item);
-  console.log("🚀 ~ handleAddLecturePreparation ~ updateLinks:", updateLinks)
-
-
   const handleAddLecturePreparation = async (values) => {
     if (!files?.length) {
       toast.info("file is required");
@@ -113,7 +105,6 @@ const LecturePreparation = () => {
       toast.info("links are required");
       return;
     }
-
 
     const newLecturePreparation = {
       title_ar: values.title_ar,
@@ -138,14 +129,12 @@ const LecturePreparation = () => {
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={(values, { resetForm }) => {
-          console.log("🚀 ~ LecturePreparation ~ values:", values)
-          
+
           handleAddLecturePreparation(values);
           resetForm();
         }}
       >
         {({ setFieldValue, values }) => {
-          console.log("🚀 ~ LecturePreparation ~ values:", values)
           return (
             <Form>
               <div className="flex gap-12">
@@ -336,7 +325,9 @@ const LecturePreparation = () => {
                   <div>
                     {links.map((link: any, index) => (
                       <div className="flex items-center justify-between px-6 py-3 border-t-2 border-mainGray">
-                        <p className="font-semibold">{link.value || link.link}</p>
+                        <p className="font-semibold">
+                          {link.value || link.link}
+                        </p>
                         <RiDeleteBin5Line
                           size={30}
                           className="cursor-pointer fill-mainRed"

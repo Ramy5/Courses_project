@@ -33,8 +33,7 @@ const ProgramInformation = () => {
     queryFn: fetchProgramData,
   });
 
-  const programData = data?.data.data || {};
-  console.log("🚀 ~ ProgramInformation ~ programData:", programData);
+  const programData = data?.data?.data || {};
 
   useEffect(() => {
     if (error) {
@@ -66,7 +65,6 @@ const ProgramInformation = () => {
           const rowIndex = info.row.index;
           const totalRows = info.table.getCoreRowModel().rows.length;
           const editData = { ...info.row.original, programData };
-          console.log("🚀 ~ ProgramInformation ~ editData:", editData);
           return (
             <DotsDropDown
               instructorRoute="/programs/courseDescription"
@@ -106,7 +104,7 @@ const ProgramInformation = () => {
       <div className="p-5 bg-white rounded-2xl">
         <div className="p-5 bg-lightGray rounded-2xl">
           <div className="w-full mb-6 text-center">
-            <span className="font-medium">{t("training program")}</span>
+            <span className="font-medium">{programData.program_type === "educational" ? `${t("Study program")}` : `${t("training program")}`}</span>
             <h2 className="text-3xl font-semibold text-mainColor">
               {programData.program_name}
             </h2>

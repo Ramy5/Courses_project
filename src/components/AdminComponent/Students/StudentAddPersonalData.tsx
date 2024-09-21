@@ -344,7 +344,7 @@ const StudentAddPersonalData = ({
                 type="submit"
                 className="me-5"
               >
-                {t("confirm")}
+                {t("save personal data")}
               </Button>
               <Button
                 action={() => navigate(-1)}

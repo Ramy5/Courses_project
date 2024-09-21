@@ -21,7 +21,6 @@ const StudentAddHomework = () => {
     queryKey: ["get-all-homeworks"],
     queryFn: () => getHomework(id),
   });
-  console.log(data);
 
   const customData = {
     startDate: data?.start_date,

@@ -1,4 +1,4 @@
-import { FaFolder, FaUserAlt } from "react-icons/fa";
+import { FaFolder, FaRegEdit, FaUserAlt } from "react-icons/fa";
 import {
   Button,
   DotsDropDown,
@@ -38,7 +38,6 @@ const Programs = () => {
   });
 
   const programData = data ? data?.data.data.programs : {};
-  console.log("🚀 ~ Programs ~ programData:", programData)
   const programPagination = data ? data?.data?.data.pagination : {};
 
   useEffect(() => {
@@ -102,18 +101,27 @@ const Programs = () => {
               >
                 <div className="flex items-center justify-between w-full">
                   <h2 className="font-semibold text-xl text-mainColor">
-                    {program.program_name}
+                    {program.program_name} <span>({program.program_code})</span>
                   </h2>
                   <DotsDropDown
-                    firstName="view program data"
-                    firstIcon={<GrView size={22} className="fill-mainColor" />}
+                    anotherName="view program data"
+                    anotherIcon={
+                      <GrView size={22} className="fill-mainColor" />
+                    }
+                    firstName="edit program"
+                    firstIcon={
+                      <FaRegEdit size={22} className="fill-mainColor" />
+                    }
                     secondName="delete program"
                     secondIcon={
                       <RiDeleteBin5Line size={22} className="fill-mainRed" />
                     }
                     isOpen={openRow == program.id}
                     onToggle={() => handleToggleDropDown(program.id)}
-                    onFirstClick={() => {
+                    onFirstClick={() =>
+                      navigate("/programs/create", { state: program.id })
+                    }
+                    onAnotherClick={() => {
                       navigate(`/programs/programInfo/${program.id}`);
                     }}
                     onSecondClick={() => {

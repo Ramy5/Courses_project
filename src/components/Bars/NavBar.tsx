@@ -17,7 +17,6 @@ const NavBar: React.FC<SideBarProps> = ({
   setToggleSideBar,
   toggleSideBar,
 }) => {
-  console.log("🚀 ~ toggleSideBar:", toggleSideBar);
   const [currentDate, setCurrentDate] = useState<string>("");
   const { user, isLoading, role } = useAppSelector((store) => store.user);
   const dispatch = useAppDispatch();

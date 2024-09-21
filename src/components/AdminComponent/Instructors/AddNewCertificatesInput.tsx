@@ -42,8 +42,6 @@ const AddNewCertificatesInput = ({
   dataReceived,
   setEditCertificateData,
 }: AddNewCertificatesInput_TP) => {
-  console.log("🚀 ~ newCertificates:", newCertificates);
-  // const editCertificate = editObj?.newCertificate && editObj?.newCertificate[0];
   const [editCertificate, setEditCertificate] = useState({});
   const { id: instructorParamID } = useParams();
 

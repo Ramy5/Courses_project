@@ -24,7 +24,6 @@ const StudyScheduleFirstStep = ({
   scheduleData,
   setEditStudySchedule,
 }) => {
-  console.log("🚀 ~ scheduleData:", scheduleData);
   const [activeButton, setActiveButton] = useState<any>(
     JSON.parse(localStorage.getItem("day")) || {
       id: 1,
@@ -131,7 +130,6 @@ const StudyScheduleFirstStep = ({
   const filterScheduleTable = scheduleData?.lecture_time?.filter(
     (item) => item.day_id == activeButton.id
   );
-  console.log("🚀 ~ filterScheduleTable:", filterScheduleTable);
 
   {
     isLoading || (isRefetching && <Loading />);
@@ -246,10 +244,7 @@ const StudyScheduleFirstStep = ({
       <div className="flex items-center justify-end gap-5 mt-12">
         <Button
           action={() => {
-            console.log(
-              "🚀 ~ !!scheduleData?.start_date:",
-              !!scheduleData?.start_date
-            );
+
             if (!scheduleData?.start_date) {
               toast.info("Start time is required");
               return;

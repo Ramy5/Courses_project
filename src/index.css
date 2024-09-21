@@ -29,7 +29,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 @layer components {
   .shadow-button {
-    box-shadow: rgba(83, 109, 254, 0.3) 0 4px 8px, rgba(83, 109, 254, 0.2) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
+    box-shadow: rgba(83, 109, 254, 0.3) 0 4px 8px,
+      rgba(83, 109, 254, 0.2) 0 7px 13px -3px, #d6d6e7 0 -3px 0 inset;
   }
 }
 
@@ -383,7 +384,7 @@ h1 {
 }
 
 .fc-scroller {
-  overflow: hidden !important;
+  overflow-y: hidden !important;
 }
 
 .fc-datagrid-cell-frame {
@@ -396,6 +397,13 @@ h1 {
 .fc-scrollgrid-sync-table,
 .fc-timeline-body {
   height: 100% !important;
+}
+
+.fc-scrollgrid-section.fc-scrollgrid-section-body.fc-scrollgrid-section-liquid td:last-child .fc-scrollgrid-sync-table,
+.fc-scrollgrid-section-header .fc-scroller-harness .fc-scrollgrid-sync-table {
+  min-width: 960px !important;
+  width: 1700px !important;
+  overflow-x: scroll !important;
 }
 
 .fc-timeline-lane-frame,
@@ -440,42 +448,77 @@ tbody .fc-datagrid-cell-frame {
   border-bottom: 2px solid #4ecb71 !important;
 }
 
+.fc-timeline-lane-frame {
+  display: flex;
+  justify-content: space-between; /* Distributes space evenly between items */
+}
+
+.fc-timeline-lane-frame .fc-timeline-event-harness {
+  margin: 0 5px; /* Optional: Add margin for spacing */
+  min-width: 200px; /* Set a minimum width for consistency */
+}
+
 .fc-timeline-lane-frame .fc-timeline-event-harness:nth-child(1) {
   margin-left: 5px !important;
-  margin-right: -20px !important;
+  margin-right: -70px !important;
 }
 
 .fc-timeline-lane-frame .fc-timeline-event-harness:nth-child(2) {
-  margin-left: 20px !important;
-  margin-right: -25px !important;
+  margin-left: 70px !important;
+  margin-right: -120px !important;
 }
 .fc-timeline-lane-frame .fc-timeline-event-harness:nth-child(3) {
-  margin-left: 25px !important;
-  margin-right: -30px !important;
+  margin-left: 120px !important;
+  margin-right: -170px !important;
 }
 .fc-timeline-lane-frame .fc-timeline-event-harness:nth-child(4) {
-  margin-left: 30px !important;
-  margin-right: -35px !important;
+  margin-left: 170px !important;
+  margin-right: -230px !important;
 }
 .fc-timeline-lane-frame .fc-timeline-event-harness:nth-child(5) {
-  margin-left: 35px !important;
-  margin-right: -40px !important;
+  margin-left: 230px !important;
+  margin-right: -280px !important;
 }
 .fc-timeline-lane-frame .fc-timeline-event-harness:nth-child(6) {
-  margin-left: 40px !important;
-  margin-right: -45px !important;
+  margin-left: 280px !important;
+  margin-right: -330px !important;
 }
 .fc-timeline-lane-frame .fc-timeline-event-harness:nth-child(7) {
-  margin-left: 45px !important;
-  margin-right: -50px !important;
+  margin-left: 330px !important;
+  margin-right: -380px !important;
 }
 .fc-timeline-lane-frame .fc-timeline-event-harness:nth-child(8) {
-  margin-left: 50px !important;
-  margin-right: -55px !important;
+  margin-left: 380px !important;
+  margin-right: -420px !important;
 }
 .fc-timeline-lane-frame .fc-timeline-event-harness:nth-child(9) {
-  margin-left: 55px !important;
-  margin-right: -60px !important;
+  margin-left: 420px !important;
+  margin-right: -470px !important;
 }
 
+/* .fc-timeline-event-harness:nth-child(1) {
+  width: 130px !important;
+}
+.fc-timeline-event-harness:nth-child(2) {
+  width: (130 * 2)px !important;
+}
+.fc-timeline-event-harness:nth-child(3) {
+  width: 130px !important;
+}
+.fc-timeline-event-harness:nth-child(4) {
+  width: 130px !important;
+} */
 /* End Schedule */
+
+.fc-timegrid-slot {
+  max-width: 100px !important; /* Customize the width as per your requirement */
+}
+
+.fc-timegrid-slot-lane {
+  overflow-y: scroll;
+  max-height: 600px !important; /* Set your desired maximum height before scroll appears */
+}
+
+.fc-scrollgrid {
+  overflow-x: auto !important;
+}

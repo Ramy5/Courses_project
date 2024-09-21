@@ -81,6 +81,7 @@ const InformationPanel = () => {
 
   const programsData = programData?.map((program: any) => {
     return {
+      programID: program?.id,
       programTitle: program?.program_name,
       programColor: generateRandomColor(),
       numOfCourses: program?.course_count,
@@ -323,6 +324,7 @@ const InformationPanel = () => {
             <SwiperSlide key={index}>
               <ProgramBox
                 key={index}
+                programID={program.programID}
                 programTitle={program.programTitle}
                 programColor={program.programColor}
                 numOfCourses={program.numOfCourses}

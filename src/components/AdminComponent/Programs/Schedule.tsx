@@ -88,6 +88,13 @@ const Schedule = ({ scheduleData }) => {
         calendarEl.style.direction = isRTL ? "rtl" : "ltr";
       }
 
+      // // Scroll to time if after 16:00 PM
+      // const currentHour = new Date().getHours(); // Get the current hour
+      // console.log("🚀 ~ useEffect ~ currentHour:", currentHour)
+      // if (currentHour >= 16) {
+      //   calendar.scrollToTime("16:00:00"); // Scroll to 16:00 if current time exceeds 16:00 PM
+      // }
+
       return () => {
         calendar.destroy();
       };
@@ -98,6 +105,18 @@ const Schedule = ({ scheduleData }) => {
     const event = events.find((e) => e.id == eventInfo?.event.id);
     return <div>{event ? event?.customContent : eventInfo?.event.title}</div>;
   };
+
+  // useEffect(() => {
+  //   const elements = document.querySelectorAll('.fc-timeline-event-harness');
+  //   const right = 130;
+
+  //   elements.forEach((element, index) => {
+
+  //       element.style.right = `${-right * (index + 1)}px`;
+  //       element.style.left = `${right * (index)}px`;
+
+  //   });
+  // }, []);
 
   return (
     <div>
@@ -118,7 +137,7 @@ const Schedule = ({ scheduleData }) => {
             hour12: false,
           }}
           slotMinTime={"09:00AM"}
-          slotMaxTime={"19:00PM"}
+          slotMaxTime={"25:00PM"}
           initialDate="2024-06-25"
           eventContent={renderEventContent}
         />
@@ -127,6 +146,30 @@ const Schedule = ({ scheduleData }) => {
   );
 };
 export default Schedule;
+
+// import React, { useState } from 'react';
+// import FullCalendar from '@fullcalendar/react';
+// import timeGridPlugin from '@fullcalendar/timegrid';
+
+// const MyCalendar = () => {
+//   return (
+//     <FullCalendar
+//       plugins={[timeGridPlugin]}
+//       initialView="timeGridWeek"
+//       allDaySlot={false}
+//       slotMinTime="09:00:00" // Starting time
+//       slotMaxTime="16:00:00" // Ending time visible, rest scrolls
+//       height="auto"
+//       contentHeight="auto"
+//       scrollTime="09:00:00" // Initial scroll time
+//       slotDuration="00:30:00" // Slot interval
+//       editable={true}
+//       selectable={true}
+//     />
+//   );
+// }
+
+// export default MyCalendar;
 
 // const resources = [
 //   { id: "friday", title: "saturday" },

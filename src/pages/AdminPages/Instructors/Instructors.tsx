@@ -58,7 +58,6 @@ const Instructors = () => {
   });
 
   const instructorData = data?.data.data.teachers || {};
-  console.log("🚀 ~ Instructors ~ instructorData:", instructorData)
   const instructorPagination = data?.data.data || {};
 
   useEffect(() => {

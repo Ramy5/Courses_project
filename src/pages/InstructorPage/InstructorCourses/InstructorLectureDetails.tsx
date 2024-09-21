@@ -35,16 +35,12 @@ const InstructorLectureDetails = () => {
   };
 
   const { data, isFetching, isRefetching, refetch } = useQuery({
-    queryKey: ["show_lecture"],
+    queryKey: ["instrutor_show_lecture"],
     queryFn: fetchLectureData,
     enabled: !!id,
   });
 
   const instructorLectureShow = data?.data?.data.lecture_data || [];
-  console.log(
-    "🚀 ~ InstructorLectureDetails ~ instructorLectureShow:",
-    instructorLectureShow
-  );
 
   const fetchLectureAllData = async () => {
     const response = await customFetch(`LecturesDataIns?lecture_data_id=${id}`);
@@ -62,10 +58,6 @@ const InstructorLectureDetails = () => {
     enabled: !!id,
   });
   const instructorLectureDataShow = allData?.data?.data || [];
-  console.log(
-    "🚀 ~ InstructorLectureDetails ~ instructorLectureDataShow:",
-    instructorLectureDataShow
-  );
 
   useEffect(() => {
     const diffMinutes = subtractTwoTime(

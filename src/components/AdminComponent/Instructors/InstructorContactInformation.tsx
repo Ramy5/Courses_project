@@ -181,7 +181,7 @@ const InstructorContactInformation = ({
 
         <div className="flex justify-end mt-5 m-auto">
           <Button type="submit" className="me-5" loading={isPending}>
-            {editObj ? t("edit") : t("confirm")}
+            {editObj ? t("edit contact information") : t("save contact information")}
           </Button>
           <Button
             action={() => navigate(-1)}
