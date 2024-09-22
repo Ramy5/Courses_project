@@ -136,9 +136,15 @@ const Schedule = ({ scheduleData }) => {
             omitZeroMinute: false,
             hour12: false,
           }}
+          resourceAreaHeaderContent="Days" 
           slotMinTime={"09:00AM"}
           slotMaxTime={"25:00PM"}
+          slotDuration="00:00:00" 
+          slotLabelInterval="01:00" //
+          eventMinHeight={100}
+          slotMinWidth={75} 
           initialDate="2024-06-25"
+
           eventContent={renderEventContent}
         />
       </div>

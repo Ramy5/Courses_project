@@ -74,6 +74,7 @@ const StudySchedule = () => {
   });
 
   const instructorScheduleData = data?.data?.data || [];
+  console.log("🚀 ~ StudySchedule ~ instructorScheduleData:", instructorScheduleData)
 
   const lectureTimeData = instructorScheduleData?.map((schedule) => ({
     id: schedule.id,

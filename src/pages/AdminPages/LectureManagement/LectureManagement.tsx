@@ -82,7 +82,7 @@ const LectureManagement = () => {
           value: teacher?.id,
         };
       });
-  
+
       return [{ id: "", value: "", label: "الكل" }, ...transformedData];
     },
   });
@@ -470,7 +470,7 @@ const LectureManagement = () => {
                 </h2>
 
                 <div className="lg:w-[25vw] ">
-                 
+                  <BaseSelect
                     className="mt-1"
                     id="instructor"
                     name="instructor"
