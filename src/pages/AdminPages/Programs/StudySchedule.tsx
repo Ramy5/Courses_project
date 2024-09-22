@@ -46,7 +46,6 @@ const StudySchedule = () => {
     lecture_time: [],
   });
 
-  console.log("🚀 ~ StudySchedule ~ scheduleData:", scheduleData)
 
   const [editStudySchedule, setEditStudySchedule] = useState({});
   const navigate = useNavigate();
@@ -74,7 +73,6 @@ const StudySchedule = () => {
   });
 
   const instructorScheduleData = data?.data?.data || [];
-  console.log("🚀 ~ StudySchedule ~ instructorScheduleData:", instructorScheduleData)
 
   const lectureTimeData = instructorScheduleData?.map((schedule) => ({
     id: schedule.id,

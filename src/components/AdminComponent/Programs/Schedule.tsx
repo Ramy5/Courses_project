@@ -90,7 +90,6 @@ const Schedule = ({ scheduleData }) => {
 
       // // Scroll to time if after 16:00 PM
       // const currentHour = new Date().getHours(); // Get the current hour
-      // console.log("🚀 ~ useEffect ~ currentHour:", currentHour)
       // if (currentHour >= 16) {
       //   calendar.scrollToTime("16:00:00"); // Scroll to 16:00 if current time exceeds 16:00 PM
       // }

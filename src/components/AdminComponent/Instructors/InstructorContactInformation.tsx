@@ -107,7 +107,6 @@ const InstructorContactInformation = ({
   };
 
   const validate = (values) => {
-    console.log("🚀 ~ validate ~ values:", values);
     const errors = {};
 
     return errors;
@@ -122,13 +121,13 @@ const InstructorContactInformation = ({
         resetForm();
       }}
     >
-      <Form className="flex flex-col w-full gap-5 px-8 md:w-3/4 md:px-16 m-auto">
+      <Form className="flex flex-col w-full gap-5 px-8 m-auto md:w-3/4 md:px-16">
         <div>
           <BaseInput
             name="phone"
             id="phone"
             type="text"
-            className="w-full text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+            className="w-full py-2 text-lg rounded-lg bg-lightGray main_shadow text-slate-800 focus-within:outline-none"
             placeholder={t("phone")}
             label={t("phone")}
             labelProps="!font-semibold"
@@ -139,7 +138,7 @@ const InstructorContactInformation = ({
             name="facebook"
             id="facebook"
             type="text"
-            className="w-full text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+            className="w-full py-2 text-lg rounded-lg bg-lightGray main_shadow text-slate-800 focus-within:outline-none"
             placeholder={t("facebook")}
             label={t("facebook")}
             labelProps="!font-semibold"
@@ -150,7 +149,7 @@ const InstructorContactInformation = ({
             name="whatsApp"
             id="whatsApp"
             type="text"
-            className="w-full text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+            className="w-full py-2 text-lg rounded-lg bg-lightGray main_shadow text-slate-800 focus-within:outline-none"
             placeholder={t("whats app")}
             label={t("whats app")}
             labelProps="!font-semibold"
@@ -161,7 +160,7 @@ const InstructorContactInformation = ({
             name="linkedIn"
             id="linkedIn"
             type="text"
-            className="w-full text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+            className="w-full py-2 text-lg rounded-lg bg-lightGray main_shadow text-slate-800 focus-within:outline-none"
             placeholder={t("linked in")}
             label={t("linked in")}
             labelProps="!font-semibold"
@@ -172,14 +171,14 @@ const InstructorContactInformation = ({
             name="twitter"
             id="twitter"
             type="text"
-            className="w-full text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+            className="w-full py-2 text-lg rounded-lg bg-lightGray main_shadow text-slate-800 focus-within:outline-none"
             placeholder={t("twitter")}
             label={t("twitter")}
             labelProps="!font-semibold"
           />
         </div>
 
-        <div className="flex justify-end mt-5 m-auto">
+        <div className="flex justify-end m-auto mt-5">
           <Button type="submit" className="me-5" loading={isPending}>
             {editObj ? t("edit contact information") : t("save contact information")}
           </Button>

@@ -1,10 +1,9 @@
-import { Line } from "react-chartjs-2";
+import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
-  PointElement,
-  LineElement,
+  BarElement,
   Title,
   Tooltip,
   Legend,
@@ -14,15 +13,14 @@ import { t } from "i18next";
 ChartJS.register(
   CategoryScale,
   LinearScale,
-  PointElement,
-  LineElement,
+  BarElement,
   Title,
   Tooltip,
   Legend
 );
 
 const PerformanceChart = ({ data }) => {
-  const options = {
+  const options: any = {
     responsive: true,
     plugins: {
       legend: {
@@ -40,7 +38,7 @@ const PerformanceChart = ({ data }) => {
           display: true,
         },
         ticks: {
-          stepSize: 100,
+          stepSize: 50,
           color: "#aaa",
         },
       },
@@ -71,7 +69,7 @@ const PerformanceChart = ({ data }) => {
       <h2 className="mb-5 text-2xl font-bold text-inherit">
         {t("performance")}
       </h2>
-      <Line data={data} options={options} />
+      <Bar data={data} options={options} />
     </div>
   );
 };

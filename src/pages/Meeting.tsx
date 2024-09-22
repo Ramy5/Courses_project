@@ -17,7 +17,6 @@ const Meeting = ({ payload }) => {
         sdkKey: payload.sdkKey,
         sdkSecret: payload.sdkSecret,
         success: function (res) {
-          console.log("Signature Generated", res.result);
           ZoomMtg.init({
             leaveUrl: payload.leaveUrl,
             success: function () {

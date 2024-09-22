@@ -25,7 +25,6 @@ import {
 import { useMemo, useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { t } from "i18next";
-import { useAppSelector } from "../../hooks/reduxHooks";
 import customFetch from "../../utils/axios";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "../../components/UI/Loading";
@@ -36,37 +35,42 @@ const getPrograms = async () => {
   return data.data;
 };
 
-const getCount = async () => {
-  const { data } = await customFetch("getCounts");
-  return data.data;
-};
-
 const getTeacherSlides = async () => {
   const { data } = await customFetch("allInstructorsWithCounts");
   return data.data;
 };
 
+const getStudentsReceipt = async () => {
+  const { data } = await customFetch("getStudentsReciepts");
+  return data.data;
+};
+
 const InformationPanel = () => {
-  const isRTL = useRTL();
   const [startDate, setStartDate] = useState(new Date());
   // const [searchTerm, setSearchTerm] = useState("");
   const [sortOption, setSortOption] = useState(null);
-  const { user } = useAppSelector((slice) => slice.user);
+  const [currentSlide, setCurrentSlide] = useState(0);
   const [search, setSearch] = useState("");
 
   const {
-    data: countData,
+    data: slidesData,
     isLoading: countIsLoading,
     isFetching: countIsFetching,
     isRefetching: countIsRefetching,
   } = useQuery({
-    queryKey: ["get-counts"],
-    queryFn: getCount,
-  });
-
-  const { data: slidesData } = useQuery({
     queryKey: ["get-slides"],
     queryFn: getTeacherSlides,
+  });
+
+  const handleSlideChange = (swiper) => {
+    setCurrentSlide(swiper.realIndex);
+  };
+
+  const currentTeacher = slidesData?.[currentSlide];
+
+  const { data: ReceiptsData } = useQuery({
+    queryKey: ["get-receipt"],
+    queryFn: getStudentsReceipt,
   });
 
   const {
@@ -94,107 +98,113 @@ const InformationPanel = () => {
     {
       dataTitle: "number of lectures",
       dataColor: "#005560",
-      dataCount: countData?.total_lectures,
+      dataCount: currentTeacher?.total_lectures,
       dataIcon: <FaHashtag className="text-lg lg:text-2xl" color="#005560" />,
     },
     {
       dataTitle: "lecture hours",
       dataColor: "#7E57C2",
-      dataCount: countData?.total_lectures, // TODO:
+      dataCount: currentTeacher?.total_lectures, // TODO: BACKEND RETURN
       dataIcon: <FaClock className="text-lg lg:text-2xl" color="#7E57C2" />,
     },
     {
       dataTitle: "courses",
       dataColor: "#388E3C",
-      dataCount: countData?.total_courses,
+      dataCount: currentTeacher?.total_courses,
       dataIcon: <FaBook className="text-lg lg:text-2xl" color="#388E3C" />,
     },
     {
       dataTitle: "number of exams",
       dataColor: "#D32F2F",
-      dataCount: countData?.total_exams,
+      dataCount: currentTeacher?.total_exams,
       dataIcon: <FaListAlt className="text-lg lg:text-2xl" color="#D32F2F" />,
     },
     {
       dataTitle: "projects",
       dataColor: "#8D6E63",
-      dataCount: countData?.total_projects,
+      dataCount: currentTeacher?.total_projects,
       dataIcon: <FaTasks className="text-lg lg:text-2xl" color="#8D6E63" />,
     },
     {
       dataTitle: "assignments",
       dataColor: "#0277BD",
-      dataCount: countData?.total_homeworks,
+      dataCount: currentTeacher?.total_homeworks,
       dataIcon: (
         <FaClipboardList className="text-lg lg:text-2xl" color="#0277BD" />
       ),
     },
   ];
 
-  const personData = slidesData?.map((slide) => {
-    return {
-      id: slide.id,
-      img: slide.personal_image,
-      desc: slide.name,
-    };
-  });
+  const studentsDataFee = ReceiptsData?.students?.map(
+    (fee: any, index: number) => {
+      return {
+        index: index + 1,
+        studentName: fee?.full_name,
+        program: fee?.academicData?.program?.program_name, // NOTE ASK BACKEND
+        level: fee?.academicData?.level,
+        email: fee?.email,
+        paymentDate: fee?.receipts?.[0]?.receipt_date,
+        paymentStatus: fee?.receipts?.[0]?.status,
+      };
+    }
+  );
 
-  const studentsDataFee = [
-    {
-      index: 1,
-      studentName: "John Doe",
-      program: "Computer Science",
-      level: "Level One",
-      email: "john@doe.com",
-      paymentDate: "03/21/2024",
-      paymentStatus: "Paid",
-    },
-    {
-      index: 2,
-      studentName: "Jane Smith",
-      program: "Engineering",
-      level: "Level Three",
-      email: "jane@smith.com",
-      paymentDate: "-",
-      paymentStatus: "Unpaid",
-    },
-    {
-      index: 3,
-      studentName: "Emily Johnson",
-      program: "Computer Science",
-      level: "Level One",
-      email: "emily@johnson.com",
-      paymentDate: "03/21/2024",
-      paymentStatus: "Paid",
-    },
-    {
-      index: 4,
-      studentName: "Michael Brown",
-      program: "Engineering",
-      level: "Level Three",
-      email: "michael@brown.com",
-      paymentDate: "-",
-      paymentStatus: "Unpaid",
-    },
-    {
-      index: 5,
-      studentName: "Chris Davis",
-      program: "Computer Science",
-      level: "Level One",
-      email: "chris@davis.com",
-      paymentDate: "03/21/2024",
-      paymentStatus: "Paid",
-    },
-    {
-      index: 6,
-      studentName: "Sarah Wilson",
-      program: "Engineering",
-      level: "Level Three",
-      email: "sarah@wilson.com",
-      paymentDate: "-",
-      paymentStatus: "Unpaid",
-    },
-  ];
+  // [
+  //   {
+  //     index: 1,
+  //     studentName: "John Doe",
+  //     program: "Computer Science",
+  //     level: "Level One",
+  //     email: "john@doe.com",
+  //     paymentDate: "03/21/2024",
+  //     paymentStatus: "Paid",
+  //   },
+  //   {
+  //     index: 2,
+  //     studentName: "Jane Smith",
+  //     program: "Engineering",
+  //     level: "Level Three",
+  //     email: "jane@smith.com",
+  //     paymentDate: "-",
+  //     paymentStatus: "Unpaid",
+  //   },
+  //   {
+  //     index: 3,
+  //     studentName: "Emily Johnson",
+  //     program: "Computer Science",
+  //     level: "Level One",
+  //     email: "emily@johnson.com",
+  //     paymentDate: "03/21/2024",
+  //     paymentStatus: "Paid",
+  //   },
+  //   {
+  //     index: 4,
+  //     studentName: "Michael Brown",
+  //     program: "Engineering",
+  //     level: "Level Three",
+  //     email: "michael@brown.com",
+  //     paymentDate: "-",
+  //     paymentStatus: "Unpaid",
+  //   },
+  //   {
+  //     index: 5,
+  //     studentName: "Chris Davis",
+  //     program: "Computer Science",
+  //     level: "Level One",
+  //     email: "chris@davis.com",
+  //     paymentDate: "03/21/2024",
+  //     paymentStatus: "Paid",
+  //   },
+  //   {
+  //     index: 6,
+  //     studentName: "Sarah Wilson",
+  //     program: "Engineering",
+  //     level: "Level Three",
+  //     email: "sarah@wilson.com",
+  //     paymentDate: "-",
+  //     paymentStatus: "Unpaid",
+  //   },
+  // ];
 
   const studentsColumnsFee = useMemo<ColumnDef<[]>[]>(
     () => [
@@ -232,7 +242,7 @@ const InformationPanel = () => {
         header: () => <span>{t("Payment Status")}</span>,
         accessorKey: "paymentStatus",
         cell: (info) => {
-          if (info.row.original.paymentStatus === "Unpaid") {
+          if (info.row.original.paymentStatus === "لم يسدد") {
             return (
               <span className="inline-block w-full px-2 text-red-800 bg-red-200 border rounded-md w-30 border-red-950">
                 {t(`${info.getValue()}`)}
@@ -258,8 +268,8 @@ const InformationPanel = () => {
         label: "Performance",
         data: [100, 120, 150, 130, 200, 300],
         fill: true,
-        backgroundColor: "rgba(54, 162, 235, 0.2)",
-        borderColor: "rgba(54, 162, 235, 1)",
+        backgroundColor: "#393D94",
+        borderColor: "#393D94",
         pointBackgroundColor: "rgba(54, 162, 235, 1)",
         pointBorderColor: "#fff",
         tension: 0.4,
@@ -355,6 +365,8 @@ const InformationPanel = () => {
         </div>
       </div>
 
+      <hr className="block w-full h-[3px] !my-12 bg-mainColor/50" />
+
       {/* DATA COUNT AND PERSONS DATA */}
       <div className="grid items-center grid-cols-2 gap-6 lg:grid-cols-3">
         {/* PERSONS */}
@@ -366,11 +378,12 @@ const InformationPanel = () => {
             dir="rtl"
             slidesPerView={1}
             modules={[Navigation]}
+            onSlideChangeTransitionEnd={handleSlideChange}
             className="mySwiper"
           >
-            {personData?.map((item, index) => (
+            {slidesData?.map((item, index) => (
               <SwiperSlide key={index}>
-                <PersonView img={item.img} desc={item.desc} />
+                <PersonView img={item.personal_image} desc={item.name} />
               </SwiperSlide>
             ))}
           </Swiper>
@@ -414,11 +427,11 @@ const InformationPanel = () => {
         </div>
 
         <Table
-          data={studentsDataFee}
+          data={studentsDataFee || []}
           columns={studentsColumnsFee}
           showNavigation={true}
-          totalPages={4}
-          currentPage={"1"}
+          totalPages={ReceiptsData?.totalPages}
+          currentPage={ReceiptsData?.currentPage}
         />
       </div>
     </div>

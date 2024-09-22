@@ -28,9 +28,7 @@ const AddLectureTiming = ({
   editStudySchedule,
   setEditStudySchedule,
 }) => {
-  console.log("🚀 ~ editStudySchedule:", editStudySchedule);
   const [coursesSelect, setCoursesSelect] = useState(null);
-  console.log("🚀 ~ coursesSelect:", coursesSelect);
   const [groupSelect, setGroupSelect] = useState(null);
   const [teacherSelect, setTeacherSelect] = useState(null);
   const [levelSelect, setLevelSelect] = useState(null);
@@ -52,7 +50,6 @@ const AddLectureTiming = ({
     teacher_name: editStudySchedule?.teacher_name || teacherSelect?.value,
     level: editStudySchedule?.level || levelSelect?.id,
   };
-  console.log("🚀 ~ initialValues:", initialValues);
 
   const fetchCoursesData = async () => {
     const response = await customFetch(`/courses?per_page=10000`);
@@ -174,7 +171,6 @@ const AddLectureTiming = ({
         enableReinitialize={true}
       >
         {({ values, setFieldValue }) => {
-          console.log("🚀 ~ values:", values);
           return (
             <Form>
               <div className="w-full md:w-4/5">
@@ -187,7 +183,7 @@ const AddLectureTiming = ({
                   value={scheduleData?.day?.day}
                   type="text"
                   label={t("day")}
-                  className="w-full text-lg py-1 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                  className="w-full py-1 text-lg rounded-lg bg-lightGray main_shadow text-slate-800 focus-within:outline-none"
                   placeholder={t("day")}
                   labelProps="font-semibold text-base"
                   disabled={true}
@@ -201,7 +197,6 @@ const AddLectureTiming = ({
                     options={courseOption}
                     value={coursesSelect}
                     onChange={(option) => {
-                      console.log("🚀 ~ option:", option)
                       setFieldValue("course_id", option!.id);
                       setFieldValue("course_name", option!.value);
                       setCoursesSelect({
@@ -287,7 +282,7 @@ const AddLectureTiming = ({
                       id="start_time"
                       type="time"
                       label={t("start")}
-                      className="w-full text-lg py-1 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                      className="w-full py-1 text-lg rounded-lg bg-lightGray main_shadow text-slate-800 focus-within:outline-none"
                       placeholder={t("")}
                       labelProps="font-semibold text-base"
                     />
@@ -296,7 +291,7 @@ const AddLectureTiming = ({
                       id="end_time"
                       type="time"
                       label={t("end")}
-                      className="w-full text-lg py-1 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                      className="w-full py-1 text-lg rounded-lg bg-lightGray main_shadow text-slate-800 focus-within:outline-none"
                       placeholder={t("")}
                       labelProps="font-semibold text-base"
                     />
