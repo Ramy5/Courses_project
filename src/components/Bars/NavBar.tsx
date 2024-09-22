@@ -11,20 +11,33 @@ import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import { t } from "i18next";
 import { logoutUser } from "../../features/user/userSlice";
 import { useNavigate } from "react-router-dom";
-import EducationLogo from "../../assets/fullLogo.png";
+import customFetch from "../../utils/axios";
+import { useQuery } from "@tanstack/react-query";
+
+const getOrganizationSetting = async () => {
+  const { data } = await customFetch.get("setting/1");
+  return data.data.setting;
+};
 
 const NavBar: React.FC<SideBarProps> = ({
   setToggleSideBar,
   toggleSideBar,
 }) => {
   const [currentDate, setCurrentDate] = useState<string>("");
-  const { user, isLoading, role } = useAppSelector((store) => store.user);
+  const { user, isLoading, role, setting } = useAppSelector(
+    (store) => store.user
+  );
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const isRTL = useRTL();
 
   const { i18n } = useTranslation();
+
+  const { data } = useQuery({
+    queryKey: ["get-setting-data"],
+    queryFn: getOrganizationSetting,
+  });
 
   useEffect(() => {
     document.documentElement.dir = isRTL ? "rtl" : "ltr";
@@ -62,7 +75,10 @@ const NavBar: React.FC<SideBarProps> = ({
         </div> */}
         {!toggleSideBar && (
           <div>
-            <img src={EducationLogo} className="w-[320px] animate_scale h-16" />
+            <img
+              src={data?.organization_cover}
+              className="w-[320px] animate_scale h-16"
+            />
           </div>
         )}
       </div>

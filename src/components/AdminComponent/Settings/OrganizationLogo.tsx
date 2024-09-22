@@ -23,7 +23,7 @@ const OrganizationLogo: React.FC<OrganizationLogo_TP> = ({
         <div className="mt-8">
           <div className="grid items-center justify-between gap-8 mb-12 lg:grid-cols-3">
             <div className="col-span-1 text-center">
-              <h2>{t("organization logo")}</h2>
+              <h2>{t("side panel logo")}</h2>
               <UploadFile
                 files={organizationFile}
                 setFiles={setOrganizationFile}
@@ -32,7 +32,7 @@ const OrganizationLogo: React.FC<OrganizationLogo_TP> = ({
             </div>
 
             <div className="col-span-2 text-center">
-              <h2>{t("image cover")}</h2>
+              <h2>{t("main logo")}</h2>
               <UploadFile
                 id="cover"
                 files={organizationCoverFile}

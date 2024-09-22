@@ -56,13 +56,13 @@ customFetch.interceptors.response.use(
 
 export const checkForUnauthorizedResponse = (error: any, thunkAPI: any) => {
   const errorMsg =
-    error.response && error.response.data.msg
-      ? error.response.data.msg
+    error.response && error.response.data.message
+      ? error.response.data.message
       : "An error occurred";
 
   if (error?.response?.status === 401) {
     thunkAPI.dispatch(logoutUser());
-    return thunkAPI.rejectWithValue("Unauthorized!");
+    return thunkAPI.rejectWithValue(errorMsg);
   }
 
   toast.error(errorMsg);

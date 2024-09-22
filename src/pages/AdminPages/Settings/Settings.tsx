@@ -7,7 +7,7 @@ import {
   SideBarMenuColor,
 } from "../../../components";
 import customFetch from "../../../utils/axios";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import Loading from "../../../components/UI/Loading";
 import axios from "axios";
@@ -45,6 +45,7 @@ const Settings = () => {
   const [activeTab, setActiveTab] = useState<string>("organization data");
   const [organizationFile, setOrganizationFile] = useState(null);
   const [organizationCoverFile, setOrganizationCoverFile] = useState(null);
+  const queryClient = useQueryClient();
 
   const { data, isLoading, isRefetching, isFetching } = useQuery({
     queryKey: ["get-setting-data"],
@@ -70,6 +71,7 @@ const Settings = () => {
     mutationFn: postOrganizationSetting,
     onSuccess: () => {
       toast.success(t("organization data has successfully added"));
+      queryClient.refetchQueries("get-setting-data");
     },
     onError: (error: any) => {
       const errorMessage = error.message;
