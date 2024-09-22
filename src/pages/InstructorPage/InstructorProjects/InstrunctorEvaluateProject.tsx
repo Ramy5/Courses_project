@@ -73,7 +73,6 @@ const InstrunctorEvaluateProject = () => {
       student_id: projectsDataAnswer?.student?.id,
       degree: +values.evaluate,
     };
-    console.log(formattedValues);
 
     mutate(formattedValues);
   };

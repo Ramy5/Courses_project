@@ -24,10 +24,6 @@ const InstructorViewAllProject = () => {
     queryKey: ["projectsDataAnswerData"],
     queryFn: () => getStudentsProjectsAnswers(studentId),
   });
-  console.log(
-    "🚀 ~ InstructorViewAllProject ~ projectsDataAnswer:",
-    projectsDataAnswer
-  );
 
   const allProjectsData = projectsDataAnswer?.map((data: any) => {
     return {

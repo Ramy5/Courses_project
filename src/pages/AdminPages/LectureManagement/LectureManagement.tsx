@@ -61,6 +61,7 @@ const LectureManagement = () => {
     queryFn: () => getLectureManagement(page, instructorSelectId),
   });
 
+  console.log("🚀 ~ LectureManagement ~ data:", data);
   useEffect(() => {
     refetch();
   }, [instructorSelectId, refetch, page]);
@@ -74,15 +75,18 @@ const LectureManagement = () => {
     queryKey: ["get-instructor-option"],
     queryFn: getInstructorOption,
     select: (data: any) => {
-      return data?.map((teacher) => {
+      const transformedData = data?.map((teacher) => {
         return {
           id: teacher?.id,
           label: teacher?.full_name,
           value: teacher?.id,
         };
       });
+
+      return [{ id: "", value: "", label: "الكل" }, ...transformedData];
     },
   });
+  console.log("🚀 ~ LectureManagement ~ instructorsOption:", instructorsOption);
 
   useEffect(() => {
     if (data) {
@@ -325,7 +329,11 @@ const LectureManagement = () => {
             );
           } else if (info.row.original.status === "setup") {
             return (
-              <div className={`flex items-center ${info.getValue() ? "justify-center" : "justify-end"} w-56 gap-1`}>
+              <div
+                className={`flex items-center ${
+                  info.getValue() ? "justify-center" : "justify-end"
+                } w-56 gap-1`}
+              >
                 {lecturesZoomEditId === info.row.original.id ? (
                   <>
                     <input
@@ -469,7 +477,7 @@ const LectureManagement = () => {
                     label={t("instructor")}
                     options={instructorsOption}
                     styles={customStyles}
-                    placeholder={t("filter by instructor...")}
+                    placeholder={t("everyone")}
                     onChange={(e) => {
                       setInstructorSelectId(e.value);
                       setFieldValue("instructor", e.value);

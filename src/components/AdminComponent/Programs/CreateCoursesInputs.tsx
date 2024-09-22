@@ -3,7 +3,7 @@ import { BaseInput, Button, MainRadio } from "../../../components";
 import { t } from "i18next";
 import Select from "react-select";
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import customFetch from "../../../utils/axios";
 import { toast } from "react-toastify";
@@ -11,22 +11,21 @@ import * as Yup from "yup";
 import { FormikError } from "../../UI/FormikError";
 import SuggestedReferences from "./SuggestedReferences";
 import BaseSelect from "../../UI/BaseSelect";
-import Loading from "../../UI/Loading";
 
 const validationSchema = Yup.object().shape({
   course_name: Yup.string().required("Course name is required"),
   course_teachers: Yup.array().min(1, "At least one teacher is required"),
   course_code: Yup.string().required("Course code is required"),
   level: Yup.string().required("Level is required"),
-  course_objectives: Yup.string().required("Course objectives are required"),
-  information_concepts: Yup.string().required(
-    "Information concepts are required"
-  ),
-  mental_skills: Yup.string().required("Mental skills are required"),
-  general_skills: Yup.string().required("General skills are required"),
-  professional_skills: Yup.string().required(
-    "Professional skills are required"
-  ),
+  // course_objectives: Yup.string().required("Course objectives are required"),
+  // information_concepts: Yup.string().required(
+  //   "Information concepts are required"
+  // ),
+  // mental_skills: Yup.string().required("Mental skills are required"),
+  // general_skills: Yup.string().required("General skills are required"),
+  // professional_skills: Yup.string().required(
+  //   "Professional skills are required"
+  // ),
   teaching_learning_methods: Yup.string().required(
     "Teaching and learning methods are required"
   ),
@@ -50,9 +49,6 @@ const CreateCoursesInputs = ({
   setEditCoursesData,
   editFinishedCoursesData,
 }: any) => {
-  console.log("🚀 ~ step:", step);
-  console.log("🚀 ~ editFinishedCoursesData:", editFinishedCoursesData);
-  console.log("🚀 ~ editCoursesData:", editCoursesData);
 
   const [suggestedReferences, setSuggestedReferences] = useState(
     editCoursesData?.references || editFinishedCoursesData?.references || []

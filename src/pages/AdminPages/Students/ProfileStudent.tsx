@@ -28,11 +28,7 @@ interface PersonlyProfile {
   deleteStudent?: () => void;
 }
 
-const ProfileStudent = ({
-  personalData,
-  deleteStudent,
-}: PersonlyProfile) => {
-  console.log("🚀 ~ personalData:", personalData);
+const ProfileStudent = ({ personalData, deleteStudent }: PersonlyProfile) => {
   const [openRow, setOpenRow] = useState<number | null>(null);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -102,7 +98,13 @@ const ProfileStudent = ({
               deleteStudent();
               navigate(-1);
             }}
-            blockedName={`${userData === "admin" ? "block student" : ""}`}
+            blockedName={`${
+              userData === "admin"
+                ? personalData?.blocked_status === 0
+                  ? "block student"
+                  : "Unblock"
+                : ""
+            }`}
             blockedIcon={
               personalData?.blocked_status === 0 ? (
                 <TbLockOpen2 size={22} className="text-mainColor" />

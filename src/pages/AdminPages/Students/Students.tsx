@@ -83,7 +83,7 @@ const Students = () => {
         cell: (info) => info.getValue() || "---",
       },
       {
-        header: () => <span>{t("Payment Status")}</span>,
+        header: () => <span>{t("case Study")}</span>,
         accessorKey: "academicData",
         cell: (info) => {
           if (info.getValue()?.status === "محروم") {

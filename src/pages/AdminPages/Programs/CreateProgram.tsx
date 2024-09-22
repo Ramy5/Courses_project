@@ -3,11 +3,12 @@ import { useEffect, useState } from "react";
 import CreateProgramInputs from "../../../components/AdminComponent/Programs/CreateProgramInputs";
 import CreateCoursesInputs from "../../../components/AdminComponent/Programs/CreateCoursesInputs";
 import customFetch from "../../../utils/axios";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { t } from "i18next";
 import { useLocation, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
+import Loading from "../../../components/UI/Loading";
 interface AddProgram_TP {
   program_name: string;
   program_type: boolean;
@@ -60,32 +61,72 @@ const CreateProgram = () => {
   const [coursesData, setCoursesData] = useState([]);
   const [editCoursesData, setEditCoursesData] = useState({});
   const [editFinishedCoursesData, setEditFinishedCoursesData] = useState({});
-  console.log("🚀 ~ CreateProgram ~ editFinishedCoursesData:", editFinishedCoursesData)
+  console.log(
+    "🚀 ~ CreateProgram ~ editFinishedCoursesData:",
+    editFinishedCoursesData
+  );
+  const [editFinishedProgramData, setEditFinishedProgramData] = useState({});
+  console.log(
+    "🚀 ~ CreateProgram ~ editFinishedProgramData:",
+    editFinishedProgramData
+  );
+
   const queryClient = useQueryClient();
   const nanigate = useNavigate();
   const location = useLocation();
   const dataReceived = location.state;
+  console.log("🚀 ~ CreateProgram ~ dataReceived:", dataReceived);
+  const dataReceivedID = location.state;
+  console.log("🚀 ~ CreateProgram ~ dataReceivedID:", dataReceivedID);
+
+  const fetchProgramData = async () => {
+    const response = await customFetch(`/program/${dataReceivedID}`);
+    return response.data.data;
+  };
+
+  const { data, isLoading, isFetching } = useQuery({
+    queryKey: ["edit_program_data", dataReceivedID],
+    queryFn: fetchProgramData,
+    enabled: dataReceivedID !== null && typeof dataReceivedID == "number",
+  });
 
   useEffect(() => {
-    if (dataReceived) {
-      setEditFinishedCoursesData(dataReceived);
+    setEditFinishedProgramData(data || {});
+    setStep(1);
+  }, [isFetching]);
+
+  useEffect(() => {
+    if (dataReceived !== null && typeof dataReceived == "object") {
+      setEditFinishedCoursesData(dataReceived || {});
       setStep(2);
     }
   }, [dataReceived]);
 
+  // useEffect(() => {
+  //   if (dataReceived !== null &&  typeof dataReceived == "number") {
+  //     setEditFinishedProgramData(data);
+  //     setStep(1);
+  //   } else if (dataReceived !== null &&  typeof dataReceived == "object") {
+  //     setEditFinishedCoursesData(dataReceived || {});
+  //     setStep(2);
+  //   } else {
+  //     setStep(1);
+  //   }
+  // }, [dataReceived]);
+
   const initialValues = {
-    program_name: "",
-    program_type: "",
-    program_code: "",
-    specialization: "",
-    academic_levels: "",
-    number_classes: "",
-    vision: "",
-    message: "",
-    excellence: "",
-    very_good: "",
-    good: "",
-    acceptable: "",
+    program_name: editFinishedProgramData?.program_name || "",
+    program_type: editFinishedProgramData?.program_type || "",
+    program_code: editFinishedProgramData?.program_code || "",
+    specialization: editFinishedProgramData?.specialization || "",
+    academic_levels: editFinishedProgramData?.academic_levels || "",
+    number_classes: editFinishedProgramData?.number_classes || "",
+    vision: editFinishedProgramData?.vision || "",
+    message: editFinishedProgramData?.message || "",
+    excellence: editFinishedProgramData?.excellence || "",
+    very_good: editFinishedProgramData?.very_good || "",
+    good: editFinishedProgramData?.good || "",
+    acceptable: editFinishedProgramData?.acceptable || "",
   };
 
   const { mutate, isPending } = useMutation({
@@ -109,10 +150,6 @@ const CreateProgram = () => {
         ...referenceRest,
       })),
     })
-  );
-  console.log(
-    "🚀 ~ updatedCoursesData ~ updatedCoursesData:",
-    updatedCoursesData
   );
 
   const handleAddProgram = async (values: AddProgram_TP) => {
@@ -142,16 +179,22 @@ const CreateProgram = () => {
 
     await mutate(newProgram);
   };
-
+  if (isLoading || isFetching) return <Loading />;
   return (
     <div>
       <Formik
         initialValues={initialValues}
-        validationSchema={Object.keys(editFinishedCoursesData)?.length === 0 ? validationSchema : ""}
+        validationSchema={
+          Object.keys(editFinishedCoursesData)?.length === 0 ||
+          Object.keys(editFinishedProgramData)?.length === 0
+            ? validationSchema
+            : ""
+        }
         onSubmit={(values, { resetForm }) => {
           handleAddProgram(values);
           resetForm();
         }}
+        enableReinitialize={true}
       >
         <Form>
           {step === 1 && (
@@ -161,11 +204,12 @@ const CreateProgram = () => {
               setCoursesData={setCoursesData}
               setEditCoursesData={setEditCoursesData}
               isPending={isPending}
+              editFinishedProgramData={editFinishedProgramData}
             />
           )}
           {step === 2 && (
             <CreateCoursesInputs
-            step={step}
+              step={step}
               setStep={setStep}
               setCoursesData={setCoursesData}
               coursesData={coursesData}

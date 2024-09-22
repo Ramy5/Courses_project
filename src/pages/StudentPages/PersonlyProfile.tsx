@@ -25,8 +25,6 @@ const PersonlyProfile = () => {
     queryFn: getStudentProfile,
   });
 
-  console.log(data);
-
   const studentProfileData = {
     id: data?.id,
     profileCover: studentProfileCover,

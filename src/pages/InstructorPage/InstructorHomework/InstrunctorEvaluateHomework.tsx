@@ -73,8 +73,6 @@ const InstrunctorEvaluateHomework = () => {
       student_id: homeworksDataAnswer?.student?.id,
       degree: +values.evaluate,
     };
-    console.log(formattedValues);
-
     mutate(formattedValues);
   };
 

@@ -21,10 +21,7 @@ const RecordAttendance = () => {
   const [page, setPage] = useState<number>(1);
   const [selectedRows, setSelectedRows] = useState<any>([]);
   const [coursesSelect, setCoursesSelect] = useState(null);
-  console.log("🚀 ~ RecordAttendance ~ coursesSelect:", coursesSelect);
   const [dateSelect, setDateSelect] = useState(null);
-  console.log("🚀 ~ RecordAttendance ~ dateSelect:", dateSelect)
-  // const formatDates = formatDate(dateSelect);
   const queryClient = useQueryClient();
 
   const initialValues = {
@@ -87,7 +84,6 @@ const RecordAttendance = () => {
   });
 
   const lectureDateData = lectureDate && lectureDate?.data?.data;
-  console.log("🚀 ~ RecordAttendance ~ lectureDateData:", lectureDateData);
   const filterLectureDate = lectureDateData?.filter(
     (item) => item.id == dateSelect?.id
   );
@@ -101,7 +97,6 @@ const RecordAttendance = () => {
   const fetchRecordAttendance = async () => {
     const course_id = coursesSelect?.id;
     const lecture_id = dateSelect?.value;
-    console.log("🚀 ~ fetchRecordAttendance ~ lecture_id:", lecture_id);
     const response = await customFetch(
       `studentsInCourse?course_id=${course_id || 0}&date=${
         lecture_id || 0
@@ -142,7 +137,6 @@ const RecordAttendance = () => {
         header: () => <span>{t("absence rate")}</span>,
         accessorKey: "attend_percentage",
         cell: (info) => {
-          console.log("🚀 ~ RecordAttendance ~ info:", info.getValue())
           const attendPercentage = Number(
             info.getValue() 
           );
@@ -278,7 +272,6 @@ const RecordAttendance = () => {
                     options={lectureDateOptions}
                     value={dateSelect}
                     onChange={(e) => {
-                      console.log("🚀 ~ RecordAttendance ~ e:", e);
                       // const formattedDate = e?.toISOString().split("T")[0]; // Convert to YYYY-MM-DD
                       // setFieldValue("lecture_date", formattedDate);
                       setDateSelect({

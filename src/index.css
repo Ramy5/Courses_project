@@ -29,7 +29,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 @layer components {
   .shadow-button {
-    box-shadow: rgba(83, 109, 254, 0.3) 0 4px 8px, rgba(83, 109, 254, 0.2) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
+    box-shadow: rgba(83, 109, 254, 0.3) 0 4px 8px,
+      rgba(83, 109, 254, 0.2) 0 7px 13px -3px, #d6d6e7 0 -3px 0 inset;
   }
 }
 
@@ -349,18 +350,16 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
 .fc-license-message {
   display: none !important;
 }
-
 .fullContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
+  min-height: 100vh !important;
   padding: 20px 40px;
   background: linear-gradient(135deg, #fdbb78 0%, #ff765f 100%);
   font-family: "Roboto", sans-serif;
 }
-
 h1 {
   font-size: 3rem;
   font-weight: 500;
@@ -370,11 +369,9 @@ h1 {
   text-align: center;
   text-transform: uppercase;
 }
-
 .fc-view-harness-active {
   height: 670px !important;
 }
-
 .fc-timeline-header-row th,
 .fc-datagrid-body tr {
   font-size: 17px !important;
@@ -383,7 +380,7 @@ h1 {
 }
 
 .fc-scroller {
-  overflow: hidden !important;
+  overflow-y: hidden !important;
 }
 
 .fc-datagrid-cell-frame {
@@ -397,6 +394,15 @@ h1 {
 .fc-timeline-body {
   height: 100% !important;
 }
+
+/* .fc-scrollgrid-section.fc-scrollgrid-section-body.fc-scrollgrid-section-liquid
+  td:last-child
+  .fc-scrollgrid-sync-table,
+.fc-scrollgrid-section-header .fc-scroller-harness .fc-scrollgrid-sync-table {
+  min-width: 960px !important;
+  width: 1700px !important;
+  overflow-x: scroll !important;
+} */
 
 .fc-timeline-lane-frame,
 tbody .fc-datagrid-cell-frame {
@@ -440,7 +446,81 @@ tbody .fc-datagrid-cell-frame {
   border-bottom: 2px solid #4ecb71 !important;
 }
 
+.fc-timeline-lane-frame .fc-timeline-event-harness {
+  margin-left: 26.5px !important;
+  margin-right: -24px !important;
+  height: 107px !important;
+}
+
 .fc-timeline-lane-frame .fc-timeline-event-harness:nth-child(1) {
+  margin-left: 5px !important;
+  margin-right: -23px !important;
+}
+
+.fc-timeline-lane-frame .fc-timeline-event-harness a {
+  height: 100% !important;
+}
+
+/* .fc-timeline-event-harness:nth-child(1) {
+  left: 5px !important;
+  right: -130px !important;
+}
+
+.fc-timeline-event-harness:nth-child(2) {
+  left: 130px !important;
+  right: -238px !important;
+}
+
+.fc-timeline-event-harness:nth-child(3) {
+  left: 238px !important;
+  right: -346px !important;
+}
+.fc-timeline-event-harness:nth-child(4) {
+  left: 346px !important;
+  right: -455px !important;
+}
+.fc-timeline-event-harness:nth-child(5) {
+left: 455px !important;
+    right: -562px !important;
+}
+
+
+
+.fc-timeline-lane-frame .fc-timeline-event-harness:nth-child(2) {
+  margin-left: 7px !important;
+  margin-right: 0px !important;
+}
+.fc-timeline-lane-frame .fc-timeline-event-harness:nth-child(3) {
+  margin-left: 0px !important;
+  margin-right: 0px !important;
+}
+.fc-timeline-lane-frame .fc-timeline-event-harness:nth-child(4) {
+  margin-left: 170px !important;
+  margin-right: -230px !important;
+} */
+/*
+.fc-timeline-lane-frame .fc-timeline-event-harness:nth-child(5) {
+  margin-left: 230px !important;
+  margin-right: -280px !important;
+}
+.fc-timeline-lane-frame .fc-timeline-event-harness:nth-child(6) {
+  margin-left: 280px !important;
+  margin-right: -330px !important;
+}
+.fc-timeline-lane-frame .fc-timeline-event-harness:nth-child(7) {
+  margin-left: 330px !important;
+  margin-right: -380px !important;
+}
+.fc-timeline-lane-frame .fc-timeline-event-harness:nth-child(8) {
+  margin-left: 380px !important;
+  margin-right: -420px !important;
+}
+.fc-timeline-lane-frame .fc-timeline-event-harness:nth-child(9) {
+  margin-left: 420px !important;
+  margin-right: -470px !important;
+} */
+
+/* .fc-timeline-lane-frame .fc-timeline-event-harness:nth-child(1) {
   margin-left: 5px !important;
   margin-right: -20px !important;
 }
@@ -476,6 +556,12 @@ tbody .fc-datagrid-cell-frame {
 .fc-timeline-lane-frame .fc-timeline-event-harness:nth-child(9) {
   margin-left: 55px !important;
   margin-right: -60px !important;
-}
+} */
 
 /* End Schedule */
+
+
+
+
+
+

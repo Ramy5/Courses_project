@@ -35,7 +35,7 @@ const EditInstructor = () => {
     });
 
   const instructorData = data?.data?.teacher;
-  console.log("🚀 ~ EditInstructor ~ instructorData:", instructorData)
+  
   const contactInfo =
     data?.data?.teacher?.contactInfo && data?.data?.teacher?.contactInfo[0];
   const qualifications =

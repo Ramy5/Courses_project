@@ -292,7 +292,7 @@ const StudentAddAcademicData = ({
                 type="submit"
                 className="me-5"
               >
-                {t("confirm")}
+                {t("save academic data")}
               </Button>
               <Button
                 action={() => navigate(-1)}

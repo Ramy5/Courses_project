@@ -163,7 +163,7 @@ const StudentAddLoginData = ({
                 className="me-5"
                 type="submit"
               >
-                {t("confirm")}
+                {t("save login data")}
               </Button>
               <Button
                 action={() => navigate(-1)}
