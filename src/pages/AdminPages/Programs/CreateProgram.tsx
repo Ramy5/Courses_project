@@ -61,23 +61,14 @@ const CreateProgram = () => {
   const [coursesData, setCoursesData] = useState([]);
   const [editCoursesData, setEditCoursesData] = useState({});
   const [editFinishedCoursesData, setEditFinishedCoursesData] = useState({});
-  console.log(
-    "🚀 ~ CreateProgram ~ editFinishedCoursesData:",
-    editFinishedCoursesData
-  );
   const [editFinishedProgramData, setEditFinishedProgramData] = useState({});
-  console.log(
-    "🚀 ~ CreateProgram ~ editFinishedProgramData:",
-    editFinishedProgramData
-  );
+
 
   const queryClient = useQueryClient();
   const nanigate = useNavigate();
   const location = useLocation();
   const dataReceived = location.state;
-  console.log("🚀 ~ CreateProgram ~ dataReceived:", dataReceived);
   const dataReceivedID = location.state;
-  console.log("🚀 ~ CreateProgram ~ dataReceivedID:", dataReceivedID);
 
   const fetchProgramData = async () => {
     const response = await customFetch(`/program/${dataReceivedID}`);

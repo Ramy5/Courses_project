@@ -61,7 +61,6 @@ const LectureManagement = () => {
     queryFn: () => getLectureManagement(page, instructorSelectId),
   });
 
-  console.log("🚀 ~ LectureManagement ~ data:", data);
   useEffect(() => {
     refetch();
   }, [instructorSelectId, refetch, page]);
@@ -86,7 +85,6 @@ const LectureManagement = () => {
       return [{ id: "", value: "", label: "الكل" }, ...transformedData];
     },
   });
-  console.log("🚀 ~ LectureManagement ~ instructorsOption:", instructorsOption);
 
   useEffect(() => {
     if (data) {

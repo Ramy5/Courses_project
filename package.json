@@ -23,6 +23,8 @@
     "@types/i18next-browser-languagedetector": "^3.0.0",
     "@types/react-i18next": "^8.1.0",
     "@types/react-select": "^5.0.1",
+    "@zoom/meetingsdk": "^3.8.5",
+    "@zoom/videosdk": "^1.12.1",
     "@zoomus/websdk": "^2.18.3",
     "axios": "^1.7.2",
     "chart.js": "^4.4.3",
