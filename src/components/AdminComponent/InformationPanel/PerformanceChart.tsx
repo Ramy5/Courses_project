@@ -19,7 +19,13 @@ ChartJS.register(
   Legend
 );
 
-const PerformanceChart = ({ data }) => {
+const PerformanceChart = ({
+  data,
+  hightPerformance,
+}: {
+  data: any;
+  hightPerformance: number;
+}) => {
   const options: any = {
     responsive: true,
     plugins: {
@@ -33,12 +39,12 @@ const PerformanceChart = ({ data }) => {
     scales: {
       y: {
         beginAtZero: true,
-        max: 300,
+        max: hightPerformance,
         grid: {
           display: true,
         },
         ticks: {
-          stepSize: 50,
+          stepSize: 20,
           color: "#aaa",
         },
       },
