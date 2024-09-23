@@ -22,7 +22,7 @@ import {
   FaTasks,
   FaClipboardList,
 } from "react-icons/fa";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { t } from "i18next";
 import customFetch from "../../utils/axios";
@@ -45,11 +45,17 @@ const getStudentsReceipt = async () => {
   return data.data;
 };
 
+const getCounts = async () => {
+  const { data } = await customFetch("getCounts");
+  return data.data;
+};
+
 const InformationPanel = () => {
   const [startDate, setStartDate] = useState(new Date());
   // const [searchTerm, setSearchTerm] = useState("");
   const [sortOption, setSortOption] = useState(null);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [highCounts, setHighCounts] = useState(null);
   const [search, setSearch] = useState("");
 
   const {
@@ -67,12 +73,26 @@ const InformationPanel = () => {
   };
 
   const currentTeacher = slidesData?.[currentSlide];
+  console.log("🚀 ~ InformationPanel ~ currentTeacher:", currentTeacher);
 
   const { data: ReceiptsData } = useQuery({
     queryKey: ["get-receipt"],
     queryFn: getStudentsReceipt,
   });
 
+  const { data: CountsData } = useQuery({
+    queryKey: ["get-counts"],
+    queryFn: getCounts,
+  });
+
+  useEffect(() => {
+    if (CountsData) {
+      const highPerformance = Math.max(...Object.values(CountsData));
+      setHighCounts(highPerformance);
+    }
+  }, [CountsData]);
+
+  console.log("🚀 ~ InformationPanel ~ CountssData:", CountsData);
   const {
     data: programData,
     isLoading: programIsLoading,
@@ -262,11 +282,23 @@ const InformationPanel = () => {
   );
 
   const chartData = {
-    labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+    labels: [
+      t("lectures"),
+      t("courses"),
+      t("exams"),
+      t("projects"),
+      t("homeworks"),
+    ],
     datasets: [
       {
         label: "Performance",
-        data: [100, 120, 150, 130, 200, 300],
+        data: [
+          CountsData?.total_lectures,
+          CountsData?.total_courses,
+          CountsData?.total_exams,
+          CountsData?.total_projects,
+          CountsData?.total_homeworks,
+        ],
         fill: true,
         backgroundColor: "#393D94",
         borderColor: "#393D94",
@@ -361,7 +393,7 @@ const InformationPanel = () => {
 
         {/* PERFORMANCE CHART */}
         <div className="col-span-2">
-          <PerformanceChart data={chartData} />
+          <PerformanceChart data={chartData} hightPerformance={highCounts} />
         </div>
       </div>
 
