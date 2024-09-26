@@ -2,7 +2,6 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Button, SearchInput, Table, TitlePage } from "../../../components";
 import { t } from "i18next";
 import { PiStudent } from "react-icons/pi";
-import { FaFilter } from "react-icons/fa";
 import { FiPrinter } from "react-icons/fi";
 import { ColumnDef } from "@tanstack/react-table";
 import { IoMdEye } from "react-icons/io";
