@@ -29,6 +29,7 @@ import customFetch from "../../utils/axios";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "../../components/UI/Loading";
 import { generateRandomColor } from "../../utils/helpers";
+import useDebounce from "../../hooks/useDebounce";
 
 const getPrograms = async () => {
   const { data } = await customFetch("showPrograms");
@@ -40,8 +41,14 @@ const getTeacherSlides = async () => {
   return data.data;
 };
 
-const getStudentsReceipt = async () => {
-  const { data } = await customFetch("getStudentsReciepts");
+const getStudentsReceipt = async (
+  page: number,
+  search: string,
+  sorting: string
+) => {
+  const { data } = await customFetch(
+    `getStudentsReciepts?page=${page}&search=${search}&sort=${sorting}`
+  );
   return data.data;
 };
 
@@ -52,11 +59,16 @@ const getCounts = async () => {
 
 const InformationPanel = () => {
   const [startDate, setStartDate] = useState(new Date());
-  // const [searchTerm, setSearchTerm] = useState("");
-  const [sortOption, setSortOption] = useState(null);
+  const [page, setPage] = useState(1);
+  const [sortOption, setSortOption] = useState({
+    value: "newest",
+    label: t("newest"),
+  });
+  console.log("🚀 ~ InformationPanel ~ sortOption:", sortOption);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [highCounts, setHighCounts] = useState(null);
   const [search, setSearch] = useState("");
+  const debounceSearchTerm = useDebounce(search, 1000);
 
   const {
     data: slidesData,
@@ -73,11 +85,10 @@ const InformationPanel = () => {
   };
 
   const currentTeacher = slidesData?.[currentSlide];
-  console.log("🚀 ~ InformationPanel ~ currentTeacher:", currentTeacher);
 
-  const { data: ReceiptsData } = useQuery({
+  const { data: ReceiptsData, refetch: receiptRefetch } = useQuery({
     queryKey: ["get-receipt"],
-    queryFn: getStudentsReceipt,
+    queryFn: () => getStudentsReceipt(page, search, sortOption?.value),
   });
 
   const { data: CountsData } = useQuery({
@@ -92,7 +103,6 @@ const InformationPanel = () => {
     }
   }, [CountsData]);
 
-  console.log("🚀 ~ InformationPanel ~ CountssData:", CountsData);
   const {
     data: programData,
     isLoading: programIsLoading,
@@ -313,10 +323,20 @@ const InformationPanel = () => {
   };
 
   const sortOptions = [
-    { value: "none", label: t("none") },
-    { value: "asc", label: t("ascending") },
-    { value: "desc", label: t("descending") },
+    { value: "newest", label: t("newest") },
+    { value: "oldest", label: t("oldest") },
   ];
+
+  useEffect(() => {
+    receiptRefetch();
+  }, [page]);
+
+  useEffect(() => {
+    if (debounceSearchTerm.length >= 0) {
+      setPage(1);
+      receiptRefetch();
+    }
+  }, [debounceSearchTerm]);
 
   if (
     countIsLoading ||
