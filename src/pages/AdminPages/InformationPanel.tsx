@@ -61,7 +61,7 @@ const InformationPanel = () => {
   const [startDate, setStartDate] = useState(new Date());
   const [page, setPage] = useState(1);
   const [sortOption, setSortOption] = useState({
-    value: "newest",
+    value: "news",
     label: t("newest"),
   });
   console.log("🚀 ~ InformationPanel ~ sortOption:", sortOption);
@@ -323,13 +323,13 @@ const InformationPanel = () => {
   };
 
   const sortOptions = [
-    { value: "newest", label: t("newest") },
+    { value: "news", label: t("newest") },
     { value: "oldest", label: t("oldest") },
   ];
 
   useEffect(() => {
     receiptRefetch();
-  }, [page]);
+  }, [page, sortOption]);
 
   useEffect(() => {
     if (debounceSearchTerm.length >= 0) {
