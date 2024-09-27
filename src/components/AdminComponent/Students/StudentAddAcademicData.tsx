@@ -163,6 +163,36 @@ const StudentAddAcademicData = ({
       value: "level 4",
       id: 4,
     },
+    {
+      label: `${t("level")} 5`,
+      value: "level 5",
+      id: 5,
+    },
+    {
+      label: `${t("level")} 6`,
+      value: "level 6",
+      id: 6,
+    },
+    {
+      label: `${t("level")} 7`,
+      value: "level 7",
+      id: 7,
+    },
+    {
+      label: `${t("level")} 8`,
+      value: "level 8",
+      id: 8,
+    },
+    {
+      label: `${t("level")} 9`,
+      value: "level 9",
+      id: 9,
+    },
+    {
+      label: `${t("level")} 10`,
+      value: "level 10",
+      id: 10,
+    },
   ];
 
   const groupNumberOption = [
@@ -175,6 +205,46 @@ const StudentAddAcademicData = ({
       label: `2`,
       value: "2",
       id: 2,
+    },
+    {
+      label: `3`,
+      value: "3",
+      id: 3,
+    },
+    {
+      label: `4`,
+      value: "4",
+      id: 4,
+    },
+    {
+      label: `5`,
+      value: "5",
+      id: 5,
+    },
+    {
+      label: `6`,
+      value: "6",
+      id: 6,
+    },
+    {
+      label: `7`,
+      value: "7",
+      id: 7,
+    },
+    {
+      label: `8`,
+      value: "8",
+      id: 8,
+    },
+    {
+      label: `9`,
+      value: "9",
+      id: 9,
+    },
+    {
+      label: `10`,
+      value: "10",
+      id: 10,
     },
   ];
 
@@ -214,12 +284,12 @@ const StudentAddAcademicData = ({
     >
       {({ setFieldValue }) => {
         return (
-          <Form className="flex flex-col w-full gap-5 px-8 md:w-3/4 md:px-16 mx-auto">
+          <Form className="flex flex-col w-full gap-5 px-8 mx-auto md:w-3/4 md:px-16">
             <BaseInput
               name="number_academic"
               id="number_academic"
               type="text"
-              className="w-full text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+              className="w-full py-2 text-lg rounded-lg bg-lightGray main_shadow text-slate-800 focus-within:outline-none"
               placeholder={t("academic number")}
               label={t("academic number")}
               labelProps="!font-semibold"
@@ -286,7 +356,7 @@ const StudentAddAcademicData = ({
               />
             </div>
 
-            <div className="mt-8 mx-auto">
+            <div className="mx-auto mt-8">
               <Button
                 loading={isPending || editIsPending}
                 type="submit"
