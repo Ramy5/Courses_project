@@ -59,7 +59,7 @@ const userSlice = createSlice({
   reducers: {
     logoutUser: (state, action) => {
       state.user = null;
-      clearCookies();
+      // clearCookies();
 
       if (action.payload) {
         toast.success(action.payload);

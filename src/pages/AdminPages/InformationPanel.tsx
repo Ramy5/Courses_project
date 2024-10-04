@@ -64,7 +64,6 @@ const InformationPanel = () => {
     value: "news",
     label: t("newest"),
   });
-  console.log("🚀 ~ InformationPanel ~ sortOption:", sortOption);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [highCounts, setHighCounts] = useState(null);
   const [search, setSearch] = useState("");
