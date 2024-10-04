@@ -472,7 +472,7 @@ const InformationPanel = () => {
               className="w-64"
               autoFocus
               onChange={(e) => setSearch(e.target.value)}
-              placeholder={t("search about instructor")}
+              placeholder={t("search about student")}
             />
           </div>
         </div>
