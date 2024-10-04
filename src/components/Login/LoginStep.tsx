@@ -24,7 +24,6 @@ const LoginStep = (props: LoginStepProps_TP) => {
   const { setFieldValue, values } = useFormikContext();
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const { role, user, isLoading } = useAppSelector((store) => store.user);
-  console.log("🚀 ~ LoginStep ~ user:", user);
   const isRTL = useRTL();
   const navigate = useNavigate();
 

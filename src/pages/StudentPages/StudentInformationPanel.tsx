@@ -9,7 +9,6 @@ import customFetch from "../../utils/axios";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "../../components/UI/Loading";
 import { generateRandomColor } from "../../utils/helpers";
-import { useAppSelector } from "../../hooks/reduxHooks";
 
 const getNewsData = async () => {
   const { data } = await customFetch("getLatestCourseItems");
@@ -26,9 +25,6 @@ const StudentInformationPanel = () => {
     queryKey: ["get-news"],
     queryFn: getNewsData,
   });
-
-  const { user } = useAppSelector((slice) => slice.user);
-  console.log("🚀 ~ StudentInformationPanel ~ user:", user);
 
   const {
     data: coursesData,
