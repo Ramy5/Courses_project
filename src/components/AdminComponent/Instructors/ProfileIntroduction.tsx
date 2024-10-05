@@ -74,7 +74,7 @@ const ProfileIntroduction = ({
       <img
         src={DefaultProfileCover}
         alt="profile"
-        className="bg-center bg-cover bg-no-repeat h-[200px] rounded-2xl object-cover"
+        className="bg-center bg-cover bg-no-repeat h-[200px] w-full rounded-2xl object-cover"
       />
       <div className="absolute flex items-end justify-between w-full md:px-12 px-5 md:top-32 top-[155px]">
         <div className="flex items-end gap-3">

@@ -1,16 +1,16 @@
 import { Form, Formik } from "formik";
 import { t } from "i18next";
-import Select from "react-select";
-import selectStyle from "../../../utils/selectStyle";
 import Schedule from "./Schedule";
 import { Button } from "../..";
 import { useState, useEffect } from "react";
 import Loading from "../../UI/Loading";
 import BaseSelect from "../../UI/BaseSelect";
+import { useNavigate } from "react-router-dom";
 
 const StudyScheduleSecondStep = ({ setSteps, scheduleData }: any) => {
   const [levelSelect, setLevelSelect] = useState(1);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const filterScheduleData = scheduleData?.lecture_time?.filter(
     (schedule) => schedule.level == levelSelect
@@ -54,7 +54,7 @@ const StudyScheduleSecondStep = ({ setSteps, scheduleData }: any) => {
       <div className="w-full mt-14">
         <div className="w-1/2 m-auto text-center">
           <h2 className="font-semibold text-mainColor text-2xl mb-3">
-            {t("artificial intelligence programme")}
+            {t("Program")} {scheduleData?.lecture_time?.[0]?.program_name}
           </h2>
           <Formik initialValues={{ educational_level: "" }} onSubmit={() => {}}>
             {({ setFieldValue }) => {
@@ -117,7 +117,7 @@ const StudyScheduleSecondStep = ({ setSteps, scheduleData }: any) => {
         >
           {t("next")}
         </Button>
-        <Button className="bg-mainRed">{t("cancel")}</Button>
+        <Button className="bg-mainRed" action={() => navigate(-1)}>{t("cancel")}</Button>
       </div>
     </div>
   );

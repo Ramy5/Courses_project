@@ -25,10 +25,7 @@ const StudyScheduleFirstStep = ({
   setEditStudySchedule,
 }) => {
   const [activeButton, setActiveButton] = useState<any>(
-    JSON.parse(localStorage.getItem("day")) || {
-      id: 1,
-      day: "Saturday",
-    }
+    JSON.parse(localStorage.getItem("day"))
   );
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -51,6 +48,12 @@ const StudyScheduleFirstStep = ({
   });
 
   const dayData = data?.data.data.days;
+  console.log("🚀 ~ dayData:", dayData);
+
+  useEffect(() => {
+    setActiveButton({ id: 1, day: "السبت" });
+    localStorage.setItem("day", JSON.stringify({ id: 1, day: "السبت" }));
+  }, []);
 
   const studyScheduleColumns = useMemo<ColumnDef<any>[]>(
     () => [
@@ -128,7 +131,7 @@ const StudyScheduleFirstStep = ({
   }, [activeButton]);
 
   const filterScheduleTable = scheduleData?.lecture_time?.filter(
-    (item) => item.day_id == activeButton.id
+    (item) => item?.day_id == activeButton?.id
   );
 
   {
@@ -138,7 +141,8 @@ const StudyScheduleFirstStep = ({
   return (
     <div className="mt-12">
       <h2 className="text-xl font-semibold">
-        {t("study schedule for artificial intelligence program")}
+        {t("study schedule for program")}{" "}
+        {scheduleData?.lecture_time?.[0]?.program_name}
       </h2>
 
       <div className="bg-[#F9F9F9] p-4 my-5 rounded-2xl">
@@ -148,6 +152,7 @@ const StudyScheduleFirstStep = ({
             setScheduleData(values);
           }}
           validationSchema={validationSchema}
+          enableReinitialize={true}
         >
           <Form>
             <div className="flex flex-col justify-between my-3 md:flex-row gap-y-4">
@@ -197,7 +202,7 @@ const StudyScheduleFirstStep = ({
             <Button
               key={item}
               className={`${
-                activeButton.id === item.id
+                activeButton?.id === item?.id
                   ? "bg-mainColor text-white"
                   : "bg-transparent text-mainGray"
               } px-3`}
@@ -244,7 +249,6 @@ const StudyScheduleFirstStep = ({
       <div className="flex items-center justify-end gap-5 mt-12">
         <Button
           action={() => {
-
             if (!scheduleData?.start_date) {
               toast.info("Start time is required");
               return;

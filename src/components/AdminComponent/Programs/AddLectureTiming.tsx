@@ -32,12 +32,14 @@ const AddLectureTiming = ({
   const [groupSelect, setGroupSelect] = useState(null);
   const [teacherSelect, setTeacherSelect] = useState(null);
   const [levelSelect, setLevelSelect] = useState(null);
+  console.log(
+    "🚀 ~ initialValues.JSON.parse(localStorage.getIte",
+    JSON.parse(localStorage.getItem("day"))?.id
+  );
 
   const initialValues = {
     day_id:
-      editStudySchedule?.day_id ||
-      JSON.parse(localStorage.getItem("day"))?.id ||
-      0,
+      editStudySchedule?.day_id || JSON.parse(localStorage.getItem("day"))?.id,
     program_id: editStudySchedule?.program_id || scheduleId,
     id: editStudySchedule?.id || crypto.randomUUID(),
     course_id: editStudySchedule?.course_id || coursesSelect?.id,
