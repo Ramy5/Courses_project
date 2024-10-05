@@ -369,8 +369,11 @@ h1 {
   text-align: center;
   text-transform: uppercase;
 }
+.fc .fc-datagrid-cell-cushion {
+  padding: 8px 8px 44px 8px !important;
+}
 .fc-view-harness-active {
-  height: 670px !important;
+  height: 770px !important;
 }
 .fc-timeline-header-row th,
 .fc-datagrid-body tr {
@@ -406,7 +409,7 @@ h1 {
 
 .fc-timeline-lane-frame,
 tbody .fc-datagrid-cell-frame {
-  height: 80px !important;
+  height: 115px !important;
 }
 
 .fc-scroller .fc-scroller-liquid-absolute {
@@ -432,7 +435,7 @@ tbody .fc-datagrid-cell-frame {
 }
 
 .fc-scrollgrid-section th {
-  padding-bottom: 10px;
+  padding-bottom: 2px;
 }
 
 .fc-event {

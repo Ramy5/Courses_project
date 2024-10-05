@@ -45,7 +45,7 @@ const StudySchedule = () => {
     day: {},
     lecture_time: [],
   });
-
+  console.log("🚀 ~ StudySchedule ~ scheduleData:", scheduleData);
 
   const [editStudySchedule, setEditStudySchedule] = useState({});
   const navigate = useNavigate();
