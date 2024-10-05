@@ -43,11 +43,11 @@ customFetch.interceptors.response.use(
       location.pathname !== "/"
     ) {
       prevRequest.sent = true;
-      clearCookies();
-      Cookies.remove("role");
-      Cookies.remove("token");
-      toast.error(t("your session is end, please login again"));
-      location.href = "/";
+      // clearCookies();
+      // Cookies.remove("role");
+      // Cookies.remove("token");
+      // toast.error(t("your session is end, please login again"));
+      // location.href = "/";
     }
 
     return Promise.reject(error);

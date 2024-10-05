@@ -22,13 +22,14 @@ import {
   FaTasks,
   FaClipboardList,
 } from "react-icons/fa";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { t } from "i18next";
 import customFetch from "../../utils/axios";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "../../components/UI/Loading";
 import { generateRandomColor } from "../../utils/helpers";
+import useDebounce from "../../hooks/useDebounce";
 
 const getPrograms = async () => {
   const { data } = await customFetch("showPrograms");
@@ -40,17 +41,33 @@ const getTeacherSlides = async () => {
   return data.data;
 };
 
-const getStudentsReceipt = async () => {
-  const { data } = await customFetch("getStudentsReciepts");
+const getStudentsReceipt = async (
+  page: number,
+  search: string,
+  sorting: string
+) => {
+  const { data } = await customFetch(
+    `getStudentsReciepts?page=${page}&search=${search}&sort=${sorting}`
+  );
+  return data.data;
+};
+
+const getCounts = async () => {
+  const { data } = await customFetch("getCounts");
   return data.data;
 };
 
 const InformationPanel = () => {
   const [startDate, setStartDate] = useState(new Date());
-  // const [searchTerm, setSearchTerm] = useState("");
-  const [sortOption, setSortOption] = useState(null);
+  const [page, setPage] = useState(1);
+  const [sortOption, setSortOption] = useState({
+    value: "news",
+    label: t("newest"),
+  });
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [highCounts, setHighCounts] = useState(null);
   const [search, setSearch] = useState("");
+  const debounceSearchTerm = useDebounce(search, 1000);
 
   const {
     data: slidesData,
@@ -68,10 +85,22 @@ const InformationPanel = () => {
 
   const currentTeacher = slidesData?.[currentSlide];
 
-  const { data: ReceiptsData } = useQuery({
+  const { data: ReceiptsData, refetch: receiptRefetch } = useQuery({
     queryKey: ["get-receipt"],
-    queryFn: getStudentsReceipt,
+    queryFn: () => getStudentsReceipt(page, search, sortOption?.value),
   });
+
+  const { data: CountsData } = useQuery({
+    queryKey: ["get-counts"],
+    queryFn: getCounts,
+  });
+
+  useEffect(() => {
+    if (CountsData) {
+      const highPerformance = Math.max(...Object.values(CountsData));
+      setHighCounts(highPerformance);
+    }
+  }, [CountsData]);
 
   const {
     data: programData,
@@ -262,11 +291,23 @@ const InformationPanel = () => {
   );
 
   const chartData = {
-    labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+    labels: [
+      t("lectures"),
+      t("courses"),
+      t("exams"),
+      t("projects"),
+      t("homeworks"),
+    ],
     datasets: [
       {
         label: "Performance",
-        data: [100, 120, 150, 130, 200, 300],
+        data: [
+          CountsData?.total_lectures,
+          CountsData?.total_courses,
+          CountsData?.total_exams,
+          CountsData?.total_projects,
+          CountsData?.total_homeworks,
+        ],
         fill: true,
         backgroundColor: "#393D94",
         borderColor: "#393D94",
@@ -281,10 +322,20 @@ const InformationPanel = () => {
   };
 
   const sortOptions = [
-    { value: "none", label: t("none") },
-    { value: "asc", label: t("ascending") },
-    { value: "desc", label: t("descending") },
+    { value: "news", label: t("newest") },
+    { value: "oldest", label: t("oldest") },
   ];
+
+  useEffect(() => {
+    receiptRefetch();
+  }, [page, sortOption]);
+
+  useEffect(() => {
+    if (debounceSearchTerm.length >= 0) {
+      setPage(1);
+      receiptRefetch();
+    }
+  }, [debounceSearchTerm]);
 
   if (
     countIsLoading ||
@@ -361,7 +412,7 @@ const InformationPanel = () => {
 
         {/* PERFORMANCE CHART */}
         <div className="col-span-2">
-          <PerformanceChart data={chartData} />
+          <PerformanceChart data={chartData} hightPerformance={highCounts} />
         </div>
       </div>
 
@@ -421,7 +472,7 @@ const InformationPanel = () => {
               className="w-64"
               autoFocus
               onChange={(e) => setSearch(e.target.value)}
-              placeholder={t("search about instructor")}
+              placeholder={t("search about student")}
             />
           </div>
         </div>
