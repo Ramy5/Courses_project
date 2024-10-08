@@ -13,9 +13,23 @@ import { useRTL } from "../../../hooks/useRTL";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
 
-const validationSchema = Yup.object().shape({
-  start_date: Yup.string().required("start date name is required"),
-  end_date: Yup.string().required("end date name is required"),
+const validationSchemaDurationStudy = Yup.object().shape({
+  start_date: Yup.string()
+    .required("Start date is required")
+    .test(
+      "startDate",
+      "Start date must be before the end date",
+      function (value) {
+        const { end_date } = this.parent;
+        return !end_date || new Date(value) <= new Date(end_date);
+      }
+    ),
+  end_date: Yup.string()
+    .required("End date is required")
+    .test("endDate", "End date must be after the start date", function (value) {
+      const { start_date } = this.parent;
+      return !start_date || new Date(value) >= new Date(start_date);
+    }),
 });
 
 const StudyScheduleFirstStep = ({
@@ -31,7 +45,7 @@ const StudyScheduleFirstStep = ({
   const navigate = useNavigate();
   const isRTL = useRTL();
 
-  const initialValues = {
+  const initialValuesOfDurationStudy = {
     start_date: "",
     end_date: "",
     day: activeButton,
@@ -147,52 +161,58 @@ const StudyScheduleFirstStep = ({
 
       <div className="bg-[#F9F9F9] p-4 my-5 rounded-2xl">
         <Formik
-          initialValues={initialValues}
+          initialValues={initialValuesOfDurationStudy}
           onSubmit={(values) => {
             setScheduleData(values);
           }}
-          validationSchema={validationSchema}
+          validationSchema={validationSchemaDurationStudy}
           enableReinitialize={true}
         >
-          <Form>
-            <div className="flex flex-col justify-between my-3 md:flex-row gap-y-4">
-              <p className="text-base font-semibold">
-                {t("current academic period")}
-              </p>
-              <BaseInput
-                name="start_date"
-                id="start_date"
-                type="date"
-                label={t("start date")}
-                className="w-full text-lg py-1 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
-                placeholder={t("")}
-                value={scheduleData?.start_date}
-                labelProps="font-semibold text-base"
-                onChange={(e) => {
-                  setScheduleData((prevState) => ({
-                    ...prevState,
-                    start_date: e.target.value,
-                  }));
-                }}
-              />
-              <BaseInput
-                name="end_date"
-                id="end_date"
-                type="date"
-                label={t("end date")}
-                className="w-full text-lg py-1 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
-                placeholder={t("")}
-                value={scheduleData?.end_date}
-                labelProps="font-semibold text-base"
-                onChange={(e) => {
-                  setScheduleData((prevState) => ({
-                    ...prevState,
-                    end_date: e.target.value,
-                  }));
-                }}
-              />
-            </div>
-          </Form>
+          {({ setFieldValue }) => {
+            return (
+              <Form>
+                <div className="flex flex-col justify-between my-3 md:flex-row gap-y-4">
+                  <p className="text-base font-semibold">
+                    {t("current academic period")}
+                  </p>
+                  <BaseInput
+                    name="start_date"
+                    id="start_date"
+                    type="date"
+                    label={t("start date")}
+                    className="w-full text-lg py-1 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                    placeholder={t("")}
+                    value={scheduleData?.start_date}
+                    labelProps="font-semibold text-base"
+                    onChange={(e) => {
+                      setFieldValue("start_date", e.target.value);
+                      setScheduleData((prevState) => ({
+                        ...prevState,
+                        start_date: e.target.value,
+                      }));
+                    }}
+                  />
+                  <BaseInput
+                    name="end_date"
+                    id="end_date"
+                    type="date"
+                    label={t("end date")}
+                    className="w-full text-lg py-1 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                    placeholder={t("")}
+                    value={scheduleData?.end_date}
+                    labelProps="font-semibold text-base"
+                    onChange={(e) => {
+                      setFieldValue("end_date", e.target.value);
+                      setScheduleData((prevState) => ({
+                        ...prevState,
+                        end_date: e.target.value,
+                      }));
+                    }}
+                  />
+                </div>
+              </Form>
+            );
+          }}
         </Formik>
       </div>
 

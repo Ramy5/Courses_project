@@ -111,6 +111,7 @@ const InformationPanel = () => {
     queryKey: ["get-programs"],
     queryFn: getPrograms,
   });
+    console.log("🚀 ~ InformationPanel ~ programData:", programData)
 
   const programsData = programData?.map((program: any) => {
     return {

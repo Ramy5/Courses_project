@@ -259,6 +259,7 @@ const CreateProgramInputs = ({
                 label={t("program code")}
                 labelProps="!font-semibold"
                 onChange={(e) => mutate({ program_code: e.target.value })}
+                disabled={!!Object.keys(editFinishedProgramData).length}
               />
               {error?.response?.data?.message === "هذا الكود موجود بالفعل" && (
                 <span className="text-mainRed">
@@ -286,15 +287,26 @@ const CreateProgramInputs = ({
               label={t("number academic levels")}
               labelProps="!font-semibold"
             />
-            <BaseInput
-              name="number_classes"
-              id="number_classes"
-              type="number"
-              className="w-full sm:w-1/2 text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
-              placeholder={t("number classes")}
-              label={t("number classes")}
-              labelProps="!font-semibold"
-            />
+            <div className="flex items-center justify-between">
+              <BaseInput
+                name="number_classes"
+                id="number_classes"
+                type="number"
+                className="w-full sm:w-full text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                placeholder={t("number classes")}
+                label={t("number classes")}
+                labelProps="!font-semibold"
+              />
+              <BaseInput
+                name="price"
+                id="price"
+                type="number"
+                className="w-full sm:w-full text-lg py-2 bg-lightGray main_shadow rounded-lg text-slate-800 focus-within:outline-none"
+                placeholder={t("price")}
+                label={t("price")}
+                labelProps="!font-semibold"
+              />
+            </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-5 my-5">
             <div>
