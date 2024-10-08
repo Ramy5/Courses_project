@@ -60,6 +60,7 @@ const BaseInput = ({
   } = useFormikContext<{
     [key: string]: any;
   }>();
+    console.log("🚀 ~ values:", values)
 
   useEffect(() => {
     dispatch(changeSidebarRoute(dirty && !isSubmitting));

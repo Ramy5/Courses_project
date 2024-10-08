@@ -26,6 +26,8 @@ const ProgramBox = (props: ProgramBox_TP) => {
     numOfInstructor,
     id,
   } = props;
+    console.log("🚀 ~ ProgramBox ~ programID:", programID)
+    console.log("🚀 ~ ProgramBox ~ id:", id)
 
   const handleStudySchedule = (id: number) => {
     navigate(`/programs/programInfo/${id}`);
@@ -35,7 +37,7 @@ const ProgramBox = (props: ProgramBox_TP) => {
     <div
       className={`rounded-xl border-s-8 bg-white p-4 cursor-pointer`}
       style={{ borderColor: programColor }}
-      onClick={() => handleStudySchedule(programID)}
+      onClick={() => handleStudySchedule(id)}
     >
       <h2 className="flex items-end gap-2 mb-6">
         <span>

@@ -289,9 +289,9 @@ const TestManagement = () => {
                 <Table
                   data={examsFlatData || []}
                   columns={examsColumns}
-                  showNavigation={true}
-                  totalPages={40}
-                  currentPage={1}
+                  // showNavigation={true}
+                  // totalPages={40}
+                  // currentPage={1}
                   setPage={setPage}
                 ></Table>
               ) : (

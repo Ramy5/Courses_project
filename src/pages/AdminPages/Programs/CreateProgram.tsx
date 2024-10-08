@@ -11,7 +11,7 @@ import * as Yup from "yup";
 import Loading from "../../../components/UI/Loading";
 interface AddProgram_TP {
   program_name: string;
-  program_type: boolean;
+  program_type: string;
   program_code: string;
   specialization: string;
   academic_levels: string;
@@ -22,6 +22,7 @@ interface AddProgram_TP {
   very_good: string;
   good: string;
   acceptable: string;
+  price: string;
 }
 
 const validationSchema = Yup.object({
@@ -33,6 +34,7 @@ const validationSchema = Yup.object({
   number_classes: Yup.string().required("number of classes is required"),
   vision: Yup.string().required("vision is required"),
   message: Yup.string().required("message is required"),
+  price: Yup.number().required("price is required"),
   excellence: Yup.number()
     .required("Grade is required")
     .min(90, "Grade must be at least 90")
@@ -61,8 +63,7 @@ const CreateProgram = () => {
   const [coursesData, setCoursesData] = useState([]);
   const [editCoursesData, setEditCoursesData] = useState({});
   const [editFinishedCoursesData, setEditFinishedCoursesData] = useState({});
-  const [editFinishedProgramData, setEditFinishedProgramData] = useState({});
-
+  const [editFinishedProgramData, setEditFinishedProgramData] = useState<AddProgram_TP>({});
 
   const queryClient = useQueryClient();
   const nanigate = useNavigate();
@@ -105,7 +106,7 @@ const CreateProgram = () => {
   //   }
   // }, [dataReceived]);
 
-  const initialValues = {
+  const initialValues: AddProgram_TP = {
     program_name: editFinishedProgramData?.program_name || "",
     program_type: editFinishedProgramData?.program_type || "",
     program_code: editFinishedProgramData?.program_code || "",
@@ -118,6 +119,7 @@ const CreateProgram = () => {
     very_good: editFinishedProgramData?.very_good || "",
     good: editFinishedProgramData?.good || "",
     acceptable: editFinishedProgramData?.acceptable || "",
+    price: editFinishedProgramData?.price || "",
   };
 
   const { mutate, isPending } = useMutation({
@@ -165,8 +167,10 @@ const CreateProgram = () => {
       very_good: values.very_good,
       good: values.good,
       acceptable: values.acceptable,
+      price: values.price,
       courses: updatedCoursesData,
     };
+    console.log("🚀 ~ handleAddProgram ~ newProgram:", newProgram);
 
     await mutate(newProgram);
   };
