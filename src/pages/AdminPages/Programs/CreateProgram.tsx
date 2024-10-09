@@ -53,8 +53,13 @@ const validationSchema = Yup.object({
     .max(64, "Grade cannot exceed 64"),
 });
 
-const postInstructorLogin = async (newProgram: any) => {
+const postProgram = async (newProgram: any) => {
   const data = await customFetch.post("programs", newProgram);
+  return data;
+};
+
+const editProgram = async (newProgram: any, id: number) => {
+  const data = await customFetch.post(`programs/${id}`, newProgram);
   return data;
 };
 
@@ -63,7 +68,12 @@ const CreateProgram = () => {
   const [coursesData, setCoursesData] = useState([]);
   const [editCoursesData, setEditCoursesData] = useState({});
   const [editFinishedCoursesData, setEditFinishedCoursesData] = useState({});
-  const [editFinishedProgramData, setEditFinishedProgramData] = useState<AddProgram_TP>({});
+  const [editFinishedProgramData, setEditFinishedProgramData] =
+    useState<AddProgram_TP>({});
+  console.log(
+    "🚀 ~ CreateProgram ~ editFinishedProgramData:",
+    editFinishedProgramData
+  );
 
   const queryClient = useQueryClient();
   const nanigate = useNavigate();
@@ -124,7 +134,7 @@ const CreateProgram = () => {
 
   const { mutate, isPending } = useMutation({
     mutationKey: ["add-program"],
-    mutationFn: postInstructorLogin,
+    mutationFn: postProgram,
     onSuccess: (data) => {
       queryClient.invalidateQueries("program");
       toast.success(t("program has been added successfully"));
@@ -136,14 +146,29 @@ const CreateProgram = () => {
     },
   });
 
-  const updatedCoursesData = coursesData?.map(
-    ({ id, references, ...rest }) => ({
-      ...rest,
-      references: references?.map(({ id, ...referenceRest }) => ({
-        ...referenceRest,
-      })),
-    })
-  );
+  const { mutate: editmutate, isPending: editIsPending } = useMutation({
+    mutationKey: ["edit-program"],
+    mutationFn: (newProgram) =>
+      editProgram(newProgram, editFinishedProgramData?.id),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries("program");
+      toast.success(t("program has been edited successfully"));
+      nanigate("/programs");
+    },
+    onError: (error) => {
+      const errorMessage = error?.response?.data?.error[0];
+      toast.error(errorMessage);
+    },
+  });
+
+  // const updatedCoursesData = coursesData?.map(
+  //   ({ id, references, ...rest }) => ({
+  //     ...rest,
+  //     references: references?.map(({ id, ...referenceRest }) => ({
+  //       ...referenceRest,
+  //     })),
+  //   })
+  // );
 
   const handleAddProgram = async (values: AddProgram_TP) => {
     const updatedCoursesData = coursesData?.map(
@@ -170,9 +195,12 @@ const CreateProgram = () => {
       price: values.price,
       courses: updatedCoursesData,
     };
-    console.log("🚀 ~ handleAddProgram ~ newProgram:", newProgram);
 
-    await mutate(newProgram);
+    const { courses, ...programWithoutCourses } = newProgram;
+
+    (await Object.keys(editFinishedCoursesData)?.length) !== 0
+      ? mutate(newProgram)
+      : editmutate(programWithoutCourses);
   };
   if (isLoading || isFetching) return <Loading />;
   return (
@@ -198,7 +226,7 @@ const CreateProgram = () => {
               coursesData={coursesData}
               setCoursesData={setCoursesData}
               setEditCoursesData={setEditCoursesData}
-              isPending={isPending}
+              isPending={isPending || editIsPending}
               editFinishedProgramData={editFinishedProgramData}
             />
           )}
