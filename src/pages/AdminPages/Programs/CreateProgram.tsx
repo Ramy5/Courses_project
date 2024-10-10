@@ -79,7 +79,9 @@ const CreateProgram = () => {
   const nanigate = useNavigate();
   const location = useLocation();
   const dataReceived = location.state;
+  console.log("🚀 ~ CreateProgram ~ dataReceived:", dataReceived);
   const dataReceivedID = location.state;
+  console.log("🚀 ~ CreateProgram ~ dataReceivedID:", dataReceivedID);
 
   const fetchProgramData = async () => {
     const response = await customFetch(`/program/${dataReceivedID}`);
@@ -198,9 +200,13 @@ const CreateProgram = () => {
 
     const { courses, ...programWithoutCourses } = newProgram;
 
-    (await Object.keys(editFinishedCoursesData)?.length) !== 0
-      ? mutate(newProgram)
-      : editmutate(programWithoutCourses);
+    // (await Object.keys(editFinishedCoursesData)?.length) !== 0
+    //   ? mutate(newProgram)
+    //   : editmutate(programWithoutCourses);
+
+    dataReceived
+      ? await editmutate(programWithoutCourses)
+      : await mutate(newProgram);
   };
   if (isLoading || isFetching) return <Loading />;
   return (
